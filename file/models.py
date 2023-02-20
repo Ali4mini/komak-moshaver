@@ -1,0 +1,52 @@
+from django.db import models
+from taggit.managers import TaggableManager
+
+# Create your models here.
+
+class Sell(models.Model):
+    class Types(models.TextChoices):
+        APARTEMANT = 'A', 'آپارتمان'
+        LAND = 'L', 'زمین'
+        STORE = 'S', 'مغازه'
+
+    owner_name = models.CharField(max_length=100)
+    owner_phone = models.CharField(max_length=11)
+    address = models.TextField()
+    m2 = models.IntegerField()
+    price = models.IntegerField()
+    year = models.IntegerField()
+    floor = models.IntegerField()
+    elevator = models.BooleanField(default=True)
+    storage = models.BooleanField(default=True)
+    parking = models.BooleanField()
+    type = models.CharField(max_length=1, choices=Types.choices, default=Types.APARTEMANT)
+    tags = TaggableManager()
+
+    def __str__(self):
+        return f"owner: {self.owner_name} owner's phone: {self.owner_phone}"
+
+class Rent(models.Model):
+    class Types(models.TextChoices):
+        APARTEMANT = 'A', 'آپارتمان'
+        LAND = 'L', 'زمین'
+        STORE = 'S', 'مغازه'
+
+    owner_name = models.CharField(max_length=100)
+    owner_phone = models.CharField(max_length=11)
+    address = models.TextField()
+    m2 = models.IntegerField()
+    price_up = models.IntegerField()
+    price_rent = models.IntegerField()
+    year = models.IntegerField()
+    floor = models.IntegerField()
+    elevator = models.BooleanField(default=True)
+    storage = models.BooleanField(default=True)
+    parking = models.BooleanField()
+    type = models.CharField(max_length=1, choices=Types.choices, default=Types.APARTEMANT)
+    tags = TaggableManager()
+
+    def __str__(self):
+        return f"owner: {self.owner_name} owner's phone: {self.owner_phone}"
+
+
+        
