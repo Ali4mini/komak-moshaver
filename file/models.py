@@ -18,9 +18,9 @@ class Sell(models.Model):
     floor = models.IntegerField()
     elevator = models.BooleanField(default=True)
     storage = models.BooleanField(default=True)
-    parking = models.BooleanField()
+    parking = models.BooleanField(default=True)
     type = models.CharField(max_length=1, choices=Types.choices, default=Types.APARTEMANT)
-    tags = TaggableManager()
+    tags = TaggableManager(blank=True)
 
     def __str__(self):
         return f"owner: {self.owner_name} owner's phone: {self.owner_phone}"
@@ -43,7 +43,7 @@ class Rent(models.Model):
     storage = models.BooleanField(default=True)
     parking = models.BooleanField()
     type = models.CharField(max_length=1, choices=Types.choices, default=Types.APARTEMANT)
-    tags = TaggableManager()
+    tags = TaggableManager(blank=True)
 
     def __str__(self):
         return f"owner: {self.owner_name} owner's phone: {self.owner_phone}"
