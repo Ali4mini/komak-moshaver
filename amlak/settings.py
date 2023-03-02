@@ -78,9 +78,9 @@ WSGI_APPLICATION = 'amlak.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'testdb', 
-        'USER': 'test_user', 
-        'PASSWORD': 'test1234',
+        'NAME': 'amlakdb', 
+        'USER': 'ali', 
+        'PASSWORD': 'alirezainim4',
         'HOST': '127.0.0.1', 
         'PORT': '5432',
     }

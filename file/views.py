@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from . import forms
 from django.views.decorators.csrf import csrf_exempt
-
+from django.contrib.auth import authenticate, login
+from .forms import LoginForm
+from django.http import HttpResponse
 # Create your views here.
 
 
