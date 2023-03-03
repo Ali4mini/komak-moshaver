@@ -4,7 +4,7 @@ from .models import Sell, Rent
 # Register your models here.
 
 @admin.register(Sell)
-class PostAdmin(admin.ModelAdmin):
+class SellAdmin(admin.ModelAdmin):
     list_display = ['owner_name', 'm2', 'address', 'type', ]
     list_filter = ['m2', 'price', ]
     #search_fields = ['title', 'body']
@@ -15,6 +15,6 @@ class PostAdmin(admin.ModelAdmin):
 
 
 @admin.register(Rent)
-class CommentAdmin(admin.ModelAdmin):
+class RentAdmin(admin.ModelAdmin):
     list_display = ['owner_name', 'm2', 'address', 'type', ]
     list_filter = ['m2', 'price_up', 'price_rent',]
