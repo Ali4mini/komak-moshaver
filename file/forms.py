@@ -1,14 +1,11 @@
 from django import forms
-from . import models
+from .models import Sell, Rent
 class NewSellFile(forms.ModelForm):
     class Meta:
-        model = models.Sell
+        model = Sell
         fields = "__all__"
 class NewRentFile(forms.ModelForm):
     class Meta:
-        model = models.Rent
+        model = Rent
         fields = "__all__"
 
-class LoginForm(forms.Form):
-    username = forms.CharField()
-    password = forms.CharField(widget=forms.PasswordInput)

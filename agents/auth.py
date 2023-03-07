@@ -1,8 +1,8 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login
-from .forms import LoginForm
 from django.views.decorators.csrf import csrf_exempt
+from .forms import LoginForm
 
 @csrf_exempt
 def agent_login(request):

@@ -1,0 +1,69 @@
+{% extends 'file/base.html' %}
+{% load static %}
+{% block title %}file detail{% endblock title %}
+
+{% block content %}
+    <link rel='stylesheet' href="{% static 'css/file_details.css' %}">
+<div class="images">
+        
+    </div>
+
+    <div class="details">
+        <table>
+            <tr>
+                <th>نوع:</th>
+                <td>{{ post.get_type_display}}</td>
+            </tr>
+            <tr>
+                <th>مالک:</th>
+                <td>{{ post.owner_name}}</td>
+            </tr>
+            <tr>
+                <th>شماره مالک:</th>
+                <td>{{ post.owner_phone }}</td>
+            </tr>
+            <tr>
+                <th>متراژ:</th>
+                <td>{{ post.m2 }}</td>
+            </tr>
+            <tr>
+                <th>قیمت: </th>
+                <td>{{ post.price }}</td>
+            </tr>
+            <tr>
+                <th>آدرس: </th>
+                <td>{{ post.address }}</td>
+            </tr>
+            <tr>
+                <th>آسانسور :</th>
+                <td>{% if post.elevator %}
+                        دارد
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>پارکینگ :</th>
+                <td>{% if post.parking %}
+                        دارد
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>انباری :</th>
+                <td>{% if post.storage %}
+                        دارد
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>تگ ها :</th>
+                <td>{% if post.tags %}
+                        {{ post.tags.name }}
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+    </div>
+
+
+{% endblock content %}
