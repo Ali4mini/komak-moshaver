@@ -43,7 +43,12 @@
 
 
 
-
+.messages .success{
+  list-style-type: none;
+  width: 100%;
+  height: 30px;
+  background-color: lightgreen;
+}
 
 
 

@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from . import forms
+from django.contrib import messages
 # Create your views here.
 
 @csrf_exempt
@@ -12,6 +13,7 @@ def buy_customer(request):
             customer = form.save(commit=False)
 
             customer.save()
+            messages.success(request, 'مشتری با موفقیت ثبت شد.',)
             return render(request, 'customer/panel.html')
         else:
             return HttpResponse('invalid request')
@@ -26,7 +28,8 @@ def rent_customer(request):
         if form.is_valid():
             customer = form.save(commit=False)
 
-            customer.save()
+            customer.save()           
+            messages.success(request, 'مشتری با موفقیت ثبت شد.',)
             return render(request, 'customer/panel.html')
         else:
             return HttpResponse('invalid request')

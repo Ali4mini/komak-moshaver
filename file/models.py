@@ -1,6 +1,6 @@
 from django.db import models
 from taggit.managers import TaggableManager
-
+from django.urls import reverse
 # Create your models here.
 
 class Sell(models.Model):
@@ -24,6 +24,10 @@ class Sell(models.Model):
 
     def __str__(self):
         return f"owner: {self.owner_name} owner's phone: {self.owner_phone}"
+    
+    def get_absolute_url(self):
+        return reverse("file:sell_file_detail", args=[self.id])
+    
 
 class Rent(models.Model):
     class Types(models.TextChoices):
@@ -47,6 +51,8 @@ class Rent(models.Model):
 
     def __str__(self):
         return f"owner: {self.owner_name} owner's phone: {self.owner_phone}"
-
+    
+    def get_absolute_url(self):
+        return reverse("file:rent_file_detail", args=[self.id])
 
         

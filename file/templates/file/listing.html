@@ -1,0 +1,85 @@
+{% extends 'file/base.html' %}
+{% block title %}listing{% endblock title %}
+{% load static %}
+
+{% block content %}
+    <link rel='stylesheet' href={% static 'css/listing.css' %}>
+    <div class="filter">
+        <form method="post">
+            {{filter_form}}
+            {% csrf_token %}
+            <input type="submit" value="submit">
+        </form>
+    </div>
+    <div class="files">
+    {% if request.user.is_authenticated %}
+        {% for file in files %}
+        <a href="{{ file.get_absolute_url }}"> 
+            <div class="file-section">
+                <div class="top">
+                    <h4> {{file.address}} </h4>
+                </div>
+                <div class="left-side">
+                    {% if file.parking %}
+                    <div id="parking">
+                        <img src={% static 'images/parking-svgrepo-com.svg' %} alt="پارکینگ" width="50" height="30" >
+                    </div>
+                    {% endif %}
+                    {% if file.elevator %}
+                    <div id="elavator">
+                        <img src={% static 'images/elevator-svgrepo-com.svg' %} alt="پارکینگ" width="30" height="25" >
+                    </div>
+                    {% endif %}
+                    {% if file.storage %}
+                    <div id="storage">
+                        <img src={% static 'images/safe-svgrepo-com.svg' %} alt="پارکینگ" width="30" height="20" >
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="bottom">
+                    <table id="type">
+                        <tr>
+                            <th>نوع:</th>
+                            <td>{{ file.get_type_display}}</td>
+                        </tr>
+                    </table>
+                    <table id="price">
+                        <tr>
+                            <th>قیمت:</th>
+                            <td>{{ file.price}}</td>
+                        </tr>
+                    </table>
+                    <table id="m2">
+                        <tr>
+                            <th>متراژ:</th>
+                            <td>{{ file.m2}}</td>
+                        </tr>
+                    </table>
+                    <table id="year">
+                        <tr>
+                            <th>سال ساخت:</th>
+                            <td>{{ file.year}}</td>
+                        </tr>
+                    </table>
+                    <table id="floor">
+                        <tr>
+                            <th>طبقه:</th>
+                            <td>{{ file.floor}}</td>
+                        </tr>
+                    </table>
+
+
+                </div>
+
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+        {% else %}
+            <h1>
+                <a href='agents/login'> login first</a>
+            </h4>
+    {% endif %}
+
+
+{% endblock content %}
