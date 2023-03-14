@@ -1,42 +1,11 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from . import forms
 from django.views.decorators.csrf import csrf_exempt
 from .models import Sell, Rent
-from django.http import HttpResponse
 from django.contrib import messages
+from django.urls import reverse
 # Create your views here.
 
-
-def panel(request):
-    if request.method == 'POST':
-        form = forms.SellFilter(data=request.POST)
-        if form.is_valid():
-            budget = form.cleaned_data['price']
-
-            type = form.cleaned_data['type']
-            if type == None:
-                type = 0
-            m2 = form.cleaned_data['m2']
-            if m2 == None:
-                m2 = 0
-            year = form.cleaned_data['year']
-            if year == None:
-                year = 0
-            parking = form.cleaned_data['parking']
-            files = Sell.objects.filter(price__lte=budget, 
-                                        type=type, 
-                                        m2__gte=m2, 
-                                        year__gte=year)
-            
-            return render(request, 'file/listing.html', {'files': files,
-                                                         'filter_form': form,
-                                                         })
-    else:   
-        form = forms.SellFilter()
-        files = Sell.objects.all()
-        return render(request, 'file/listing.html', {'files': files,
-                                                     'filter_form': form
-                                                     })
 
 
 @csrf_exempt
@@ -83,5 +52,21 @@ def new_rent_file(request):
     
 
 def file_detail(request, id):
-    post = get_object_or_404(Sell, pk=id, )
-    return render(request, 'file/file_detail.html', {'post': post})
+    file = get_object_or_404(Sell, pk=id, )
+    return render(request, 'file/file_detail.html', {'post': file})
+
+def file_delete(request, id):
+    file = Sell.objects.get(pk=id)
+    file.delete()
+    messages.success(request,'فایل ما موفقیت حذف شد.')
+    return redirect('/')
+
+
+
+
+
+
+
+
+
+

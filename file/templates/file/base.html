@@ -11,9 +11,9 @@
     <div class="nav">
       <ul>
         <li><a href="/">پنل</a></li>
-        <li><a href="/new-sell-file/">فایل</a></li>
-        <li><a href="new-sell-customer">مشتری</a></li>
-        <li><a href="agents/login">ورود</a></li>
+        <li><a href="{% url 'file:new_sell_file' %}">فایل</a></li>
+        <li><a href="{% url 'customer:new_buy_customer' %}">مشتری</a></li>
+        <li><a href="{% url 'agents:login' %}">ورود</a></li>
       </ul>
     </div>
     {% if messages %}

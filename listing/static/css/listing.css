@@ -4,13 +4,21 @@
 }
 
 .files .file-section{
-    border: rgb(122, 33, 33) dashed 2px;
+    border: rgb(243, 223, 223) dashed 0.5px;
     border-radius: 4px;
     margin: 10px 12px;
     padding-bottom: 15px;
     padding-right: 10px;
     height: 100%;
-    
+    box-shadow: 2px 4px 0 rgb(0 0 0 / 20%), 0 3px 10px 0 rgb(0 0 0 / 19%);
+}
+.files .file-section:hover{
+    border: rgb(243, 223, 223) dashed 0.5px;
+    border-radius: 4px;
+    margin: 10px 12px;
+    padding-bottom: 15px;
+    padding-right: 10px;
+    height: 100%;
 }
 
 .files .file-section h4{

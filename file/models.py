@@ -8,9 +8,10 @@ class Sell(models.Model):
         APARTEMANT = 'A', 'آپارتمان'
         LAND = 'L', 'زمین'
         STORE = 'S', 'مغازه'
+        HOUSE = 'H', 'خانه و ویلا'
 
-    owner_name = models.CharField(max_length=100)
-    owner_phone = models.CharField(max_length=11)
+    owner_name = models.CharField(max_length=1000)
+    owner_phone = models.CharField(max_length=12)
     address = models.TextField()
     m2 = models.IntegerField()
     price = models.IntegerField()
@@ -35,8 +36,8 @@ class Rent(models.Model):
         LAND = 'L', 'زمین'
         STORE = 'S', 'مغازه'
 
-    owner_name = models.CharField(max_length=100)
-    owner_phone = models.CharField(max_length=11)
+    owner_name = models.CharField(max_length=1000)
+    owner_phone = models.CharField(max_length=12)
     address = models.TextField()
     m2 = models.IntegerField()
     price_up = models.IntegerField()

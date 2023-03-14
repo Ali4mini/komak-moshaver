@@ -1,0 +1,16 @@
+2023-03-14 12:16:36,430 - WARNING - root - initialized Divar object
+2023-03-14 12:16:40,410 - INFO - root - logged in with cookie: alireza.pkl
+2023-03-14 12:16:54,733 - INFO - root - found all post of page: https://divar.ir/s/tehran/buy-residential/khavaran?districts=273%2C272&user_type=personal
+2023-03-14 12:17:00,734 - INFO - root - extracting data from 'https://divar.ir/v/%D8%AE%D8%A7%D9%86%D9%87-%DA%A9%D9%84%D9%86%DA%AF%D9%89-%D9%88-%D8%AA%D8%AC%D8%A7%D8%B1%D9%89_%D8%B2%D9%85%DB%8C%D9%86-%D9%88-%DA%A9%D9%84%D9%86%DA%AF%DB%8C_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%AF%D9%88%D9%84%D8%A7%D8%A8_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/AZHkgihs'
+2023-03-14 12:17:07,387 - WARNING - root - terms of agreements: False
+2023-03-14 12:17:07,476 - INFO - root - extracted category
+2023-03-14 12:17:07,563 - INFO - root - extracting group elements
+2023-03-14 12:17:07,563 - INFO - root - merging base_row_title and group_row_title.
+2023-03-14 12:17:07,653 - WARNING - root - done extracting data from https://divar.ir/v/%D8%AE%D8%A7%D9%86%D9%87-%DA%A9%D9%84%D9%86%DA%AF%D9%89-%D9%88-%D8%AA%D8%AC%D8%A7%D8%B1%D9%89_%D8%B2%D9%85%DB%8C%D9%86-%D9%88-%DA%A9%D9%84%D9%86%DA%AF%DB%8C_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%AF%D9%88%D9%84%D8%A7%D8%A8_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/AZHkgihs
+2023-03-14 12:17:08,194 - INFO - root - extracting data from 'https://divar.ir/v/%D8%A7%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86-%DB%B4%DB%B7%D9%85%D8%AA%D8%B1-%D8%AF%D9%88%D8%AE%D9%88%D8%A7%D8%A8%D9%87_%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%A2%D9%87%D9%86%DA%AF_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/wY3rlGpX'
+2023-03-14 12:18:13,011 - WARNING - root - terms of agreements: False
+2023-03-14 12:18:13,067 - INFO - root - extracted category
+2023-03-14 12:18:13,190 - INFO - root - extracting group elements
+2023-03-14 12:18:13,190 - INFO - root - merging base_row_title and group_row_title.
+2023-03-14 12:18:13,287 - WARNING - root - done extracting data from https://divar.ir/v/%D8%A7%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86-%DB%B4%DB%B7%D9%85%D8%AA%D8%B1-%D8%AF%D9%88%D8%AE%D9%88%D8%A7%D8%A8%D9%87_%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%A2%D9%87%D9%86%DA%AF_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/wY3rlGpX
+2023-03-14 12:18:14,335 - WARNING - root - deleting Divar object

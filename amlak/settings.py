@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'file.apps.FileConfig',
     'taggit',
     'customer.apps.CustomerConfig',
+    'listing.apps.ListingConfig',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
