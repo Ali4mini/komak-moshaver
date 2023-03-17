@@ -21,7 +21,14 @@ class Sell(models.Model):
     storage = models.BooleanField(default=True)
     parking = models.BooleanField(default=True)
     type = models.CharField(max_length=1, choices=Types.choices, default=Types.APARTEMANT)
-    tags = TaggableManager(blank=True)
+    added_by = models.ForeignKey("agents.Profile",
+                                 verbose_name=("added to site by "),
+                                 on_delete=models.DO_NOTHING,
+                                 blank=True,
+                                 default=1
+                                 )
+    tag_manager = TaggableManager(blank=True)
+    
 
     def __str__(self):
         return f"owner: {self.owner_name} owner's phone: {self.owner_phone}"
@@ -48,7 +55,13 @@ class Rent(models.Model):
     storage = models.BooleanField(default=True)
     parking = models.BooleanField()
     type = models.CharField(max_length=1, choices=Types.choices, default=Types.APARTEMANT)
-    tags = TaggableManager(blank=True)
+    added_by = models.ForeignKey("agents.Profile",
+                                 verbose_name=("added to site by "),
+                                 on_delete=models.DO_NOTHING,
+                                 blank=True,
+                                 default=1
+                                 )
+    tags_manager = TaggableManager(blank=True)
 
     def __str__(self):
         return f"owner: {self.owner_name} owner's phone: {self.owner_phone}"

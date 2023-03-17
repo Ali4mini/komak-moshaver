@@ -92,11 +92,11 @@ class Listing:
         posts = Divar_obj.all_posts(page=self.divar_url)
         sleep(6)
         #Divar_obj.save_cookie('alireza.pkl')
-        for post in posts[:2]:
+        for post in posts:
             print(f'in => {post}  ')
             res = Divar_obj.post_details(post)
             res = validation(res)
-            print(res)
+            file_count = models.Sell.objects.count()
             if res["شاخه"][1] == "فروش مسکونی":
                 models.Sell.objects.create(owner_name="UNKNOWN",
                                         owner_phone=res['شمارهٔ موبایل'],
@@ -109,8 +109,9 @@ class Listing:
                                         parking=res['ویژگی ها'][2],
                                         storage=res['ویژگی ها'][1],
                                         type=res['نوع'],
-                                        tags=res['تگ ها']
                                         )
+                file_instance = models.Sell.objects.last()
+                tags = file_instance.tag_manager.add(res['تگ ها'])
         
         
         del Divar_obj

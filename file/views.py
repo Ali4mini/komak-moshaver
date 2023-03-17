@@ -14,12 +14,14 @@ def new_sell_file(request):
         form = forms.NewSellFile(data=request.POST)
         if form.is_valid():
             # Create a NewSellFile object without saving it to the database
-            comment = form.save(commit=False)
+            file = form.save(commit=False)
 
             print(request)
             # Save the comment to the database
-            comment.save()
-            
+            file.save()
+            # adding tags 
+            form.save_m2m()
+
             messages.success(request, 'فایل با موفقیت ثبت شد.',)
             return render(request, 'file/panel.html', )
         return render(request, 'file/new_sell_file.html')

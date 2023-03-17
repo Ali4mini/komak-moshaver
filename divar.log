@@ -1,16 +1,148 @@
-2023-03-14 12:16:36,430 - WARNING - root - initialized Divar object
-2023-03-14 12:16:40,410 - INFO - root - logged in with cookie: alireza.pkl
-2023-03-14 12:16:54,733 - INFO - root - found all post of page: https://divar.ir/s/tehran/buy-residential/khavaran?districts=273%2C272&user_type=personal
-2023-03-14 12:17:00,734 - INFO - root - extracting data from 'https://divar.ir/v/%D8%AE%D8%A7%D9%86%D9%87-%DA%A9%D9%84%D9%86%DA%AF%D9%89-%D9%88-%D8%AA%D8%AC%D8%A7%D8%B1%D9%89_%D8%B2%D9%85%DB%8C%D9%86-%D9%88-%DA%A9%D9%84%D9%86%DA%AF%DB%8C_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%AF%D9%88%D9%84%D8%A7%D8%A8_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/AZHkgihs'
-2023-03-14 12:17:07,387 - WARNING - root - terms of agreements: False
-2023-03-14 12:17:07,476 - INFO - root - extracted category
-2023-03-14 12:17:07,563 - INFO - root - extracting group elements
-2023-03-14 12:17:07,563 - INFO - root - merging base_row_title and group_row_title.
-2023-03-14 12:17:07,653 - WARNING - root - done extracting data from https://divar.ir/v/%D8%AE%D8%A7%D9%86%D9%87-%DA%A9%D9%84%D9%86%DA%AF%D9%89-%D9%88-%D8%AA%D8%AC%D8%A7%D8%B1%D9%89_%D8%B2%D9%85%DB%8C%D9%86-%D9%88-%DA%A9%D9%84%D9%86%DA%AF%DB%8C_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%AF%D9%88%D9%84%D8%A7%D8%A8_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/AZHkgihs
-2023-03-14 12:17:08,194 - INFO - root - extracting data from 'https://divar.ir/v/%D8%A7%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86-%DB%B4%DB%B7%D9%85%D8%AA%D8%B1-%D8%AF%D9%88%D8%AE%D9%88%D8%A7%D8%A8%D9%87_%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%A2%D9%87%D9%86%DA%AF_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/wY3rlGpX'
-2023-03-14 12:18:13,011 - WARNING - root - terms of agreements: False
-2023-03-14 12:18:13,067 - INFO - root - extracted category
-2023-03-14 12:18:13,190 - INFO - root - extracting group elements
-2023-03-14 12:18:13,190 - INFO - root - merging base_row_title and group_row_title.
-2023-03-14 12:18:13,287 - WARNING - root - done extracting data from https://divar.ir/v/%D8%A7%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86-%DB%B4%DB%B7%D9%85%D8%AA%D8%B1-%D8%AF%D9%88%D8%AE%D9%88%D8%A7%D8%A8%D9%87_%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%A2%D9%87%D9%86%DA%AF_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/wY3rlGpX
-2023-03-14 12:18:14,335 - WARNING - root - deleting Divar object
+2023-03-16 06:32:16,094 - WARNING - root - initialized Divar object
+2023-03-16 06:32:23,904 - INFO - root - logged in with cookie: alireza.pkl
+2023-03-16 06:32:36,877 - INFO - root - found all post of page: https://divar.ir/s/tehran/buy-residential/khavaran?districts=273%2C272&user_type=personal
+2023-03-16 06:32:42,877 - INFO - root - extracting data from 'https://divar.ir/v/%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86-%D9%81%D8%B1%D9%88%D8%B4%DB%8C-%DB%B5%DB%B6%D9%85%D8%AA%D8%B1%DB%8C-%D8%AA%D9%85%DB%8C%D8%B2%D9%85%D8%AD%D8%AF%D9%88%D8%AF%D9%87-%D8%BA%DB%8C%D8%A7%D8%AB%DB%8C_%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%A2%D9%87%D9%86%DA%AF_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/AZSEaESw'
+2023-03-16 06:32:49,743 - WARNING - root - terms of agreements: False
+2023-03-16 06:32:49,885 - INFO - root - extracted category
+2023-03-16 06:32:49,962 - INFO - root - extracting group elements
+2023-03-16 06:32:49,962 - INFO - root - merging base_row_title and group_row_title.
+2023-03-16 06:32:50,021 - WARNING - root - done extracting data from https://divar.ir/v/%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86-%D9%81%D8%B1%D9%88%D8%B4%DB%8C-%DB%B5%DB%B6%D9%85%D8%AA%D8%B1%DB%8C-%D8%AA%D9%85%DB%8C%D8%B2%D9%85%D8%AD%D8%AF%D9%88%D8%AF%D9%87-%D8%BA%DB%8C%D8%A7%D8%AB%DB%8C_%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%A2%D9%87%D9%86%DA%AF_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/AZSEaESw
+2023-03-16 06:32:50,090 - INFO - root - extracting data from 'https://divar.ir/v/%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7-%DB%B5%DB%B7-%D9%85%D8%AA%D8%B1%DB%8C-%D8%AF%D8%B1-%D9%85%D8%AD%D9%84%D8%A7%D8%AA%DB%8C_%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%A2%D9%87%D9%86%DA%AF_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/wY4rpY0A'
+2023-03-16 06:32:57,768 - WARNING - root - terms of agreements: False
+2023-03-16 06:32:57,904 - INFO - root - extracted category
+2023-03-16 06:32:58,135 - INFO - root - extracting group elements
+2023-03-16 06:32:58,135 - INFO - root - merging base_row_title and group_row_title.
+2023-03-16 06:32:58,203 - WARNING - root - done extracting data from https://divar.ir/v/%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7-%DB%B5%DB%B7-%D9%85%D8%AA%D8%B1%DB%8C-%D8%AF%D8%B1-%D9%85%D8%AD%D9%84%D8%A7%D8%AA%DB%8C_%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%A2%D9%87%D9%86%DA%AF_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/wY4rpY0A
+2023-03-16 06:32:58,265 - INFO - root - extracting data from 'https://divar.ir/v/%DB%B1%DB%B0%DB%B0%DB%B0%D9%85%D8%AA%D8%B1-%D8%A8%D8%A7%D8%BA%DA%86%D9%87-%D8%AE%D8%A7%D9%88%D8%B1%D8%B4%D9%87%D8%B1-%D9%82%D8%A7%D8%B3%D9%85-%D8%A2%D8%A8%D8%A7%D8%AF%D8%AA%D9%87%D8%B1%D8%A7%D9%86%DA%86%DB%8C-_%D8%B2%D9%85%DB%8C%D9%86-%D9%88-%DA%A9%D9%84%D9%86%DA%AF%DB%8C_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%AE%D8%A7%D9%88%D8%B1%D8%A7%D9%86_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/AZR4MEEt'
+2023-03-16 06:33:04,814 - WARNING - root - terms of agreements: False
+2023-03-16 06:33:04,868 - INFO - root - extracted category
+2023-03-16 06:33:04,908 - INFO - root - extracting group elements
+2023-03-16 06:33:04,908 - INFO - root - merging base_row_title and group_row_title.
+2023-03-16 06:33:04,961 - WARNING - root - done extracting data from https://divar.ir/v/%DB%B1%DB%B0%DB%B0%DB%B0%D9%85%D8%AA%D8%B1-%D8%A8%D8%A7%D8%BA%DA%86%D9%87-%D8%AE%D8%A7%D9%88%D8%B1%D8%B4%D9%87%D8%B1-%D9%82%D8%A7%D8%B3%D9%85-%D8%A2%D8%A8%D8%A7%D8%AF%D8%AA%D9%87%D8%B1%D8%A7%D9%86%DA%86%DB%8C-_%D8%B2%D9%85%DB%8C%D9%86-%D9%88-%DA%A9%D9%84%D9%86%DA%AF%DB%8C_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%AE%D8%A7%D9%88%D8%B1%D8%A7%D9%86_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/AZR4MEEt
+2023-03-16 06:33:05,173 - INFO - root - extracting data from 'https://divar.ir/v/%D8%A7%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86-%DB%B6%DB%B8-%D9%85%D8%AA%D8%B1%DB%8C-%D8%AF%D9%88%D8%AE%D9%88%D8%A7%D8%A8%D9%87_%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%A2%D9%87%D9%86%DA%AF_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/AZRkcG_c'
+2023-03-16 06:33:12,129 - WARNING - root - terms of agreements: False
+2023-03-16 06:33:12,273 - INFO - root - extracted category
+2023-03-16 06:33:12,355 - INFO - root - extracting group elements
+2023-03-16 06:33:12,355 - INFO - root - merging base_row_title and group_row_title.
+2023-03-16 06:33:12,411 - WARNING - root - done extracting data from https://divar.ir/v/%D8%A7%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86-%DB%B6%DB%B8-%D9%85%D8%AA%D8%B1%DB%8C-%D8%AF%D9%88%D8%AE%D9%88%D8%A7%D8%A8%D9%87_%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%A2%D9%87%D9%86%DA%AF_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/AZRkcG_c
+2023-03-16 06:33:12,448 - INFO - root - extracting data from 'https://divar.ir/v/%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86-%DB%B1%DB%B0%DB%B0%D9%85%D8%AA%D8%B1%DB%8C-%D9%85%D8%AE%D8%A8%D8%B1-%D8%AC%D9%86%D9%88%D8%A8%DB%8C-%D9%88%DB%8C%D9%88-%D8%A7%D8%A8%D8%AF%DB%8C_%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%AE%D8%A7%D9%88%D8%B1%D8%A7%D9%86_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/AZQkB7L3'
+2023-03-16 06:33:19,006 - WARNING - root - terms of agreements: False
+2023-03-16 06:33:19,082 - INFO - root - extracted category
+2023-03-16 06:33:19,211 - INFO - root - extracting group elements
+2023-03-16 06:33:19,211 - INFO - root - merging base_row_title and group_row_title.
+2023-03-16 06:33:19,282 - WARNING - root - done extracting data from https://divar.ir/v/%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86-%DB%B1%DB%B0%DB%B0%D9%85%D8%AA%D8%B1%DB%8C-%D9%85%D8%AE%D8%A8%D8%B1-%D8%AC%D9%86%D9%88%D8%A8%DB%8C-%D9%88%DB%8C%D9%88-%D8%A7%D8%A8%D8%AF%DB%8C_%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%AE%D8%A7%D9%88%D8%B1%D8%A7%D9%86_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/AZQkB7L3
+2023-03-16 06:33:19,314 - INFO - root - extracting data from 'https://divar.ir/v/%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86%DB%B5%DB%B5%D9%85%D8%AA%D8%B1-%D9%85%D8%B1%D8%A8%D8%B9-%D8%AA%DA%A9-%D8%AE%D8%A7%D8%A8%D9%87-%D9%86%D9%88%D8%B3%D8%A7%D8%B2_%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%A2%D9%87%D9%86%DA%AF_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/AZF8dbfN'
+2023-03-16 06:33:26,804 - WARNING - root - terms of agreements: False
+2023-03-16 06:33:26,890 - INFO - root - extracted category
+2023-03-16 06:33:27,029 - INFO - root - extracting group elements
+2023-03-16 06:33:27,029 - INFO - root - merging base_row_title and group_row_title.
+2023-03-16 06:33:27,127 - WARNING - root - done extracting data from https://divar.ir/v/%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86%DB%B5%DB%B5%D9%85%D8%AA%D8%B1-%D9%85%D8%B1%D8%A8%D8%B9-%D8%AA%DA%A9-%D8%AE%D8%A7%D8%A8%D9%87-%D9%86%D9%88%D8%B3%D8%A7%D8%B2_%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%A2%D9%87%D9%86%DA%AF_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/AZF8dbfN
+2023-03-16 06:33:27,181 - INFO - root - extracting data from 'https://divar.ir/v/%DB%B1%DB%B1%DB%B0-%D9%85%D8%AA%D8%B1-%D8%AF%D9%88-%D8%AE%D9%88%D8%A7%D8%A8-%D8%A8%D8%B1%D8%AC-%D8%B9%D8%B1%D8%B4_%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%A2%D9%87%D9%86%DA%AF_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/AZRonow1'
+2023-03-16 06:33:35,001 - WARNING - root - terms of agreements: False
+2023-03-16 06:33:35,073 - INFO - root - extracted category
+2023-03-16 06:33:35,183 - INFO - root - extracting group elements
+2023-03-16 06:33:35,184 - INFO - root - merging base_row_title and group_row_title.
+2023-03-16 06:33:35,260 - WARNING - root - done extracting data from https://divar.ir/v/%DB%B1%DB%B1%DB%B0-%D9%85%D8%AA%D8%B1-%D8%AF%D9%88-%D8%AE%D9%88%D8%A7%D8%A8-%D8%A8%D8%B1%D8%AC-%D8%B9%D8%B1%D8%B4_%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%A2%D9%87%D9%86%DA%AF_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/AZRonow1
+2023-03-16 06:33:35,497 - INFO - root - extracting data from 'https://divar.ir/v/%D8%B2%D9%85%DB%8C%D9%86-%D9%85%D8%B3%DA%A9%D9%88%D9%86%DB%8C-%D8%AA%D8%AC%D8%A7%D8%B1%DB%8C_%D8%B2%D9%85%DB%8C%D9%86-%D9%88-%DA%A9%D9%84%D9%86%DA%AF%DB%8C_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%A2%D9%87%D9%86%DA%AF_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/wY47F20l'
+2023-03-16 06:33:41,827 - WARNING - root - terms of agreements: False
+2023-03-16 06:33:41,908 - INFO - root - extracted category
+2023-03-16 06:33:41,984 - INFO - root - extracting group elements
+2023-03-16 06:33:41,984 - INFO - root - merging base_row_title and group_row_title.
+2023-03-16 06:33:42,056 - WARNING - root - done extracting data from https://divar.ir/v/%D8%B2%D9%85%DB%8C%D9%86-%D9%85%D8%B3%DA%A9%D9%88%D9%86%DB%8C-%D8%AA%D8%AC%D8%A7%D8%B1%DB%8C_%D8%B2%D9%85%DB%8C%D9%86-%D9%88-%DA%A9%D9%84%D9%86%DA%AF%DB%8C_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%A2%D9%87%D9%86%DA%AF_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/wY47F20l
+2023-03-16 06:33:42,089 - INFO - root - extracting data from 'https://divar.ir/v/%D8%A7%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86-%DB%B4%DB%B7%D9%85%D8%AA%D8%B1-%D8%AF%D9%88%D8%AE%D9%88%D8%A7%D8%A8%D9%87_%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%A2%D9%87%D9%86%DA%AF_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/wY3rlGpX'
+2023-03-16 06:33:49,518 - WARNING - root - terms of agreements: False
+2023-03-16 06:33:49,585 - INFO - root - extracted category
+2023-03-16 06:33:49,678 - INFO - root - extracting group elements
+2023-03-16 06:33:49,678 - INFO - root - merging base_row_title and group_row_title.
+2023-03-16 06:33:49,754 - WARNING - root - done extracting data from https://divar.ir/v/%D8%A7%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86-%DB%B4%DB%B7%D9%85%D8%AA%D8%B1-%D8%AF%D9%88%D8%AE%D9%88%D8%A7%D8%A8%D9%87_%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%A2%D9%87%D9%86%DA%AF_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/wY3rlGpX
+2023-03-16 06:33:49,789 - INFO - root - extracting data from 'https://divar.ir/v/%D8%AE%D8%A7%D9%86%D9%87-%DA%A9%D9%84%D9%86%DA%AF%DB%8C-%DB%B7%DB%B5-%D9%85%D8%AA%D8%B1_%D8%B2%D9%85%DB%8C%D9%86-%D9%88-%DA%A9%D9%84%D9%86%DA%AF%DB%8C_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%A2%D9%87%D9%86%DA%AF_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/AZQgaXxi'
+2023-03-16 06:33:56,536 - WARNING - root - terms of agreements: False
+2023-03-16 06:33:56,624 - INFO - root - extracted category
+2023-03-16 06:33:56,669 - INFO - root - extracting group elements
+2023-03-16 06:33:56,669 - INFO - root - merging base_row_title and group_row_title.
+2023-03-16 06:33:56,730 - WARNING - root - done extracting data from https://divar.ir/v/%D8%AE%D8%A7%D9%86%D9%87-%DA%A9%D9%84%D9%86%DA%AF%DB%8C-%DB%B7%DB%B5-%D9%85%D8%AA%D8%B1_%D8%B2%D9%85%DB%8C%D9%86-%D9%88-%DA%A9%D9%84%D9%86%DA%AF%DB%8C_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%A2%D9%87%D9%86%DA%AF_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/AZQgaXxi
+2023-03-16 06:33:56,763 - INFO - root - extracting data from 'https://divar.ir/v/%D8%AE%D8%A7%D9%86%D9%87-%DA%A9%D9%84%D9%86%DA%AF%D9%89-%D9%88-%D8%AA%D8%AC%D8%A7%D8%B1%D9%89_%D8%B2%D9%85%DB%8C%D9%86-%D9%88-%DA%A9%D9%84%D9%86%DA%AF%DB%8C_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%AF%D9%88%D9%84%D8%A7%D8%A8_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/AZHkgihs'
+2023-03-16 06:34:04,681 - WARNING - root - terms of agreements: False
+2023-03-16 06:34:04,752 - INFO - root - extracted category
+2023-03-16 06:34:04,820 - INFO - root - extracting group elements
+2023-03-16 06:34:04,820 - INFO - root - merging base_row_title and group_row_title.
+2023-03-16 06:34:04,904 - WARNING - root - done extracting data from https://divar.ir/v/%D8%AE%D8%A7%D9%86%D9%87-%DA%A9%D9%84%D9%86%DA%AF%D9%89-%D9%88-%D8%AA%D8%AC%D8%A7%D8%B1%D9%89_%D8%B2%D9%85%DB%8C%D9%86-%D9%88-%DA%A9%D9%84%D9%86%DA%AF%DB%8C_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%AF%D9%88%D9%84%D8%A7%D8%A8_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/AZHkgihs
+2023-03-16 06:34:04,938 - INFO - root - extracting data from 'https://divar.ir/v/%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86-%DB%B4%DB%B4%D9%85%D8%AA%D8%B1%D9%87-%DB%8C%DA%A9-%D8%AE%D9%88%D8%A7%D8%A8_%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%AF%D9%88%D9%84%D8%A7%D8%A8_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/AZPUY5C_'
+2023-03-16 06:34:11,490 - WARNING - root - terms of agreements: False
+2023-03-16 06:34:11,552 - INFO - root - extracted category
+2023-03-16 06:34:11,648 - INFO - root - extracting group elements
+2023-03-16 06:34:11,648 - INFO - root - merging base_row_title and group_row_title.
+2023-03-16 06:34:11,707 - WARNING - root - done extracting data from https://divar.ir/v/%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86-%DB%B4%DB%B4%D9%85%D8%AA%D8%B1%D9%87-%DB%8C%DA%A9-%D8%AE%D9%88%D8%A7%D8%A8_%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%AF%D9%88%D9%84%D8%A7%D8%A8_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/AZPUY5C_
+2023-03-16 06:34:11,738 - INFO - root - extracting data from 'https://divar.ir/v/%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86-%DB%B8%DB%B9-%D8%AF%D9%88%D8%AE%D9%88%D8%A7%D8%A8%D9%87-%D8%AE%DB%8C%D9%84%DB%8C-%D8%AE%D9%88%D8%B4-%D9%86%D9%82%D8%B4_%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%A2%D9%87%D9%86%DA%AF_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/AZP0ll1h'
+2023-03-16 06:34:18,391 - WARNING - root - terms of agreements: False
+2023-03-16 06:34:18,465 - INFO - root - extracted category
+2023-03-16 06:34:18,601 - INFO - root - extracting group elements
+2023-03-16 06:34:18,601 - INFO - root - merging base_row_title and group_row_title.
+2023-03-16 06:34:18,699 - WARNING - root - done extracting data from https://divar.ir/v/%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86-%DB%B8%DB%B9-%D8%AF%D9%88%D8%AE%D9%88%D8%A7%D8%A8%D9%87-%D8%AE%DB%8C%D9%84%DB%8C-%D8%AE%D9%88%D8%B4-%D9%86%D9%82%D8%B4_%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%A2%D9%87%D9%86%DA%AF_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/AZP0ll1h
+2023-03-16 06:34:18,729 - INFO - root - extracting data from 'https://divar.ir/v/%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86-%DB%B7%DB%B2-%D9%85%D8%AA%D8%B1-%D8%AF%D9%88-%D8%AE%D9%88%D8%A7%D8%A8-%D8%AA%DA%A9%D9%88%D8%A7%D8%AD%D8%AF_%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%AF%D9%88%D9%84%D8%A7%D8%A8_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/AZPYD1DC'
+2023-03-16 06:34:25,399 - WARNING - root - terms of agreements: False
+2023-03-16 06:34:25,458 - INFO - root - extracted category
+2023-03-16 06:34:25,586 - INFO - root - extracting group elements
+2023-03-16 06:34:25,586 - INFO - root - merging base_row_title and group_row_title.
+2023-03-16 06:34:25,686 - WARNING - root - done extracting data from https://divar.ir/v/%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86-%DB%B7%DB%B2-%D9%85%D8%AA%D8%B1-%D8%AF%D9%88-%D8%AE%D9%88%D8%A7%D8%A8-%D8%AA%DA%A9%D9%88%D8%A7%D8%AD%D8%AF_%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%AF%D9%88%D9%84%D8%A7%D8%A8_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/AZPYD1DC
+2023-03-16 06:34:25,721 - INFO - root - extracting data from 'https://divar.ir/v/%D8%AE%D8%A7%D9%86%D9%87-%DA%A9%D9%84%D9%86%DA%AF%DB%8C-%DB%B3%DB%B0%DB%B0%D9%85%D8%AA%D8%B1%D9%85%DB%8C%D8%AF%D8%A7%D9%86-%D8%AE%D8%B1%D8%A7%D8%B3%D8%A7%D9%86-%D8%AE%D8%A7%D9%88%D8%B1%D8%A7%D9%86_%D8%B2%D9%85%DB%8C%D9%86-%D9%88-%DA%A9%D9%84%D9%86%DA%AF%DB%8C_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%AE%D8%A7%D9%88%D8%B1%D8%A7%D9%86_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/AZPMCvde'
+2023-03-16 06:34:32,034 - WARNING - root - terms of agreements: False
+2023-03-16 06:34:32,121 - INFO - root - extracted category
+2023-03-16 06:34:32,182 - INFO - root - extracting group elements
+2023-03-16 06:34:32,182 - INFO - root - merging base_row_title and group_row_title.
+2023-03-16 06:34:32,255 - WARNING - root - done extracting data from https://divar.ir/v/%D8%AE%D8%A7%D9%86%D9%87-%DA%A9%D9%84%D9%86%DA%AF%DB%8C-%DB%B3%DB%B0%DB%B0%D9%85%D8%AA%D8%B1%D9%85%DB%8C%D8%AF%D8%A7%D9%86-%D8%AE%D8%B1%D8%A7%D8%B3%D8%A7%D9%86-%D8%AE%D8%A7%D9%88%D8%B1%D8%A7%D9%86_%D8%B2%D9%85%DB%8C%D9%86-%D9%88-%DA%A9%D9%84%D9%86%DA%AF%DB%8C_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%AE%D8%A7%D9%88%D8%B1%D8%A7%D9%86_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/AZPMCvde
+2023-03-16 06:34:32,295 - INFO - root - extracting data from 'https://divar.ir/v/63%D9%85%D8%AA%D8%B1-%D8%AE%D9%88%D8%B4-%D9%86%D9%82%D8%B4%D9%87-%D8%A7%D8%AA%D8%A7%D8%A8%DA%A9-%D8%A8%DB%8C%D8%B3%DB%8C%D9%85-%D9%87%D8%A7%D8%B4%D9%85-%D8%A7%D8%A8%D8%A7%D8%AF_%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%AE%D8%A7%D9%88%D8%B1%D8%A7%D9%86_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/AZOM8oLI'
+2023-03-16 06:34:38,368 - WARNING - root - terms of agreements: False
+2023-03-16 06:34:38,438 - INFO - root - extracted category
+2023-03-16 06:34:38,558 - INFO - root - extracting group elements
+2023-03-16 06:34:38,559 - INFO - root - merging base_row_title and group_row_title.
+2023-03-16 06:34:38,639 - WARNING - root - done extracting data from https://divar.ir/v/63%D9%85%D8%AA%D8%B1-%D8%AE%D9%88%D8%B4-%D9%86%D9%82%D8%B4%D9%87-%D8%A7%D8%AA%D8%A7%D8%A8%DA%A9-%D8%A8%DB%8C%D8%B3%DB%8C%D9%85-%D9%87%D8%A7%D8%B4%D9%85-%D8%A7%D8%A8%D8%A7%D8%AF_%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%AE%D8%A7%D9%88%D8%B1%D8%A7%D9%86_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/AZOM8oLI
+2023-03-16 06:34:38,670 - INFO - root - extracting data from 'https://divar.ir/v/%DB%B2%DB%B5%DB%B0-%D9%85%D8%AA%D8%B1-%D8%B2%D9%85%DB%8C%D9%86-%D9%87%D8%A7%DB%8C-%D8%B5%D9%86%D8%A7%DB%8C%D8%B9-%D8%AF%D9%81%D8%A7%D8%B9_%D8%B2%D9%85%DB%8C%D9%86-%D9%88-%DA%A9%D9%84%D9%86%DA%AF%DB%8C_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%AE%D8%A7%D9%88%D8%B1%D8%A7%D9%86_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/wY6TGmY4'
+2023-03-16 06:34:44,946 - WARNING - root - terms of agreements: False
+2023-03-16 06:34:45,002 - INFO - root - extracted category
+2023-03-16 06:34:45,093 - INFO - root - extracting group elements
+2023-03-16 06:34:45,093 - INFO - root - merging base_row_title and group_row_title.
+2023-03-16 06:34:45,142 - WARNING - root - done extracting data from https://divar.ir/v/%DB%B2%DB%B5%DB%B0-%D9%85%D8%AA%D8%B1-%D8%B2%D9%85%DB%8C%D9%86-%D9%87%D8%A7%DB%8C-%D8%B5%D9%86%D8%A7%DB%8C%D8%B9-%D8%AF%D9%81%D8%A7%D8%B9_%D8%B2%D9%85%DB%8C%D9%86-%D9%88-%DA%A9%D9%84%D9%86%DA%AF%DB%8C_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%AE%D8%A7%D9%88%D8%B1%D8%A7%D9%86_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/wY6TGmY4
+2023-03-16 06:34:45,212 - INFO - root - extracting data from 'https://divar.ir/v/%D9%88%DB%8C%D9%84%D8%A7%DB%8C%DB%8C-120%D9%85%D8%AA%D8%B1%DB%8C-%D8%B3%D9%87-%D8%B7%D8%A8%D9%82%D9%87-%D9%85%D8%A7%D8%B4%DB%8C%D9%86-%D8%B1%D9%88_%D8%AE%D8%A7%D9%86%D9%87-%D9%88-%D9%88%DB%8C%D9%84%D8%A7_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%AE%D8%A7%D9%88%D8%B1%D8%A7%D9%86_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/wYyHt-u9'
+2023-03-16 06:34:51,197 - WARNING - root - terms of agreements: False
+2023-03-16 06:34:51,271 - INFO - root - extracted category
+2023-03-16 06:34:51,406 - INFO - root - extracting group elements
+2023-03-16 06:34:51,407 - INFO - root - merging base_row_title and group_row_title.
+2023-03-16 06:34:51,489 - WARNING - root - done extracting data from https://divar.ir/v/%D9%88%DB%8C%D9%84%D8%A7%DB%8C%DB%8C-120%D9%85%D8%AA%D8%B1%DB%8C-%D8%B3%D9%87-%D8%B7%D8%A8%D9%82%D9%87-%D9%85%D8%A7%D8%B4%DB%8C%D9%86-%D8%B1%D9%88_%D8%AE%D8%A7%D9%86%D9%87-%D9%88-%D9%88%DB%8C%D9%84%D8%A7_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%AE%D8%A7%D9%88%D8%B1%D8%A7%D9%86_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/wYyHt-u9
+2023-03-16 06:34:51,520 - INFO - root - extracting data from 'https://divar.ir/v/%D8%AE%D8%A7%D9%86%D9%87-%DA%A9%D9%84%D9%86%DA%AF%DB%8C-%D9%82%D8%A7%D8%A8%D9%84-%D8%B3%DA%A9%D9%88%D9%86%D8%AA_%D8%B2%D9%85%DB%8C%D9%86-%D9%88-%DA%A9%D9%84%D9%86%DA%AF%DB%8C_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%A2%D9%87%D9%86%DA%AF_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/AZOIy2B3'
+2023-03-16 06:34:57,527 - WARNING - root - terms of agreements: False
+2023-03-16 06:34:57,598 - INFO - root - extracted category
+2023-03-16 06:34:57,665 - INFO - root - extracting group elements
+2023-03-16 06:34:57,665 - INFO - root - merging base_row_title and group_row_title.
+2023-03-16 06:34:57,731 - WARNING - root - done extracting data from https://divar.ir/v/%D8%AE%D8%A7%D9%86%D9%87-%DA%A9%D9%84%D9%86%DA%AF%DB%8C-%D9%82%D8%A7%D8%A8%D9%84-%D8%B3%DA%A9%D9%88%D9%86%D8%AA_%D8%B2%D9%85%DB%8C%D9%86-%D9%88-%DA%A9%D9%84%D9%86%DA%AF%DB%8C_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%A2%D9%87%D9%86%DA%AF_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/AZOIy2B3
+2023-03-16 06:34:57,761 - INFO - root - extracting data from 'https://divar.ir/v/%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86-%DB%B6%DB%B0-%D9%85%D8%AA%D8%B1%DB%8C-%D8%AE%D9%88%D8%B4-%D9%86%D9%82%D8%B4%D9%87_%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%A2%D9%87%D9%86%DA%AF_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/AZNg8SLv'
+2023-03-16 06:35:05,833 - WARNING - root - terms of agreements: False
+2023-03-16 06:35:05,904 - INFO - root - extracted category
+2023-03-16 06:35:06,035 - INFO - root - extracting group elements
+2023-03-16 06:35:06,035 - INFO - root - merging base_row_title and group_row_title.
+2023-03-16 06:35:06,134 - WARNING - root - done extracting data from https://divar.ir/v/%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86-%DB%B6%DB%B0-%D9%85%D8%AA%D8%B1%DB%8C-%D8%AE%D9%88%D8%B4-%D9%86%D9%82%D8%B4%D9%87_%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%A2%D9%87%D9%86%DA%AF_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/AZNg8SLv
+2023-03-16 06:35:06,186 - INFO - root - extracting data from 'https://divar.ir/v/70-%D9%85%D8%AA%D8%B1-%D9%86%D9%88%D8%B3%D8%A7%D8%B2_%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%AF%D9%88%D9%84%D8%A7%D8%A8_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/AZNknvP7'
+2023-03-16 06:35:12,985 - WARNING - root - terms of agreements: False
+2023-03-16 06:35:13,056 - INFO - root - extracted category
+2023-03-16 06:35:13,183 - INFO - root - extracting group elements
+2023-03-16 06:35:13,183 - INFO - root - merging base_row_title and group_row_title.
+2023-03-16 06:35:13,277 - WARNING - root - done extracting data from https://divar.ir/v/70-%D9%85%D8%AA%D8%B1-%D9%86%D9%88%D8%B3%D8%A7%D8%B2_%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%AF%D9%88%D9%84%D8%A7%D8%A8_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/AZNknvP7
+2023-03-16 06:35:13,311 - INFO - root - extracting data from 'https://divar.ir/v/%D8%A7%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86-%DB%B8%DB%B5%D9%85%D8%AA%D8%B1%DB%8C-%D8%B1%D8%A8%D8%B0%D9%87-%D8%B4%D9%85%D8%A7%D9%84%DB%8C_%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%A2%D9%87%D9%86%DA%AF_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/AZNg26Op'
+2023-03-16 06:35:20,663 - WARNING - root - terms of agreements: False
+2023-03-16 06:35:20,738 - INFO - root - extracted category
+2023-03-16 06:35:20,862 - INFO - root - extracting group elements
+2023-03-16 06:35:20,862 - INFO - root - merging base_row_title and group_row_title.
+2023-03-16 06:35:20,938 - WARNING - root - done extracting data from https://divar.ir/v/%D8%A7%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86-%DB%B8%DB%B5%D9%85%D8%AA%D8%B1%DB%8C-%D8%B1%D8%A8%D8%B0%D9%87-%D8%B4%D9%85%D8%A7%D9%84%DB%8C_%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%A2%D9%87%D9%86%DA%AF_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/AZNg26Op
+2023-03-16 06:35:20,969 - INFO - root - extracting data from 'https://divar.ir/v/%D9%81%D8%B1%D9%88%D8%B4-70-%D9%85%D8%AA%D8%B1-%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86-%D8%B9%D9%84%D8%A7%D9%85%D9%87-%D8%B4%D9%85%D8%A7%D9%84%DB%8C_%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%A2%D9%87%D9%86%DA%AF_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/wYxnFDxR'
+2023-03-16 06:35:27,319 - WARNING - root - terms of agreements: False
+2023-03-16 06:35:27,387 - INFO - root - extracted category
+2023-03-16 06:35:27,490 - INFO - root - extracting group elements
+2023-03-16 06:35:27,490 - INFO - root - merging base_row_title and group_row_title.
+2023-03-16 06:35:27,574 - WARNING - root - done extracting data from https://divar.ir/v/%D9%81%D8%B1%D9%88%D8%B4-70-%D9%85%D8%AA%D8%B1-%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86-%D8%B9%D9%84%D8%A7%D9%85%D9%87-%D8%B4%D9%85%D8%A7%D9%84%DB%8C_%D8%A2%D9%BE%D8%A7%D8%B1%D8%AA%D9%85%D8%A7%D9%86_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%A2%D9%87%D9%86%DA%AF_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/wYxnFDxR
+2023-03-16 06:35:27,612 - INFO - root - extracting data from 'https://divar.ir/v/%D8%AE%D8%A7%D9%86%D9%87-%DA%A9%D9%84%D9%86%DA%AF%DB%8C_%D8%AE%D8%A7%D9%86%D9%87-%D9%88-%D9%88%DB%8C%D9%84%D8%A7_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%A2%D9%87%D9%86%DA%AF_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/AZMQP12e'
+2023-03-16 06:35:33,582 - WARNING - root - terms of agreements: False
+2023-03-16 06:35:33,661 - INFO - root - extracted category
+2023-03-16 06:35:33,806 - INFO - root - extracting group elements
+2023-03-16 06:35:33,806 - INFO - root - merging base_row_title and group_row_title.
+2023-03-16 06:35:33,899 - WARNING - root - done extracting data from https://divar.ir/v/%D8%AE%D8%A7%D9%86%D9%87-%DA%A9%D9%84%D9%86%DA%AF%DB%8C_%D8%AE%D8%A7%D9%86%D9%87-%D9%88-%D9%88%DB%8C%D9%84%D8%A7_%D8%AA%D9%87%D8%B1%D8%A7%D9%86_%D8%A2%D9%87%D9%86%DA%AF_%D8%AF%DB%8C%D9%88%D8%A7%D8%B1/AZMQP12e
+2023-03-16 06:35:35,090 - WARNING - root - deleting Divar object

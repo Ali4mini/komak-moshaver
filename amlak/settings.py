@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'customer.apps.CustomerConfig',
     'listing.apps.ListingConfig',
     'django_extensions',
+    'agents.apps.AgentsConfig',
 ]
 
 MIDDLEWARE = [

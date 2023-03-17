@@ -8,9 +8,9 @@ from django.contrib import messages
 @csrf_exempt
 def agent_login(request):
     if request.method == 'POST':
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            cd = form.cleaned_data
+        login_form = LoginForm(request.POST)
+        if login_form.is_valid():
+            cd = login_form.cleaned_data
             user = authenticate(request, username=cd['username'], password=cd['password'])
             if user is not None:
                 if user.is_active:
@@ -29,6 +29,6 @@ def agent_login(request):
             
 
     else:
-        form = LoginForm()
-        return render(request, 'file/form.html', {'form': form})
+        login_form = LoginForm()
+        return render(request, 'file/form.html', {'login_form': login_form})
     
