@@ -3,7 +3,12 @@ from . import forms
 from django.views.decorators.csrf import csrf_exempt
 from .models import Sell, Rent
 from django.contrib import messages
-from django.urls import reverse
+from django.urls import reverse_lazy
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.views.generic.edit import UpdateView, DeleteView
+from django.views import View
+from django.utils.decorators import method_decorator
 # Create your views here.
 
 
@@ -52,19 +57,55 @@ def new_rent_file(request):
         form = forms.NewRentFile()
         return render(request, 'file/new_rent_file.html', )
     
+@method_decorator(login_required, name='dispatch')
+class FileDetails(View):
+    def post(self, request, id, *args, **kwargs):
+        comment_form = forms.CommentForm(data=request.POST)
+        file = get_object_or_404(Sell, pk=id)
+        user = get_object_or_404(User, pk=request.user.id)
+        if comment_form.is_valid():
+            if request.user.is_authenticated:
+                new_comment = comment_form.save(commit=False)
+                new_comment.file = file
+                new_comment.user = user
+                new_comment.save()
+                messages.success(request, 'all went ok ')
+                return redirect(f'/file/sell/{id}')
+            else:
+                messages.error(request, 'login first')
+                return redirect('/agents/login')
+    def get(self, request, id, *args, **kwargs):
+        file = get_object_or_404(Sell, pk=id, )
+        comment_form = forms.CommentForm()
+        comments = file.comments.all()
+        return render(request, 'file/file_detail.html', {'post': file,
+                                                         'comments': comments,
+                                                         'comment_form': comment_form,
+                                                         })
 
-def file_detail(request, id):
-    file = get_object_or_404(Sell, pk=id, )
-    return render(request, 'file/file_detail.html', {'post': file})
+@method_decorator(csrf_exempt, name='dispatch')
+class FileDelete(View):
+    def post(self,request,pk, *args, **kwargs):
+        try:
+            file = Sell.objects.get(pk=pk)
+            file.delete()
+            messages.success(request, 'all done')
+        except:
+            messages.error(request, 'something went wrong!')
+        return redirect('/')     
+        
 
-def file_delete(request, id):
-    file = Sell.objects.get(pk=id)
-    file.delete()
-    messages.success(request,'فایل ما موفقیت حذف شد.')
-    return redirect('/')
+# class SellDeleteView(DeleteView):
+#     model = Sell
+#     success_url = reverse_lazy('listing:list')
 
-
-
+    
+class SellUpdateView(UpdateView):
+    model = Sell
+    fields = "__all__"
+    template_name_suffix = '_form'
+    
+    
 
 
 

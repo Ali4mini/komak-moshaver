@@ -4,7 +4,7 @@
 
 {% block content %}
     <link rel='stylesheet' href="{% static 'css/file_details.css' %}">
-<div class="images">
+    <div class="images">
         
     </div>
 
@@ -64,6 +64,31 @@
             </tr>
         </table>
     </div>
-
-
+    <div class="actions">
+        <form action="delete/" method="post">
+            {% csrf_token %}
+            <input type="submit" value="delete">
+        </form>
+        <form action="edit/" method="post">
+            {% csrf_token %}
+            <input type="submit" value="edit">
+        </form>
+    </div>
+    <div class="comment_section">
+        <div class="comments">
+            <ul>
+                {% for comment in comments %}
+                    <li>{{comment.body}}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="new_comment">
+            <form action="" method="post">
+                {% csrf_token %}
+                {{ comment_form }}
+                <input type="submit" value="submit comment">
+            </form>
+        </div>
+    </div>
+    <script src="{% static 'JS/delete_confirm.js' %}"></script>
 {% endblock content %}

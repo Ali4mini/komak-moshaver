@@ -88,11 +88,11 @@ class Listing:
             return post_detail
             
         Divar_obj = Divar(headless=True)
-        Divar_obj.login('9212396361', cookie='alireza.pkl')
+        Divar_obj.login('9212396361', cookie='alireza2.pkl')
         posts = Divar_obj.all_posts(page=self.divar_url)
         sleep(6)
         #Divar_obj.save_cookie('alireza.pkl')
-        for post in posts:
+        for post in posts[:3]:
             print(f'in => {post}  ')
             res = Divar_obj.post_details(post)
             res = validation(res)

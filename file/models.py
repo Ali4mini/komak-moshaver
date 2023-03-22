@@ -1,6 +1,8 @@
 from django.db import models
 from taggit.managers import TaggableManager
 from django.urls import reverse
+from agents_m.models import Profile
+from django.conf import settings
 # Create your models here.
 
 class Sell(models.Model):
@@ -21,10 +23,10 @@ class Sell(models.Model):
     storage = models.BooleanField(default=True)
     parking = models.BooleanField(default=True)
     type = models.CharField(max_length=1, choices=Types.choices, default=Types.APARTEMANT)
-    added_by = models.ForeignKey("agents.Profile",
+    added_by = models.ForeignKey(settings.AUTH_USER_MODEL,
                                  verbose_name=("added to site by "),
                                  on_delete=models.DO_NOTHING,
-                                 blank=True,
+                                 blank=False,
                                  default=1
                                  )
     tag_manager = TaggableManager(blank=True)
@@ -55,10 +57,10 @@ class Rent(models.Model):
     storage = models.BooleanField(default=True)
     parking = models.BooleanField()
     type = models.CharField(max_length=1, choices=Types.choices, default=Types.APARTEMANT)
-    added_by = models.ForeignKey("agents.Profile",
+    added_by = models.ForeignKey(settings.AUTH_USER_MODEL,
                                  verbose_name=("added to site by "),
                                  on_delete=models.DO_NOTHING,
-                                 blank=True,
+                                 blank=False,
                                  default=1
                                  )
     tags_manager = TaggableManager(blank=True)
@@ -69,4 +71,26 @@ class Rent(models.Model):
     def get_absolute_url(self):
         return reverse("file:rent_file_detail", args=[self.id])
 
-        
+class Comment(models.Model):
+    file = models.ForeignKey("Sell",
+                             verbose_name=("file"),
+                             on_delete=models.CASCADE,
+                             related_name='comments')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             verbose_name=("user's profile"),
+                             on_delete=models.CASCADE,
+                             related_name='comments')
+    body = models.TextField(max_length=10000)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    active = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name = ("Comment")
+        verbose_name_plural = ("Comments")
+
+    def __str__(self):
+        return f'comment by {self.user} on {self.file}'
+
+    def get_absolute_url(self):
+        return reverse("sell_comment", kwargs={"pk": self.pk})

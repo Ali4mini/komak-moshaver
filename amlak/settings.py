@@ -37,12 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'agents_m.apps.AgentsMConfig',
     'file.apps.FileConfig',
     'taggit',
     'customer.apps.CustomerConfig',
     'listing.apps.ListingConfig',
     'django_extensions',
-    'agents.apps.AgentsConfig',
 ]
 
 MIDDLEWARE = [
@@ -82,9 +82,9 @@ WSGI_APPLICATION = 'amlak.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'amlakdb', 
-        'USER': 'ali', 
-        'PASSWORD': 'alirezainim4',
+        'NAME': 'amlak_m', 
+        'USER': 'amlak_user', 
+        'PASSWORD': 'inim4az3rila',
         'HOST': '127.0.0.1', 
         'PORT': '5432',
     }

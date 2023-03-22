@@ -4,15 +4,9 @@ from django.views import View
 from django.contrib.auth.decorators import login_required
 from .forms import ProfileForm
 # Create your views here.
-
-# class Profile(View):
-#     def get(self, request, **args, **kwargs):
-        
-        
-
 @login_required()
-def profile(request):
-    if request.method == 'POST':
+class Profile(View):
+    def post(request, *args, **kwargs):
         profile_form = ProfileForm(data=request.POST)
         if profile_form.is_valid():
             profile_form.save(commit=True)
@@ -21,11 +15,6 @@ def profile(request):
         else:
             messages.error(request,'went wrongly  ')
             return redirect('/agents/login')
-    if request.method == 'GET':
+    def get(request, *args, **kwargs):
         profile_form = ProfileForm()
         return render(request, 'agents/form.html', {'profile_form': profile_form})
-        
-        
-        
-
-            

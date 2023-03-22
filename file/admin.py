@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Sell, Rent
+from .models import Sell, Rent, Comment
 
 # Register your models here.
 
@@ -18,3 +18,7 @@ class SellAdmin(admin.ModelAdmin):
 class RentAdmin(admin.ModelAdmin):
     list_display = ['owner_name', 'm2', 'address', 'type', ]
     list_filter = ['m2', 'price_up', 'price_rent',]
+    
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ['file', 'body', 'created', 'active']

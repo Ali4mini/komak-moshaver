@@ -2,12 +2,13 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.views.decorators.csrf import csrf_exempt
+from django.views import View
+from django.contrib.auth.views import LoginView
 from .forms import LoginForm
 from django.contrib import messages
 
-@csrf_exempt
-def agent_login(request):
-    if request.method == 'POST':
+class AgentLogin(View):
+    def post(request, *args, **kwargs):
         login_form = LoginForm(request.POST)
         if login_form.is_valid():
             cd = login_form.cleaned_data
@@ -25,10 +26,13 @@ def agent_login(request):
                 return HttpResponse('Invalid login')
         else:
             messages.error(request, 'form is not valid')
-            return HttpResponse('from is not valid')
-            
+            return HttpResponse('from is not valid')      
 
-    else:
+    def get(request, *args, **kwargs):
         login_form = LoginForm()
-        return render(request, 'file/form.html', {'login_form': login_form})
+        return render(request, 'registeration/login.html', {'form': login_form})
+    
+class GenericLoginView(LoginView):
+    next_page = '/'
+    
     

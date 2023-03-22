@@ -3,5 +3,6 @@ from . import views
 app_name = 'listing'
 
 urlpatterns = [
-    path('', views.panel)
+    path('', views.panel, name='list')
 ]
+
