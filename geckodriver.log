@@ -1543,3 +1543,17 @@ console.warn: SearchSettings: "get: No settings file exists, new profile?" (new 
 DevTools listening on ws://localhost:56673/devtools/browser/d75c6040-6abc-4812-8c95-4d62d26bf5b5
 JavaScript error: https://s100.divarcdn.com/statics/2023/03/vendors.e2fd41ce.desktop.js, line 1: Error: timeout of 10000ms exceeded
 1679425234378	Marionette	INFO	Stopped listening on port 35983
+1679676708424	geckodriver	INFO	Listening on 127.0.0.1:46867
+1679676708720	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-headless" "--remote-debugging-port" "58151" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofileUkwIRu"
+*** You are running in headless mode.
+1679676713487	Marionette	INFO	Marionette enabled
+1679676713508	Marionette	INFO	Listening on port 43523
+WebDriver BiDi listening on ws://localhost:58151
+Read port: 43523
+1679676714578	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.error: Region.jsm: "Error fetching region" (new Error("TIMEOUT", "resource://gre/modules/Region.jsm", 769))
+console.error: Region.jsm: "Failed to fetch region" (new Error("TIMEOUT", "resource://gre/modules/Region.jsm", 421))
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofileUkwIRu/search.json.mozlz4", (void 0)))
+DevTools listening on ws://localhost:58151/devtools/browser/b3eb9879-7175-4464-ba57-f58482dbeb17
+1679676825493	Marionette	INFO	Stopped listening on port 43523

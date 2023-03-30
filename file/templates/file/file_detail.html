@@ -3,92 +3,151 @@
 {% block title %}file detail{% endblock title %}
 
 {% block content %}
-    <link rel='stylesheet' href="{% static 'css/file_details.css' %}">
-    <div class="images">
-        
-    </div>
+<!-- <link rel='stylesheet' href="{% static 'css/file_details.css' %}"> -->
 
-    <div class="details">
-        <table>
-            <tr>
-                <th>نوع:</th>
-                <td>{{ post.get_type_display}}</td>
-            </tr>
-            <tr>
-                <th>مالک:</th>
-                <td>{{ post.owner_name}}</td>
-            </tr>
-            <tr>
-                <th>شماره مالک:</th>
-                <td>{{ post.owner_phone }}</td>
-            </tr>
-            <tr>
-                <th>متراژ:</th>
-                <td>{{ post.m2 }}</td>
-            </tr>
-            <tr>
-                <th>قیمت: </th>
-                <td>{{ post.price }}</td>
-            </tr>
-            <tr>
-                <th>آدرس: </th>
-                <td>{{ post.address }}</td>
-            </tr>
-            <tr>
-                <th>آسانسور :</th>
-                <td>{% if post.elevator %}
-                        دارد
-                    {% endif %}
-                </td>
-            </tr>
-            <tr>
-                <th>پارکینگ :</th>
-                <td>{% if post.parking %}
-                        دارد
-                    {% endif %}
-                </td>
-            </tr>
-            <tr>
-                <th>انباری :</th>
-                <td>{% if post.storage %}
-                        دارد
-                    {% endif %}
-                </td>
-            </tr>
-            <tr>
-                <th>تگ ها :</th>
-                <td>{% if post.tags %}
-                        {{ post.tags.name }}
-                    {% endif %}
-                </td>
-            </tr>
-        </table>
-    </div>
-    <div class="actions">
-        <form action="delete/" method="post">
-            {% csrf_token %}
-            <input type="submit" value="delete">
-        </form>
-        <form action="edit/" method="post">
-            {% csrf_token %}
-            <input type="submit" value="edit">
-        </form>
-    </div>
-    <div class="comment_section">
-        <div class="comments">
-            <ul>
-                {% for comment in comments %}
-                    <li>{{comment.body}}</li>
-                {% endfor %}
-            </ul>
+<div class="details">
+    <div class="box m-5">
+        <div class="columns">
+            <div class="column is-full">
+                <p id="type">
+                    نوع: {{file.get_type_display}}
+                </p>
+            </div>
         </div>
-        <div class="new_comment">
-            <form action="" method="post">
-                {% csrf_token %}
-                {{ comment_form }}
-                <input type="submit" value="submit comment">
-            </form>
+        <div class="columns">
+            <div class="column is-half">
+                <div class="columns">
+                    <div class="column">
+                        <p id="owner_name">
+                            نام مالک: {{file.owner_name}}
+                        </p>
+                    </div>
+                    <div class="column">
+                        <p id="owner_phone">
+                            شماره مالک: {{file.owner_phone}}
+                        </p>
+                    </div>
+                </div>
+                <div class="columns">
+                    <div class="column">
+                        <p id="year">
+                            قیمت: {{file.price}}
+                        </p>
+                    </div>
+                    <div class="column">
+                        <p id="year">
+                            متراژ: {{file.m2}}
+                        </p>
+                    </div>
+                    <div class="column">
+                        <p id="year">
+                            طبقه: {{file.floor}}
+                        </p>
+                    </div>
+                    <div class="column">
+                        <p id="year">
+                            سال: {{file.year}}
+                        </p>
+                    </div>
+                </div>
+                <div class="columns mt-3 mb-6">
+                    <div class="column">
+                        <p id="year">
+                            آدرس: {{file.address}}
+                        </p>
+                    </div>
+                </div>
+
+
+                <div class="columns">
+                    {% if file.elevator %}
+                    <div class="column">
+                        <img src="{% static 'images/elevator.svg'%}" alt="elevator" class="image is-24x24 mt-1 mr-3">
+                        <p id="elevator">آسانسور دارد</p>
+                    </div>
+                    {% endif %}
+                    {% if file.storage %}
+                    <div class="column">
+                        <img src="{% static 'images/storage.svg'%}" alt="storage" class="image is-24x24 mt-1 mr-3">
+                        <p id="storage">انباری دارد</p>
+                    </div>
+                    {% endif %}
+                    {% if file.parking %}
+                    <div class="column">
+                        <img src="{% static 'images/parking.svg'%}" alt="parking" class="image is-24x24 mt-1 mr-3">
+                        <p id="parking">پارکینگ دارد</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="column is-half has-text-centered">
+                <div class="pictures-section">
+                    {% if file.pictures %}
+                    <figure class="image is-64x64 is-inline-block ">
+                        <img class="image is-centered" src="{{ file.picture.file }}" alt="alt"
+                            href="{{ file.pictures.url}}">
+                    </figure>
+                    {% else %}
+                    <figure class="block is-128x128 is-inline-block ">
+                        <img src="{% static 'camera.svg' %}" width="100" height="70" alt="">
+                    </figure>
+                    {% endif %}
+                </div>
+            </div>
         </div>
-    </div>
-    <script src="{% static 'JS/delete_confirm.js' %}"></script>
-{% endblock content %}
+        <div class="columns is-vcentered mt-5">
+            <div class="column is-half">
+                <div class="comments">
+                    <label class="label">یادداشت:</label>
+
+                    {% for comment in comments %}
+                    <div class="card m-3">
+                        <div class="card-title p-2"><a href="{{comment.user}}">{{comment.user}} </a></div>
+
+                        <div class="card-content p-2">{{comment.body}}</li>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+
+                    <div class="new_comment">
+                        <form action="" method="post">
+                            {% csrf_token %}
+                            <div class="field m-3">
+                                <textarea class="textarea is-small" name="body" cols="1" rows="5" maxlength="10000"
+                                    required="" id="id_body" style="border-radius: 10px;"></textarea>
+                            </div>
+                            <button type="submit" class="button is-link is-light is-pulled-left mb-6">add</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="column is-one-quarter">
+
+            </div> -->
+            <div class="actions">
+                <div class="column mr-6">
+                    <div class="columns">
+                        <div class="column ">
+                            <form action="delete/" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="button mt-5 is-danger">
+                                    حذف
+                                </button>
+                            </form>
+                        </div>
+                        <div class="column mr-6">
+                            <form action="edit/" method="get">
+                                {% csrf_token %}
+                                <button type="submit" class="button mt-5 is-pulled-left is-warning">
+                                    ویرایش
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <script src="{% static 'JS/delete_confirm.js' %}"></script>
+        {% endblock content %}

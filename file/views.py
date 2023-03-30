@@ -17,6 +17,7 @@ from django.utils.decorators import method_decorator
 def new_sell_file(request):
     if request.method == "POST":
         form = forms.NewSellFile(data=request.POST)
+        print(request.POST)
         if form.is_valid():
             # Create a NewSellFile object without saving it to the database
             file = form.save(commit=False)
@@ -28,12 +29,14 @@ def new_sell_file(request):
             form.save_m2m()
 
             messages.success(request, 'فایل با موفقیت ثبت شد.',)
-            return render(request, 'file/panel.html', )
+            return redirect('/')
+        
+        messages.success(request, '!!!! ')
         return render(request, 'file/new_sell_file.html')
 
     else:
         form = forms.NewSellFile()
-        return render(request, 'file/new_sell_file.html', )
+        return render(request, 'file/new_sell_file.html')
     
 
 @csrf_exempt
@@ -48,14 +51,14 @@ def new_rent_file(request):
             # Save the comment to the database
             file.save()
             messages.success(request, 'فایل با موفقیت ثبت شد.',)
-            return render(request, 'file/panel.html')
+            return redirect('/')
         else:
             print(request.POS)
             return render(request, 'file/new_rent_file.html')
 
     else:
         form = forms.NewRentFile()
-        return render(request, 'file/new_rent_file.html', )
+        return render(request, 'file/new_rent_file.html')
     
 @method_decorator(login_required, name='dispatch')
 class FileDetails(View):
@@ -78,7 +81,7 @@ class FileDetails(View):
         file = get_object_or_404(Sell, pk=id, )
         comment_form = forms.CommentForm()
         comments = file.comments.all()
-        return render(request, 'file/file_detail.html', {'post': file,
+        return render(request, 'file/file_detail.html', {'file': file,
                                                          'comments': comments,
                                                          'comment_form': comment_form,
                                                          })
@@ -102,10 +105,33 @@ class FileDelete(View):
     
 class SellUpdateView(UpdateView):
     model = Sell
-    fields = "__all__"
-    template_name_suffix = '_form'
+    template_name = 'file/sell_update.html'
+    success_url = '/'
+    # fields = (
+    #     'type',
+    #     'price',
+    #     'm2',
+    #     'year',
+    #     'owner_name',
+    #     'owner_phone',
+    #     'address',
+    #     'floor',
+    #     'elevator',
+    #     'storage',
+    #     'parking',
+    #     'pictures',
+    #     )    
+    form_class = forms.UpdateForm
+
+    def get(self, request, pk, *args, **kwargs):
+        file = self.model.objects.get(pk=pk)
+        print(file)
+        return render(request, 'file/sell_update.html' , {'file': file})
+        
+        
+        
     
-    
+
 
 
 

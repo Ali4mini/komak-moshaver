@@ -5,11 +5,13 @@
     <meta charset="utf-8">
     <title>{% block title %} {% endblock %}</title>
     <link href="{% static "css/base.css" %}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma-rtl.min.css">
 
   </head>
   <body>
     <div class="nav">
       <ul>
+        <li><a href="/"><img src="{% static 'logo.png'%}" width="30" alt="logo"></a></li>
         <li><a href="/">پنل</a></li>
         <li><a href="{% url 'file:new_sell_file' %}">فایل</a></li>
         <li><a href="{% url 'customer:new_buy_customer' %}">مشتری</a></li>
@@ -34,3 +36,5 @@
 
   </body>
 </html>
+
+

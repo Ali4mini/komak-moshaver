@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.views.decorators.csrf import csrf_exempt
 from django.views import View
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, LogoutView
 from .forms import LoginForm
 from django.contrib import messages
 
@@ -33,6 +33,9 @@ class AgentLogin(View):
         return render(request, 'registeration/login.html', {'form': login_form})
     
 class GenericLoginView(LoginView):
+    next_page = '/'
+
+class GenericLogoutView(LogoutView):
     next_page = '/'
     
     

@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from . import forms
@@ -14,7 +14,7 @@ def buy_customer(request):
 
             customer.save()
             messages.success(request, 'مشتری با موفقیت ثبت شد.',)
-            return render(request, 'customer/panel.html')
+            return redirect('/')
         else:
             return HttpResponse('invalid request')
     else:

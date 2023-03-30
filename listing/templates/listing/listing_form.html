@@ -3,43 +3,44 @@
 {% load static %}
 
 {% block content %}
-    
-    <form action='' method="POST">
+    <script src="{% static 'javascript/get_request.js'%}"></script>
+    <div class="filter">
         <div class="box m-6">
-            <div class="control">
-            <div class="select is-normal">
-                <select name="type" id="type">
-                    <option value="A">آپارتمان</option>
-                    <option value="L">زمین</option>
-                    <option value="S">مغازه</option>
-                    <option value="H">خانه و ویلا</option>
-                </select>
-            </div>
-            <label class="label mt-2">budget</label>
-            <div class="control">
-                <input type="number" class="input is-small" >
-            </div>
-            <label class="label mt-2">m2</label>
-            <div class="control">
-                <input type="number" class="input is-small">
-            </div>
-            <label class="label mt-2">year</label>
-            <div class="control">
-                <input type="number" class="input is-small">
-            </div>
-            <label for="" class="label mt-2">
-                <input type="checkbox" class="checkbox">
-                elevator
-            </label>
-            <label for="" class="label">
-                <input type="checkbox" class="checkbox">
-                parking
-            </label>
-            {% csrf_token %}
-            <button class='button is-link mt-3' type="submit"> Submit </button>
+            <form action="" method="post">
+                {% csrf_token%}
+                <div class="select is-primary">
+                    <select name="type" id="id_type">
+                        <option value="A" selected="">آپارتمان</option>
+                        <option value="L">زمین</option>
+                        <option value="S">مغازه</option>
+                        <option value="H">خانه و ویلا</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="id_price">قیمت:</label>
+                    <input type="number" name="price" class="input is-small" required id="id_price">
+                </div>
+                <div class="field">
+                    <label for="id_m2">متراژ:</label>
+                    <input type="number" name="m2" class="input is-small" id="id_m2">
+                </div>
+                <div class="field">
+                    <label for="id_year">سال ساخت:</label>
+                    <input type="number" name="year" class="input is-small" id="id_year">
+                </div>
+                <div class="field">
+                    <label for="id_parking">                    
+                        <input type="checkbox" name="parking" class="checkbox" id="id_parking" checked="">
+                        پارکینگ  </label>
+                </div>
+                <button type="submit" class="button is-primary is-medium is-light  is-pulled-left">Filter</button>
+                <button class="button is-danger is-light is-medium mr-3" type="button" onclick='send_request()'>
+                    Cancel
+                </button>
+            </form>
 
         </div>
-    </form>
+    </div>
 
 
     <div class="files">

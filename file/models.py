@@ -22,6 +22,7 @@ class Sell(models.Model):
     elevator = models.BooleanField(default=True)
     storage = models.BooleanField(default=True)
     parking = models.BooleanField(default=True)
+    # pictures = models.ImageField(upload_to='pictures', blank=True)
     type = models.CharField(max_length=1, choices=Types.choices, default=Types.APARTEMANT)
     added_by = models.ForeignKey(settings.AUTH_USER_MODEL,
                                  verbose_name=("added to site by "),
@@ -29,6 +30,8 @@ class Sell(models.Model):
                                  blank=False,
                                  default=1
                                  )
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
     tag_manager = TaggableManager(blank=True)
     
 
@@ -57,12 +60,15 @@ class Rent(models.Model):
     storage = models.BooleanField(default=True)
     parking = models.BooleanField()
     type = models.CharField(max_length=1, choices=Types.choices, default=Types.APARTEMANT)
+    # pictures = models.ImageField(upload_to='pictures', blank=True)
     added_by = models.ForeignKey(settings.AUTH_USER_MODEL,
                                  verbose_name=("added to site by "),
                                  on_delete=models.DO_NOTHING,
                                  blank=False,
                                  default=1
                                  )
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
     tags_manager = TaggableManager(blank=True)
 
     def __str__(self):
@@ -94,3 +100,8 @@ class Comment(models.Model):
 
     def get_absolute_url(self):
         return reverse("sell_comment", kwargs={"pk": self.pk})
+
+# class Images(models.Model):
+#     post = models.ForeignKey(Sell, default=None)
+#     image = models.ImageField(upload_to=get_image_filename,
+#                               verbose_name='Image')
