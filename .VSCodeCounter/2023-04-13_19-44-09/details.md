@@ -1,0 +1,143 @@
+# Details
+
+Date : 2023-04-13 19:44:09
+
+Directory /home/ali4mini/__Projects__/amlak
+
+Total : 128 files,  217797 codes, 383 comments, 841 blanks, all 219021 lines
+
+[Summary](results.md) / Details / [Diff Summary](diff.md) / [Diff Details](diff-details.md)
+
+## Files
+| filename | language | code | comment | blank | total |
+| :--- | :--- | ---: | ---: | ---: | ---: |
+| [Divar/divar.py](/Divar/divar.py) | Python | 131 | 9 | 46 | 186 |
+| [Divar/test.py](/Divar/test.py) | Python | 15 | 1 | 4 | 20 |
+| [README.md](/README.md) | Markdown | 0 | 0 | 1 | 1 |
+| [agents/models.py](/agents/models.py) | Python | 9 | 1 | 2 | 12 |
+| [agents_m/__init__.py](/agents_m/__init__.py) | Python | 0 | 0 | 1 | 1 |
+| [agents_m/admin.py](/agents_m/admin.py) | Python | 5 | 1 | 0 | 6 |
+| [agents_m/apps.py](/agents_m/apps.py) | Python | 4 | 0 | 3 | 7 |
+| [agents_m/auth.py](/agents_m/auth.py) | Python | 35 | 0 | 6 | 41 |
+| [agents_m/forms.py](/agents_m/forms.py) | Python | 9 | 0 | 5 | 14 |
+| [agents_m/migrations/0001_initial.py](/agents_m/migrations/0001_initial.py) | Python | 20 | 1 | 7 | 28 |
+| [agents_m/migrations/__init__.py](/agents_m/migrations/__init__.py) | Python | 0 | 0 | 1 | 1 |
+| [agents_m/models.py](/agents_m/models.py) | Python | 7 | 1 | 1 | 9 |
+| [agents_m/templates/registration/login.html](/agents_m/templates/registration/login.html) | HTML | 18 | 0 | 2 | 20 |
+| [agents_m/tests.py](/agents_m/tests.py) | Python | 1 | 1 | 2 | 4 |
+| [agents_m/urls.py](/agents_m/urls.py) | Python | 8 | 0 | 2 | 10 |
+| [agents_m/views.py](/agents_m/views.py) | Python | 19 | 1 | 0 | 20 |
+| [amlak/__init__.py](/amlak/__init__.py) | Python | 0 | 0 | 1 | 1 |
+| [amlak/asgi.py](/amlak/asgi.py) | Python | 4 | 8 | 5 | 17 |
+| [amlak/settings.py](/amlak/settings.py) | Python | 81 | 27 | 33 | 141 |
+| [amlak/urls.py](/amlak/urls.py) | Python | 11 | 15 | 2 | 28 |
+| [amlak/wsgi.py](/amlak/wsgi.py) | Python | 4 | 8 | 5 | 17 |
+| [customer/__init__.py](/customer/__init__.py) | Python | 0 | 0 | 1 | 1 |
+| [customer/admin.py](/customer/admin.py) | Python | 10 | 1 | 5 | 16 |
+| [customer/apps.py](/customer/apps.py) | Python | 4 | 0 | 3 | 7 |
+| [customer/forms.py](/customer/forms.py) | Python | 10 | 0 | 3 | 13 |
+| [customer/migrations/0001_initial.py](/customer/migrations/0001_initial.py) | Python | 26 | 1 | 7 | 34 |
+| [customer/migrations/0002_buycustomer_type_rentcustomer_type.py](/customer/migrations/0002_buycustomer_type_rentcustomer_type.py) | Python | 17 | 1 | 6 | 24 |
+| [customer/migrations/__init__.py](/customer/migrations/__init__.py) | Python | 0 | 0 | 1 | 1 |
+| [customer/models.py](/customer/models.py) | Python | 24 | 7 | 7 | 38 |
+| [customer/static/JS/scripts.js](/customer/static/JS/scripts.js) | JavaScript | 13 | 0 | 1 | 14 |
+| [customer/static/css/base.css](/customer/static/css/base.css) | CSS | 34 | 0 | 25 | 59 |
+| [customer/static/css/new_customer.css](/customer/static/css/new_customer.css) | CSS | 34 | 0 | 5 | 39 |
+| [customer/templates/customer/base.html](/customer/templates/customer/base.html) | HTML | 21 | 0 | 6 | 27 |
+| [customer/templates/customer/customer.html](/customer/templates/customer/customer.html) | HTML | 29 | 0 | 5 | 34 |
+| [customer/templates/customer/form.html](/customer/templates/customer/form.html) | HTML | 62 | 0 | 4 | 66 |
+| [customer/templates/customer/panel.html](/customer/templates/customer/panel.html) | HTML | 6 | 0 | 1 | 7 |
+| [customer/tests.py](/customer/tests.py) | Python | 1 | 1 | 2 | 4 |
+| [customer/urls.py](/customer/urls.py) | Python | 8 | 0 | 3 | 11 |
+| [customer/views.py](/customer/views.py) | Python | 62 | 1 | 7 | 70 |
+| [divar.log](/divar.log) | Log | 4 | 0 | 1 | 5 |
+| [file/__init__.py](/file/__init__.py) | Python | 0 | 0 | 1 | 1 |
+| [file/admin.py](/file/admin.py) | Python | 13 | 6 | 5 | 24 |
+| [file/apps.py](/file/apps.py) | Python | 4 | 0 | 3 | 7 |
+| [file/forms.py](/file/forms.py) | Python | 102 | 29 | 13 | 144 |
+| [file/migrations/0001_initial.py](/file/migrations/0001_initial.py) | Python | 46 | 1 | 7 | 54 |
+| [file/migrations/0002_alter_rent_tags_alter_sell_parking_alter_sell_tags.py](/file/migrations/0002_alter_rent_tags_alter_sell_parking_alter_sell_tags.py) | Python | 24 | 1 | 6 | 31 |
+| [file/migrations/0003_alter_sell_type.py](/file/migrations/0003_alter_sell_type.py) | Python | 12 | 1 | 6 | 19 |
+| [file/migrations/0004_alter_rent_type.py](/file/migrations/0004_alter_rent_type.py) | Python | 12 | 1 | 6 | 19 |
+| [file/migrations/0005_alter_rent_type_alter_sell_type.py](/file/migrations/0005_alter_rent_type_alter_sell_type.py) | Python | 17 | 1 | 6 | 24 |
+| [file/migrations/0006_alter_rent_type_alter_sell_type.py](/file/migrations/0006_alter_rent_type_alter_sell_type.py) | Python | 17 | 1 | 6 | 24 |
+| [file/migrations/0007_remove_rent_id_remove_sell_id_rent_file_id_and_more.py](/file/migrations/0007_remove_rent_id_remove_sell_id_rent_file_id_and_more.py) | Python | 26 | 1 | 6 | 33 |
+| [file/migrations/0008_remove_rent_file_id_remove_sell_file_id_rent_id_and_more.py](/file/migrations/0008_remove_rent_file_id_remove_sell_file_id_rent_id_and_more.py) | Python | 28 | 1 | 6 | 35 |
+| [file/migrations/0009_rent_file_id_sell_file_id.py](/file/migrations/0009_rent_file_id_sell_file_id.py) | Python | 17 | 1 | 6 | 24 |
+| [file/migrations/0010_alter_rent_id_alter_sell_id.py](/file/migrations/0010_alter_rent_id_alter_sell_id.py) | Python | 17 | 1 | 6 | 24 |
+| [file/migrations/0011_alter_rent_file_id_alter_sell_file_id.py](/file/migrations/0011_alter_rent_file_id_alter_sell_file_id.py) | Python | 17 | 1 | 6 | 24 |
+| [file/migrations/0012_alter_rent_file_id_alter_sell_file_id.py](/file/migrations/0012_alter_rent_file_id_alter_sell_file_id.py) | Python | 17 | 1 | 6 | 24 |
+| [file/migrations/0013_remove_rent_file_id_remove_sell_file_id.py](/file/migrations/0013_remove_rent_file_id_remove_sell_file_id.py) | Python | 15 | 1 | 6 | 22 |
+| [file/migrations/0014_alter_rent_owner_name_alter_rent_owner_phone_and_more.py](/file/migrations/0014_alter_rent_owner_name_alter_rent_owner_phone_and_more.py) | Python | 32 | 1 | 6 | 39 |
+| [file/migrations/0015_rename_tags_sell_tag_manager.py](/file/migrations/0015_rename_tags_sell_tag_manager.py) | Python | 12 | 1 | 6 | 19 |
+| [file/migrations/0016_rename_tags_rent_tags_manager_rent_added_by_and_more.py](/file/migrations/0016_rename_tags_rent_tags_manager_rent_added_by_and_more.py) | Python | 23 | 1 | 6 | 30 |
+| [file/migrations/0017_alter_rent_added_by_alter_sell_added_by.py](/file/migrations/0017_alter_rent_added_by_alter_sell_added_by.py) | Python | 18 | 1 | 6 | 25 |
+| [file/migrations/0018_comment.py](/file/migrations/0018_comment.py) | Python | 24 | 1 | 6 | 31 |
+| [file/migrations/0019_alter_comment_body.py](/file/migrations/0019_alter_comment_body.py) | Python | 12 | 1 | 6 | 19 |
+| [file/migrations/0020_alter_comment_user.py](/file/migrations/0020_alter_comment_user.py) | Python | 13 | 1 | 6 | 20 |
+| [file/migrations/0021_alter_comment_user_alter_rent_added_by_and_more.py](/file/migrations/0021_alter_comment_user_alter_rent_added_by_and_more.py) | Python | 24 | 1 | 6 | 31 |
+| [file/migrations/0022_alter_rent_added_by_alter_sell_added_by.py](/file/migrations/0022_alter_rent_added_by_alter_sell_added_by.py) | Python | 20 | 1 | 6 | 27 |
+| [file/migrations/0023_alter_comment_user.py](/file/migrations/0023_alter_comment_user.py) | Python | 15 | 1 | 6 | 22 |
+| [file/migrations/0024_alter_comment_file.py](/file/migrations/0024_alter_comment_file.py) | Python | 13 | 1 | 6 | 20 |
+| [file/migrations/0025_alter_comment_user.py](/file/migrations/0025_alter_comment_user.py) | Python | 15 | 1 | 6 | 22 |
+| [file/migrations/0026_alter_comment_file.py](/file/migrations/0026_alter_comment_file.py) | Python | 13 | 1 | 6 | 20 |
+| [file/migrations/0027_alter_comment_user.py](/file/migrations/0027_alter_comment_user.py) | Python | 15 | 1 | 6 | 22 |
+| [file/migrations/0028_rent_created_rent_pictures_rent_updated_sell_created_and_more.py](/file/migrations/0028_rent_created_rent_pictures_rent_updated_sell_created_and_more.py) | Python | 42 | 1 | 6 | 49 |
+| [file/migrations/0029_alter_rent_pictures_alter_sell_pictures.py](/file/migrations/0029_alter_rent_pictures_alter_sell_pictures.py) | Python | 17 | 1 | 6 | 24 |
+| [file/migrations/0030_remove_rent_pictures_remove_sell_pictures.py](/file/migrations/0030_remove_rent_pictures_remove_sell_pictures.py) | Python | 15 | 1 | 6 | 22 |
+| [file/migrations/0031_alter_rent_options_alter_sell_options_sellimages_and_more.py](/file/migrations/0031_alter_rent_options_alter_sell_options_sellimages_and_more.py) | Python | 31 | 1 | 6 | 38 |
+| [file/migrations/0032_sell_image1_sell_image2_sell_image3_sell_image4_and_more.py](/file/migrations/0032_sell_image1_sell_image2_sell_image3_sell_image4_and_more.py) | Python | 32 | 1 | 6 | 39 |
+| [file/migrations/0033_rentcomment.py](/file/migrations/0033_rentcomment.py) | Python | 26 | 1 | 6 | 33 |
+| [file/migrations/0034_rent_image1_rent_image2_rent_image3_rent_image4_and_more.py](/file/migrations/0034_rent_image1_rent_image2_rent_image3_rent_image4_and_more.py) | Python | 32 | 1 | 6 | 39 |
+| [file/migrations/0035_alter_rent_type.py](/file/migrations/0035_alter_rent_type.py) | Python | 12 | 1 | 6 | 19 |
+| [file/migrations/0036_alter_sell_type.py](/file/migrations/0036_alter_sell_type.py) | Python | 12 | 1 | 6 | 19 |
+| [file/migrations/0037_alter_sell_type.py](/file/migrations/0037_alter_sell_type.py) | Python | 12 | 1 | 6 | 19 |
+| [file/migrations/__init__.py](/file/migrations/__init__.py) | Python | 0 | 0 | 1 | 1 |
+| [file/models.py](/file/models.py) | Python | 127 | 2 | 25 | 154 |
+| [file/static/JS/scripts.js](/file/static/JS/scripts.js) | JavaScript | 28 | 11 | 6 | 45 |
+| [file/static/camera.svg](/file/static/camera.svg) | XML | 13 | 1 | 0 | 14 |
+| [file/static/css/base.css](/file/static/css/base.css) | CSS | 34 | 19 | 11 | 64 |
+| [file/static/css/file_details.css](/file/static/css/file_details.css) | CSS | 10 | 0 | 0 | 10 |
+| [file/static/css/new_file.css](/file/static/css/new_file.css) | CSS | 53 | 0 | 9 | 62 |
+| [file/static/css/new_rent_file.css](/file/static/css/new_rent_file.css) | CSS | 53 | 0 | 9 | 62 |
+| [file/templates/file/base copy.html](/file/templates/file/base%20copy.html) | HTML | 56 | 0 | 1 | 57 |
+| [file/templates/file/base.html](/file/templates/file/base.html) | HTML | 34 | 0 | 7 | 41 |
+| [file/templates/file/file_detail.html](/file/templates/file/file_detail.html) | HTML | 267 | 4 | 22 | 293 |
+| [file/templates/file/form.html](/file/templates/file/form.html) | HTML | 14 | 0 | 2 | 16 |
+| [file/templates/file/new_file.html](/file/templates/file/new_file.html) | HTML | 137 | 0 | 3 | 140 |
+| [file/templates/file/new_rent_file.html](/file/templates/file/new_rent_file.html) | HTML | 97 | 0 | 62 | 159 |
+| [file/templates/file/new_sell_file.html](/file/templates/file/new_sell_file.html) | HTML | 118 | 0 | 2 | 120 |
+| [file/templates/file/panel.html](/file/templates/file/panel.html) | HTML | 6 | 0 | 1 | 7 |
+| [file/templates/file/sell_form.html](/file/templates/file/sell_form.html) | HTML | 14 | 0 | 2 | 16 |
+| [file/templates/file/sell_update.html](/file/templates/file/sell_update.html) | HTML | 59 | 2 | 8 | 69 |
+| [file/tests.py](/file/tests.py) | Python | 1 | 1 | 2 | 4 |
+| [file/urls.py](/file/urls.py) | Python | 13 | 5 | 4 | 22 |
+| [file/views.py](/file/views.py) | Python | 232 | 40 | 43 | 315 |
+| [geckodriver.log](/geckodriver.log) | Log | 2,423 | 0 | 1 | 2,424 |
+| [listing/__init__.py](/listing/__init__.py) | Python | 0 | 0 | 1 | 1 |
+| [listing/admin.py](/listing/admin.py) | Python | 1 | 1 | 2 | 4 |
+| [listing/apps.py](/listing/apps.py) | Python | 4 | 0 | 3 | 7 |
+| [listing/forms.py](/listing/forms.py) | Python | 27 | 1 | 5 | 33 |
+| [listing/migrations/__init__.py](/listing/migrations/__init__.py) | Python | 0 | 0 | 1 | 1 |
+| [listing/models.py](/listing/models.py) | Python | 1 | 1 | 2 | 4 |
+| [listing/scripts/__init__.py](/listing/scripts/__init__.py) | Python | 0 | 0 | 1 | 1 |
+| [listing/scripts/divar/divar.py](/listing/scripts/divar/divar.py) | Python | 121 | 13 | 44 | 178 |
+| [listing/scripts/listing.py](/listing/scripts/listing.py) | Python | 215 | 114 | 45 | 374 |
+| [listing/scripts/listing_runner.py](/listing/scripts/listing_runner.py) | Python | 5 | 2 | 2 | 9 |
+| [listing/scripts/test.py](/listing/scripts/test.py) | Python | 1 | 0 | 1 | 2 |
+| [listing/static/JS/scripts.js](/listing/static/JS/scripts.js) | JavaScript | 17 | 0 | 1 | 18 |
+| [listing/static/css/listing.css](/listing/static/css/listing.css) | CSS | 63 | 0 | 14 | 77 |
+| [listing/static/images/elevator.svg](/listing/static/images/elevator.svg) | XML | 4 | 0 | 0 | 4 |
+| [listing/static/images/parking.svg](/listing/static/images/parking.svg) | XML | 12 | 0 | 0 | 12 |
+| [listing/static/images/storage.svg](/listing/static/images/storage.svg) | XML | 6 | 1 | 1 | 8 |
+| [listing/templates/listing/listing.html](/listing/templates/listing/listing.html) | HTML | 94 | 0 | 8 | 102 |
+| [listing/templates/listing/listing_form.html](/listing/templates/listing/listing_form.html) | HTML | 116 | 0 | 7 | 123 |
+| [listing/tests.py](/listing/tests.py) | Python | 1 | 1 | 2 | 4 |
+| [listing/urls.py](/listing/urls.py) | Python | 6 | 0 | 3 | 9 |
+| [listing/views.py](/listing/views.py) | Python | 50 | 3 | 3 | 56 |
+| [manage.py](/manage.py) | Python | 15 | 3 | 5 | 23 |
+| [out/linecounter.json](/out/linecounter.json) | JSON | 211,607 | 0 | 0 | 211,607 |
+| [package-lock.json](/package-lock.json) | JSON | 26 | 0 | 1 | 27 |
+| [package.json](/package.json) | JSON | 6 | 0 | 1 | 7 |
+
+[Summary](results.md) / Details / [Diff Summary](diff.md) / [Diff Details](diff-details.md)

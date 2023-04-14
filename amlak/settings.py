@@ -28,7 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-MEDIA_URL = '/media/'
+MEDIA_URL = 'media/'
 MEDITA_ROOT = os.path.join(BASE_DIR,'media')
 
 # Application definition
@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'django.contrib.sites',
     'django.contrib.staticfiles',
     'agents_m.apps.AgentsMConfig',
     'file.apps.FileConfig',
@@ -59,6 +60,8 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'amlak.urls'
+
+SITE_ID = 1
 
 TEMPLATES = [
     {
@@ -93,6 +96,7 @@ DATABASES = {
     }
 }
 
+ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '192.168.1.104', '192.168.43.49']
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators

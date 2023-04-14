@@ -1,0 +1,198 @@
+Date : 2023-04-13 19:44:09
+Directory : /home/ali4mini/__Projects__/amlak
+Total : 128 files,  217797 codes, 383 comments, 841 blanks, all 219021 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| JSON       |          3 |    211,639 |          0 |          2 |    211,641 |
+| Log        |          2 |      2,427 |          0 |          2 |      2,429 |
+| Python     |         91 |      2,209 |        345 |        611 |      3,165 |
+| HTML       |         17 |      1,148 |          6 |        143 |      1,297 |
+| CSS        |          7 |        281 |         19 |         73 |        373 |
+| JavaScript |          3 |         58 |         11 |          8 |         77 |
+| XML        |          4 |         35 |          2 |          1 |         38 |
+| Markdown   |          1 |          0 |          0 |          1 |          1 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++-------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                                    | files      | code       | comment    | blank      | total      |
++-------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                                       |        128 |    217,797 |        383 |        841 |    219,021 |
+| . (Files)                                                                                                               |          6 |      2,474 |          3 |         10 |      2,487 |
+| Divar                                                                                                                   |          2 |        146 |         10 |         50 |        206 |
+| agents                                                                                                                  |          1 |          9 |          1 |          2 |         12 |
+| agents_m                                                                                                                |         12 |        126 |          5 |         30 |        161 |
+| agents_m (Files)                                                                                                        |          9 |         88 |          4 |         20 |        112 |
+| agents_m/migrations                                                                                                     |          2 |         20 |          1 |          8 |         29 |
+| agents_m/templates                                                                                                      |          1 |         18 |          0 |          2 |         20 |
+| agents_m/templates/registration                                                                                         |          1 |         18 |          0 |          2 |         20 |
+| amlak                                                                                                                   |          5 |        100 |         58 |         46 |        204 |
+| customer                                                                                                                |         18 |        361 |         12 |         92 |        465 |
+| customer (Files)                                                                                                        |          8 |        119 |         10 |         31 |        160 |
+| customer/migrations                                                                                                     |          3 |         43 |          2 |         14 |         59 |
+| customer/static                                                                                                         |          3 |         81 |          0 |         31 |        112 |
+| customer/static/JS                                                                                                      |          1 |         13 |          0 |          1 |         14 |
+| customer/static/css                                                                                                     |          2 |         68 |          0 |         30 |         98 |
+| customer/templates                                                                                                      |          4 |        118 |          0 |         16 |        134 |
+| customer/templates/customer                                                                                             |          4 |        118 |          0 |         16 |        134 |
+| file                                                                                                                    |         62 |      2,230 |        157 |        465 |      2,852 |
+| file (Files)                                                                                                            |          8 |        492 |         83 |         96 |        671 |
+| file/migrations                                                                                                         |         38 |        745 |         37 |        224 |      1,006 |
+| file/static                                                                                                             |          6 |        191 |         31 |         35 |        257 |
+| file/static (Files)                                                                                                     |          1 |         13 |          1 |          0 |         14 |
+| file/static/JS                                                                                                          |          1 |         28 |         11 |          6 |         45 |
+| file/static/css                                                                                                         |          4 |        150 |         19 |         29 |        198 |
+| file/templates                                                                                                          |         10 |        802 |          6 |        110 |        918 |
+| file/templates/file                                                                                                     |         10 |        802 |          6 |        110 |        918 |
+| listing                                                                                                                 |         21 |        744 |        137 |        146 |      1,027 |
+| listing (Files)                                                                                                         |          8 |         90 |          7 |         21 |        118 |
+| listing/migrations                                                                                                      |          1 |          0 |          0 |          1 |          1 |
+| listing/scripts                                                                                                         |          5 |        342 |        129 |         93 |        564 |
+| listing/scripts (Files)                                                                                                 |          4 |        221 |        116 |         49 |        386 |
+| listing/scripts/divar                                                                                                   |          1 |        121 |         13 |         44 |        178 |
+| listing/static                                                                                                          |          5 |        102 |          1 |         16 |        119 |
+| listing/static/JS                                                                                                       |          1 |         17 |          0 |          1 |         18 |
+| listing/static/css                                                                                                      |          1 |         63 |          0 |         14 |         77 |
+| listing/static/images                                                                                                   |          3 |         22 |          1 |          1 |         24 |
+| listing/templates                                                                                                       |          2 |        210 |          0 |         15 |        225 |
+| listing/templates/listing                                                                                               |          2 |        210 |          0 |         15 |        225 |
+| out                                                                                                                     |          1 |    211,607 |          0 |          0 |    211,607 |
++-------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                                                                                | language   | code       | comment    | blank      | total      |
++-------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| /home/ali4mini/__Projects__/amlak/Divar/divar.py                                                                        | Python     |        131 |          9 |         46 |        186 |
+| /home/ali4mini/__Projects__/amlak/Divar/test.py                                                                         | Python     |         15 |          1 |          4 |         20 |
+| /home/ali4mini/__Projects__/amlak/README.md                                                                             | Markdown   |          0 |          0 |          1 |          1 |
+| /home/ali4mini/__Projects__/amlak/agents/models.py                                                                      | Python     |          9 |          1 |          2 |         12 |
+| /home/ali4mini/__Projects__/amlak/agents_m/__init__.py                                                                  | Python     |          0 |          0 |          1 |          1 |
+| /home/ali4mini/__Projects__/amlak/agents_m/admin.py                                                                     | Python     |          5 |          1 |          0 |          6 |
+| /home/ali4mini/__Projects__/amlak/agents_m/apps.py                                                                      | Python     |          4 |          0 |          3 |          7 |
+| /home/ali4mini/__Projects__/amlak/agents_m/auth.py                                                                      | Python     |         35 |          0 |          6 |         41 |
+| /home/ali4mini/__Projects__/amlak/agents_m/forms.py                                                                     | Python     |          9 |          0 |          5 |         14 |
+| /home/ali4mini/__Projects__/amlak/agents_m/migrations/0001_initial.py                                                   | Python     |         20 |          1 |          7 |         28 |
+| /home/ali4mini/__Projects__/amlak/agents_m/migrations/__init__.py                                                       | Python     |          0 |          0 |          1 |          1 |
+| /home/ali4mini/__Projects__/amlak/agents_m/models.py                                                                    | Python     |          7 |          1 |          1 |          9 |
+| /home/ali4mini/__Projects__/amlak/agents_m/templates/registration/login.html                                            | HTML       |         18 |          0 |          2 |         20 |
+| /home/ali4mini/__Projects__/amlak/agents_m/tests.py                                                                     | Python     |          1 |          1 |          2 |          4 |
+| /home/ali4mini/__Projects__/amlak/agents_m/urls.py                                                                      | Python     |          8 |          0 |          2 |         10 |
+| /home/ali4mini/__Projects__/amlak/agents_m/views.py                                                                     | Python     |         19 |          1 |          0 |         20 |
+| /home/ali4mini/__Projects__/amlak/amlak/__init__.py                                                                     | Python     |          0 |          0 |          1 |          1 |
+| /home/ali4mini/__Projects__/amlak/amlak/asgi.py                                                                         | Python     |          4 |          8 |          5 |         17 |
+| /home/ali4mini/__Projects__/amlak/amlak/settings.py                                                                     | Python     |         81 |         27 |         33 |        141 |
+| /home/ali4mini/__Projects__/amlak/amlak/urls.py                                                                         | Python     |         11 |         15 |          2 |         28 |
+| /home/ali4mini/__Projects__/amlak/amlak/wsgi.py                                                                         | Python     |          4 |          8 |          5 |         17 |
+| /home/ali4mini/__Projects__/amlak/customer/__init__.py                                                                  | Python     |          0 |          0 |          1 |          1 |
+| /home/ali4mini/__Projects__/amlak/customer/admin.py                                                                     | Python     |         10 |          1 |          5 |         16 |
+| /home/ali4mini/__Projects__/amlak/customer/apps.py                                                                      | Python     |          4 |          0 |          3 |          7 |
+| /home/ali4mini/__Projects__/amlak/customer/forms.py                                                                     | Python     |         10 |          0 |          3 |         13 |
+| /home/ali4mini/__Projects__/amlak/customer/migrations/0001_initial.py                                                   | Python     |         26 |          1 |          7 |         34 |
+| /home/ali4mini/__Projects__/amlak/customer/migrations/0002_buycustomer_type_rentcustomer_type.py                        | Python     |         17 |          1 |          6 |         24 |
+| /home/ali4mini/__Projects__/amlak/customer/migrations/__init__.py                                                       | Python     |          0 |          0 |          1 |          1 |
+| /home/ali4mini/__Projects__/amlak/customer/models.py                                                                    | Python     |         24 |          7 |          7 |         38 |
+| /home/ali4mini/__Projects__/amlak/customer/static/JS/scripts.js                                                         | JavaScript |         13 |          0 |          1 |         14 |
+| /home/ali4mini/__Projects__/amlak/customer/static/css/base.css                                                          | CSS        |         34 |          0 |         25 |         59 |
+| /home/ali4mini/__Projects__/amlak/customer/static/css/new_customer.css                                                  | CSS        |         34 |          0 |          5 |         39 |
+| /home/ali4mini/__Projects__/amlak/customer/templates/customer/base.html                                                 | HTML       |         21 |          0 |          6 |         27 |
+| /home/ali4mini/__Projects__/amlak/customer/templates/customer/customer.html                                             | HTML       |         29 |          0 |          5 |         34 |
+| /home/ali4mini/__Projects__/amlak/customer/templates/customer/form.html                                                 | HTML       |         62 |          0 |          4 |         66 |
+| /home/ali4mini/__Projects__/amlak/customer/templates/customer/panel.html                                                | HTML       |          6 |          0 |          1 |          7 |
+| /home/ali4mini/__Projects__/amlak/customer/tests.py                                                                     | Python     |          1 |          1 |          2 |          4 |
+| /home/ali4mini/__Projects__/amlak/customer/urls.py                                                                      | Python     |          8 |          0 |          3 |         11 |
+| /home/ali4mini/__Projects__/amlak/customer/views.py                                                                     | Python     |         62 |          1 |          7 |         70 |
+| /home/ali4mini/__Projects__/amlak/divar.log                                                                             | Log        |          4 |          0 |          1 |          5 |
+| /home/ali4mini/__Projects__/amlak/file/__init__.py                                                                      | Python     |          0 |          0 |          1 |          1 |
+| /home/ali4mini/__Projects__/amlak/file/admin.py                                                                         | Python     |         13 |          6 |          5 |         24 |
+| /home/ali4mini/__Projects__/amlak/file/apps.py                                                                          | Python     |          4 |          0 |          3 |          7 |
+| /home/ali4mini/__Projects__/amlak/file/forms.py                                                                         | Python     |        102 |         29 |         13 |        144 |
+| /home/ali4mini/__Projects__/amlak/file/migrations/0001_initial.py                                                       | Python     |         46 |          1 |          7 |         54 |
+| /home/ali4mini/__Projects__/amlak/file/migrations/0002_alter_rent_tags_alter_sell_parking_alter_sell_tags.py            | Python     |         24 |          1 |          6 |         31 |
+| /home/ali4mini/__Projects__/amlak/file/migrations/0003_alter_sell_type.py                                               | Python     |         12 |          1 |          6 |         19 |
+| /home/ali4mini/__Projects__/amlak/file/migrations/0004_alter_rent_type.py                                               | Python     |         12 |          1 |          6 |         19 |
+| /home/ali4mini/__Projects__/amlak/file/migrations/0005_alter_rent_type_alter_sell_type.py                               | Python     |         17 |          1 |          6 |         24 |
+| /home/ali4mini/__Projects__/amlak/file/migrations/0006_alter_rent_type_alter_sell_type.py                               | Python     |         17 |          1 |          6 |         24 |
+| /home/ali4mini/__Projects__/amlak/file/migrations/0007_remove_rent_id_remove_sell_id_rent_file_id_and_more.py           | Python     |         26 |          1 |          6 |         33 |
+| /home/ali4mini/__Projects__/amlak/file/migrations/0008_remove_rent_file_id_remove_sell_file_id_rent_id_and_more.py      | Python     |         28 |          1 |          6 |         35 |
+| /home/ali4mini/__Projects__/amlak/file/migrations/0009_rent_file_id_sell_file_id.py                                     | Python     |         17 |          1 |          6 |         24 |
+| /home/ali4mini/__Projects__/amlak/file/migrations/0010_alter_rent_id_alter_sell_id.py                                   | Python     |         17 |          1 |          6 |         24 |
+| /home/ali4mini/__Projects__/amlak/file/migrations/0011_alter_rent_file_id_alter_sell_file_id.py                         | Python     |         17 |          1 |          6 |         24 |
+| /home/ali4mini/__Projects__/amlak/file/migrations/0012_alter_rent_file_id_alter_sell_file_id.py                         | Python     |         17 |          1 |          6 |         24 |
+| /home/ali4mini/__Projects__/amlak/file/migrations/0013_remove_rent_file_id_remove_sell_file_id.py                       | Python     |         15 |          1 |          6 |         22 |
+| /home/ali4mini/__Projects__/amlak/file/migrations/0014_alter_rent_owner_name_alter_rent_owner_phone_and_more.py         | Python     |         32 |          1 |          6 |         39 |
+| /home/ali4mini/__Projects__/amlak/file/migrations/0015_rename_tags_sell_tag_manager.py                                  | Python     |         12 |          1 |          6 |         19 |
+| /home/ali4mini/__Projects__/amlak/file/migrations/0016_rename_tags_rent_tags_manager_rent_added_by_and_more.py          | Python     |         23 |          1 |          6 |         30 |
+| /home/ali4mini/__Projects__/amlak/file/migrations/0017_alter_rent_added_by_alter_sell_added_by.py                       | Python     |         18 |          1 |          6 |         25 |
+| /home/ali4mini/__Projects__/amlak/file/migrations/0018_comment.py                                                       | Python     |         24 |          1 |          6 |         31 |
+| /home/ali4mini/__Projects__/amlak/file/migrations/0019_alter_comment_body.py                                            | Python     |         12 |          1 |          6 |         19 |
+| /home/ali4mini/__Projects__/amlak/file/migrations/0020_alter_comment_user.py                                            | Python     |         13 |          1 |          6 |         20 |
+| /home/ali4mini/__Projects__/amlak/file/migrations/0021_alter_comment_user_alter_rent_added_by_and_more.py               | Python     |         24 |          1 |          6 |         31 |
+| /home/ali4mini/__Projects__/amlak/file/migrations/0022_alter_rent_added_by_alter_sell_added_by.py                       | Python     |         20 |          1 |          6 |         27 |
+| /home/ali4mini/__Projects__/amlak/file/migrations/0023_alter_comment_user.py                                            | Python     |         15 |          1 |          6 |         22 |
+| /home/ali4mini/__Projects__/amlak/file/migrations/0024_alter_comment_file.py                                            | Python     |         13 |          1 |          6 |         20 |
+| /home/ali4mini/__Projects__/amlak/file/migrations/0025_alter_comment_user.py                                            | Python     |         15 |          1 |          6 |         22 |
+| /home/ali4mini/__Projects__/amlak/file/migrations/0026_alter_comment_file.py                                            | Python     |         13 |          1 |          6 |         20 |
+| /home/ali4mini/__Projects__/amlak/file/migrations/0027_alter_comment_user.py                                            | Python     |         15 |          1 |          6 |         22 |
+| /home/ali4mini/__Projects__/amlak/file/migrations/0028_rent_created_rent_pictures_rent_updated_sell_created_and_more.py | Python     |         42 |          1 |          6 |         49 |
+| /home/ali4mini/__Projects__/amlak/file/migrations/0029_alter_rent_pictures_alter_sell_pictures.py                       | Python     |         17 |          1 |          6 |         24 |
+| /home/ali4mini/__Projects__/amlak/file/migrations/0030_remove_rent_pictures_remove_sell_pictures.py                     | Python     |         15 |          1 |          6 |         22 |
+| /home/ali4mini/__Projects__/amlak/file/migrations/0031_alter_rent_options_alter_sell_options_sellimages_and_more.py     | Python     |         31 |          1 |          6 |         38 |
+| /home/ali4mini/__Projects__/amlak/file/migrations/0032_sell_image1_sell_image2_sell_image3_sell_image4_and_more.py      | Python     |         32 |          1 |          6 |         39 |
+| /home/ali4mini/__Projects__/amlak/file/migrations/0033_rentcomment.py                                                   | Python     |         26 |          1 |          6 |         33 |
+| /home/ali4mini/__Projects__/amlak/file/migrations/0034_rent_image1_rent_image2_rent_image3_rent_image4_and_more.py      | Python     |         32 |          1 |          6 |         39 |
+| /home/ali4mini/__Projects__/amlak/file/migrations/0035_alter_rent_type.py                                               | Python     |         12 |          1 |          6 |         19 |
+| /home/ali4mini/__Projects__/amlak/file/migrations/0036_alter_sell_type.py                                               | Python     |         12 |          1 |          6 |         19 |
+| /home/ali4mini/__Projects__/amlak/file/migrations/0037_alter_sell_type.py                                               | Python     |         12 |          1 |          6 |         19 |
+| /home/ali4mini/__Projects__/amlak/file/migrations/__init__.py                                                           | Python     |          0 |          0 |          1 |          1 |
+| /home/ali4mini/__Projects__/amlak/file/models.py                                                                        | Python     |        127 |          2 |         25 |        154 |
+| /home/ali4mini/__Projects__/amlak/file/static/JS/scripts.js                                                             | JavaScript |         28 |         11 |          6 |         45 |
+| /home/ali4mini/__Projects__/amlak/file/static/camera.svg                                                                | XML        |         13 |          1 |          0 |         14 |
+| /home/ali4mini/__Projects__/amlak/file/static/css/base.css                                                              | CSS        |         34 |         19 |         11 |         64 |
+| /home/ali4mini/__Projects__/amlak/file/static/css/file_details.css                                                      | CSS        |         10 |          0 |          0 |         10 |
+| /home/ali4mini/__Projects__/amlak/file/static/css/new_file.css                                                          | CSS        |         53 |          0 |          9 |         62 |
+| /home/ali4mini/__Projects__/amlak/file/static/css/new_rent_file.css                                                     | CSS        |         53 |          0 |          9 |         62 |
+| /home/ali4mini/__Projects__/amlak/file/templates/file/base copy.html                                                    | HTML       |         56 |          0 |          1 |         57 |
+| /home/ali4mini/__Projects__/amlak/file/templates/file/base.html                                                         | HTML       |         34 |          0 |          7 |         41 |
+| /home/ali4mini/__Projects__/amlak/file/templates/file/file_detail.html                                                  | HTML       |        267 |          4 |         22 |        293 |
+| /home/ali4mini/__Projects__/amlak/file/templates/file/form.html                                                         | HTML       |         14 |          0 |          2 |         16 |
+| /home/ali4mini/__Projects__/amlak/file/templates/file/new_file.html                                                     | HTML       |        137 |          0 |          3 |        140 |
+| /home/ali4mini/__Projects__/amlak/file/templates/file/new_rent_file.html                                                | HTML       |         97 |          0 |         62 |        159 |
+| /home/ali4mini/__Projects__/amlak/file/templates/file/new_sell_file.html                                                | HTML       |        118 |          0 |          2 |        120 |
+| /home/ali4mini/__Projects__/amlak/file/templates/file/panel.html                                                        | HTML       |          6 |          0 |          1 |          7 |
+| /home/ali4mini/__Projects__/amlak/file/templates/file/sell_form.html                                                    | HTML       |         14 |          0 |          2 |         16 |
+| /home/ali4mini/__Projects__/amlak/file/templates/file/sell_update.html                                                  | HTML       |         59 |          2 |          8 |         69 |
+| /home/ali4mini/__Projects__/amlak/file/tests.py                                                                         | Python     |          1 |          1 |          2 |          4 |
+| /home/ali4mini/__Projects__/amlak/file/urls.py                                                                          | Python     |         13 |          5 |          4 |         22 |
+| /home/ali4mini/__Projects__/amlak/file/views.py                                                                         | Python     |        232 |         40 |         43 |        315 |
+| /home/ali4mini/__Projects__/amlak/geckodriver.log                                                                       | Log        |      2,423 |          0 |          1 |      2,424 |
+| /home/ali4mini/__Projects__/amlak/listing/__init__.py                                                                   | Python     |          0 |          0 |          1 |          1 |
+| /home/ali4mini/__Projects__/amlak/listing/admin.py                                                                      | Python     |          1 |          1 |          2 |          4 |
+| /home/ali4mini/__Projects__/amlak/listing/apps.py                                                                       | Python     |          4 |          0 |          3 |          7 |
+| /home/ali4mini/__Projects__/amlak/listing/forms.py                                                                      | Python     |         27 |          1 |          5 |         33 |
+| /home/ali4mini/__Projects__/amlak/listing/migrations/__init__.py                                                        | Python     |          0 |          0 |          1 |          1 |
+| /home/ali4mini/__Projects__/amlak/listing/models.py                                                                     | Python     |          1 |          1 |          2 |          4 |
+| /home/ali4mini/__Projects__/amlak/listing/scripts/__init__.py                                                           | Python     |          0 |          0 |          1 |          1 |
+| /home/ali4mini/__Projects__/amlak/listing/scripts/divar/divar.py                                                        | Python     |        121 |         13 |         44 |        178 |
+| /home/ali4mini/__Projects__/amlak/listing/scripts/listing.py                                                            | Python     |        215 |        114 |         45 |        374 |
+| /home/ali4mini/__Projects__/amlak/listing/scripts/listing_runner.py                                                     | Python     |          5 |          2 |          2 |          9 |
+| /home/ali4mini/__Projects__/amlak/listing/scripts/test.py                                                               | Python     |          1 |          0 |          1 |          2 |
+| /home/ali4mini/__Projects__/amlak/listing/static/JS/scripts.js                                                          | JavaScript |         17 |          0 |          1 |         18 |
+| /home/ali4mini/__Projects__/amlak/listing/static/css/listing.css                                                        | CSS        |         63 |          0 |         14 |         77 |
+| /home/ali4mini/__Projects__/amlak/listing/static/images/elevator.svg                                                    | XML        |          4 |          0 |          0 |          4 |
+| /home/ali4mini/__Projects__/amlak/listing/static/images/parking.svg                                                     | XML        |         12 |          0 |          0 |         12 |
+| /home/ali4mini/__Projects__/amlak/listing/static/images/storage.svg                                                     | XML        |          6 |          1 |          1 |          8 |
+| /home/ali4mini/__Projects__/amlak/listing/templates/listing/listing.html                                                | HTML       |         94 |          0 |          8 |        102 |
+| /home/ali4mini/__Projects__/amlak/listing/templates/listing/listing_form.html                                           | HTML       |        116 |          0 |          7 |        123 |
+| /home/ali4mini/__Projects__/amlak/listing/tests.py                                                                      | Python     |          1 |          1 |          2 |          4 |
+| /home/ali4mini/__Projects__/amlak/listing/urls.py                                                                       | Python     |          6 |          0 |          3 |          9 |
+| /home/ali4mini/__Projects__/amlak/listing/views.py                                                                      | Python     |         50 |          3 |          3 |         56 |
+| /home/ali4mini/__Projects__/amlak/manage.py                                                                             | Python     |         15 |          3 |          5 |         23 |
+| /home/ali4mini/__Projects__/amlak/out/linecounter.json                                                                  | JSON       |    211,607 |          0 |          0 |    211,607 |
+| /home/ali4mini/__Projects__/amlak/package-lock.json                                                                     | JSON       |         26 |          0 |          1 |         27 |
+| /home/ali4mini/__Projects__/amlak/package.json                                                                          | JSON       |          6 |          0 |          1 |          7 |
+| Total                                                                                                                   |            |    217,797 |        383 |        841 |    219,021 |
++-------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+

@@ -13,8 +13,7 @@ class Panel(View):
         filter_form = forms.SellFilter(data=request.POST)
         if filter_form.is_valid():
             print(filter_form.cleaned_data)
-            budget = filter_form.cleaned_data['price']
-            type = filter_form.cleaned_data['type']
+            prop_type = filter_form.cleaned_data['property_type']
             m2 = filter_form.cleaned_data['m2']
             year = filter_form.cleaned_data['year']
             # making data ready for proccess
@@ -22,11 +21,26 @@ class Panel(View):
                 m2 = 0
             if year == None:
                 year = 0
-            files = Sell.objects.filter(price__lte=budget, 
-                                        type=type, 
-                                        m2__gte=m2, 
-                                        year__gte=year)
-            
+            if filter_form.cleaned_data['file_type'] == 'sell':
+                budget = filter_form.cleaned_data['price']
+                if budget == None:
+                    budget = 999999999999
+                files = Sell.objects.filter(price__lte=budget, 
+                                            type=prop_type, 
+                                            m2__gte=m2, 
+                                            year__gte=year)
+            elif filter_form.cleaned_data['file_type'] == 'rent':
+                budget_up = filter_form.cleaned_data['price_up']
+                budget_rent = filter_form.cleaned_data['price_rent']
+                if budget_up == None:
+                    budget_up = 999999999999
+                if budget_rent == None:
+                    budget_rent = 999999999999
+                files = Rent.objects.filter(price_up__lte=budget_up,
+                                            price_rent__lte=budget_rent, 
+                                            type=prop_type, 
+                                            m2__gte=m2,
+                                            year__gte=year)
             return render(request, 'listing/listing_form.html',
                           {'files': files,
                             })

@@ -25,10 +25,10 @@ class Divar:
         self.terms_agreement_done = False
         logging.warning("initialized Divar object")
 
-    def __del__(self):
-        self.driver.close()
-        self.driver.quit()
-        logging.warning("deleting Divar object")
+    # def __del__(self):
+    #     self.driver.close()
+    #     self.driver.quit()
+    #     logging.warning("deleting Divar object")
 
     def __enter__(self):
         self.__init__()
@@ -62,11 +62,11 @@ class Divar:
         self.driver.get("https://divar.ir/s/tehran")
         time.sleep(3)
 
-    def first_post(self,page):
+    def last_post(self,page):
         self.driver.get(page)
         self.driver.implicitly_wait(15)
-        first = self.driver.find_element(By.XPATH, "/html/body/div/div[1]/main/div/div/div/div[1]/a")
-        return first.get_attribute("href")
+        post = self.driver.find_element(By.XPATH, "//a[@class='']")
+        return post.get_attribute("href")
         logging.info(f"returned first post of page: {page}")
 
     def all_posts(self,page):

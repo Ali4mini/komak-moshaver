@@ -1,7 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
-  <head>
+  <head id="head">
     <meta charset="utf-8">
     <title>{% block title %} {% endblock %}</title>
     <link href="{% static "css/base.css" %}" rel="stylesheet">
@@ -13,8 +13,8 @@
       <ul>
         <li><a href="/"><img src="{% static 'logo.png'%}" width="30" alt="logo"></a></li>
         <li><a href="/">پنل</a></li>
-        <li><a href="{% url 'file:new_sell_file' %}">فایل</a></li>
-        <li><a href="{% url 'customer:new_buy_customer' %}">مشتری</a></li>
+        <li><a href="{% url 'file:new_file' %}">فایل</a></li>
+        <li><a href="{% url 'customer:new_customer' %}">مشتری</a></li>
         <li><a href="{% url 'agents:login' %}">ورود</a></li>
       </ul>
     </div>

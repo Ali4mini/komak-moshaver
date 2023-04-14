@@ -3,22 +3,40 @@
 {% load static %}
 
 {% block content %}
-    <script src="{% static 'javascript/get_request.js'%}"></script>
+    <script src="{% static 'JS/scripts.js'%}"></script>
     <div class="filter">
         <div class="box m-6">
             <form action="" method="post">
                 {% csrf_token%}
                 <div class="select is-primary">
-                    <select name="type" id="id_type">
+                    <select name="file_type" id="id_type" onchange="rent_filter(this)">
+                        <option id="sell" value="sell">فروش</option>
+                        <option id="rent" value="rent">اجاره</option>
+                    </select>
+                </div>
+                <div class="select is-primary">
+                    <select name="property_type" id="id_type">
                         <option value="A" selected="">آپارتمان</option>
                         <option value="L">زمین</option>
                         <option value="S">مغازه</option>
                         <option value="H">خانه و ویلا</option>
                     </select>
                 </div>
-                <div class="field">
-                    <label for="id_price">قیمت:</label>
-                    <input type="number" name="price" class="input is-small" required id="id_price">
+                <div id="sell_filter">
+                    <div class="field">
+                        <label for="id_price">قیمت:</label>
+                        <input type="number" name="price" class="input is-small" id="id_price">
+                    </div>
+                </div>
+                <div id="rent_filter" style="display: none;">
+                    <div class="field">
+                        <label for="id_price">ودیعه:</label>
+                        <input type="number" name="price_up" class="input is-small" id="id_price">
+                    </div> 
+                    <div class="field">
+                        <label for="id_price">اجاره:</label>
+                        <input type="number" name="price_rent" class="input is-small" id="id_price">
+                    </div>
                 </div>
                 <div class="field">
                     <label for="id_m2">متراژ:</label>
@@ -28,14 +46,16 @@
                     <label for="id_year">سال ساخت:</label>
                     <input type="number" name="year" class="input is-small" id="id_year">
                 </div>
-                <div class="field">
+                <!-- <div class="field">
                     <label for="id_parking">                    
-                        <input type="checkbox" name="parking" class="checkbox" id="id_parking" checked="">
+                        <input type="checkbox" name="parking" class="checkbox" id="id_parking">
                         پارکینگ  </label>
-                </div>
-                <button type="submit" class="button is-primary is-medium is-light  is-pulled-left">Filter</button>
-                <button class="button is-danger is-light is-medium mr-3" type="button" onclick='send_request()'>
-                    Cancel
+                </div> -->
+                <button type="submit" class="button is-primary is-medium is-light  is-pulled-left">فیلتر</button>
+            </form>
+            <form method="get">
+                <button class="button is-danger is-light is-medium mr-3" type="submit">
+                    لغو
                 </button>
             </form>
 
@@ -58,9 +78,18 @@
                             <div class="column">
                                 متراژ:  {{file.m2}}
                             </div>
-                            <div class="column">
-                               <strong> قیمت</strong>:  {{file.price}}
-                            </div>
+                            {% if file.price %}
+                                <div class="column">
+                                    <strong> قیمت:</strong>:  {{file.price}}
+                                </div>
+                            {% else %}
+                                <div class="column">
+                                    <strong>ودیعه:</strong>:  {{file.price_up}}
+                                </div>
+                                <div class="column">
+                                    <strong>اجاره:</strong>:  {{file.price_rent}}
+                                </div>
+                            {% endif %}
                             <div class="column">
                                 <strong>سال: </strong> {{file.year}}
                             </div>

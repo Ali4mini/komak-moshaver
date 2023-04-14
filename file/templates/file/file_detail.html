@@ -5,17 +5,71 @@
 {% block content %}
 <!-- <link rel='stylesheet' href="{% static 'css/file_details.css' %}"> -->
 
+
+<link type="text/css" rel="stylesheet" href='{% static "lightgallery/css/lightgallery-bundle.css"%}' />
+
 <div class="details">
     <div class="box m-5">
+        <div class="" id="send-info-modal">
+            <div class="modal m-6" id="modal">
+                <div class="modal-background" onclick="close_modal()">
+
+                </div>
+                <div class="modal-card">
+                    <header class="modal-card-head">
+                        <p class="modal-card-title">ارسال اطلاعات به مشتری</p>
+                        <button class="delete" aria-label="close" onclick="close_modal()"></button>
+                    </header>
+                    <section class="modal-card-body">
+                        <form action="send/" method="post">
+                            {% csrf_token %}
+                            <div class="columns">
+                                <div class="column">
+                                    <div class="field">
+                                        <label class="label">شماره:</label>
+                                        <input class="input " type="text" name="phone" maxlength="11" required=""
+                                            id="id_phone">
+                                    </div>
+                                </div>
+                                <div class="column">
+
+                                </div>
+                                <div class="column is-pulled-left mt-3">
+                                    <button class="button is-success is-light mt-4">ارسال</button>
+                                </div>
+                            </div>
+                        </form>
+
+                    </section>
+                    <footer class="modal-card-foot">
+                        <div class="columns">
+                            <div class="column">
+                                <button class="button">Cancel</button>
+                            </div>
+                            
+                        </div>
+                    </footer>
+                </div>
+            </div>
+        </div>
+
         <div class="columns">
-            <div class="column is-full">
+            <div class="column is-half">
                 <p id="type">
-                    نوع: {{file.get_type_display}}
+                    نوع ملک: {{file.get_type_display}}
+                </p>
+            </div>
+            <div class="column is-half">
+                <p id="type">
+                    نوع فایل: {% if file_type == 'sell' %}فروش{% elif file_type == 'rent' %}اجاره{% endif %}
                 </p>
             </div>
         </div>
         <div class="columns">
-            <div class="column is-half">
+            {% if file_type == 'rent'%}
+
+            <div class="column is-half rent">
+
                 <div class="columns">
                     <div class="column">
                         <p id="owner_name">
@@ -31,7 +85,12 @@
                 <div class="columns">
                     <div class="column">
                         <p id="year">
-                            قیمت: {{file.price}}
+                            ودیعه: {{file.price_up}}
+                        </p>
+                    </div>
+                    <div class="column">
+                        <p id="year">
+                            اجاره: {{file.price_rent}}
                         </p>
                     </div>
                     <div class="column">
@@ -80,18 +139,90 @@
                     {% endif %}
                 </div>
             </div>
-            <div class="column is-half has-text-centered">
-                <div class="pictures-section">
-                    {% if file.pictures %}
-                    <figure class="image is-64x64 is-inline-block ">
-                        <img class="image is-centered" src="{{ file.picture.file }}" alt="alt"
-                            href="{{ file.pictures.url}}">
-                    </figure>
-                    {% else %}
-                    <figure class="block is-128x128 is-inline-block ">
-                        <img src="{% static 'camera.svg' %}" width="100" height="70" alt="">
-                    </figure>
+            {% elif file_type == 'sell' %}
+            <div class="column is-half sell">
+                <div class="columns">
+                    <div class="column">
+                        <p id="owner_name">
+                            نام مالک: {{file.owner_name}}
+                        </p>
+                    </div>
+                    <div class="column">
+                        <p id="owner_phone">
+                            شماره مالک: {{file.owner_phone}}
+                        </p>
+                    </div>
+                </div>
+                <div class="columns">
+                    <div class="column">
+                        <p id="year">
+                            قیمت: {{file.price}}
+                        </p>
+                    </div>
+                    <div class="column">
+                        <p id="year">
+                            متراژ: {{file.m2}}
+                        </p>
+                    </div>
+                    <div class="column">
+                        <p id="year">
+                            طبقه: {{file.floor}}
+                        </p>
+                    </div>
+                    <div class="column">
+                        <p id="year">
+                            سال: {{file.year}}
+                        </p>
+                    </div>
+                </div>
+
+                <div class="columns mt-3 mb-6">
+                    <div class="column">
+                        <p id="year">
+                            آدرس: {{file.address}}
+                        </p>
+                    </div>
+                </div>
+
+
+                <div class="columns">
+                    {% if file.elevator %}
+                    <div class="column">
+                        <img src="{% static 'images/elevator.svg'%}" alt="elevator" class="image is-24x24 mt-1 mr-3">
+                        <p id="elevator">آسانسور دارد</p>
+                    </div>
                     {% endif %}
+                    {% if file.storage %}
+                    <div class="column">
+                        <img src="{% static 'images/storage.svg'%}" alt="storage" class="image is-24x24 mt-1 mr-3">
+                        <p id="storage">انباری دارد</p>
+                    </div>
+                    {% endif %}
+                    {% if file.parking %}
+                    <div class="column">
+                        <img src="{% static 'images/parking.svg'%}" alt="parking" class="image is-24x24 mt-1 mr-3">
+                        <p id="parking">پارکینگ دارد</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="column is-half has-text-centered">
+                <div class="pictures-section" id="lightgallery">
+                    <div class="columns">
+                        {% if images %}
+                        {% for image in images %}
+                        <div class="column">
+                            <figure class="image is-inline-block" onclick="expend_image(this)">
+                                <a href="{{image}}">
+                                    <img class="image is-centered" src="{{ image }}">
+                                </a>
+                            </figure>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
@@ -137,6 +268,13 @@
                             </form>
                         </div>
                         <div class="column mr-6">
+
+                            <button class="button mr-6 mt-5 is-success" onclick="send_modal()">
+                                ارسال
+                            </button>
+
+                        </div>
+                        <div class="column mr-6">
                             <form action="edit/" method="get">
                                 {% csrf_token %}
                                 <button type="submit" class="button mt-5 is-pulled-left is-warning">
@@ -146,8 +284,18 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
-        <script src="{% static 'JS/delete_confirm.js' %}"></script>
-        {% endblock content %}
+    </div>
+</div>
+
+<script src="{% static 'JS/scripts.js' %}"></script>
+<script src='{% static "lightgallery/lightgallery.umd.js" %}'></script>
+<script type="text/javascript">
+    lightGallery(document.getElementById('lightgallery'), {
+        plugins: [lgZoom, lgThumbnail],
+        speed: 500,
+        // ... other settings
+    });
+</script>
+{% endblock content %}

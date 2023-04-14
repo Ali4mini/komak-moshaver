@@ -1,7 +1,11 @@
 from django import forms
-from .models import Sell, Rent, Comment
+from .models import Sell, Rent, Comment, SellImages, RentImages
 
 class NewSellFile(forms.ModelForm): 
+    file_type = forms.CharField(required=True)  
+    price_up = forms.IntegerField(required=False)
+    price_rent = forms.IntegerField(required=False)
+
     class Meta:
         model = Sell
         fields = (
@@ -16,16 +20,70 @@ class NewSellFile(forms.ModelForm):
             'elevator',
             'storage',
             'parking',
+            'image1',
+            'image2',
+            'image3',
+            'image4',
+            'image5',
         )
         def __init__(self, *args, **kwargs):
             super(NewSellFile, self).__init__(*args, **kwargs)
-            self.fields['pictures'].required = False
+            self.fields['price'].required = False
+            self.fields['price_up'].required = False
+            self.fields['price_rent'].required = False
+            self.fields['m2'].required = False
+            self.fields['year'].required = False
+# class NewFile(forms.ModelForm):
+#     price_up = forms.IntegerField(required=False)
+#     price_rent = forms.IntegerField(required=False)
+#     file_type = forms.CharField(max_length=10, required=True)
+#     class Meta:
+#         model = Sell
+#         fields = (
+#             'type',
+#             'price',
+#             'm2',
+#             'year',
+#             'owner_name',
+#             'owner_phone',
+#             'address',
+#             'floor',
+#             'elevator',
+#             'storage',
+#             'parking',
+#             'image1',
+#             'image2',
+#             'image3',
+#             'image4',
+#             'image5',
+#         )
+#         def __init__(self, *args, **kwargs):
+#             super(NewSellFile, self).__init__(*args, **kwargs)
 
-class NewRentFile(forms.ModelForm):
-    
+class NewRentFile(forms.ModelForm): 
     class Meta:
         model = Rent
-        fields = "__all__"
+        fields = (
+            'type',
+            'price_up',
+            'price_rent',
+            'm2',
+            'year',
+            'owner_name',
+            'owner_phone',
+            'address',
+            'floor',
+            'elevator',
+            'storage',
+            'parking',
+            'image1',
+            'image2',
+            'image3',
+            'image4',
+            'image5',
+        )
+        def __init__(self, *args, **kwargs):
+            super(NewSellFile, self).__init__(*args, **kwargs)
         
 class CommentForm(forms.ModelForm):
     
@@ -67,7 +125,19 @@ class UpdateForm(forms.ModelForm):
         self.fields['elevator'].required = False
         self.fields['storage'].required = False
         self.fields['parking'].required = False
-        self.fields['pictures'].required = False
         
-
+class SendInfo(forms.Form):
+    phone = forms.CharField(max_length=11, required=True)
+    
+class ImageForm(forms.ModelForm):
+    image = forms.ImageField(label='Image')    
+    class Meta:
+        model = SellImages
+        fields = ('image', )
+        
+class ImageForm(forms.ModelForm):
+    image = forms.ImageField(label='Image')    
+    class Meta:
+        model = RentImages
+        fields = ('image', )
 

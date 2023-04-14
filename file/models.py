@@ -8,10 +8,13 @@ from django.conf import settings
 class Sell(models.Model):
     class Types(models.TextChoices):
         APARTEMANT = 'A', 'آپارتمان'
-        LAND = 'L', 'زمین'
-        STORE = 'S', 'مغازه'
-        HOUSE = 'H', 'خانه و ویلا'
-
+        LAND = 'L', 'زمین و کلنگی'
+        STORE = 'S', 'مغازه و غرفه'
+        VILA = 'H', 'خانه و ویلا'
+        
+    class Meta:
+        ordering = ['-created']
+        
     owner_name = models.CharField(max_length=1000)
     owner_phone = models.CharField(max_length=12)
     address = models.TextField()
@@ -32,8 +35,16 @@ class Sell(models.Model):
                                  )
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    tag_manager = TaggableManager(blank=True)
     
+    image1 = models.ImageField(upload_to='images/', blank=True)
+    image2 = models.ImageField(upload_to='images/', blank=True)
+    image3 = models.ImageField(upload_to='images/', blank=True)
+    image4 = models.ImageField(upload_to='images/', blank=True)
+    image5 = models.ImageField(upload_to='images/', blank=True)   
+    
+    tag_manager = TaggableManager(blank=True)
+
+
 
     def __str__(self):
         return f"owner: {self.owner_name} owner's phone: {self.owner_phone}"
@@ -45,9 +56,13 @@ class Sell(models.Model):
 class Rent(models.Model):
     class Types(models.TextChoices):
         APARTEMANT = 'A', 'آپارتمان'
-        LAND = 'L', 'زمین'
-        STORE = 'S', 'مغازه'
-
+        LAND = 'L', 'زمین و کلنگی'
+        STORE = 'S', 'اداری و تجاری'
+        VILA = 'H', 'خانه و ویلا'
+        
+    class Meta:
+        ordering = ['-created']
+        
     owner_name = models.CharField(max_length=1000)
     owner_phone = models.CharField(max_length=12)
     address = models.TextField()
@@ -60,7 +75,6 @@ class Rent(models.Model):
     storage = models.BooleanField(default=True)
     parking = models.BooleanField()
     type = models.CharField(max_length=1, choices=Types.choices, default=Types.APARTEMANT)
-    # pictures = models.ImageField(upload_to='pictures', blank=True)
     added_by = models.ForeignKey(settings.AUTH_USER_MODEL,
                                  verbose_name=("added to site by "),
                                  on_delete=models.DO_NOTHING,
@@ -69,6 +83,14 @@ class Rent(models.Model):
                                  )
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+
+    image1 = models.ImageField(upload_to='images/', blank=True)
+    image2 = models.ImageField(upload_to='images/', blank=True)
+    image3 = models.ImageField(upload_to='images/', blank=True)
+    image4 = models.ImageField(upload_to='images/', blank=True)
+    image5 = models.ImageField(upload_to='images/', blank=True)   
+    
+
     tags_manager = TaggableManager(blank=True)
 
     def __str__(self):
@@ -100,8 +122,33 @@ class Comment(models.Model):
 
     def get_absolute_url(self):
         return reverse("sell_comment", kwargs={"pk": self.pk})
+class RentComment(models.Model):
+    file = models.ForeignKey("Rent",
+                             on_delete=models.CASCADE,
+                             related_name='rent_comments')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             verbose_name=("user's profile"),
+                             on_delete=models.CASCADE,
+                             related_name='rent_comments')
+    body = models.TextField(max_length=10000)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    active = models.BooleanField(default=True)
 
-# class Images(models.Model):
-#     post = models.ForeignKey(Sell, default=None)
-#     image = models.ImageField(upload_to=get_image_filename,
-#                               verbose_name='Image')
+    class Meta:
+        verbose_name = ("Comment")
+        verbose_name_plural = ("Comments")
+
+    def __str__(self):
+        return f'comment by {self.user} on {self.file}'
+
+    def get_absolute_url(self):
+        return reverse("sell_comment", kwargs={"pk": self.pk})
+class SellImages(models.Model):
+    post = models.ManyToManyField("Sell", verbose_name=("post"), related_name='Images')
+    image = models.ImageField(upload_to='images',
+                              verbose_name='Image')
+class RentImages(models.Model):
+    post = models.ManyToManyField("Rent", verbose_name=("post"), related_name='Images')
+    image = models.ImageField(upload_to='images',
+                              verbose_name='Image')

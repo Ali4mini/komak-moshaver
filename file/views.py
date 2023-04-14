@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from . import forms
 from django.views.decorators.csrf import csrf_exempt
-from .models import Sell, Rent
+from .models import Sell, Rent, SellImages
 from django.contrib import messages
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
@@ -9,34 +9,113 @@ from django.contrib.auth.models import User
 from django.views.generic.edit import UpdateView, DeleteView
 from django.views import View
 from django.utils.decorators import method_decorator
+import requests
 # Create your views here.
 
 
+class NewFile(View):
+    def post(self, request, *args, **kwargs):
+        data = request.POST
+        data = data.copy()
+        file_type = data['file_type']
+        
+        try:
+            data['elevator']
+            data['elevator'] = True
+        except:
+            data['elevator'] = False
+        try:
+            data['storage']
+            data['storage'] = True
+        except:
+            data['storage'] = False
+        try:
+            data['parking']
+            data['parking'] = True
+        except:
+            data['parking'] = False
+        print(data)
+        if file_type == 'sell':
+            try:
+                file, created = Sell.objects.get_or_create(type=data['property_type'],
+                                                            owner_name=data['owner_name'],
+                                                            owner_phone=data['owner_phone'],
+                                                            address=data['address'],
+                                                            m2=data['m2'],
+                                                            price=data['price'],
+                                                            year=data['year'],
+                                                            floor=data['floor'],
+                                                            elevator=data['elevator'],
+                                                            storage=data['storage'],
+                                                            parking=data['parking'],
+                                                            added_by=request.user,
+                                                            image1=data['image1'],
+                                                            image2=data['image2'],
+                                                            image3=data['image3'],
+                                                            image4=data['image4'],
+                                                            image5=data['image5'])
+                if not created:
+                    messages.error(request, 'there is a file with this info in site. ')
+                    return redirect('/')
+            
+                messages.success(request, 'فایل با موفقیت ثبت شد.',)
+                return redirect('/')
+            except:
+                messages.success(request, 'فایل   ',)
+                return redirect('/')
 
-@csrf_exempt
-def new_sell_file(request):
-    if request.method == "POST":
-        form = forms.NewSellFile(data=request.POST)
-        print(request.POST)
-        if form.is_valid():
-            # Create a NewSellFile object without saving it to the database
-            file = form.save(commit=False)
-
-            print(request)
-            # Save the comment to the database
-            file.save()
-            # adding tags 
-            form.save_m2m()
-
+        if file_type == 'rent':
+            file, created = Rent.objects.get_or_create(type=data['property_type'],
+                                        owner_name=data['owner_name'],
+                                        owner_phone=data['owner_phone'],
+                                        address=data['address'],
+                                        m2=data['m2'],
+                                        price_up=data['price_up'],
+                                        price_rent=data['price_rent'],
+                                        year=data['year'],
+                                        floor=data['floor'],
+                                        elevator=data['elevator'],
+                                        storage=data['storage'],
+                                        parking=data['parking'],
+                                        added_by=request.user,
+                                        image1=data['image1'],
+                                        image2=data['image2'],
+                                        image3=data['image3'],
+                                        image4=data['image4'],
+                                        image5=data['image5'])
+            if not created:
+                messages.error(request, 'there is a file with this info in site. ')
+                return redirect('/')
             messages.success(request, 'فایل با موفقیت ثبت شد.',)
             return redirect('/')
-        
-        messages.success(request, '!!!! ')
-        return render(request, 'file/new_sell_file.html')
 
-    else:
+    def get(self, request, *args, **kwargs):
         form = forms.NewSellFile()
-        return render(request, 'file/new_sell_file.html')
+        return render(request, 'file/new_file.html')
+    
+# @csrf_exempt
+# def new_sell_file(request):
+    # if request.method == "POST":
+        # form = forms.NewSellFile(data=request.POST)
+        # print(request.POST)
+        # if form.is_valid():
+        #     # Create a NewSellFile object without saving it to the database
+        #     file = form.save(commit=False)
+        #     file.user = request.user
+        #     # Save the comment to the database
+        #     file.save()
+ 
+ 
+        #     # use django messages framework
+        #     messages.success(request, 'فایل با موفقیت ثبت شد.',)
+        #     return redirect('/')
+        
+        # messages.success(request, '!!!! ')
+        # return render(request, 'file/new_sell_file.html')
+
+    # else:
+    #     form = forms.NewSellFile()
+    #     return render(request, 'file/new_sell_file.html')
     
 
 @csrf_exempt
@@ -61,10 +140,10 @@ def new_rent_file(request):
         return render(request, 'file/new_rent_file.html')
     
 @method_decorator(login_required, name='dispatch')
-class FileDetails(View):
-    def post(self, request, id, *args, **kwargs):
+class SellFileDetails(View):
+    def post(self, request, pk, *args, **kwargs):
         comment_form = forms.CommentForm(data=request.POST)
-        file = get_object_or_404(Sell, pk=id)
+        file = get_object_or_404(Sell, pk=pk)
         user = get_object_or_404(User, pk=request.user.id)
         if comment_form.is_valid():
             if request.user.is_authenticated:
@@ -77,13 +156,75 @@ class FileDetails(View):
             else:
                 messages.error(request, 'login first')
                 return redirect('/agents/login')
-    def get(self, request, id, *args, **kwargs):
-        file = get_object_or_404(Sell, pk=id, )
+    def get(self, request, pk, *args, **kwargs):
+        file = get_object_or_404(Sell, pk=pk, )
         comment_form = forms.CommentForm()
         comments = file.comments.all()
+        image_fields = [file.image1,
+                        file.image2,
+                        file.image3,
+                        file.image4,
+                        file.image5,
+                        ]
+        def image_field_validator(field):
+            try:
+                return field.url
+            except:
+                return None
+        
+        images = [image_field_validator(image) for image in image_fields if image_field_validator(image) != None]
+
         return render(request, 'file/file_detail.html', {'file': file,
                                                          'comments': comments,
                                                          'comment_form': comment_form,
+                                                         'send_form': forms.SendInfo(),
+                                                         'images': images,
+                                                         'file_type': 'sell',
+                                                         })
+
+    
+@method_decorator(login_required, name='dispatch')
+class RentFileDetails(View):
+    def post(self, request, pk, *args, **kwargs):
+        comment_form = forms.CommentForm(data=request.POST)
+        file = get_object_or_404(Rent, pk=pk)
+        user = get_object_or_404(User, pk=request.user.id)
+        if comment_form.is_valid():
+            if request.user.is_authenticated:
+                new_comment = comment_form.save(commit=False)
+                new_comment.file = file
+                new_comment.user = user
+                new_comment.save()
+                messages.success(request, 'all went ok ')
+                return redirect(f'/file/sell/{id}')
+            else:
+                messages.error(request, 'login first')
+                return redirect('/agents/login')
+    def get(self, request, pk, *args, **kwargs):
+        file = get_object_or_404(Rent, pk=pk, )
+        comment_form = forms.CommentForm()
+        comments = file.rent_comments.all()
+        image_fields = [file.image1,
+                        file.image2,
+                        file.image3,
+                        file.image4,
+                        file.image5,
+                        ]
+        def image_field_validator(field):
+            try:
+                return field.url
+            except:
+                return None
+        
+        images = [image_field_validator(image) for image in image_fields if image_field_validator(image) != None]
+
+        return render(request, 'file/file_detail.html', {'file': file,
+                                                         'comments': comments,
+                                                         'comment_form': comment_form,
+                                                         'send_form': forms.SendInfo(),
+                                                         'images': images,
+                                                         'file_type': 'rent',
+
                                                          })
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -129,8 +270,40 @@ class SellUpdateView(UpdateView):
         return render(request, 'file/sell_update.html' , {'file': file})
         
         
-        
+class SellSendInfo(View):
+    def post(self, request, pk, *args, **kwargs):
+        phone_number = request.POST.get('phone')
+        file = Sell.objects.get(pk=pk)
+        ## making info ready to send
+        if file.elevator:
+            elevator = 'دارد'
+        else:
+            elevator = 'ندارد'
+        if file.storage:
+            storage = 'دارد'
+        else:
+            storage = 'ندارد'
+        if file.parking:
+            parking = 'دارد'
+        else:
+            parking = 'ندارد'
+            
+        sell_template = f'''
+        آدرس : {file.address}
+        متراژ: {file.m2}
+        قیمت: {file.price}
+        طبقه: {file.floor}
+        آسانسور: {elevator}
+        پارکینگ: {parking}
+        انباری: {storage}
+        '''
     
+        data = {'from':'50004001845778', 'to':[phone_number], 'text':sell_template, 'udh':''}
+        response = requests.post('https://console.melipayamak.com/api/send/advanced/b59dd6ca1de047aabf4416be63da2c01', json=data)
+        
+        print(response.json())
+        messages.success(request, 'all done')
+        return redirect('/')
 
 
 

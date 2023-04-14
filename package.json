@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "bulma": "^0.9.4"
+    "bulma": "^0.9.4",
+    "lightgallery": "^2.7.1"
   }
 }
