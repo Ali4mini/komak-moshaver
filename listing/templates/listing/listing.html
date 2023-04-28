@@ -3,43 +3,8 @@
 {% load static %}
 
 {% block content %}
-    
-    <form action='' method="POST">
-        <div class="box m-6">
-            <div class="control">
-            <div class="select is-normal">
-                <select name="type" id="type">
-                    <option value="A">آپارتمان</option>
-                    <option value="L">زمین</option>
-                    <option value="S">مغازه</option>
-                    <option value="H">خانه و ویلا</option>
-                </select>
-            </div>
-            <label class="label mt-2">budget</label>
-            <div class="control">
-                <input type="number" class="input is-small" >
-            </div>
-            <label class="label mt-2">m2</label>
-            <div class="control">
-                <input type="number" class="input is-small">
-            </div>
-            <label class="label mt-2">year</label>
-            <div class="control">
-                <input type="number" class="input is-small">
-            </div>
-            <label for="" class="label mt-2">
-                <input type="checkbox" class="checkbox">
-                elevator
-            </label>
-            <label for="" class="label">
-                <input type="checkbox" class="checkbox">
-                parking
-            </label>
-            {% csrf_token %}
-            <button class='button is-link mt-3' type="submit"> Submit </button>
+    <script src="{% static 'JS/scripts.js'%}"></script>
 
-        </div>
-    </form>
 
 
     <div class="files">
@@ -57,9 +22,18 @@
                             <div class="column">
                                 متراژ:  {{file.m2}}
                             </div>
-                            <div class="column">
-                               <strong> قیمت</strong>:  {{file.price}}
-                            </div>
+                            {% if file.price %}
+                                <div class="column">
+                                    <strong> قیمت:</strong>:  {{file.price}}
+                                </div>
+                            {% else %}
+                                <div class="column">
+                                    <strong>ودیعه:</strong>:  {{file.price_up}}
+                                </div>
+                                <div class="column">
+                                    <strong>اجاره:</strong>:  {{file.price_rent}}
+                                </div>
+                            {% endif %}
                             <div class="column">
                                 <strong>سال: </strong> {{file.year}}
                             </div>

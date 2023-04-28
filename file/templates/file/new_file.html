@@ -7,56 +7,66 @@
   <form action="" method="post">
     {% csrf_token%}
     <div class="select is-primary">
-        <select name="file_type" id="id_type" onchange="rent_filter(this)">
-            <option id="sell" value="sell">فروش</option>
-            <option id="rent" value="rent">اجاره</option>
-        </select>
+      <select name="file_type" id="id_type" onchange="rent_filter(this)">
+        <option id="sell" value="sell">فروش</option>
+        <option id="rent" value="rent">اجاره</option>
+      </select>
     </div>
     <div class="select is-primary">
-        <select name="property_type" id="id_type">
-            <option value="A" selected="">آپارتمان</option>
-            <option value="L">زمین</option>
-            <option value="S">مغازه</option>
-            <option value="H">خانه و ویلا</option>
-        </select>
+      <select name="property_type" id="id_type">
+        <option value="A" selected="">آپارتمان</option>
+        <option value="L">زمین</option>
+        <option value="S">مغازه</option>
+        <option value="H">خانه و ویلا</option>
+      </select>
     </div>
     <div id="sell_filter">
-        <div class="field">
+      <div class="columns">
+        <div class="column is-half">
+          <div class="field">
             <label for="id_price">قیمت:</label>
             <input type="number" name="price" class="input is-small" id="id_price">
+          </div>
         </div>
+      </div>
     </div>
     <div id="rent_filter" style="display: none;">
-        <div class="field">
+      <div class="columns">
+        <div class="column">
+          <div class="field">
             <label for="id_price">ودیعه:</label>
             <input type="number" name="price_up" class="input is-small" id="id_price">
-        </div> 
-        <div class="field">
+          </div>
+        </div>
+        <div class="column">
+          <div class="field">
             <label for="id_price">اجاره:</label>
             <input type="number" name="price_rent" class="input is-small" id="id_price">
+          </div>
         </div>
+      </div>
     </div>
     <div class="field">
       <label class="label">مالک:</label>
-        <input class='input is-small' type="text" name="owner_name" maxlength="1000" required="" id="id_owner_name">
+      <input class='input is-small' type="text" name="owner_name" maxlength="1000" required="" id="id_owner_name">
       <label class="label mt-2">شماره مالک:</label>
-        <input class='input is-small' type="text" name="owner_phone" maxlength="12" required="" id="id_owner_phone">
+      <input class='input is-small' type="text" name="owner_phone" maxlength="12" required="" id="id_owner_phone">
     </div>
     <div class="field">
       <label class="label">آدرس:</label>
-        <textarea name="address" cols="10" rows="4" class="textarea is-small" required="" id="id_address"></textarea>
+      <textarea name="address" cols="10" rows="4" class="textarea is-small" required="" id="id_address"></textarea>
     </div>
     <div class="field">
       <label class="label">متراژ:</label>
-        <input class='input is-small' type="number" name="m2" required="" id="id_m2">
+      <input class='input is-small' type="number" name="m2" required="" id="id_m2">
     </div>
     <div class="field">
       <label class="label">سال ساخت:</label>
-        <input class='input is-small' type="number" name="year" required="" id="id_year">
+      <input class='input is-small' type="number" name="year" required="" id="id_year">
     </div>
     <div class="field">
       <label class="label">طبقه:</label>
-        <input class='input is-small' type="number" name="floor" required="" id="id_floor">
+      <input class='input is-small' type="number" name="floor" required="" id="id_floor">
     </div>
     <div class="field">
       <label class="checkbox">
@@ -73,60 +83,61 @@
       </label>
     </div>
 
-      <div class="file mt-3 mb-3">
-        <label class="file-label">
-          <input class="file-input" type="file" name="image1">
-          <span class="file-cta">
-            <span class="file-label">
-              عکس ها
-            </span>
+    <!-- <div class="file mt-3 mb-3">
+      <label class="file-label">
+        <input class="file-input" type="file" name="image1">
+        <span class="file-cta">
+          <span class="file-label">
+            عکس ها
           </span>
-        </label>
-      </div>
-      <div class="file mt-3 mb-3">
-        <label class="file-label">
-          <input class="file-input" type="file" name="image2">
-          <span class="file-cta">
-            <span class="file-label">
-              عکس ها
-            </span>
+        </span>
+      </label>
+    </div>
+    <div class="file mt-3 mb-3">
+      <label class="file-label">
+        <input class="file-input" type="file" name="image2">
+        <span class="file-cta">
+          <span class="file-label">
+            عکس ها
           </span>
-        </label>
-      </div>
-      <div class="file mt-3 mb-3">
-        <label class="file-label">
-          <input class="file-input" type="file" name="image3">
-          <span class="file-cta">
-            <span class="file-label">
-              عکس ها
-            </span>
+        </span>
+      </label>
+    </div>
+    <div class="file mt-3 mb-3">
+      <label class="file-label">
+        <input class="file-input" type="file" name="image3">
+        <span class="file-cta">
+          <span class="file-label">
+            عکس ها
           </span>
-        </label>
-      </div>
-      <div class="file mt-3 mb-3">
-        <label class="file-label">
-          <input class="file-input" type="file" name="image4">
-          <span class="file-cta">
-            <span class="file-label">
-              عکس ها
-            </span>
+        </span>
+      </label>
+    </div>
+    <div class="file mt-3 mb-3">
+      <label class="file-label">
+        <input class="file-input" type="file" name="image4">
+        <span class="file-cta">
+          <span class="file-label">
+            عکس ها
           </span>
-        </label>
-      </div>
-      <div class="file mt-3 mb-3">
-        <label class="file-label">
-          <input class="file-input" type="file" name="image5">
-          <span class="file-cta">
-            <span class="file-label">
-              عکس ها
-            </span>
+        </span>
+      </label>
+    </div>
+    <div class="file mt-3 mb-3">
+      <label class="file-label">
+        <input class="file-input" type="file" name="image5">
+        <span class="file-cta">
+          <span class="file-label">
+            عکس ها
           </span>
-        </label>
-      </div>
+        </span>
+      </label>
+    </div> -->
     <div class="field">
-    <label class="label">برچسب ها:</label>
-      <input class='input is-small' type="text" name="tag_manager" id="id_tag" class="input class='input is-small' is-small"> 
-        <p class="help">یک لیست از برچسب های جدا شده توسط کاما </p>
+      <label class="label">برچسب ها:</label>
+      <input class='input is-small' type="text" name="tag_manager" id="id_tag"
+        class="input class='input is-small' is-small">
+      <p class="help">یک لیست از برچسب های جدا شده توسط کاما </p>
     </div>
     <div class="columns">
       <div class="column">

@@ -48,9 +48,18 @@ class Panel(View):
     def get(self, request, *args, **kwargs):  
  
         # form = forms.SellFilter()
-        sell_files = Sell.objects.all()
-        rent_files = Rent.objects.all()
+        sell_files = Sell.objects.exclude(owner_name='UNKNOWN')
+        rent_files = Rent.objects.exclude(owner_name='UNKNOWN')
         result_files = list(chain(sell_files, rent_files))
         return render(request, 'listing/listing_form.html', 
+                      {'files': result_files,                       
+                         })
+        
+class Listing(View):
+    def get(self, request, *args, **kwargs):
+        sell_files = Sell.objects.filter(tag_manager__name__in=['دیوار'], owner_name='UNKNOWN')
+        rent_files = Rent.objects.filter(tags_manager__name__in=['دیوار'], owner_name='UNKNOWN')
+        result_files = list(chain(sell_files, rent_files))
+        return render(request, 'listing/listing.html', 
                       {'files': result_files,                       
                          })

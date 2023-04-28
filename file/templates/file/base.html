@@ -12,9 +12,11 @@
     <div class="nav">
       <ul>
         <li><a href="/"><img src="{% static 'logo.png'%}" width="30" alt="logo"></a></li>
-        <li><a href="/">پنل</a></li>
+        <li><a href="/listing">پنل</a></li>
         <li><a href="{% url 'file:new_file' %}">فایل</a></li>
-        <li><a href="{% url 'customer:new_customer' %}">مشتری</a></li>
+        <li><a href="{% url 'customer:new_customer' %}">مشتری جدید</a></li>
+        <li><a href="/customer">مشتری ها</a></li>
+
         <li><a href="{% url 'agents:login' %}">ورود</a></li>
       </ul>
     </div>

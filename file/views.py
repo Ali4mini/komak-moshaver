@@ -18,6 +18,12 @@ class NewFile(View):
         data = request.POST
         data = data.copy()
         file_type = data['file_type']
+        ## temp for images
+        data['image1'] = ''
+        data['image2'] = ''
+        data['image3'] = ''
+        data['image4'] = ''
+        data['image5'] = ''
         
         try:
             data['elevator']
@@ -36,7 +42,7 @@ class NewFile(View):
             data['parking'] = False
         print(data)
         if file_type == 'sell':
-            try:
+            # try:
                 file, created = Sell.objects.get_or_create(type=data['property_type'],
                                                             owner_name=data['owner_name'],
                                                             owner_phone=data['owner_phone'],
@@ -60,9 +66,9 @@ class NewFile(View):
             
                 messages.success(request, 'فایل با موفقیت ثبت شد.',)
                 return redirect('/')
-            except:
-                messages.success(request, 'فایل   ',)
-                return redirect('/')
+            # except:
+            #     messages.success(request, 'فایل   ',)
+            #     return redirect('/')
 
         if file_type == 'rent':
             file, created = Rent.objects.get_or_create(type=data['property_type'],
@@ -92,54 +98,29 @@ class NewFile(View):
     def get(self, request, *args, **kwargs):
         form = forms.NewSellFile()
         return render(request, 'file/new_file.html')
-    
+
 # @csrf_exempt
-# def new_sell_file(request):
-    # if request.method == "POST":
-        # form = forms.NewSellFile(data=request.POST)
-        # print(request.POST)
-        # if form.is_valid():
-        #     # Create a NewSellFile object without saving it to the database
-        #     file = form.save(commit=False)
-        #     file.user = request.user
-        #     # Save the comment to the database
-        #     file.save()
- 
- 
-        #     # use django messages framework
-        #     messages.success(request, 'فایل با موفقیت ثبت شد.',)
-        #     return redirect('/')
-        
-        # messages.success(request, '!!!! ')
-        # return render(request, 'file/new_sell_file.html')
+# def new_rent_file(request):
+#     if request.method == "POST":
+#         form = forms.NewRentFile(data=request.POST)
+#         if form.is_valid():
+#             # Create a NewSellFile object without saving it to the database
+#             file = form.save(commit=False)
 
-    # else:
-    #     form = forms.NewSellFile()
-    #     return render(request, 'file/new_sell_file.html')
+#             print(request)
+#             # Save the comment to the database
+#             file.save()
+#             messages.success(request, 'فایل با موفقیت ثبت شد.',)
+#             return redirect('/')
+#         else:
+#             print(request.POS)
+#             return render(request, 'file/new_rent_file.html')
+
+#     else:
+#         form = forms.NewRentFile()
+#         return render(request, 'file/new_rent_file.html')
     
-
-@csrf_exempt
-def new_rent_file(request):
-    if request.method == "POST":
-        form = forms.NewRentFile(data=request.POST)
-        if form.is_valid():
-            # Create a NewSellFile object without saving it to the database
-            file = form.save(commit=False)
-
-            print(request)
-            # Save the comment to the database
-            file.save()
-            messages.success(request, 'فایل با موفقیت ثبت شد.',)
-            return redirect('/')
-        else:
-            print(request.POS)
-            return render(request, 'file/new_rent_file.html')
-
-    else:
-        form = forms.NewRentFile()
-        return render(request, 'file/new_rent_file.html')
-    
-@method_decorator(login_required, name='dispatch')
+@method_decorator((login_required, csrf_exempt), name='dispatch')
 class SellFileDetails(View):
     def post(self, request, pk, *args, **kwargs):
         comment_form = forms.CommentForm(data=request.POST)
@@ -183,7 +164,7 @@ class SellFileDetails(View):
                                                          })
 
     
-@method_decorator(login_required, name='dispatch')
+@method_decorator((login_required, csrf_exempt), name='dispatch')
 class RentFileDetails(View):
     def post(self, request, pk, *args, **kwargs):
         comment_form = forms.CommentForm(data=request.POST)
@@ -196,7 +177,7 @@ class RentFileDetails(View):
                 new_comment.user = user
                 new_comment.save()
                 messages.success(request, 'all went ok ')
-                return redirect(f'/file/sell/{id}')
+                return redirect(f'/file/sell/{pk}')
             else:
                 messages.error(request, 'login first')
                 return redirect('/agents/login')
@@ -228,16 +209,26 @@ class RentFileDetails(View):
                                                          })
 
 @method_decorator(csrf_exempt, name='dispatch')
-class FileDelete(View):
-    def post(self,request,pk, *args, **kwargs):
+class SellFileDelete(View):
+    def post(self, request, pk, *args, **kwargs):
         try:
             file = Sell.objects.get(pk=pk)
             file.delete()
             messages.success(request, 'all done')
         except:
             messages.error(request, 'something went wrong!')
-        return redirect('/')     
-        
+        return redirect('/listing/')     
+
+class RentFileDelete(View):
+    def post(self, request, pk, *args, **kwargs):
+        try:
+            file = Rent.objects.get(pk=pk)
+            file.delete()
+            messages.success(request, 'all done')
+        except:
+            messages.error(request, 'something went wrong!')
+        return redirect('/listing/')     
+         
 
 # class SellDeleteView(DeleteView):
 #     model = Sell
@@ -247,27 +238,24 @@ class FileDelete(View):
 class SellUpdateView(UpdateView):
     model = Sell
     template_name = 'file/sell_update.html'
-    success_url = '/'
-    # fields = (
-    #     'type',
-    #     'price',
-    #     'm2',
-    #     'year',
-    #     'owner_name',
-    #     'owner_phone',
-    #     'address',
-    #     'floor',
-    #     'elevator',
-    #     'storage',
-    #     'parking',
-    #     'pictures',
-    #     )    
-    form_class = forms.UpdateForm
+    success_url = '/listing/'
+    form_class = forms.SellUpdateForm
 
     def get(self, request, pk, *args, **kwargs):
         file = self.model.objects.get(pk=pk)
         print(file)
         return render(request, 'file/sell_update.html' , {'file': file})
+    
+class RentUpdateView(UpdateView):
+    model = Rent
+    template_name = 'file/sell_form.html'
+    success_url = '/listing/'
+    form_class = forms.RentUpdateForm
+
+    def get(self, request, pk, *args, **kwargs):
+        file = self.model.objects.get(pk=pk)
+        print(file)
+        return render(request, 'file/rent_update.html' , {'file': file})
         
         
 class SellSendInfo(View):

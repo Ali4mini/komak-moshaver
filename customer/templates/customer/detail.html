@@ -44,7 +44,7 @@
                     <footer class="modal-card-foot">
                         <div class="columns">
                             <div class="column">
-                                <button class="button">لغو</button>
+                                <button class="button">Cancel</button>
                             </div>
                             
                         </div>
@@ -56,82 +56,70 @@
         <div class="columns">
             <div class="column is-half">
                 <p id="type">
-                    نوع ملک: {{file.get_type_display}}
+                    نوع ملک: {{customer.get_type_display}}
                 </p>
             </div>
             <div class="column is-half">
                 <p id="type">
-                    نوع فایل: {% if file_type == 'sell' %}فروش{% elif file_type == 'rent' %}اجاره{% endif %}
+                    نوع مشتری: {% if customer_type == 'buy' %}خرید{% elif customer_type == 'rent' %}اجاره{% endif %}
                 </p>
             </div>
         </div>
         <div class="columns">
-            {% if file_type == 'rent'%}
+            {% if customer_type == 'rent'%}
 
             <div class="column is-half rent">
 
                 <div class="columns">
                     <div class="column">
                         <p id="owner_name">
-                            نام مالک: {{file.owner_name}}
+                            نام مشتری: {{customer.customer_name}}
                         </p>
                     </div>
                     <div class="column">
                         <p id="owner_phone">
-                            شماره مالک: {{file.owner_phone}}
+                            شماره مشتری: {{customer.customer_phone}}
                         </p>
                     </div>
                 </div>
                 <div class="columns">
                     <div class="column">
                         <p id="year">
-                            ودیعه: {{file.price_up}}
+                            ودیعه: {{customer.up_budget}}
                         </p>
                     </div>
                     <div class="column">
                         <p id="year">
-                            اجاره: {{file.price_rent}}
+                            اجاره: {{customer.rent_budget}}
                         </p>
                     </div>
                     <div class="column">
                         <p id="year">
-                            متراژ: {{file.m2}}
+                            متراژ: {{customer.m2}}
                         </p>
                     </div>
                     <div class="column">
                         <p id="year">
-                            طبقه: {{file.floor}}
-                        </p>
-                    </div>
-                    <div class="column">
-                        <p id="year">
-                            سال: {{file.year}}
-                        </p>
-                    </div>
-                </div>
-                <div class="columns mt-3 mb-6">
-                    <div class="column">
-                        <p id="year">
-                            آدرس: {{file.address}}
+                            سال: {{customer.year}}
                         </p>
                     </div>
                 </div>
 
 
                 <div class="columns">
-                    {% if file.elevator %}
+                    {% if customer.elevator %}
                     <div class="column">
                         <img src="{% static 'images/elevator.svg'%}" alt="elevator" class="image is-24x24 mt-1 mr-3">
                         <p id="elevator">آسانسور دارد</p>
                     </div>
                     {% endif %}
-                    {% if file.storage %}
+                    {% if customer.storage %}
                     <div class="column">
                         <img src="{% static 'images/storage.svg'%}" alt="storage" class="image is-24x24 mt-1 mr-3">
                         <p id="storage">انباری دارد</p>
                     </div>
                     {% endif %}
-                    {% if file.parking %}
+                    {% if customer.parking %}
                     <div class="column">
                         <img src="{% static 'images/parking.svg'%}" alt="parking" class="image is-24x24 mt-1 mr-3">
                         <p id="parking">پارکینگ دارد</p>
@@ -139,66 +127,53 @@
                     {% endif %}
                 </div>
             </div>
-            {% elif file_type == 'sell' %}
+            {% elif customer_type == 'buy' %}
             <div class="column is-half sell">
                 <div class="columns">
                     <div class="column">
                         <p id="owner_name">
-                            نام مالک: {{file.owner_name}}
+                            نام مشتری: {{customer.customer_name}}
                         </p>
                     </div>
                     <div class="column">
                         <p id="owner_phone">
-                            شماره مالک: {{file.owner_phone}}
+                            شماره مشتری: {{customer.customer_phone}}
                         </p>
                     </div>
                 </div>
                 <div class="columns">
                     <div class="column">
                         <p id="year">
-                            قیمت: {{file.price}}
+                            بودجه: {{customer.budget}}
                         </p>
                     </div>
                     <div class="column">
                         <p id="year">
-                            متراژ: {{file.m2}}
+                            متراژ: {{customer.m2}}
                         </p>
                     </div>
                     <div class="column">
                         <p id="year">
-                            طبقه: {{file.floor}}
-                        </p>
-                    </div>
-                    <div class="column">
-                        <p id="year">
-                            سال: {{file.year}}
-                        </p>
-                    </div>
-                </div>
-
-                <div class="columns mt-3 mb-6">
-                    <div class="column">
-                        <p id="year">
-                            آدرس: {{file.address}}
+                            سال: {{customer.year}}
                         </p>
                     </div>
                 </div>
 
 
                 <div class="columns">
-                    {% if file.elevator %}
+                    {% if customer.elevator %}
                     <div class="column">
                         <img src="{% static 'images/elevator.svg'%}" alt="elevator" class="image is-24x24 mt-1 mr-3">
                         <p id="elevator">آسانسور دارد</p>
                     </div>
                     {% endif %}
-                    {% if file.storage %}
+                    {% if customer.storage %}
                     <div class="column">
                         <img src="{% static 'images/storage.svg'%}" alt="storage" class="image is-24x24 mt-1 mr-3">
                         <p id="storage">انباری دارد</p>
                     </div>
                     {% endif %}
-                    {% if file.parking %}
+                    {% if customer.parking %}
                     <div class="column">
                         <img src="{% static 'images/parking.svg'%}" alt="parking" class="image is-24x24 mt-1 mr-3">
                         <p id="parking">پارکینگ دارد</p>
@@ -208,23 +183,6 @@
             </div>
             {% endif %}
 
-            <div class="column is-half has-text-centered">
-                <div class="pictures-section" id="lightgallery">
-                    <div class="columns">
-                        {% if images %}
-                        {% for image in images %}
-                        <div class="column">
-                            <figure class="image is-inline-block" onclick="expend_image(this)">
-                                <a href="{{image}}">
-                                    <img class="image is-centered" src="{{ image }}">
-                                </a>
-                            </figure>
-                        </div>
-                        {% endfor %}
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
         </div>
         <div class="columns is-vcentered mt-5">
             <div class="column is-half">
@@ -289,13 +247,4 @@
     </div>
 </div>
 
-<script src="{% static 'JS/scripts.js' %}"></script>
-<script src='{% static "lightgallery/lightgallery.umd.js" %}'></script>
-<script type="text/javascript">
-    lightGallery(document.getElementById('lightgallery'), {
-        plugins: [lgZoom, lgThumbnail],
-        speed: 500,
-        // ... other settings
-    });
-</script>
 {% endblock content %}

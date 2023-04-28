@@ -13,13 +13,12 @@
                     <option id="rent" value="rent">اجاره</option>
                 </select>
             </div>
-            <div class="select mr-3">
-                <select name="property_type" id="id_type">
-                    <option value="A" selected="">آپارتمان</option>
-                    <option value="L">زمین</option>
-                    <option value="S">مغازه</option>
-                    <option value="H">خانه و ویلا</option>
-
+            <div class="select is-link">
+                <select class="" name="type" id="id_type">
+                    <option value="A" {% if file.type == "A" %} selected {% endif%}>آپارتمان</option>
+                    <option value="L" {% if file.type == "L" %} selected {% endif%}>زمین</option>
+                    <option value="S" {% if file.type == "S" %} selected {% endif%}>مغازه</option>
+                    <option value="H" {% if file.type == "H" %} selected {% endif%}>خانه و ویلا</option>
                 </select>
             </div>
         </div>

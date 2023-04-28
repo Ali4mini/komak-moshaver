@@ -7,19 +7,12 @@
     <form method="post">
         {% csrf_token %}
         <div class="field">
-            <div class="select is-primary">
-                <select name="file_type" id="id_type" onchange="rent_select(this)">
-                    <option id="sell" value="buy">خرید</option>
-                    <option id="rent" value="rent">اجاره</option>
-                </select>
-            </div>
-            <div class="select mr-3">
-                <select name="property_type" id="id_type">
-                    <option value="A" selected="">آپارتمان</option>
-                    <option value="L">زمین</option>
-                    <option value="S">مغازه</option>
-                    <option value="H">خانه و ویلا</option>
-
+            <div class="select is-link">
+                <select class="" name="type" id="id_type">
+                    <option value="A" {% if file.type == "A" %} selected {% endif%}>آپارتمان</option>
+                    <option value="L" {% if file.type == "L" %} selected {% endif%}>زمین</option>
+                    <option value="S" {% if file.type == "S" %} selected {% endif%}>مغازه</option>
+                    <option value="H" {% if file.type == "H" %} selected {% endif%}>خانه و ویلا</option>
                 </select>
             </div>
         </div>
@@ -28,47 +21,38 @@
                 <div class="field">
                     <label class="label">نام مشتری:</label>
                     <input class="input is-small" type="text" name="customer_name" maxlength="150" required=""
-                        id="id_customer_name">
+                        id="id_customer_name" value="{{customer.customer_name}}">
                 </div>
             </div>
             <div class="column">
                 <div class="field">
                     <label class="label">شماره مشتری:</label>
                     <input class="input is-small" type="text" name="customer_phone" maxlength="12" required=""
-                        id="id_customer_phone">
+                        id="id_customer_phone" value="{{customer.customer_phone}}">
                 </div>
             </div>
         </div>
         <div class="field sell_cusotmer" id="sell_customer">
             <label class="label">بودجه:</label>
-            <input type="number" name="budget" class="input" id="id_budget">
-        </div>
-        <div class="field rent_customer" id="rent_customer" style="display: none;">
-            <label class="label">ودیعه:</label>
-            <input type="number" name="budget_up" class="input" id="id_budget_up">
-            <label class="label">اجاره:</label>
-            <input type="number" name="budget_rent" class="input" id="id_budget_rent">
+            <input type="number" name="budget" class="input" id="id_budget" value="{{customer.budget}}">
         </div>
         <div class="field">
             <label class="label">متراژ:</label>
-            <input class='input is-small' type="number" name="m2" required="" id="id_m2">
+            <input class='input is-small' type="number" name="m2" required="" id="id_m2" value="{{customer.m2}}">
         </div>
         <div class="field">
             <label class="label">سال ساخت:</label>
-            <input class='input is-small' type="number" name="year" required="" id="id_year">
+            <input class='input is-small' type="number" name="year" required="" id="id_year" value="{{customer.m2}}">
         </div>
         <div class="field">
-            <label class="checkbox ">
-                <input class='checkbox mr-3 mt-3' type="checkbox" name="elevator" id="id_elevator" >
-                آسانسور
+            <label class='checkbox mr-3'>آسانسور:
+                <input type="checkbox" name="elevator" id="id_elevator" {% if customer.elevator %} checked {% endif%}>
             </label>
-            <label class="checkbox">
-                <input class='checkbox is-small mr-6' type="checkbox" name="storage" id="id_storage" >
-                انباری
+            <label class='checkbox mr-3'>انباری:
+                <input type="checkbox" name="storage" id="id_storage" {% if customer.storage %} checked {% endif%}>
             </label>
-            <label class="checkbox">
-                <input class='checkbox is-small mr-6' type="checkbox" name="parking" id="id_parking" >
-                پارکینگ
+            <label class='checkbox mr-3 mb-4'>پارکینگ:
+                <input type="checkbox" name="parking" id="id_parking" {% if customer.parking %} checked {% endif%}>
             </label>
         </div>
         <div class="columns">

@@ -95,7 +95,7 @@ class CommentForm(forms.ModelForm):
         
     #     return data
     
-class UpdateForm(forms.ModelForm):
+class SellUpdateForm(forms.ModelForm):
     class Meta:
         model = Sell
         fields = (
@@ -113,7 +113,7 @@ class UpdateForm(forms.ModelForm):
         )
         
     def __init__(self, *args, **kwargs) -> None:
-        super(UpdateForm, self).__init__(*args, **kwargs)
+        super(SellUpdateForm, self).__init__(*args, **kwargs)
         self.fields['type'].required = False
         self.fields['price'].required = False
         self.fields['m2'].required = False
@@ -126,6 +126,39 @@ class UpdateForm(forms.ModelForm):
         self.fields['storage'].required = False
         self.fields['parking'].required = False
         
+class RentUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Rent 
+        fields = (
+            'type',
+            'price_up',
+            'price_rent',
+            'm2',
+            'year',
+            'owner_name',
+            'owner_phone',
+            'address',
+            'floor',
+            'elevator',
+            'storage',
+            'parking',
+        )
+        
+    def __init__(self, *args, **kwargs) -> None:
+        super(RentUpdateForm, self).__init__(*args, **kwargs)
+        self.fields['type'].required = False
+        self.fields['price_up'].required = False
+        self.fields['price_rent'].required = False
+        self.fields['m2'].required = False
+        self.fields['year'].required = False
+        self.fields['owner_name'].required = False
+        self.fields['owner_phone'].required = False
+        self.fields['address'].required = False
+        self.fields['floor'].required = False
+        self.fields['elevator'].required = False
+        self.fields['storage'].required = False
+        self.fields['parking'].required = False
+     
 class SendInfo(forms.Form):
     phone = forms.CharField(max_length=11, required=True)
     
