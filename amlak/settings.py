@@ -88,15 +88,15 @@ WSGI_APPLICATION = 'amlak.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'amlak_m', 
-        'USER': 'amlak_user', 
+        'NAME': 'amlak', 
+        'USER': 'amlak_u', 
         'PASSWORD': 'inim4az3rila',
         'HOST': '127.0.0.1', 
         'PORT': '5432',
     }
 }
 
-ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '192.168.1.104', '192.168.43.49', '192.168.1.106', '127.0.0.1']
+ALLOWED_HOSTS = ['87.107.165.126']
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators

@@ -157,7 +157,7 @@ class RentCustomerDelete(View):
 class BuyUpdateView(UpdateView):
     model = BuyCustomer
     template_name = 'customer/sell_update_form.html'
-    success_url = '/customer/'
+    success_url = 'customer/'
     form_class = forms.SellUpdateForm
 
     def get(self, request, pk, *args, **kwargs):
@@ -167,7 +167,7 @@ class BuyUpdateView(UpdateView):
 class RentUpdateView(UpdateView):
     model = RentCustomer
     template_name = 'customer/rent_update_form.html'
-    success_url = '/customer/'
+    success_url = 'customer/'
     form_class = forms.RentUpdateForm
 
     def get(self, request, pk, *args, **kwargs):

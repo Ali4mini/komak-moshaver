@@ -81,11 +81,13 @@ class Listing:
                         post_detail['اجاره'] = float(post_detail['اجاره'].replace(' میلیون', ''))
                 except Exception:
                     traceback.print_exc()
-                    if post_detail['اجارهٔ ماهانه'] == 'توافقی':
-                        post_detail['اجاره'] = 9999999
-                    if post_detail['اجارهٔ ماهانه'] == 'مجانی':
-                        post_detail['اجاره'] = 0
-                    
+                    try:
+                       if post_detail['اجارهٔ ماهانه'] == 'توافقی':
+                          post_detail['اجاره'] = 9999999
+                       if post_detail['اجارهٔ ماهانه'] == 'مجانی':
+                          post_detail['اجاره'] = 0
+                    except:
+                       post_detail['اجاره'] = 0
                           
             try:            
                 
@@ -234,7 +236,7 @@ class Listing:
 
                 if "فروش" in res["شاخه"][1] and res['نوع'] in valid_types:
                     if not res['شمارهٔ موبایل'] == 'None':
-                        try:
+                        
                         
                             file, created = models.Sell.objects.get_or_create(owner_name="UNKNOWN",
                                                     owner_phone=res['شمارهٔ موبایل'],
@@ -253,9 +255,8 @@ class Listing:
                             if not created:
                                     print('it was in DB')
                                 
-                            file.tags_manager.add(res['تگ ها'])
-                        except:
-                            pass
+                            file.tag_manager.add(res['تگ ها'])
+                        
                 if "اجاره" in res["شاخه"][1] and res['نوع'] in valid_types:
                     if res["شاخه"][1] == 'اجاره کوتاه مدت':
                             print('اجاره کوتاه مدت')
