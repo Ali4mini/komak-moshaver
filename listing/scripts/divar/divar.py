@@ -9,9 +9,7 @@ import pickle
 import time
 import logging
 
-
-
-logging.basicConfig(level=logging.INFO, filename="divar.log", filemode="w", format="%(asctime)s - %(levelname)s - %(name)s - %(message)s")
+logging.basicConfig(filename="divar.log", filemode="w", format="%(asctime)s - %(levelname)s - %(name)s - %(message)s")
 
 
 

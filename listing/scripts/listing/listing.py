@@ -2,25 +2,45 @@ from file import models
 from listing.scripts.divar.divar import Divar
 import time
 import traceback
-import logging
-
-logging.basicConfig(filename='logs/listing.log', filemode='w',
-                    format="%(process)d-%(levelname)s-%(message)s",
-                    datefmt="%d-%b-%y %H:%M:%S")
-
-class expceptions:
-    def __init__(self) -> None:
-        pass
-
+import logging, logging.handlers
+import requests
+import pickle
+# ! Custom exceptions
+  
 
 class Listing:
     def __init__(self) -> None:
-        self.divar_url = 'https://divar.ir/s/tehran/real-estate/doolab?districts=1017%2C273%2C974%2C1016&user_type=personal&sort=sort_date'
-        self.divar_obj = Divar(headless=False)
-        logging.info('initialized listing object')
-    def divar_bot(self) -> None:
-        def validation(post_detail: dict) -> dict:
-            print(post_detail)
+        
+        self.logger = logging.getLogger('Listing')
+        self.logger.info('initialized listing object')
+        
+    class DivarBot:
+        def __init__(self, *args, **kwargs) -> None:
+            super().__init__(*args, **kwargs)
+            self.divar_url = 'https://divar.ir/s/tehran/real-estate/doolab?districts=1017%2C273%2C974%2C1016&user_type=personal&sort=sort_date'
+            self.divar_obj = Divar(headless=True)
+            self.logger = logging.getLogger('Divar')
+            self.logger.setLevel(logging.INFO)
+            
+            self.smtphandler = logging.handlers.SMTPHandler(mailhost='localhost',
+                                                           fromaddr='divar.bot@test.xyz',
+                                                           toaddrs='ali.4mini@proton.me',
+                                                           subject='Divar Bot Errors')
+            self.smtphandler.setFormatter("%(process)d-%(levelname)s-%(message)s")
+            self.smtphandler.setLevel(logging.ERROR)
+            self.logger.addHandler(self.smtphandler)
+        def BurntCookie(self, cookie):
+            """this method should called when a cookie is burnt"""
+            template = f'''
+                        we have a burnt cookie
+                        cookie: {cookie}
+                        '''
+            data = {'from':'50004001845778', 'to':['09212396361'], 'text':template, 'udh':''}
+            response = requests.post('https://console.melipayamak.com/api/send/advanced/b59dd6ca1de047aabf4416be63da2c01', json=data)
+        
+        def validation(self, post_detail: dict) -> dict:
+            self.logger.info(f'extracted info: {post_detail}')
+
             if "کوتاه مدت" in post_detail['شاخه'][1]:
                 post_detail['ودیعه'] = 0
                 post_detail['اجارهٔ ماهانه'] = 0
@@ -135,30 +155,30 @@ class Listing:
 
                 
             post_detail['تگ ها'] = 'دیوار'  
+            self.logger.info(f'ready to use info: {post_detail}')
             
             return post_detail
-        def cookie_saver():
+        def cookie_saver(self, cookie: str) -> None:
             """
             it open's login page and give you 60 sec to login, than it's going to save a cookie
             """
             self.divar_obj1 = Divar(headless=False)
 
-            self.divar_obj1.login('9212396361', cookie='test1.pkl')
-
+            self.divar_obj1.login('9212031469', cookie='9212031469.pkl')
+            self.divar_obj.save_cookie(cookie)
             del self.divar_obj1
             
-        def scanner():
+        def scanner(self):
+            current_cookie = {'cookie': '', 'passed': 0}
             def searcher(post, outf="checked_links.txt", inf="checked_links.txt"):
                 if post in open(inf,"r").readlines():
-                    print(f"{post} is here!!!")
+                    self.logger.warning(f"{post} is here!!!")
                     
                 else:
                     file = f'https://divar.ir/v/{post}'
                     time.sleep(30)
                     res = self.divar_obj.post_details(file)
-                    res = validation(res)
-                    self.divar_obj.save_cookie('test1.pkl')
-                    print(res)
+                    res = self.validation(res)
                     valid_types = ['A', 
                                    'L',
                                    'S',
@@ -166,6 +186,7 @@ class Listing:
                                    ]
                     if "فروش" in res["شاخه"][1] and res['نوع'] in valid_types:
                         if not res['شمارهٔ موبایل'] == 'None':
+                            current_cookie['passed'] = 0
                             try:
                                 file, created = models.Sell.objects.get_or_create(owner_name="UNKNOWN",
                                                     owner_phone=res['شمارهٔ موبایل'],
@@ -180,15 +201,18 @@ class Listing:
                                                     type=res['نوع'],
                                                     )
                                 if not created:
-                                    print('it was in DB')
+                                    self.logger.warning('it was in DB')
                                 file.tag_manager.add(res['تگ ها'])
-                            except:
-                                pass
+                            except Exception as e:
+                                current_cookie['passed'] += 1 
+                                self.logger.exception('there was a error while adding sell file to DB')
+
                     elif "اجاره" in res["شاخه"][1] and res['نوع'] in valid_types:
                         if res["شاخه"][1] == 'اجاره کوتاه مدت':
                             pass
                         else:
                             if not res['شمارهٔ موبایل'] == 'None':
+                                current_cookie['passed'] = 0
                                 try:
                                     file, created = models.Rent.objects.get_or_create(owner_name="UNKNOWN",
                                                         owner_phone=res['شمارهٔ موبایل'],
@@ -204,49 +228,64 @@ class Listing:
                                                         type=res['نوع'],
                                                         )
                                     if not created:
-                                        print('it was in DB')
+                                        self.logger.info('it was in DB')
                             
                                     file.tags_manager.add(res['تگ ها'])
                                 except:
-                                    pass
+                                    self.logger.exception('there was a error while adding rent file to DB')
+                            else:
+                                current_cookie['passed'] += 0
+
                     else:
                         print('it is not sell')
                     with open(outf, 'w') as f1:
                         f1.write(post)
-                        print(f"{post}  is added ")
+                        self.logger.info(f"{post}  is added ")
                         
             def id_generator(link: str) -> str:
                 return link[-8:]
             temp_c = 0
-            while True:
-                if temp_c == 0:
-                    self.divar_obj.login('9212396361', cookie='9212396361.pkl')
-                post = self.divar_obj.last_post(page=self.divar_url)
-                logging.info(f'scraping info from {post}') 
-                post_id = id_generator(post)
-                searcher(post=post_id)
+            try:
+                while True:
+                    self.logger.warning('starting the loop')
 
-                time.sleep(180)
-                temp_c = temp_c + 1
-                if temp_c == 5:
-                    print('9199328173')
-                    self.divar_obj.login('9199328173', cookie='9199328173.pkl')
-                if temp_c == 10:
-                    print('9212031469')
-                    self.divar_obj.login('9212031469', cookie='9212031469.pkl')
-                if temp_c == 15:
-                    temp_c = 0
+                    if temp_c == 0:
+                        self.divar_obj.login('9212396361', cookie='9212396361.pkl')
+                        self.logger.warning('logged in with "9212396361"')
+                        current_cookie['cookie'] = '9212396361'
 
+                    post = self.divar_obj.last_post(page=self.divar_url)
+                    self.logger.info(f'scraping info from {post}') 
+                    post_id = id_generator(post)
+                    searcher(post=post_id)
 
-        def last_24_files() -> None:
+                    time.sleep(180)
+                    temp_c = temp_c + 1
+                    if temp_c == 5:
+                        self.divar_obj.login('9199328173', cookie='9199328173.pkl')
+                        self.logger.warning('logged in with "9199328173"')
+                        current_cookie['cookie']= '9199328173'
+                    if temp_c == 10:
+                        self.divar_obj.login('9212031469', cookie='9212031469.pkl')
+                        self.logger.warning('logged in with "9212031469"')
+                        current_cookie['cookie'] = '9212031469'
+                    if temp_c == 15:
+                        temp_c = 0
+                        
+                    if current_cookie['passed'] > 4:
+                        self.BurntCookie(cookie=current_cookie['cookie'])
+            except Exception as e:
+                self.logger.exception('we have a Error: ')
+
+        def last_24_files(self) -> None:
             self.divar_obj.login('9212396361', cookie='test1.pkl')
             posts = self.divar_obj.all_posts(page=self.divar_url)
             time.sleep(3)
             for post in posts:
-                print(f'in => {post}  ')
+                self.logger.info(f'in => {post}  ')
                 res = self.divar_obj.post_details(post)
-                res = validation(res)
-                print(res)
+                res = self.validation(res)
+                self.logger.debug(f'extracted data: {res}')
                 sell_file_count = models.Sell.objects.count()
                 rent_file_count = models.Rent.objects.count()
                 valid_types = [ 'A', 
@@ -270,19 +309,16 @@ class Listing:
                                                     parking=res['ویژگی ها'][2],
                                                     storage=res['ویژگی ها'][1],
                                                     type=res['نوع'],
-                                                    )
-                            print(res['تگ ها'])
-                            
+                                                    )                            
                             if not created:
-                                    print('it was in DB')
+                                    self.logger.info('it was in DB')
 
                             file.tag_manager.add(res['تگ ها'])
                         
                         except:
-                            pass
-
+                            self.logger.exception('an Error hapend while adding sell file')
                     else:
-                        print('phone was None!! ')
+                        self.logger.warning('phone was None!! ')
 
 
                 if "اجاره" in res["شاخه"][1] and res['نوع'] in valid_types:
@@ -304,22 +340,21 @@ class Listing:
                                                     storage=res['ویژگی ها'][1],
                                                     type=res['نوع'],
                                                     )  
-                                print(res['تگ ها'])
                                 if not created:
-                                    print('it was in DB')
+                                    self.logger.info('it was in DB')
                                     
                                 file.tags_manager.add(res['تگ ها'])
                             except:
-                                pass
+                                self.logger.exception('an Error hapend while adding rent file')
                         else:
-                            print('phone was None')
+                            self.logger.warning('phone was None')
                             print('   !!!!ejare!!!!  \n')
-                print(f'done => {post}  ')
+                self.logger.info(f'done => {post}  ')
 
-          
-        last_24_files()
-        scanner()
-        
-        # cookie_saver()
-        del self.divar_obj
-        
+        def run(self) -> None:
+            self.logger.warning('running Divar bot.')
+            self.last_24_files()
+            self.logger.info('done extracting last 24 files.')
+            self.scanner()
+            # self.cookie_saver('9212396361.pkl')
+

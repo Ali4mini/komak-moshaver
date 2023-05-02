@@ -1,9 +1,8 @@
-from . import listing
+from .listing import listing
 import time
 
 def run():
     listing_obj = listing.Listing()
-    listing_obj.divar_bot()
+    divar = listing_obj.DivarBot()
+    divar.run()
     
-    # with listing.DivarBot() as divar_bot:
-    #     divar_bot.scanner()
