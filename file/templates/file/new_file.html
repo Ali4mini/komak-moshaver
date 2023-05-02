@@ -20,11 +20,37 @@
         <option value="H">خانه و ویلا</option>
       </select>
     </div>
+    <div class="column">
+      <div class="field">
+        <label class="label">آدرس:</label>
+        <textarea name="address" cols="10" rows="4" class="textarea is-small" required="" id="id_address"></textarea>
+      </div>
+    </div>
+    <div class="columns">
+      <div class="column">
+        <div class="field">
+          <label class="label">متراژ:</label>
+          <input class='input is-small' type="number" name="m2" required="" id="id_m2">
+        </div>
+      </div>
+      <div class="column">
+        <div class="field">
+          <label class="label">سال ساخت:</label>
+          <input class='input is-small' type="number" name="year" required="" id="id_year">
+        </div>
+      </div>
+      <div class="column">
+        <div class="field">
+          <label class="label">طبقه:</label>
+          <input class='input is-small' type="number" name="floor" required="" id="id_floor">
+        </div>
+      </div>
+    </div>
     <div id="sell_filter">
       <div class="columns">
         <div class="column is-half">
           <div class="field">
-            <label for="id_price">قیمت:</label>
+            <label class="label">قیمت:</label>
             <input type="number" name="price" class="input is-small" id="id_price">
           </div>
         </div>
@@ -34,53 +60,48 @@
       <div class="columns">
         <div class="column">
           <div class="field">
-            <label for="id_price">ودیعه:</label>
+            <label class="label">ودیعه:</label>
             <input type="number" name="price_up" class="input is-small" id="id_price">
           </div>
         </div>
         <div class="column">
           <div class="field">
-            <label for="id_price">اجاره:</label>
+            <label class="label">اجاره:</label>
             <input type="number" name="price_rent" class="input is-small" id="id_price">
           </div>
         </div>
       </div>
     </div>
-    <div class="field">
-      <label class="label">مالک:</label>
-      <input class='input is-small' type="text" name="owner_name" maxlength="1000" required="" id="id_owner_name">
-      <label class="label mt-2">شماره مالک:</label>
-      <input class='input is-small' type="text" name="owner_phone" maxlength="12" required="" id="id_owner_phone">
-    </div>
-    <div class="field">
-      <label class="label">آدرس:</label>
-      <textarea name="address" cols="10" rows="4" class="textarea is-small" required="" id="id_address"></textarea>
-    </div>
-    <div class="field">
-      <label class="label">متراژ:</label>
-      <input class='input is-small' type="number" name="m2" required="" id="id_m2">
-    </div>
-    <div class="field">
-      <label class="label">سال ساخت:</label>
-      <input class='input is-small' type="number" name="year" required="" id="id_year">
-    </div>
-    <div class="field">
-      <label class="label">طبقه:</label>
-      <input class='input is-small' type="number" name="floor" required="" id="id_floor">
-    </div>
-    <div class="field">
+
+    <div class="field mt-3">
       <label class="checkbox">
-        <input class='checkbox is-small mr-0' type="checkbox" name="elevator" id="id_elevator" checked="">
+        <input class='checkbox' type="checkbox" name="elevator" id="id_elevator">
         آسانسور
       </label>
+    </div>
+    <div class="field">
       <label class="checkbox">
-        <input class='checkbox is-small mr-6' type="checkbox" name="storage" id="id_storage" checked="">
+        <input class='checkbox' type="checkbox" name="storage" id="id_storage">
         انباری
       </label>
+    </div>
+    <div class="field md-3">
       <label class="checkbox">
-        <input class='checkbox is-small mr-6' type="checkbox" name="parking" id="id_parking" checked="">
+        <input class='checkbox' type="checkbox" name="parking" id="id_parking">
         پارکینگ
       </label>
+    </div>
+    <div class="field">
+      <div class="columns">
+        <div class="column">
+          <label class="label">مالک:</label>
+          <input class='input is-small' type="text" name="owner_name" maxlength="1000" required="" id="id_owner_name">
+        </div>
+        <div class="column">
+          <label class="label ">شماره مالک:</label>
+          <input class='input is-small' type="text" name="owner_phone" maxlength="12" required="" id="id_owner_phone">
+        </div>
+      </div>
     </div>
 
     <!-- <div class="file mt-3 mb-3">

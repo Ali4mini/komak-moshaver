@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 2023-04-29 19:51:09,055 - WARNING - root - initialized Divar object
 2023-04-29 19:51:11,522 - INFO - root - logged in with cookie: test1.pkl
 2023-04-29 19:51:26,005 - INFO - root - found all post of page: https://divar.ir/s/tehran/real-estate/khavaran?districts=1015%2C1019%2C1020%2C272%2C273&user_type=personal
@@ -1252,3 +1253,9 @@
 2023-05-01 11:57:22,366 - INFO - root - merging base_row_title and group_row_title.
 2023-05-01 11:57:52,539 - WARNING - root - done extracting data from https://divar.ir/v/AZPVX609
 2023-05-01 11:57:57,567 - WARNING - root - saved a cookie: test1.pkl
+=======
+2023-05-01 20:45:31,779 - WARNING - root - initialized Divar object
+2023-05-01 20:45:51,652 - WARNING - root - initialized Divar object
+2023-05-01 20:47:15,212 - WARNING - root - logged in with phone number: 9212396361
+2023-05-01 20:49:05,114 - WARNING - root - saved a cookie: test1.pkl
+>>>>>>> 3aa09d0 (- fixing some bugs)
