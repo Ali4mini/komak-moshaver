@@ -64,9 +64,9 @@ class NewCustomer(View):
                                                                     added_by=request.user)
             if not created:
                 messages.error(request, 'there is already a customer with this info in DB')
-                return redirect('customer/')
+                return redirect('/')
             messages.success(request, 'مشتری با موفقیت ثبت شد.',)
-            return redirect('customer/')
+            return redirect('/')
     def get(self, request, *args, **kwargs):
         return render(request, 'customer/form.html')
 

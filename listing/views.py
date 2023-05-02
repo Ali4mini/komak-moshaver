@@ -28,7 +28,7 @@ class Panel(View):
                 files = Sell.objects.filter(price__lte=budget, 
                                             type=prop_type, 
                                             m2__gte=m2, 
-                                            year__gte=year)
+                                            year__gte=year).exclude(owner_name='UNKNOWN')
             elif filter_form.cleaned_data['file_type'] == 'rent':
                 budget_up = filter_form.cleaned_data['price_up']
                 budget_rent = filter_form.cleaned_data['price_rent']
@@ -40,7 +40,7 @@ class Panel(View):
                                             price_rent__lte=budget_rent, 
                                             type=prop_type, 
                                             m2__gte=m2,
-                                            year__gte=year)
+                                            year__gte=year).exclude(owner_name='UNKNOWN')
             return render(request, 'listing/listing_form.html',
                           {'files': files,
                             })

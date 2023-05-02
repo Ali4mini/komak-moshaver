@@ -1,69 +1,114 @@
 {% extends 'file/base.html' %}
-{% block title %} edit {% endblock%}
+{% block title %} New File {% endblock title %}
 {% load static%}
+
 {% block content %}
-<div class="box m-5">
-    <form method="post">
-        <div class="columns">
-            <div class="column is-half">
-                {% csrf_token %}
-                <label class='label'>مالک:</label>
-                <input class='input is-small' type="text" name="owner_name" maxlength="1000" id="id_owner_name" value="{{file.owner_name}}">
-
-                <label class='label'">شماره مالک :</label>
-                <input class='input is-small' type=" text" name="owner_phone" maxlength="12" id="id_owner_phone" value="{{file.owner_phone}}">
-
-
-                <label class='label'>نوع:</label>
-                <div class="select is-link">
-                    <select class="" name="type" id="id_type">
-                        <option value="A" {% if file.type == "A" %} selected {% endif%}>آپارتمان</option>
-                        <option value="L" {% if file.type == "L" %} selected {% endif%}>زمین</option>
-                        <option value="S" {% if file.type == "S" %} selected {% endif%}>مغازه</option>
-                        <option value="H" {% if file.type == "H" %} selected {% endif%}>خانه و ویلا</option>
-                    </select>
-                </div>
-                <div class="field">
-                    <label class='label'>آدرس:</label>
-                    <textarea class="textarea is-small" name="address" cols="10" rows="4"
-                        id="id_address">{{ file.address }}</textarea>
-
-                    <label class='label'>متراژ:</label>
-                    <input class='input is-small' type="number" name="m2" id="id_m2" value="{{file.m2}}">
-
-                    <label class='label'>قیمت:</label>
-                    <input class='input is-small' type="number" name="price" id="id_price" value="{{file.price}}">
-
-                    <label class='label'>سال ساخت:</label>
-                    <input class='input is-small' type="number" name="year" id="id_year" value="{{file.year}}">
-
-                    <label class='label'>طبقه:
-                        <input class='input is-small' type="number" name="floor" id="id_floor" value="{{file.floor}}">
-                    </label>
-                    <label class='checkbox mr-3'>آسانسور:
-                        <input type="checkbox" name="elevator" id="id_elevator" {% if file.elevator %}checked {% endif%}>
-                    </label>
-                    <label class='checkbox mr-3'>انباری:
-                        <input type="checkbox" name="storage" id="id_storage" {% if file.storage %}checked {% endif%} >
-                    </label>
-                    <label class='checkbox mr-3 mb-4'>پارکینگ:
-                        <input type="checkbox" name="parking" id="id_parking" {% if file.parking %}checked {% endif%}>
-                    </label>
-                        <!-- <label class='label' "id_pictures">Pictures:</label>
-                <input class='input is-small' type="file" name="pictures" accept="image/*" id="id_pictures"> -->
-
-                    <label class='label'>برچسب ها:</label>
-                    <input class='input is-small' type="text" name="tag" id="id_tag"  value="{{file.tags.all}}">
-                </div>
-            </div>
+<div class="box m-5 p-5">
+  <form action="" method="post">
+    {% csrf_token%}
+    <label class='label'>نوع:</label>
+    <div class="select is-link">
+      <select class="" name="type" id="id_type">
+        <option value="A" {% if file.type == "A" %} selected {% endif%}>آپارتمان</option>
+        <option value="L" {% if file.type == "L" %} selected {% endif%}>زمین</option>
+        <option value="S" {% if file.type == "S" %} selected {% endif%}>مغازه</option>
+        <option value="H" {% if file.type == "H" %} selected {% endif%}>خانه و ویلا</option>
+      </select>
+    </div>
+    <div class="column">
+      <div class="field">
+        <label class="label">آدرس:</label>
+        <textarea name="address" cols="10" rows="4" class="textarea is-small" required=""
+          id="id_address">{{file.address}}</textarea>
+      </div>
+    </div>
+    <div class="columns">
+      <div class="column">
+        <div class="field">
+          <label class="label">متراژ:</label>
+          <input class='input is-small' type="number" name="m2" required="" id="id_m2" value="{{file.m2}}">
         </div>
-        <div class="columns">
-            <div class="column">
-                <button type="submit" class="button is-medium is-pulled-left m-4 is-success">
-                    edit
-                </button>
-            </div>
+      </div>
+      <div class="column">
+        <div class="field">
+          <label class="label">سال ساخت:</label>
+          <input class='input is-small' type="number" name="year" required="" id="id_year" value="{{file.year}}">
         </div>
-    </form>
+      </div>
+      <div class="column">
+        <div class="field">
+          <label class="label">طبقه:</label>
+          <input class='input is-small' type="number" name="floor" required="" id="id_floor" value="{{file.floor}}">
+        </div>
+      </div>
+    </div>
+    <div id="sell_filter">
+      <div class="columns">
+        <div class="column is-half">
+          <div class="field">
+            <label class="label">قیمت:</label>
+            <input type="number" name="price" class="input is-small" id="id_price" value="{{file.price}}">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="rent_filter" style="display: none;">
+      <div class="columns">
+        <div class="column">
+          <div class="field">
+            <label class="label">ودیعه:</label>
+            <input type="number" name="price_up" class="input is-small" id="id_price" value="{{file.up_price}}">
+          </div>
+        </div>
+        <div class="column">
+          <div class="field">
+            <label class="label">اجاره:</label>
+            <input type="number" name="price_rent" class="input is-small" id="id_price" value="{{file.rent_price}}">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <label class='checkbox mt-3'>آسانسور:
+        <input type="checkbox" name="elevator" id="id_elevator" {% if file.elevator %}checked {% endif%}>
+      </label>
+    </div>
+    <div class="field">
+      <label class='checkbox '>انباری:
+        <input type="checkbox" name="storage" id="id_storage" {% if file.storage %}checked {% endif%}>
+      </label>
+    </div>
+    <div class="field">
+      <label class='checkbox mb-3'>پارکینگ:
+        <input type="checkbox" name="parking" id="id_parking" {% if file.parking %}checked {% endif%}>
+      </label>
+    </div>
+
+    <div class="field">
+      <div class="columns">
+        <div class="column">
+          <label class="label">مالک:</label>
+          <input class='input is-small' type="text" name="owner_name" maxlength="1000" required="" id="id_owner_name">
+        </div>
+        <div class="column">
+          <label class="label ">شماره مالک:</label>
+          <input class='input is-small' type="text" name="owner_phone" maxlength="12" required="" id="id_owner_phone">
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class='label'>برچسب ها:</label>
+      <input class='input is-small' type="text" name="tag" id="id_tag" value="{{file.tags.all}}">
+    </div>
 </div>
-{% endblock %}
+<div class="columns">
+  <div class="column">
+    <button type="submit" class="button is-medium is-primary mt-4 is-pulled-left">ثبت</button>
+  </div>
+</div>
+</form>
+</div>
+<script src="{% static 'JS/scripts.js'%}"></script>
+
+{% endblock content%}

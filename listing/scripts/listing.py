@@ -131,8 +131,8 @@ class Listing:
             it open's login page and give 120 sec to login than it's going to save a cookie
             """
             self.divar_obj1 = Divar(headless=False)
-            self.divar_obj1.login('9212396361', cookie='test1.pkl')
-            time.sleep(120)
+            self.divar_obj1.login('9212396361')
+            time.sleep(100)
             self.divar_obj1.save_cookie('test1.pkl')
             del self.divar_obj1
             
@@ -207,13 +207,16 @@ class Listing:
                         
             def id_generator(link: str) -> str:
                 return link[-8:]
-            
+            temp_c = 0
             while True:
                 post = self.divar_obj.last_post(page=self.divar_url)
                 print(post)
                 post_id = id_generator(post)
                 searcher(post=post_id)
                 time.sleep(30)
+                temp_c = temp_c + 1
+                if temp_c == 10:
+                    pass
 
         def last_24_files() -> None:
             self.divar_obj.login('9212396361', cookie='test1.pkl')
@@ -256,6 +259,8 @@ class Listing:
                             file.tags_manager.add(res['تگ ها'])
                         except:
                             pass
+                    else:
+                        print('phone was None!! ')
                 if "اجاره" in res["شاخه"][1] and res['نوع'] in valid_types:
                     if res["شاخه"][1] == 'اجاره کوتاه مدت':
                             print('اجاره کوتاه مدت')
@@ -282,6 +287,8 @@ class Listing:
                                 file.tags_manager.add(res['تگ ها'])
                             except:
                                 pass
+                        else:
+                            print('phone was None')
                             print('   !!!!ejare!!!!  \n')
                 print(f'done => {post}  ')
 

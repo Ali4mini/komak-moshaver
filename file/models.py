@@ -99,15 +99,15 @@ class Rent(models.Model):
     def get_absolute_url(self):
         return reverse("file:rent_file_detail", args=[self.id])
 
-class Comment(models.Model):
+class SellComment(models.Model):
     file = models.ForeignKey("Sell",
                              verbose_name=("file"),
                              on_delete=models.CASCADE,
-                             related_name='comments')
+                             related_name='sell_comments')
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              verbose_name=("user's profile"),
                              on_delete=models.CASCADE,
-                             related_name='comments')
+                             related_name='sell_comments')
     body = models.TextField(max_length=10000)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -143,7 +143,7 @@ class RentComment(models.Model):
         return f'comment by {self.user} on {self.file}'
 
     def get_absolute_url(self):
-        return reverse("sell_comment", kwargs={"pk": self.pk})
+        return reverse("rent_comment", kwargs={"pk": self.pk})
 class SellImages(models.Model):
     post = models.ManyToManyField("Sell", verbose_name=("post"), related_name='Images')
     image = models.ImageField(upload_to='images',

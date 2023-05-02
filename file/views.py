@@ -123,7 +123,7 @@ class NewFile(View):
 @method_decorator((login_required, csrf_exempt), name='dispatch')
 class SellFileDetails(View):
     def post(self, request, pk, *args, **kwargs):
-        comment_form = forms.CommentForm(data=request.POST)
+        comment_form = forms.SellCommentForm(data=request.POST)
         file = get_object_or_404(Sell, pk=pk)
         user = get_object_or_404(User, pk=request.user.id)
         if comment_form.is_valid():
@@ -133,14 +133,14 @@ class SellFileDetails(View):
                 new_comment.user = user
                 new_comment.save()
                 messages.success(request, 'all went ok ')
-                return redirect(f'/file/sell/{id}')
+                return redirect(f'/file/sell/{pk}')
             else:
                 messages.error(request, 'login first')
                 return redirect('/agents/login')
     def get(self, request, pk, *args, **kwargs):
         file = get_object_or_404(Sell, pk=pk, )
-        comment_form = forms.CommentForm()
-        comments = file.comments.all()
+        comment_form = forms.SellCommentForm()
+        comments = file.sell_comments.all()
         image_fields = [file.image1,
                         file.image2,
                         file.image3,
@@ -167,7 +167,7 @@ class SellFileDetails(View):
 @method_decorator((login_required, csrf_exempt), name='dispatch')
 class RentFileDetails(View):
     def post(self, request, pk, *args, **kwargs):
-        comment_form = forms.CommentForm(data=request.POST)
+        comment_form = forms.RentCommentForm(data=request.POST)
         file = get_object_or_404(Rent, pk=pk)
         user = get_object_or_404(User, pk=request.user.id)
         if comment_form.is_valid():
@@ -177,13 +177,13 @@ class RentFileDetails(View):
                 new_comment.user = user
                 new_comment.save()
                 messages.success(request, 'all went ok ')
-                return redirect(f'/file/sell/{pk}')
+                return redirect(f'/file/rent/{pk}')
             else:
                 messages.error(request, 'login first')
                 return redirect('/agents/login')
     def get(self, request, pk, *args, **kwargs):
         file = get_object_or_404(Rent, pk=pk, )
-        comment_form = forms.CommentForm()
+        comment_form = forms.RentCommentForm()
         comments = file.rent_comments.all()
         image_fields = [file.image1,
                         file.image2,

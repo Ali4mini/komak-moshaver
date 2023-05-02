@@ -1,5 +1,5 @@
 from django import forms
-from .models import Sell, Rent, Comment, SellImages, RentImages
+from .models import Sell, Rent, SellComment,RentComment, SellImages, RentImages
 
 class NewSellFile(forms.ModelForm): 
     file_type = forms.CharField(required=True)  
@@ -85,10 +85,20 @@ class NewRentFile(forms.ModelForm):
         def __init__(self, *args, **kwargs):
             super(NewSellFile, self).__init__(*args, **kwargs)
         
-class CommentForm(forms.ModelForm):
+class SellCommentForm(forms.ModelForm):
     
     class Meta:
-        model = Comment
+        model = SellComment
+        fields = ["body"]
+    # def clean_field(self):
+    #     data = self.data    
+        
+    #     return data
+    
+class RentCommentForm(forms.ModelForm):
+    
+    class Meta:
+        model = RentComment
         fields = ["body"]
     # def clean_field(self):
     #     data = self.data    
