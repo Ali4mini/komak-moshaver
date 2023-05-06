@@ -5,7 +5,7 @@ from .models import Sell, Rent, SellComment, RentComment
 
 @admin.register(Sell)
 class SellAdmin(admin.ModelAdmin):
-    list_display = ['owner_name', 'm2', 'address', 'type', ]
+    list_display = ['owner_name', 'm2', 'address', 'type',]
     list_filter = ['m2', 'price', ]
     #search_fields = ['title', 'body']
     #prepopulated_fields = {'slug': ('title',)}

@@ -21,7 +21,7 @@ class Sell(models.Model):
     m2 = models.IntegerField()
     price = models.IntegerField()
     year = models.IntegerField()
-    floor = models.IntegerField()
+    floor = models.IntegerField(blank=True)
     elevator = models.BooleanField(default=True)
     storage = models.BooleanField(default=True)
     parking = models.BooleanField(default=True)
@@ -33,6 +33,13 @@ class Sell(models.Model):
                                  blank=False,
                                  default=1
                                  )
+    bedroom = models.IntegerField()
+    parking_motor = models.BooleanField()
+    takhlie = models.CharField(max_length=100)
+    vahedha = models.IntegerField()
+    komod_divari = models.BooleanField()
+    bazdid = models.CharField(max_length=100)
+    tabaghat = models.IntegerField()
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     
@@ -83,6 +90,14 @@ class Rent(models.Model):
                                  )
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    bedroom = models.IntegerField(blank=True)
+    parking_motor = models.BooleanField()
+    takhlie = models.CharField(max_length=100)
+    vahedha = models.IntegerField()
+    komod_divari = models.BooleanField()
+    bazdid = models.CharField(max_length=100)
+    tabdil = models.BooleanField()
+    tabaghat = models.IntegerField()
 
     image1 = models.ImageField(upload_to='images/', blank=True)
     image2 = models.ImageField(upload_to='images/', blank=True)

@@ -6,15 +6,15 @@
 <div class="box m-5 p-5">
   <form action="" method="post">
     {% csrf_token%}
-    <div class="select is-primary">
+    <div class="select is-link">
       <select name="file_type" id="id_type" onchange="rent_filter(this)">
         <option id="sell" value="sell">فروش</option>
         <option id="rent" value="rent">اجاره</option>
       </select>
     </div>
-    <div class="select is-primary">
-      <select name="property_type" id="id_type">
-        <option value="A" selected="">آپارتمان</option>
+    <div class="select is-link">
+      <select class="" name="property_type" id="id_type">
+        <option value="A">آپارتمان</option>
         <option value="L">زمین</option>
         <option value="S">مغازه</option>
         <option value="H">خانه و ویلا</option>
@@ -23,29 +23,75 @@
     <div class="column">
       <div class="field">
         <label class="label">آدرس:</label>
-        <textarea name="address" cols="10" rows="4" class="textarea is-small" required="" id="id_address"></textarea>
+        <textarea name="address" cols="10" rows="4" class="textarea is-small" required=""
+          id="id_address"></textarea>
       </div>
     </div>
     <div class="columns">
       <div class="column">
         <div class="field">
           <label class="label">متراژ:</label>
-          <input class='input is-small' type="number" name="m2" required="" id="id_m2">
+          <input class='input is-small' type="number" name="m2" id="id_m2">
         </div>
       </div>
       <div class="column">
         <div class="field">
           <label class="label">سال ساخت:</label>
-          <input class='input is-small' type="number" name="year" required="" id="id_year">
+          <input class='input is-small' type="number" name="year" id="id_year">
         </div>
       </div>
       <div class="column">
         <div class="field">
           <label class="label">طبقه:</label>
-          <input class='input is-small' type="number" name="floor" required="" id="id_floor">
+          <input class='input is-small' type="number" name="floor" id="id_floor">
         </div>
       </div>
     </div>
+    <div class="columns">
+    <div class="column">
+      <div class="field">
+        <label class="label">اتاق خواب:</label>
+        <input class='input is-small' type="number" name="bedroom" id="id_bedroom">
+      </div>
+    </div>
+    <div class="column">
+      <div class="field">
+        <label class="label">تعداد واحد:</label>
+        <input class='input is-small' type="number" name="vahedha" id="id_vahedha">
+      </div>
+    </div>
+    <div class="column">
+      <div class="field">
+        <label class="label">tabaghat:</label>
+        <input class='input is-small' type="number" name="tabaghat" id="id_tabaghat">
+      </div>
+    </div>
+  </div>
+    <div class="column">
+      <div class="field">
+        <label class="label">بازدید:</label>
+        <input class='input is-small' name="bazdid" id="id_bazdid">
+      </div>
+    </div>
+    <label class='label'>تخلیه:</label>
+    <div class="select is-link mb-4">
+      <select class="" name="takhlie" id="id_takhlie">
+        <option value="0">تخلیه</option>
+        <option value="1">فروردین</option>
+        <option value="2">اردیبهشت</option>
+        <option value="3">خرداد</option>
+        <option value="4">تیر</option>
+        <option value="5">مرداد</option>
+        <option value="6">شهریور</option>
+        <option value="7">مهر</option>
+        <option value="8">آبان</option>
+        <option value="9">آذر</option>
+        <option value="10">دی</option>
+        <option value="11">بهمن</option>
+        <option value="12">اسفند</option>
+      </select>
+    </div>
+
     <div id="sell_filter">
       <div class="columns">
         <div class="column is-half">
@@ -61,36 +107,44 @@
         <div class="column">
           <div class="field">
             <label class="label">ودیعه:</label>
-            <input type="number" name="price_up" class="input is-small" id="id_price">
+            <input type="number" name="price_up" class="input is-small" id="id_price_up">
           </div>
         </div>
         <div class="column">
           <div class="field">
             <label class="label">اجاره:</label>
-            <input type="number" name="price_rent" class="input is-small" id="id_price">
+            <input type="number" name="price_rent" class="input is-small" id="id_price_rent">
           </div>
         </div>
       </div>
     </div>
-
-    <div class="field mt-3">
-      <label class="checkbox">
-        <input class='checkbox' type="checkbox" name="elevator" id="id_elevator">
-        آسانسور
+    <div class="field">
+      <label class='checkbox mt-3'>تبدیل:
+        <input type="checkbox" name="tabdil" id="id_tabdil">
       </label>
     </div>
     <div class="field">
-      <label class="checkbox">
-        <input class='checkbox' type="checkbox" name="storage" id="id_storage">
-        انباری
+      <label class='checkbox mt-3'>آسانسور:
+        <input type="checkbox" name="elevator" id="id_elevator">
       </label>
     </div>
-    <div class="field md-3">
-      <label class="checkbox">
-        <input class='checkbox' type="checkbox" name="parking" id="id_parking">
-        پارکینگ
+    <div class="field">
+      <label class='checkbox '>انباری:
+        <input type="checkbox" name="storage" id="id_storage">
+      </label>
+      <label class='checkbox mr-5'>کمد دیواری:
+        <input type="checkbox" name="komod_divari" id="id_komod_divari">
       </label>
     </div>
+    <div class="field">
+      <label class='checkbox mb-3'>پارکینگ:
+        <input type="checkbox" name="parking" id="id_parking">
+      </label>
+      <label class='checkbox mr-5'>پارکینگ موتور:
+        <input type="checkbox" name="parking_motor" id="id_parking_motor">
+      </label>
+    </div>
+
     <div class="field">
       <div class="columns">
         <div class="column">
@@ -104,68 +158,17 @@
       </div>
     </div>
 
-    <!-- <div class="file mt-3 mb-3">
-      <label class="file-label">
-        <input class="file-input" type="file" name="image1">
-        <span class="file-cta">
-          <span class="file-label">
-            عکس ها
-          </span>
-        </span>
-      </label>
-    </div>
-    <div class="file mt-3 mb-3">
-      <label class="file-label">
-        <input class="file-input" type="file" name="image2">
-        <span class="file-cta">
-          <span class="file-label">
-            عکس ها
-          </span>
-        </span>
-      </label>
-    </div>
-    <div class="file mt-3 mb-3">
-      <label class="file-label">
-        <input class="file-input" type="file" name="image3">
-        <span class="file-cta">
-          <span class="file-label">
-            عکس ها
-          </span>
-        </span>
-      </label>
-    </div>
-    <div class="file mt-3 mb-3">
-      <label class="file-label">
-        <input class="file-input" type="file" name="image4">
-        <span class="file-cta">
-          <span class="file-label">
-            عکس ها
-          </span>
-        </span>
-      </label>
-    </div>
-    <div class="file mt-3 mb-3">
-      <label class="file-label">
-        <input class="file-input" type="file" name="image5">
-        <span class="file-cta">
-          <span class="file-label">
-            عکس ها
-          </span>
-        </span>
-      </label>
-    </div> -->
     <div class="field">
-      <label class="label">برچسب ها:</label>
-      <input class='input is-small' type="text" name="tag_manager" id="id_tag"
-        class="input class='input is-small' is-small">
-      <p class="help">یک لیست از برچسب های جدا شده توسط کاما </p>
+      <label class='label'>برچسب ها:</label>
+      <input class='input is-small' type="text" name="tag" id="id_tag">
     </div>
-    <div class="columns">
-      <div class="column">
-        <button type="submit" class="button is-medium is-primary mt-4 is-pulled-left">ثبت</button>
-      </div>
-    </div>
-  </form>
+</div>
+<div class="columns">
+  <div class="column">
+    <button type="submit" class="button is-medium is-primary mt-4 is-pulled-left">ثبت</button>
+  </div>
+</div>
+</form>
 </div>
 <script src="{% static 'JS/scripts.js'%}"></script>
 

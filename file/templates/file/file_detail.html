@@ -46,7 +46,7 @@
                             <div class="column">
                                 <button class="button">لغو</button>
                             </div>
-                            
+
                         </div>
                     </footer>
                 </div>
@@ -83,29 +83,56 @@
                     </div>
                 </div>
                 <div class="columns">
-                    <div class="column">
+                    <div class="column is-4">
                         <p id="year">
                             ودیعه: {{file.price_up}}
                         </p>
                     </div>
-                    <div class="column">
+                    <div class="column is-4">
                         <p id="year">
                             اجاره: {{file.price_rent}}
                         </p>
                     </div>
-                    <div class="column">
+                    <div class="column is-4">
                         <p id="year">
                             متراژ: {{file.m2}}
                         </p>
                     </div>
-                    <div class="column">
+                    <div class="column is-4">
                         <p id="year">
                             طبقه: {{file.floor}}
                         </p>
                     </div>
-                    <div class="column">
+                    <div class="column is-4">
+                        <p id="year">
+                            طبفات: {{file.tabaghat}}
+                        </p>
+                    </div>
+                </div>
+                <div class="columns">
+                    <div class="column is-4">
                         <p id="year">
                             سال: {{file.year}}
+                        </p>
+                    </div>
+                    <div class="column is-4">
+                        <p id="year">
+                            اتاق خواب: {{file.bedroom}}
+                        </p>
+                    </div>
+                    <div class="column is-4">
+                        <p id="year">
+                            تعداد واحدها: {{file.vahedha}}
+                        </p>
+                    </div>
+                    <div class="column is-4">
+                        <p id="year">
+                            تخلیه: {{file.takhlie}}
+                        </p>
+                    </div>
+                    <div class="column is-4">
+                        <p id="year">
+                            بازدید: {{file.bazdid}}
                         </p>
                     </div>
                 </div>
@@ -135,6 +162,13 @@
                     <div class="column">
                         <img src="{% static 'images/parking.svg'%}" alt="parking" class="image is-24x24 mt-1 mr-3">
                         <p id="parking">پارکینگ دارد</p>
+                    </div>
+                    {% endif %}
+                    {% if file.parking_motor %}
+                    <div class="column">
+                        <img src="{% static 'images/parking.svg'%}" alt="parking_motor"
+                            class="image is-24x24 mt-1 mr-3">
+                        <p id="parking_motor">motor</p>
                     </div>
                     {% endif %}
                 </div>
@@ -154,24 +188,51 @@
                     </div>
                 </div>
                 <div class="columns">
-                    <div class="column">
+                    <div class="column is-4">
                         <p id="year">
                             قیمت: {{file.price}}
                         </p>
                     </div>
-                    <div class="column">
+                    <div class="column is-4">
                         <p id="year">
                             متراژ: {{file.m2}}
                         </p>
                     </div>
-                    <div class="column">
+                    <div class="column is-4">
                         <p id="year">
                             طبقه: {{file.floor}}
                         </p>
                     </div>
-                    <div class="column">
+                    <div class="column is-4">
+                        <p id="year">
+                            طبقات: {{file.tabaghat}}
+                        </p>
+                    </div>
+                </div>
+                <div class="columns">
+                    <div class="column is-4">
                         <p id="year">
                             سال: {{file.year}}
+                        </p>
+                    </div>
+                    <div class="column is-4">
+                        <p id="year">
+                            اتاق خواب: {{file.bedroom}}
+                        </p>
+                    </div>
+                    <div class="column is-4">
+                        <p id="year">
+                            تعداد واحدها: {{file.vahedha}}
+                        </p>
+                    </div>
+                    <div class="column is-4">
+                        <p id="year">
+                            تخلیه: {{file.takhlie}}
+                        </p>
+                    </div>
+                    <div class="column is-4">
+                        <p id="year">
+                            بازدید: {{file.bazdid}}
                         </p>
                     </div>
                 </div>
@@ -198,33 +259,30 @@
                         <p id="storage">انباری دارد</p>
                     </div>
                     {% endif %}
+                    {% if file.komod_divari %}
+                    <div class="column">
+                        <img src="{% static 'images/storage.svg'%}" alt="komod_divari" class="image is-24x24 mt-1 mr-3">
+                        <p id="komod_divari">کمد دیواری دارد</p>
+                    </div>
+                    {% endif %}
                     {% if file.parking %}
                     <div class="column">
                         <img src="{% static 'images/parking.svg'%}" alt="parking" class="image is-24x24 mt-1 mr-3">
                         <p id="parking">پارکینگ دارد</p>
                     </div>
                     {% endif %}
+                    {% if file.parking_motor %}
+                    <div class="column">
+                        <img src="{% static 'images/parking.svg'%}" alt="parking_motor"
+                            class="image is-24x24 mt-1 mr-3">
+                        <p id="parking_motor">پارکینگ موتور دارد</p>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
             {% endif %}
 
-            <div class="column is-half has-text-centered">
-                <div class="pictures-section" id="lightgallery">
-                    <div class="columns">
-                        {% if images %}
-                        {% for image in images %}
-                        <div class="column">
-                            <figure class="image is-inline-block" onclick="expend_image(this)">
-                                <a href="{{image}}">
-                                    <img class="image is-centered" src="{{ image }}">
-                                </a>
-                            </figure>
-                        </div>
-                        {% endfor %}
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
+
         </div>
         <div class="columns is-vcentered mt-5">
             <div class="column is-half">

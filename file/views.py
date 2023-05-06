@@ -40,6 +40,16 @@ class NewFile(View):
             data['parking'] = True
         except:
             data['parking'] = False
+        try:
+            data['parking_motor']
+            data['parking_motor'] = True
+        except:
+            data['parking_motor'] = False
+        try:
+            data['komod_divari']
+            data['komod_divari'] = True
+        except:
+            data['komod_divari'] = False
         print(data)
         if file_type == 'sell':
             # try:
@@ -59,7 +69,14 @@ class NewFile(View):
                                                             image2=data['image2'],
                                                             image3=data['image3'],
                                                             image4=data['image4'],
-                                                            image5=data['image5'])
+                                                            image5=data['image5'],
+                                                            bedroom=data['bedroom'],
+                                                            parking_motor=data['parking_motor'],
+                                                            takhlie=data['takhlie'],
+                                                            bazdid=data['bazdid'],
+                                                            vahedha=data['vahedha'],
+                                                            komod_divari=data['komod_divari'],
+                                                            tabaghat=data['tabaghat'])
                 if not created:
                     messages.error(request, 'there is a file with this info in site. ')
                     return redirect('/')
@@ -88,7 +105,14 @@ class NewFile(View):
                                         image2=data['image2'],
                                         image3=data['image3'],
                                         image4=data['image4'],
-                                        image5=data['image5'])
+                                        image5=data['image5'],
+                                        bedroom=data['bedroom'],
+                                        parking_motor=data['parking_motor'],
+                                        takhlie=data['takhlie'],
+                                        bazdid=data['bazdid'],
+                                        vahedha=data['vahedha'],
+                                        komod_divari=data['komod_divari'],
+                                        tabaghat=data['tabaghat'])
             if not created:
                 messages.error(request, 'there is a file with this info in site. ')
                 return redirect('/')
