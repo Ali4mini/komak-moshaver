@@ -260,7 +260,6 @@ class Listing:
                                 
                             file.tag_manager.add(res['تگ ها'])
                         
-                            file.tags_manager.add(res['تگ ها'])
                         
                     else:
                         print('phone was None!! ')
