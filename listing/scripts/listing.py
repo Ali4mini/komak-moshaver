@@ -133,7 +133,7 @@ class Listing:
             it open's login page and give 120 sec to login than it's going to save a cookie
             """
             self.divar_obj1 = Divar(headless=False)
-            self.divar_obj1.login('9212396361')
+            self.divar_obj1.login('9212396361', cookie='test1.pkl')
             time.sleep(100)
             self.divar_obj1.save_cookie('test1.pkl')
             del self.divar_obj1
@@ -258,16 +258,12 @@ class Listing:
                             if not created:
                                     print('it was in DB')
                                 
-<<<<<<< HEAD
                             file.tag_manager.add(res['تگ ها'])
                         
-=======
                             file.tags_manager.add(res['تگ ها'])
-                        except:
-                            pass
+                        
                     else:
                         print('phone was None!! ')
->>>>>>> 3aa09d0 (- fixing some bugs)
                 if "اجاره" in res["شاخه"][1] and res['نوع'] in valid_types:
                     if res["شاخه"][1] == 'اجاره کوتاه مدت':
                             print('اجاره کوتاه مدت')
