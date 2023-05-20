@@ -10,7 +10,7 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.views.generic.edit import UpdateView, DeleteView
-
+from file.models import Sell, Rent
 
 # Create your views here.
 
@@ -97,9 +97,13 @@ class BuyCustomerDetails(View):
                 messages.error(request, 'login first')
                 return redirect('/agents/login')
     def get(self, request, pk, *args, **kwargs):
-        customer = get_object_or_404(BuyCustomer, pk=pk, )
+        customer = get_object_or_404(BuyCustomer, pk=pk)
+        budget = customer.budget
+        min_budget, max_budget = budget-300 , budget+300
         comment_form = forms.CommentForm()
         comments = customer.buy_customer_comments.all()
+        files = Sell.objects.filter(type=customer.type ,price__lte=max_budget,price__gte=min_budget).exclude(owner_name='UNKNOWN')
+        print(files)
         return render(request, 'customer/detail.html', {'customer': customer,
                                                          'comments': comments,
                                                          'comment_form': comment_form,
@@ -125,9 +129,12 @@ class RentCustomerDetails(View):
                 return redirect('/agents/login')
     def get(self, request, pk, *args, **kwargs):
         customer = get_object_or_404(RentCustomer, pk=pk, )
+        up_budget = customer.up_budget
+        min_budget, max_budget = up_budget-300 , up_budget+300
         comment_form = forms.CommentForm()
         comments = customer.rent_customer_comments.all()
-        print(customer.type)
+        files = Sell.objects.filter(type=customer.type ,price__lte=max_budget,price__gte=min_budget).exclude(owner_name='UNKNOWN')
+        print(files)
         return render(request, 'customer/detail.html', {'customer': customer,
                                                          'comments': comments,
                                                          'comment_form': comment_form,
@@ -173,3 +180,8 @@ class RentUpdateView(UpdateView):
     def get(self, request, pk, *args, **kwargs):
         customer = self.model.objects.get(pk=pk)
         return render(request, 'customer/rent_update_form.html' , {'customer': customer})
+
+# class matcher(View):
+    
+#     def get(self, request, pk, *args, **kwargs):
+        

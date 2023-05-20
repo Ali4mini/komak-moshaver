@@ -120,6 +120,13 @@ class SellUpdateForm(forms.ModelForm):
             'elevator',
             'storage',
             'parking',
+            'bedroom',
+            'parking_motor',
+            'takhlie',
+            'vahedha',
+            'komod_divari',
+            'bazdid',
+            'tabaghat',
         )
         
     def __init__(self, *args, **kwargs) -> None:
@@ -135,6 +142,9 @@ class SellUpdateForm(forms.ModelForm):
         self.fields['elevator'].required = False
         self.fields['storage'].required = False
         self.fields['parking'].required = False
+        self.fields['bazdid'].required = False
+        self.fields['tabaghat'].required = False
+
         
 class RentUpdateForm(forms.ModelForm):
     class Meta:
@@ -152,6 +162,14 @@ class RentUpdateForm(forms.ModelForm):
             'elevator',
             'storage',
             'parking',
+            'bedroom',
+            'parking_motor',
+            'takhlie',
+            'vahedha',
+            'komod_divari',
+            'bazdid',
+            'tabaghat',
+            'tabdil',
         )
         
     def __init__(self, *args, **kwargs) -> None:
@@ -168,6 +186,8 @@ class RentUpdateForm(forms.ModelForm):
         self.fields['elevator'].required = False
         self.fields['storage'].required = False
         self.fields['parking'].required = False
+        self.fields['bazdid'].required = False
+        self.fields['tabaghat'].required = False
      
 class SendInfo(forms.Form):
     phone = forms.CharField(max_length=11, required=True)

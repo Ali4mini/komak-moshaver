@@ -215,10 +215,18 @@ class Listing:
                 print(post)
                 post_id = id_generator(post)
                 searcher(post=post_id)
-                time.sleep(30)
+                time.sleep(60)
                 temp_c = temp_c + 1
-                if temp_c == 10:
-                    pass
+                if temp_c > 4:
+                    self.divar_obj.save_cookie('test1.pkl')
+                    time.sleep(10)
+                    ## deleting session and making another one
+                    self.divar_obj.driver.close()
+                    self.divar_obj.driver.quite()
+
+                    self.divar_obj.login('9212396361', cookie='test1.pkl')
+
+
 
         def last_24_files() -> None:
             self.divar_obj.login('9212396361', cookie='test1.pkl')
@@ -295,9 +303,9 @@ class Listing:
                 print(f'done => {post}  ')
 
           
-        last_24_files()
-        scanner()
+        # last_24_files()
+        # scanner()
         
-        # cookie_saver()
+        cookie_saver()
         del self.divar_obj
         

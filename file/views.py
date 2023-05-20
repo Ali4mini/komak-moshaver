@@ -261,7 +261,7 @@ class RentFileDelete(View):
     
 class SellUpdateView(UpdateView):
     model = Sell
-    template_name = 'file/sell_update.html'
+    # template_name = 'file/sell_update.html'
     success_url = '/listing/'
     form_class = forms.SellUpdateForm
 
@@ -272,9 +272,10 @@ class SellUpdateView(UpdateView):
     
 class RentUpdateView(UpdateView):
     model = Rent
-    template_name = 'file/sell_form.html'
+    # template_name = 'file/rent_update.html'
     success_url = '/listing/'
     form_class = forms.RentUpdateForm
+    
 
     def get(self, request, pk, *args, **kwargs):
         file = self.model.objects.get(pk=pk)
