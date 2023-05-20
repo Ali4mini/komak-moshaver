@@ -897,3 +897,30 @@ DevTools listening on ws://localhost:57893/devtools/browser/03c73f92-00ed-4815-8
 [GFX1-]: Unrecognized feature ACCELERATED_CANVAS2D
 [GFX1-]: Unrecognized feature ACCELERATED_CANVAS2D
 1684134025966	Marionette	INFO	Stopped listening on port 41103
+1684584176652	geckodriver	INFO	Listening on 127.0.0.1:55335
+1684584177409	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... ss" "--remote-debugging-port" "48287" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofileScKdz6"
+*** You are running in headless mode.
+1684584182162	Marionette	INFO	Marionette enabled
+1684584182200	Marionette	INFO	Listening on port 43909
+Read port: 43909
+WebDriver BiDi listening on ws://localhost:48287
+Read port: 43909
+1684584184686	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofileScKdz6/search.json.mozlz4", (void 0)))
+DevTools listening on ws://localhost:48287/devtools/browser/aaaf83b6-945f-4433-bb95-1711b17ac87e
+1684584194650	geckodriver	INFO	Listening on 127.0.0.1:39869
+1684584195279	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... te" "--remote-debugging-port" "58801" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofileoyekhq"
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+1684584198316	Marionette	INFO	Marionette enabled
+1684584198320	Marionette	INFO	Listening on port 33057
+WebDriver BiDi listening on ws://localhost:58801
+Read port: 33057
+1684584199089	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofileoyekhq/search.json.mozlz4", (void 0)))
+console.error: Region.jsm: "Error fetching region" (new AbortError("The operation was aborted. ", (void 0), 767))
+console.error: Region.jsm: "Failed to fetch region" (new Error("NO_RESULT", "resource://gre/modules/Region.jsm", 421))
+DevTools listening on ws://localhost:58801/devtools/browser/6fc71926-00df-4042-bc51-bcf6b46917f1

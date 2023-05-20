@@ -303,9 +303,9 @@ class Listing:
                 print(f'done => {post}  ')
 
           
-        # last_24_files()
-        # scanner()
+        last_24_files()
+        scanner()
         
-        cookie_saver()
+        # cookie_saver()
         del self.divar_obj
         
