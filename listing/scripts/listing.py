@@ -144,12 +144,6 @@ class Listing:
             self.divar_obj1 = Divar(headless=False)
 
             self.divar_obj1.login('9212396361', cookie='test1.pkl')
-            time.sleep(60)
-            self.divar_obj1.save_cookie('9199328173.pkl')
-
-            self.divar_obj1.login('9212396361')
-            time.sleep(100)
-            self.divar_obj1.save_cookie('test1.pkl')
 
             del self.divar_obj1
             
@@ -232,7 +226,7 @@ class Listing:
                 post_id = id_generator(post)
                 searcher(post=post_id)
 
-                time.sleep(15)
+                time.sleep(180)
                 temp_c = temp_c + 1
                 if temp_c == 5:
                     print('9199328173')
@@ -242,11 +236,6 @@ class Listing:
                     self.divar_obj.login('9212031469', cookie='9212031469.pkl')
                 if temp_c == 15:
                     temp_c = 0
-
-                time.sleep(30)
-                temp_c = temp_c + 1
-                if temp_c == 10:
-                    pass
 
 
         def last_24_files() -> None:
@@ -286,16 +275,16 @@ class Listing:
                             
                             if not created:
                                     print('it was in DB')
-                                
+
                             file.tag_manager.add(res['تگ ها'])
                         
-                        
-                            file.tags_manager.add(res['تگ ها'])
                         except:
                             pass
 
                     else:
                         print('phone was None!! ')
+
+
                 if "اجاره" in res["شاخه"][1] and res['نوع'] in valid_types:
                     if res["شاخه"][1] == 'اجاره کوتاه مدت':
                             print('اجاره کوتاه مدت')
