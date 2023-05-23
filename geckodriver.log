@@ -370,6 +370,7 @@ JavaScript error: , line 0: NetworkError: AutoCancel
 console.error: Region.jsm: "Error fetching region" (new Error("TIMEOUT", "resource://gre/modules/Region.jsm", 769))
 console.error: Region.jsm: "Failed to fetch region" (new Error("TIMEOUT", "resource://gre/modules/Region.jsm", 421))
 <<<<<<< HEAD
+<<<<<<< HEAD
 update.go:85: cannot change mount namespace according to change mount (/var/lib/snapd/hostfs/usr/share/cups/doc-root /usr/share/cups/doc-root none bind,ro 0 0): cannot open directory "/var/lib": permission denied
 update.go:85: cannot change mount namespace according to change mount (/var/lib/snapd/hostfs/usr/share/gimp/2.0/help /usr/share/gimp/2.0/help none bind,ro 0 0): cannot open directory "/var/lib": permission denied
 update.go:85: cannot change mount namespace according to change mount (/var/lib/snapd/hostfs/usr/share/gtk-doc /usr/share/gtk-doc none bind,ro 0 0): cannot open directory "/var/lib": permission denied
@@ -459,6 +460,8 @@ ALSA lib seq.c:935:(snd_seq_open_noupdate) Unknown SEQ default
 console.error: "update.locale" " file doesn't exist in either the application or GRE directories"
 JavaScript error: , line 0: NetworkError: AutoCancel
 =======
+=======
+>>>>>>> master
 1682784050164	geckodriver	INFO	Listening on 127.0.0.1:41099
 1682784050666	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... ss" "--remote-debugging-port" "40323" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofilezwwRdy"
 *** You are running in headless mode.
@@ -596,6 +599,7 @@ interaction.flushEventLoop@chrome://remote/content/marionette/interaction.js:431
 webdriverClickElement@chrome://remote/content/marionette/interaction.js:179:31
 1682958066032	Marionette	INFO	Stopped listening on port 36605
 [GFX1-]: Unrecognized feature ACCELERATED_CANVAS2D
+<<<<<<< HEAD
 >>>>>>> 3aa09d0 (- fixing some bugs)
 1683383609600	geckodriver	INFO	Listening on 127.0.0.1:44823
 1683383610101	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... ss" "--remote-debugging-port" "50823" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofileXNEVmq"
@@ -1238,3 +1242,5 @@ Exiting due to channel error.
 Exiting due to channel error.
 Exiting due to channel error.
 Exiting due to channel error.
+=======
+>>>>>>> master
