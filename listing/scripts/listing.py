@@ -2,13 +2,22 @@ from file import models
 from listing.scripts.divar.divar import Divar
 import time
 import traceback
+import logging
+
+logging.basicConfig(filename='logs/listing.log', filemode='w',
+                    format="%(process)d-%(levelname)s-%(message)s",
+                    datefmt="%d-%b-%y %H:%M:%S")
+
+class expceptions:
+    def __init__(self) -> None:
+        pass
+
 
 class Listing:
     def __init__(self) -> None:
-        
-        self.divar_url = 'https://divar.ir/s/tehran/real-estate/khavaran?districts=1015%2C1019%2C1020%2C272%2C273&user_type=personal'
-        self.divar_obj = Divar(headless=True)
-
+        self.divar_url = 'https://divar.ir/s/tehran/real-estate/doolab?districts=1017%2C273%2C974%2C1016&user_type=personal&sort=sort_date'
+        self.divar_obj = Divar(headless=False)
+        logging.info('initialized listing object')
     def divar_bot(self) -> None:
         def validation(post_detail: dict) -> dict:
             print(post_detail)
@@ -130,17 +139,16 @@ class Listing:
             return post_detail
         def cookie_saver():
             """
-            it open's login page and give 120 sec to login than it's going to save a cookie
+            it open's login page and give you 60 sec to login, than it's going to save a cookie
             """
             self.divar_obj1 = Divar(headless=False)
             self.divar_obj1.login('9212396361', cookie='test1.pkl')
-            time.sleep(100)
-            self.divar_obj1.save_cookie('test1.pkl')
+            time.sleep(60)
+            self.divar_obj1.save_cookie('9199328173.pkl')
             del self.divar_obj1
             
         def scanner():
-            self.divar_obj.login('9212396361', cookie='test1.pkl')
-            def searcher(post,outf="checked_links.txt",inf="checked_links.txt"):
+            def searcher(post, outf="checked_links.txt", inf="checked_links.txt"):
                 if post in open(inf,"r").readlines():
                     print(f"{post} is here!!!")
                     
@@ -211,22 +219,22 @@ class Listing:
                 return link[-8:]
             temp_c = 0
             while True:
+                if temp_c == 0:
+                    self.divar_obj.login('9212396361', cookie='9212396361.pkl')
                 post = self.divar_obj.last_post(page=self.divar_url)
-                print(post)
+                logging.info(f'scraping info from {post}') 
                 post_id = id_generator(post)
                 searcher(post=post_id)
-                time.sleep(60)
+                time.sleep(15)
                 temp_c = temp_c + 1
-                if temp_c > 4:
-                    self.divar_obj.save_cookie('test1.pkl')
-                    time.sleep(10)
-                    ## deleting session and making another one
-                    self.divar_obj.driver.close()
-                    self.divar_obj.driver.quite()
-
-                    self.divar_obj.login('9212396361', cookie='test1.pkl')
-
-
+                if temp_c == 5:
+                    print('9199328173')
+                    self.divar_obj.login('9199328173', cookie='9199328173.pkl')
+                if temp_c == 10:
+                    print('9212031469')
+                    self.divar_obj.login('9212031469', cookie='9212031469.pkl')
+                if temp_c == 15:
+                    temp_c = 0
 
         def last_24_files() -> None:
             self.divar_obj.login('9212396361', cookie='test1.pkl')
