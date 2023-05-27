@@ -200,13 +200,16 @@ class Listing:
                                                     storage=res['ویژگی ها'][1],
                                                     type=res['نوع'],
                                                     )
+                                file.tag_manager.add(res['تگ ها'])
                                 if not created:
                                     self.logger.warning('it was in DB')
-                                file.tag_manager.add(res['تگ ها'])
+                                else:
+                                    self.logger.info('a new file added')
                             except Exception as e:
-                                current_cookie['passed'] += 1 
                                 self.logger.exception('there was a error while adding sell file to DB')
-
+                        else:
+                            self.logger.warning('phone wan None')
+                            current_cookie['passed'] += 1 
                     elif "اجاره" in res["شاخه"][1] and res['نوع'] in valid_types:
                         if res["شاخه"][1] == 'اجاره کوتاه مدت':
                             pass
@@ -227,14 +230,16 @@ class Listing:
                                                         storage=res['ویژگی ها'][1],
                                                         type=res['نوع'],
                                                         )
+                                    file.tags_manager.add(res['تگ ها'])
                                     if not created:
                                         self.logger.info('it was in DB')
-                            
-                                    file.tags_manager.add(res['تگ ها'])
+                                    else:
+                                        self.logger.info('a new file added')
                                 except:
                                     self.logger.exception('there was a error while adding rent file to DB')
                             else:
-                                current_cookie['passed'] += 0
+                                self.logger.warning('phone wan None')
+                                current_cookie['passed'] += 1
 
                     else:
                         print('it is not sell')
@@ -258,7 +263,7 @@ class Listing:
                     self.logger.info(f'scraping info from {post}') 
                     post_id = id_generator(post)
                     searcher(post=post_id)
-
+                    self.logger.info(f'current cookie: {current_cookie}')
                     time.sleep(180)
                     temp_c = temp_c + 1
                     if temp_c == 5:
@@ -272,13 +277,13 @@ class Listing:
                     if temp_c == 15:
                         temp_c = 0
                         
-                    if current_cookie['passed'] > 4:
+                    if current_cookie['passed'] > 2:
                         self.BurntCookie(cookie=current_cookie['cookie'])
             except Exception as e:
                 self.logger.exception('we have a Error: ')
 
         def last_24_files(self) -> None:
-            self.divar_obj.login('9212396361', cookie='test1.pkl')
+            self.divar_obj.login('9212396361', cookie='9212396361.pkl')
             posts = self.divar_obj.all_posts(page=self.divar_url)
             time.sleep(3)
             for post in posts:
