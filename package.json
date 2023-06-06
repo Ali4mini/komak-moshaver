@@ -2,5 +2,8 @@
   "dependencies": {
     "bulma": "^0.9.4",
     "lightgallery": "^2.7.1"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.3.2"
   }
 }

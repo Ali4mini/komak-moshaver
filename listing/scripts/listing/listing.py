@@ -164,7 +164,8 @@ class Listing:
             """
             self.divar_obj1 = Divar(headless=False)
 
-            self.divar_obj1.login('9212031469', cookie='9212031469.pkl')
+            self.divar_obj1.login('9212031469', cookie='9212396361.pkl')
+            time.sleep(60)
             self.divar_obj.save_cookie(cookie)
             del self.divar_obj1
             

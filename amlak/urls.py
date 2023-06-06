@@ -23,5 +23,5 @@ urlpatterns = [
     path('', include('listing.urls', namespace='listing'), name="list"),
     path('file/', include('file.urls', namespace='file')),
     path('customer/', include('customer.urls', namespace='customer')),
-    path('agents/', include('agents_m.urls', namespace='agents')),
-]  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path('accounts/', include('agents_m.urls', namespace='agents')),
+]  + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

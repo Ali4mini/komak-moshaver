@@ -5,9 +5,11 @@ from django.views import View
 from django.http import HttpResponse
 from .forms import SellFilter
 from itertools import chain
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 # Create your views here.
-
+@method_decorator((login_required), name='dispatch')
 class Panel(View):
     def post(self, request, *args, **kwargs):
         filter_form = forms.SellFilter(data=request.POST)
@@ -15,6 +17,7 @@ class Panel(View):
             print(filter_form.cleaned_data)
             prop_type = filter_form.cleaned_data['property_type']
             m2 = filter_form.cleaned_data['m2']
+            print(m2)
             year = filter_form.cleaned_data['year']
             # making data ready for proccess
             if m2 == None:
@@ -41,7 +44,7 @@ class Panel(View):
                                             type=prop_type, 
                                             m2__gte=m2,
                                             year__gte=year).exclude(owner_name='UNKNOWN')
-            return render(request, 'listing/listing_form.html',
+            return render(request, 'index.html',
                           {'files': files,
                             })
         return HttpResponse('form wasnt valid')
@@ -51,10 +54,10 @@ class Panel(View):
         sell_files = Sell.objects.exclude(owner_name='UNKNOWN')
         rent_files = Rent.objects.exclude(owner_name='UNKNOWN')
         result_files = list(chain(sell_files, rent_files))
-        return render(request, 'listing/listing_form.html', 
+        return render(request, 'index.html', 
                       {'files': result_files,                       
                          })
-        
+@method_decorator((login_required), name='dispatch')
 class Listing(View):
     def get(self, request, *args, **kwargs):
         sell_files = Sell.objects.filter(tag_manager__name__in=['دیوار'], owner_name='UNKNOWN')

@@ -1,0 +1,63 @@
+.nav{
+  width: 100%;
+  margin-top: 0;
+}
+
+.nav ul{
+  list-style-type: none;
+  background-color: #367;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+
+}
+
+.nav li{
+  float: right;
+}
+
+.nav a{
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 20px 22px;
+  text-decoration: none;
+}
+
+.nav a:hover{
+  background: rgb(175, 209, 106);
+}
+
+.new_file .form{
+  background-color: rgb(241, 246, 248);
+}
+
+.new_file .form label{
+  background-color: rgb(240, 224, 224);
+  float: right;
+}
+.new_file .form #id_address{
+
+  background-color: white;
+}
+
+
+
+/* .messages .success{
+  list-style-type: none;
+  width: 100%;
+  height: 30px;
+  background-color: lightgreen;
+}
+
+
+
+
+
+
+
+
+
+
+
+
