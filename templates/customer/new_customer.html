@@ -1,7 +1,7 @@
 {% extends '_base.html' %}
 {% load static %}
 {% block title %}
-New File
+New customer
 {% endblock title%}
 
 {% block content %}
@@ -9,7 +9,7 @@ New File
 <div class="flex border-2 shadow-lg bg-gray-50 rounded-xl mx-4 mt-10 h-auto">
     <form action="" method="post" class="flex flex-row flex-wrap w-full">
         {% csrf_token %}
-        <select name="file_type" id="" onchange="showRentDiv(this)"
+        <select name="customer_type" id="" onchange="showRentDiv(this)"
             class="bg-gray-50 border focus:ring-blue-300 text-center focus:border-blue-300 shadow-md mx-3 my-3 w-32 h-10 rounded-lg">
             <option id="sell" value="sell">فروش</option>
             <option id="rent" value="rent">اجاره</option>
@@ -25,7 +25,7 @@ New File
             <div class="relative mx-3" data-te-input-wrapper-init>
                 <textarea type="text"
                     class="peer block min-h-[auto] bg-white w-full rounded-lg border shadow bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
-                    id="address" name="address" placeholder=""></textarea>
+                    id="address" name="address" placeholder="address"></textarea>
                 <label for="vahedha"
                     class="pointer-events-none absolute right-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">
                     آدرس
@@ -64,10 +64,30 @@ New File
                   </label>
                 </div>
               </div>
+              <div id="rent_customer" class="flex flex-row gap-2 " style="display: none;">
+                <div class="relative mx-3 mb-2" data-te-input-wrapper-init>
+                  <input type="text"
+                    class="peer block min-h-[auto] bg-white w-full rounded-lg border-2 shadow bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0  "
+                    id="up_price" name="up_price" placeholder="ودیعه" />
+                  <label for="up_price"
+                    class="pointer-events-none absolute right-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">
+                    ودیعه
+                  </label>
+                </div>
+                <div class="relative mx-3" data-te-input-wrapper-init>
+                  <input type="text"
+                    class="peer block min-h-[auto] bg-white w-full rounded-lg border-2 shadow bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+                    id="rent_price" name="rent_price" placeholder="اجاره" />
+                  <label for="rent_price"
+                    class="pointer-events-none absolute right-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">
+                    اجاره
+                  </label>
+                </div>
+              </div>
             <div class="relative mx-3" data-te-input-wrapper-init>
                 <input type="text"
                     class="peer block min-h-[auto] bg-white w-full rounded-lg border-2 shadow bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
-                    id="m2" name="m2" placeholder="" />
+                    id="m2" name="m2" placeholder="متراژ" />
                 <label for="m2"
                     class="pointer-events-none absolute right-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">
                     متراژ
@@ -76,7 +96,7 @@ New File
             <div class="relative mx-3" data-te-input-wrapper-init>
                 <input type="text"
                     class="peer block min-h-[auto] bg-white w-full rounded-lg border-2 shadow bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
-                    id="bedroom" name="bedroom" placeholder="" />
+                    id="bedroom" name="bedroom" placeholder="bedroom" />
                 <label for="bedroom"
                     class="pointer-events-none absolute right-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">
                     اتاق خواب
@@ -85,7 +105,7 @@ New File
             <div class="relative mx-3" data-te-input-wrapper-init>
                 <input type="text"
                     class="peer block min-h-[auto] bg-white w-full rounded-lg border-2 shadow bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
-                    id="year" name="year" placeholder="" />
+                    id="year" name="year" placeholder="year" />
                 <label for="year"
                     class="pointer-events-none absolute right-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">
                     سال ساخت
@@ -94,66 +114,22 @@ New File
             <div class="relative mx-3" data-te-input-wrapper-init>
                 <input type="text"
                     class="peer block min-h-[auto] bg-white w-full rounded-lg border-2 shadow bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
-                    id="floor" name="floor" placeholder="" />
+                    id="floor" name="floor" placeholder="floor" />
                 <label for="floor"
                     class="pointer-events-none absolute right-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">
                     طبقه
                 </label>
             </div>
-            <div class="relative mx-3" data-te-input-wrapper-init>
-                <input type="text"
-                    class="peer block min-h-[auto] bg-white w-full rounded-lg border-2 shadow bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
-                    id="tabaghat" name="tabaghat" placeholder="" />
-                <label for="tabaghat"
-                    class="pointer-events-none absolute right-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">
-                    طبقات
-                </label>
-            </div>
-            <div class="relative mx-3" data-te-input-wrapper-init>
-                <input type="text"
-                    class="peer block min-h-[auto] bg-white w-full rounded-lg border-2 shadow bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
-                    id="vahedha" name="vahedha" placeholder="" />
-                <label for="vahedha"
-                    class="pointer-events-none absolute right-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">
-                    واحد ها
-                </label>
-            </div>
+ 
             
-        </div>
-        <div class="flex basis-full gap-4 my-2">
-            <div class="relative mx-3" data-te-input-wrapper-init>
-                <input type="text"
-                    class="peer block min-h-[auto] bg-white w-full rounded-lg border-2 shadow bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
-                    id="bazdid" name="bazdid" placeholder="" />
-                <label for="bazdid"
-                    class="pointer-events-none absolute right-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">
-                    بازدید
-                </label>
-            </div>
-            <select name="takhlie" id="id_takhlie"
-                class=" bg-gray-50 border focus:ring-blue-300 text-center focus:border-blue-300 shadow-md mx-3 my-3 w-32 h-10 rounded">
-                <option value="0">تخلیه</option>
-                <option value="1">فروردین</option>
-                <option value="2">اردیبهشت</option>
-                <option value="3">خرداد</option>
-                <option value="4">تیر</option>
-                <option value="5">مرداد</option>
-                <option value="6">شهریور</option>
-                <option value="7">مهر</option>
-                <option value="8">آبان</option>
-                <option value="9">آذر</option>
-                <option value="10">دی</option>
-                <option value="11">بهمن</option>
-                <option value="12">اسفند</option>
-            </select>
         </div>
 
         <div class="flex basis-full gap-4 my-4">
             <div class="relative mx-3" data-te-input-wrapper-init>
                 <input type="text"
                     class="peer block min-h-[auto] bg-white w-full rounded-lg border-2 shadow bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
-                    id="owner_phone" name="owner_phone" placeholder="owner_phone" />
-                <label for="owner_phone"
+                    id="customer_phone" name="customer_phone" placeholder="customer_phone" />
+                <label for="customer_phone"
                     class="pointer-events-none absolute right-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">
                     شماره مالک
                 </label>
@@ -161,7 +137,7 @@ New File
             <div class="relative mx-3" data-te-input-wrapper-init>
                 <input type="text"
                     class="peer block min-h-[auto] bg-white w-full rounded-lg border-2 shadow bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
-                    id="owner_name" name="owner_name" placeholder="owner_name" />
+                    id="customer_name" name="customer_name" placeholder="customer_name" />
                 <label for="bazdid"
                     class="pointer-events-none absolute right-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">
                     نام مالک
@@ -210,6 +186,5 @@ New File
             class="basis-full mt-4 h-10 rounded-lg hover:bg-blue-100 bg-gray-200 border w-full bottom-0">
     </form>
 </div>
-
 <script src="{% static 'JS/rent.js' %}"></script>
 {% endblock content %}

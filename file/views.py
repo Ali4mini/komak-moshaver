@@ -123,27 +123,6 @@ class NewFile(View):
         form = forms.NewSellFile()
         return render(request, 'file/new_file.html')
 
-# @csrf_exempt
-# def new_rent_file(request):
-#     if request.method == "POST":
-#         form = forms.NewRentFile(data=request.POST)
-#         if form.is_valid():
-#             # Create a NewSellFile object without saving it to the database
-#             file = form.save(commit=False)
-
-#             print(request)
-#             # Save the comment to the database
-#             file.save()
-#             messages.success(request, 'فایل با موفقیت ثبت شد.',)
-#             return redirect('/')
-#         else:
-#             print(request.POS)
-#             return render(request, 'file/new_rent_file.html')
-
-#     else:
-#         form = forms.NewRentFile()
-#         return render(request, 'file/new_rent_file.html')
-    
 @method_decorator((login_required, csrf_exempt), name='dispatch')
 class SellFileDetails(View):
     def post(self, request, pk, *args, **kwargs):
@@ -262,25 +241,25 @@ class RentFileDelete(View):
 class SellUpdateView(UpdateView):
     model = Sell
     # template_name = 'file/sell_update.html'
-    success_url = '/listing/'
+    success_url = '/'
     form_class = forms.SellUpdateForm
 
     def get(self, request, pk, *args, **kwargs):
         file = self.model.objects.get(pk=pk)
         print(file)
-        return render(request, 'file/sell_update.html' , {'file': file})
+        return render(request, 'file/file_update.html' , {'file': file, 'type': 'sell'})
     
 class RentUpdateView(UpdateView):
     model = Rent
     # template_name = 'file/rent_update.html'
-    success_url = '/listing/'
+    success_url = '/'
     form_class = forms.RentUpdateForm
     
 
     def get(self, request, pk, *args, **kwargs):
         file = self.model.objects.get(pk=pk)
         print(file)
-        return render(request, 'file/rent_update.html' , {'file': file})
+        return render(request, 'file/file_update.html' , {'file': file, 'type': 'rent'})
         
         
 class SellSendInfo(View):

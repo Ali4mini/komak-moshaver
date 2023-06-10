@@ -144,6 +144,8 @@ class SellUpdateForm(forms.ModelForm):
         self.fields['parking'].required = False
         self.fields['bazdid'].required = False
         self.fields['tabaghat'].required = False
+        self.fields['vahedha'].required = False
+
 
         
 class RentUpdateForm(forms.ModelForm):
@@ -188,7 +190,8 @@ class RentUpdateForm(forms.ModelForm):
         self.fields['parking'].required = False
         self.fields['bazdid'].required = False
         self.fields['tabaghat'].required = False
-     
+        self.fields['vahedha'].required = False
+    
 class SendInfo(forms.Form):
     phone = forms.CharField(max_length=11, required=True)
     

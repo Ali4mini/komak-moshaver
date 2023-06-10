@@ -1,0 +1,83 @@
+{% extends "_base.html" %}
+{% load static %}
+{% block title %}
+{{file.address}}
+{% endblock title%}
+
+{% block content %}
+<div id="filter" class="flex border-2 bg-white rounded-lg mx-4 mt-20 h-auto shadow-lg">
+    <div class="flex flex-col">
+        <div class="flex flex-row-2 gap-20 my-3 px-4">
+            <p>نوع فایل: {% if file_type == 'sell' %}فروش{% elif file_type == 'rent' %}اجاره{% endif %} </p>
+            <p>نوع ملک: {{file.get_type_display}}</p>
+        </div>
+        <div class="flex flex-row-2 gap-20 my-3 px-4">
+            <p>نام مالک: {{file.owner_name}}</p>
+            <p>شماره مالک: {{file.owner_phone}}</p>
+        </div>
+        <div class="flex flex-row flex-wrap gap-x-20 gap-y-8 my-3 px-4">
+            <p>متراژ: {{file.m2}}</p>
+            {% if file_type == 'sell' %}
+            <p>بودجه: {{file.price}}</p>
+            {% else %}
+            <p>ودیعه: {{file.price_up}}</p>
+            <p>اجاره: {{file.price_rent}}</p>
+            {% endif %}    
+            <p>سال ساخت: {{file.year}}</p>
+            <p>طبقه: {{file.floor}}</p>
+            <p>طبقات: {{file.tabaghat}}</p>
+            <p>تعداد اتاق خواب: {{file.bedroom}}</p>
+            <p>تعداد واحد: {{file.vahedha}}</p>
+            <p>تخلیه: {{file.takhlie}}</p>
+        </div>
+        <div class="flex flex-row gap-20 my-3 px-4">
+            <p>آدرس: {{file.address}}</p>
+        </div>
+        <div class="flex gap-20 my-3 px-4">
+            {% if file.parking %}
+            <div class="flex flex-col">
+                <img src="{% static 'images/parking.svg' %}" alt="" width="40px" class="mx-auto">
+                <span>پارکینگ دارد</span>
+            </div>
+            {% endif %}
+            {% if file.elevator %}
+            <div class="flex flex-col">
+                <img src="{% static 'images/elevator.svg' %}" alt="" width="30px" class="mx-auto">
+                <p>آسانسور دارد</p>
+            </div>
+            {% endif %}
+            {% if file.storage %}
+            <div class="flex flex-col">
+                <img src="{% static 'images/storage.svg' %}" alt="" width="30px" class="mx-auto">
+                <p>انباری دارد</p>
+            </div>
+            {% endif %}
+            {% if file.parking_motor %}
+            <div class="flex flex-col">
+                <img src="{% static 'images/motor.svg' %}" alt="" width="40px" class="mx-auto">
+                <p>پارکینگ موتور دارد</p>
+            </div>
+            {% endif %}
+            {% if file.komod_divari %}
+            <div class="flex flex-col">
+                <img src="{% static 'images/elevator.svg' %}" alt="" width="30px" class="mx-auto">
+                <p>کمد دیواری دارد</p>
+            </div>
+            {% endif %}
+        </div>
+        <div class="flex flex-row gap-80 my-3 px-4">
+            <form action="delete/" method="post">
+                {% csrf_token %}
+                <button type="submit" class="focus:outline-none basis-1/3 text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">حذف</button>
+            </form>
+            <div class=""></div>
+            <div class=""></div>
+            <form action="edit/" method="get">
+                {% csrf_token %}
+                <button type="submit" class="text-white basis-1/3 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">ویرایش</button>
+            </form>            
+        </div>
+       
+
+    </div>
+    {% endblock content %}

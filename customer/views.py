@@ -68,14 +68,14 @@ class NewCustomer(View):
             messages.success(request, 'مشتری با موفقیت ثبت شد.',)
             return redirect('/')
     def get(self, request, *args, **kwargs):
-        return render(request, 'customer/form.html')
+        return render(request, 'customer/new_customer.html')
 
 class CustomerListing(View):
     def get(self, request, *args, **kwargs):
         buy_customers = BuyCustomer.objects.all()
         rent_customer = RentCustomer.objects.all()
         result_customers = list(chain(buy_customers, rent_customer))
-        return render(request, 'customer/listing.html', {'customers': result_customers})
+        return render(request, 'customer/customers.html', {'customers': result_customers})
     
     
 
@@ -104,7 +104,7 @@ class BuyCustomerDetails(View):
         comments = customer.buy_customer_comments.all()
         files = Sell.objects.filter(type=customer.type ,price__lte=max_budget,price__gte=min_budget).exclude(owner_name='UNKNOWN')
         print(files)
-        return render(request, 'customer/detail.html', {'customer': customer,
+        return render(request, 'customer/customer_detail.html', {'customer': customer,
                                                          'comments': comments,
                                                          'comment_form': comment_form,
                                                          'customer_type': 'buy',
@@ -135,7 +135,7 @@ class RentCustomerDetails(View):
         comments = customer.rent_customer_comments.all()
         files = Sell.objects.filter(type=customer.type ,price__lte=max_budget,price__gte=min_budget).exclude(owner_name='UNKNOWN')
         print(files)
-        return render(request, 'customer/detail.html', {'customer': customer,
+        return render(request, 'customer/customer_detail.html', {'customer': customer,
                                                          'comments': comments,
                                                          'comment_form': comment_form,
                                                          'customer_type': 'rent',
@@ -164,22 +164,22 @@ class RentCustomerDelete(View):
 class BuyUpdateView(UpdateView):
     model = BuyCustomer
     template_name = 'customer/sell_update_form.html'
-    success_url = 'customer/'
+    success_url = '/customer/'
     form_class = forms.SellUpdateForm
 
     def get(self, request, pk, *args, **kwargs):
         customer = self.model.objects.get(pk=pk)
-        return render(request, 'customer/sell_update_form.html' , {'customer': customer})
+        return render(request, 'customer/customer_update.html' , {'customer': customer, 'type': 'buy'})
     
 class RentUpdateView(UpdateView):
     model = RentCustomer
     template_name = 'customer/rent_update_form.html'
-    success_url = 'customer/'
+    success_url = '/customer/'
     form_class = forms.RentUpdateForm
 
     def get(self, request, pk, *args, **kwargs):
         customer = self.model.objects.get(pk=pk)
-        return render(request, 'customer/rent_update_form.html' , {'customer': customer})
+        return render(request, 'customer/customer_update.html' , {'customer': customer, 'type': 'rent'})
 
 # class matcher(View):
     
