@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.urls import reverse
 # Create your models here.
+
 class BuyCustomer(models.Model):
     class Types(models.TextChoices):
         APARTEMANT = 'A', 'آپارتمان'

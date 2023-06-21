@@ -12,7 +12,7 @@ from django.utils.decorators import method_decorator
 import requests
 # Create your views here.
 
-
+@method_decorator((login_required, csrf_exempt), name='dispatch')
 class NewFile(View):
     def post(self, request, *args, **kwargs):
         data = request.POST
@@ -220,8 +220,8 @@ class SellFileDelete(View):
             messages.success(request, 'all done')
         except:
             messages.error(request, 'something went wrong!')
-        return redirect('/listing/')     
-
+        return redirect('/')     
+@method_decorator((login_required, csrf_exempt), name='dispatch')
 class RentFileDelete(View):
     def post(self, request, pk, *args, **kwargs):
         try:
@@ -230,14 +230,14 @@ class RentFileDelete(View):
             messages.success(request, 'all done')
         except:
             messages.error(request, 'something went wrong!')
-        return redirect('/listing/')     
+        return redirect('/')     
          
 
 # class SellDeleteView(DeleteView):
 #     model = Sell
 #     success_url = reverse_lazy('listing:list')
 
-    
+@method_decorator((login_required, csrf_exempt), name='dispatch')  
 class SellUpdateView(UpdateView):
     model = Sell
     # template_name = 'file/sell_update.html'
@@ -246,9 +246,9 @@ class SellUpdateView(UpdateView):
 
     def get(self, request, pk, *args, **kwargs):
         file = self.model.objects.get(pk=pk)
-        print(file)
         return render(request, 'file/file_update.html' , {'file': file, 'type': 'sell'})
     
+@method_decorator((login_required, csrf_exempt), name='dispatch')
 class RentUpdateView(UpdateView):
     model = Rent
     # template_name = 'file/rent_update.html'
@@ -261,7 +261,7 @@ class RentUpdateView(UpdateView):
         print(file)
         return render(request, 'file/file_update.html' , {'file': file, 'type': 'rent'})
         
-        
+@method_decorator((login_required, csrf_exempt), name='dispatch')
 class SellSendInfo(View):
     def post(self, request, pk, *args, **kwargs):
         phone_number = request.POST.get('phone')

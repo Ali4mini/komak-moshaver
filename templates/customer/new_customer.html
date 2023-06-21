@@ -7,184 +7,152 @@ New customer
 {% block content %}
 
 <div class="flex border-2 shadow-lg bg-gray-50 rounded-xl mx-4 mt-10 h-auto">
-    <form action="" method="post" class="flex flex-row flex-wrap w-full">
-        {% csrf_token %}
-        <select name="customer_type" id="" onchange="showRentDiv(this)"
-            class="bg-gray-50 border focus:ring-blue-300 text-center focus:border-blue-300 shadow-md mx-3 my-3 w-32 h-10 rounded-lg">
-            <option id="sell" value="sell">فروش</option>
-            <option id="rent" value="rent">اجاره</option>
-        </select>
-        <select name="property_type" id=""
-            class="bg-gray-50 border focus:ring-blue-300 text-center focus:border-blue-300 shadow-md mx-3 my-3 w-32 h-10 rounded-lg">
-            <option value="A" selected="">آپارتمان</option>
-            <option value="L">زمین</option>
-            <option value="S">مغازه</option>
-            <option value="H">خانه و ویلا</option>
-        </select>
-        <div class="block basis-full my-3 mx-4">
-            <div class="relative mx-3" data-te-input-wrapper-init>
-                <textarea type="text"
-                    class="peer block min-h-[auto] bg-white w-full rounded-lg border shadow bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
-                    id="address" name="address" placeholder="address"></textarea>
-                <label for="vahedha"
-                    class="pointer-events-none absolute right-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">
-                    آدرس
-                </label>
-            </div>
-        </div>
-        <div class="grid grid-cols-5 auto-cols-max flex-row gap-4 my-3">
-            <div id="sell_file">
-                <div class="relative mx-3" data-te-input-wrapper-init>
-                  <input type="text"
-                    class="peer block min-h-[auto] bg-white w-full rounded-lg border-2 shadow bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
-                    id="price" name="price" placeholder="" />
-                  <label for="price"
-                    class="pointer-events-none absolute right-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">
-                    قیمت
-                  </label>
-                </div>
-              </div>
-              <div id="rent_file" class="flex flex-row gap-2 " style="display: none;">
-                <div class="relative mx-3 mb-2" data-te-input-wrapper-init>
-                  <input type="text"
-                    class="peer block min-h-[auto] bg-white w-full rounded-lg border-2 shadow bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0  "
-                    id="up_price" name="up_price" placeholder="" />
-                  <label for="up_price"
-                    class="pointer-events-none absolute right-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">
-                    ودیعه
-                  </label>
-                </div>
-                <div class="relative mx-3" data-te-input-wrapper-init>
-                  <input type="text"
-                    class="peer block min-h-[auto] bg-white w-full rounded-lg border-2 shadow bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
-                    id="rent_price" name="rent_price" placeholder="" />
-                  <label for="rent_price"
-                    class="pointer-events-none absolute right-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">
-                    اجاره
-                  </label>
-                </div>
-              </div>
-              <div id="rent_customer" class="flex flex-row gap-2 " style="display: none;">
-                <div class="relative mx-3 mb-2" data-te-input-wrapper-init>
-                  <input type="text"
-                    class="peer block min-h-[auto] bg-white w-full rounded-lg border-2 shadow bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0  "
-                    id="up_price" name="up_price" placeholder="ودیعه" />
-                  <label for="up_price"
-                    class="pointer-events-none absolute right-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">
-                    ودیعه
-                  </label>
-                </div>
-                <div class="relative mx-3" data-te-input-wrapper-init>
-                  <input type="text"
-                    class="peer block min-h-[auto] bg-white w-full rounded-lg border-2 shadow bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
-                    id="rent_price" name="rent_price" placeholder="اجاره" />
-                  <label for="rent_price"
-                    class="pointer-events-none absolute right-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">
-                    اجاره
-                  </label>
-                </div>
-              </div>
-            <div class="relative mx-3" data-te-input-wrapper-init>
-                <input type="text"
-                    class="peer block min-h-[auto] bg-white w-full rounded-lg border-2 shadow bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
-                    id="m2" name="m2" placeholder="متراژ" />
-                <label for="m2"
-                    class="pointer-events-none absolute right-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">
-                    متراژ
-                </label>
-            </div>
-            <div class="relative mx-3" data-te-input-wrapper-init>
-                <input type="text"
-                    class="peer block min-h-[auto] bg-white w-full rounded-lg border-2 shadow bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
-                    id="bedroom" name="bedroom" placeholder="bedroom" />
-                <label for="bedroom"
-                    class="pointer-events-none absolute right-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">
-                    اتاق خواب
-                </label>
-            </div>
-            <div class="relative mx-3" data-te-input-wrapper-init>
-                <input type="text"
-                    class="peer block min-h-[auto] bg-white w-full rounded-lg border-2 shadow bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
-                    id="year" name="year" placeholder="year" />
-                <label for="year"
-                    class="pointer-events-none absolute right-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">
-                    سال ساخت
-                </label>
-            </div>
-            <div class="relative mx-3" data-te-input-wrapper-init>
-                <input type="text"
-                    class="peer block min-h-[auto] bg-white w-full rounded-lg border-2 shadow bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
-                    id="floor" name="floor" placeholder="floor" />
-                <label for="floor"
-                    class="pointer-events-none absolute right-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">
-                    طبقه
-                </label>
-            </div>
- 
-            
-        </div>
+  <form action="" method="post" class="flex flex-row flex-wrap w-full">
+    {% csrf_token %}
+    <select name="customer_type" id="customer_type" onchange="showRentDiv(this)"
+      class="bg-gray-50 border focus:ring-blue-300 text-center focus:border-blue-300 shadow-md mx-3 my-3 w-32 h-10 rounded-lg">
+      <option id="buy" value="buy">خرید</option>
+      <option id="rent" value="rent">اجاره</option>
+    </select>
+    <select name="property_type" id="property_type"
+      class="bg-gray-50 border focus:ring-blue-300 text-center focus:border-blue-300 shadow-md mx-3 my-3 w-32 h-10 rounded-lg">
+      <option value="A" selected="">آپارتمان</option>
+      <option value="L">زمین</option>
+      <option value="S">مغازه</option>
+      <option value="H">خانه و ویلا</option>
+    </select>
 
-        <div class="flex basis-full gap-4 my-4">
-            <div class="relative mx-3" data-te-input-wrapper-init>
-                <input type="text"
-                    class="peer block min-h-[auto] bg-white w-full rounded-lg border-2 shadow bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
-                    id="customer_phone" name="customer_phone" placeholder="customer_phone" />
-                <label for="customer_phone"
-                    class="pointer-events-none absolute right-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">
-                    شماره مالک
-                </label>
-            </div>
-            <div class="relative mx-3" data-te-input-wrapper-init>
-                <input type="text"
-                    class="peer block min-h-[auto] bg-white w-full rounded-lg border-2 shadow bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
-                    id="customer_name" name="customer_name" placeholder="customer_name" />
-                <label for="bazdid"
-                    class="pointer-events-none absolute right-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">
-                    نام مالک
-                </label>
-            </div>
+    <div class="grid grid-cols-5 auto-cols-max flex-row gap-4 my-3">
+      <div id="sell_file">
+        <div class="relative mx-3" data-te-input-wrapper-init>
+          <input type="number" class="peer w-full px-3 rounded-lg shadow border h-10 border-gray-300  placeholder-transparent
+              focus:outline-none" id="budget" name="budget" placeholder="قیمت" />
+          <label for="price" class="absolute text-gray-500 right-4 text-sm -top-3.5 px-2 bg-white-200 transition-all
+              peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-placeholder-shown:bg-transparent
+              peer-focus:text-gray-500 peer-focus:-top-3.5 peer-focus:bg-white peer-focus:px-2">
+            قیمت
+          </label>
         </div>
-        <div class="flex flex-col-2 mr-2">
-            <div class=" items-center mx-3 my-3">
-                <input id="default-checkbox" type="checkbox" name="parking"
-                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded  transition duration-500 ease-in-out transform border-transparent  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400">
-                <label for="default-checkbox"
-                    class="mr-2 text-sm font-medium text-gray-900 dark:text-gray-300">پارکینگ</label>
-            </div>
-            <div class=" items-center mx-3 my-3">
-                <input id="default-checkbox" type="checkbox" name="elevetaor"
-                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded  transition duration-500 ease-in-out transform border-transparent  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400">
-                <label for="default-checkbox"
-                    class="mr-2 text-sm font-medium text-gray-900 dark:text-gray-300">آسانسور</label>
-            </div>
-            <div class=" items-center mx-3 my-3">
-                <input id="default-checkbox" type="checkbox" name="storage"
-                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded  transition duration-500 ease-in-out transform border-transparent  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400">
-                <label for="default-checkbox"
-                    class="mr-2 text-sm font-medium text-gray-900 dark:text-gray-300">انباری</label>
-            </div>
-            <div class=" items-center mx-3 my-3">
-                <input id="default-checkbox" type="checkbox" name="parking"
-                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded  transition duration-500 ease-in-out transform border-transparent  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400">
-                <label for="default-checkbox" class="mr-2 text-sm font-medium text-gray-900 dark:text-gray-300">پارکینگ
-                    موتور</label>
-            </div>
-            <div class=" items-center mx-3 my-3">
-                <input id="default-checkbox" type="checkbox" name="elevetaor"
-                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded  transition duration-500 ease-in-out transform border-transparent  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400">
-                <label for="default-checkbox" class="mr-2 text-sm font-medium text-gray-900 dark:text-gray-300">کمد
-                    دیواری</label>
-            </div>
-            <div class=" items-center mx-3 my-3">
-                <input id="default-checkbox" type="checkbox" name="storage"
-                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded  transition duration-500 ease-in-out transform border-transparent  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400">
-                <label for="default-checkbox"
-                    class="mr-2 text-sm font-medium text-gray-900 dark:text-gray-300">بالکن</label>
-            </div>
+      </div>
+      <div id="rent_file" class="flex flex-row gap-2 " style="display: none;">
+        <div class="relative mx-3 mb-2" data-te-input-wrapper-init>
+          <input type="number"
+            class="peer block min-h-[auto] bg-white w-full rounded-lg border-2 shadow bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0  "
+            id="up_budget" name="up_budget" placeholder="ودیعه" />
+          <label for="price_up" class="absolute text-gray-500 right-4 text-sm -top-3.5 px-2 bg-white-200 transition-all
+            peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-placeholder-shown:bg-transparent
+            peer-focus:text-gray-500 peer-focus:-top-3.5 peer-focus:bg-white peer-focus:px-2">
+            ودیعه
+          </label>
         </div>
-        <input type="submit" value="ثبت"
-            class="basis-full mt-4 h-10 rounded-lg hover:bg-blue-100 bg-gray-200 border w-full bottom-0">
-    </form>
+        <div class="relative mx-3" data-te-input-wrapper-init>
+          <input type="number" class="peer w-full px-3 rounded-lg shadow border h-10 border-gray-300  placeholder-transparent
+            focus:outline-none" id="rent_budget" name="rent_budget" placeholder="اجاره" />
+          <label for="price_rent" class="absolute text-gray-500 right-4 text-sm -top-3.5 px-2 bg-white-200 transition-all
+            peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-placeholder-shown:bg-transparent
+            peer-focus:text-gray-500 peer-focus:-top-3.5 peer-focus:bg-white peer-focus:px-2">
+            اجاره
+          </label>
+        </div>
+      </div>
+
+      <div class="relative mx-3">
+        <input type="number" class="peer w-full px-3 rounded-lg shadow border h-10 border-gray-300  placeholder-transparent
+                  focus:outline-none" id="m2" name="m2" placeholder="متراژ" />
+        <label for="m2" class="absolute text-gray-500 right-4 text-sm -top-3.5 px-2 bg-white-200 transition-all
+                  peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-placeholder-shown:bg-transparent
+                  peer-focus:text-gray-500 peer-focus:-top-3.5 peer-focus:bg-white peer-focus:px-2">
+          متراژ
+        </label>
+      </div>
+      <div class="relative mx-3">
+        <input type="number" class="peer w-full px-3 rounded-lg shadow border h-10 border-gray-300  placeholder-transparent
+                  focus:outline-none" id="bedroom" name="bedroom" placeholder="اتاق خواب" />
+        <label for="bedroom" class="absolute text-gray-500 right-4 text-sm -top-3.5 px-2 bg-white-200 transition-all
+                  peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-placeholder-shown:bg-transparent
+                  peer-focus:text-gray-500 peer-focus:-top-3.5 peer-focus:bg-white peer-focus:px-2">
+          اتاق خواب
+        </label>
+      </div>
+      <div class="relative mx-3">
+        <input type="number" class="peer w-full px-3 rounded-lg shadow border h-10 border-gray-300  placeholder-transparent
+                  focus:outline-none" id="year" name="year" placeholder="سال ساخت" />
+        <label for="year" class="absolute text-gray-500 right-4 text-sm -top-3.5 px-2 bg-white-200 transition-all
+                  peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-placeholder-shown:bg-transparent
+                  peer-focus:text-gray-500 peer-focus:-top-3.5 peer-focus:bg-white peer-focus:px-2">
+          سال ساخت
+        </label>
+      </div>
+      <div class="relative mx-3">
+        <input type="number" class="peer w-full px-3 rounded-lg shadow border h-10 border-gray-300  placeholder-transparent
+                  focus:outline-none" id="floor" name="floor" placeholder="طبقه" />
+        <label for="floor" class="absolute text-gray-500 right-4 text-sm -top-3.5 px-2 bg-white-200 transition-all
+                  peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-placeholder-shown:bg-transparent
+                  peer-focus:text-gray-500 peer-focus:-top-3.5 peer-focus:bg-white peer-focus:px-2">
+          طبقه
+        </label>
+      </div>
+
+
+    </div>
+
+    <div class="flex basis-full gap-4 my-4">
+      <div class="relative mx-3">
+        <input type="text" class="peer w-full px-3 rounded-lg shadow border h-10 border-gray-300  placeholder-transparent
+                  focus:outline-none" id="customer_phone" name="customer_phone" placeholder="شماره مشتری" required />
+        <label for="customer_phone" class="absolute text-gray-500 right-4 text-sm -top-3.5 px-2 bg-white-200 transition-all
+                  peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-placeholder-shown:bg-transparent
+                  peer-focus:text-gray-500 peer-focus:-top-3.5 peer-focus:bg-white peer-focus:px-2">
+          شماره مشتری
+        </label>
+      </div>
+      <div class="relative mx-3">
+        <input type="text" class="peer w-full px-3 rounded-lg shadow border h-10 border-gray-300  placeholder-transparent
+                  focus:outline-none" id="customer_name" name="customer_name" placeholder="نام مشتری" required />
+        <label for="bazdid" class="absolute text-gray-500 right-4 text-sm -top-3.5 px-2 bg-white-200 transition-all
+                  peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-placeholder-shown:bg-transparent
+                  peer-focus:text-gray-500 peer-focus:-top-3.5 peer-focus:bg-white peer-focus:px-2">
+          نام مشتری
+        </label>
+      </div>
+    </div>
+    <div class="flex flex-col-2 mr-2">
+      <div class=" items-center mx-3 my-3">
+        <input id="parking" type="checkbox" name="parking"
+          class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded  transition duration-500 ease-in-out transform border-transparent  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400">
+        <label for="parking" class="mr-2 text-sm font-medium text-gray-900 dark:text-gray-300">پارکینگ</label>
+      </div>
+      <div class=" items-center mx-3 my-3">
+        <input id="elevator" type="checkbox" name="elevetaor"
+          class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded  transition duration-500 ease-in-out transform border-transparent  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400">
+        <label for="elevator" class="mr-2 text-sm font-medium text-gray-900 dark:text-gray-300">آسانسور</label>
+      </div>
+      <div class=" items-center mx-3 my-3">
+        <input id="storage" type="checkbox" name="storage"
+          class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded  transition duration-500 ease-in-out transform border-transparent  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400">
+        <label for="storage" class="mr-2 text-sm font-medium text-gray-900 dark:text-gray-300">انباری</label>
+      </div>
+      <div class=" items-center mx-3 my-3">
+        <input id="parking_motor" type="checkbox" name="parking_motor"
+          class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded  transition duration-500 ease-in-out transform border-transparent  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400">
+        <label for="parking_motor" class="mr-2 text-sm font-medium text-gray-900 dark:text-gray-300">پارکینگ
+          موتور</label>
+      </div>
+      <div class=" items-center mx-3 my-3">
+        <input id="komod_divari" type="checkbox" name="komod_divari"
+          class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded  transition duration-500 ease-in-out transform border-transparent  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400">
+        <label for="komod_divari" class="mr-2 text-sm font-medium text-gray-900 dark:text-gray-300">کمد
+          دیواری</label>
+      </div>
+      <div class=" items-center mx-3 my-3">
+        <input id="balkon" type="checkbox" name="balkon"
+          class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded  transition duration-500 ease-in-out transform border-transparent  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400">
+        <label for="balkon" class="mr-2 text-sm font-medium text-gray-900 dark:text-gray-300">بالکن</label>
+      </div>
+    </div>
+    <input id="submit" type="submit" value="ثبت"
+      class="basis-full mt-4 h-10 rounded-lg hover:bg-blue-100 bg-gray-200 border w-full bottom-0">
+  </form>
 </div>
 <script src="{% static 'JS/rent.js' %}"></script>
 {% endblock content %}

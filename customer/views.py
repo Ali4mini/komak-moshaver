@@ -34,28 +34,28 @@ class NewCustomer(View):
         except:
             data['parking'] = False
              
-        if data['file_type'] == 'buy':
+        if data['customer_type'] == 'buy':
             customer, created = BuyCustomer.objects.get_or_create(customer_name=data['customer_name'],
-                                                                    customer_phone=data['customer_phone'],
-                                                                    type=data['property_type'],
-                                                                    budget=data['budget'],
-                                                                    m2=data['m2'],
-                                                                    year=data['year'],
-                                                                    elevator=data['elevator'],
-                                                                    parking=data['parking'],
-                                                                    storage=data['storage'],
-                                                                    added_by=request.user)
+                                                                  customer_phone=data['customer_phone'],
+                                                                  type=data['property_type'],
+                                                                  budget=data['budget'],
+                                                                  m2=data['m2'],
+                                                                  year=data['year'],
+                                                                  elevator=data['elevator'],
+                                                                  parking=data['parking'],
+                                                                  storage=data['storage'],
+                                                                  added_by=request.user)
             if not created:
                 messages.error(request, 'there is already a customer with this info in DB')
-                return redirect('/')
+                return redirect('/cusotmer/')
             messages.success(request, 'مشتری با موفقیت ثبت شد.',)
-            return redirect('/')
-        elif data['file_type'] == 'rent':
+            return redirect('/customer/')
+        elif data['customer_type'] == 'rent':
             customer, created = RentCustomer.objects.get_or_create(customer_name=data['customer_name'],
                                                                     customer_phone=data['customer_phone'],
                                                                     type=data['property_type'],
-                                                                    up_budget=data['budget_up'],
-                                                                    rent_budget=data['budget_rent'],
+                                                                    up_budget=data['up_budget'],
+                                                                    rent_budget=data['rent_budget'],
                                                                     m2=data['m2'],
                                                                     year=data['year'],
                                                                     elevator=data['elevator'],
@@ -64,9 +64,9 @@ class NewCustomer(View):
                                                                     added_by=request.user)
             if not created:
                 messages.error(request, 'there is already a customer with this info in DB')
-                return redirect('/')
+                return redirect('/customer/')
             messages.success(request, 'مشتری با موفقیت ثبت شد.',)
-            return redirect('/')
+            return redirect('/customer/')
     def get(self, request, *args, **kwargs):
         return render(request, 'customer/new_customer.html')
 
@@ -76,7 +76,6 @@ class CustomerListing(View):
         rent_customer = RentCustomer.objects.all()
         result_customers = list(chain(buy_customers, rent_customer))
         return render(request, 'customer/customers.html', {'customers': result_customers})
-    
     
 
 @method_decorator((login_required, csrf_exempt), name='dispatch')

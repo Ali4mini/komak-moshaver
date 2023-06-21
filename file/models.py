@@ -159,6 +159,7 @@ class RentComment(models.Model):
 
     def get_absolute_url(self):
         return reverse("rent_comment", kwargs={"pk": self.pk})
+    
 class SellImages(models.Model):
     post = models.ManyToManyField("Sell", verbose_name=("post"), related_name='Images')
     image = models.ImageField(upload_to='images',

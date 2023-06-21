@@ -17,7 +17,6 @@ class Panel(View):
             print(filter_form.cleaned_data)
             prop_type = filter_form.cleaned_data['property_type']
             m2 = filter_form.cleaned_data['m2']
-            print(m2)
             year = filter_form.cleaned_data['year']
             # making data ready for proccess
             if m2 == None:
@@ -49,8 +48,6 @@ class Panel(View):
                             })
         return HttpResponse('form wasnt valid')
     def get(self, request, *args, **kwargs):  
- 
-        # form = forms.SellFilter()
         sell_files = Sell.objects.exclude(owner_name='UNKNOWN')
         rent_files = Rent.objects.exclude(owner_name='UNKNOWN')
         result_files = list(chain(sell_files, rent_files))

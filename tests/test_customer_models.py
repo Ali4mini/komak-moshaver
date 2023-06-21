@@ -12,7 +12,7 @@ def user(db) -> User:
 
 
 @pytest.fixture(scope='function')
-def Buy_customer(db, user) -> BuyCustomer:
+def buy_customer(db, user) -> BuyCustomer:
     customer = BuyCustomer.objects.create(customer_name='test',
                                           customer_phone='09123456789',
                                           budget=3000,
@@ -36,13 +36,13 @@ def rent_customer(db, user) -> RentCustomer:
                                           added_by=user,
                                           elevator=True,
                                           year=1399,
-                                          parking=False,
+                                          parking=True,
                                           )
     return customer
 
 @pytest.fixture(scope='function')
-def buy_comment(db, Buy_customer: BuyCustomer, user: User) -> BuyComment:
-    comment = BuyComment.objects.create(file=Buy_customer,
+def buy_comment(db, buy_customer: BuyCustomer, user: User) -> BuyComment:
+    comment = BuyComment.objects.create(file=buy_customer,
                                          user=user,
                                          body='test body',
                                          )
@@ -83,12 +83,13 @@ def test_create_RentCustomer(user: User) -> None:
                                           added_by=user,
                                           elevator=True,
                                           year=1399,
-                                          parking=True)
+                                          parking=False,
+                                          )
     assert customer
     
-def test_create_BuyComment(user: User, Buy_customer: BuyCustomer) -> None:
+def test_create_BuyComment(user: User, buy_customer: BuyCustomer) -> None:
     #NOTE test creation of BuyComment
-    comment = BuyComment.objects.create(file=Buy_customer,
+    comment = BuyComment.objects.create(file=buy_customer,
                                          user=user,
                                          body='test body',
                                          )
@@ -103,15 +104,15 @@ def test_create_RentComment(user: User, rent_customer: RentCustomer) -> None:
     assert comment
     
 #SECTION - Update
-def test_update_Buy(Buy_customer: BuyCustomer) -> None:
+def test_update_Buy(buy_customer: BuyCustomer) -> None:
     #NOTE - test for updating Buy customer
-    Buy_customer.customer_name = 'updated test'
-    Buy_customer.customer_phone = 'updated test'
-    Buy_customer.price = 4500
-    Buy_customer.bedroom = 3
-    Buy_customer.save()
-    assert Buy_customer.customer_name is 'updated test'
-    assert Buy_customer.price is 4500
+    buy_customer.customer_name = 'updated test'
+    buy_customer.customer_phone = 'updated test'
+    buy_customer.price = 4500
+    buy_customer.bedroom = 3
+    buy_customer.save()
+    assert buy_customer.customer_name is 'updated test'
+    assert buy_customer.price is 4500
 
 def test_update_Rent(rent_customer: RentCustomer) -> None:
     #NOTE - test for updating Rent customer
@@ -136,17 +137,17 @@ def test_update_BuyComment(rent_comment: RentComment):
 #!SECTION
 
 #SECTION - Read
-def test_read_Buy(Buy_customer: BuyCustomer, user: User) -> None:
-    assert Buy_customer.parking is False
-    assert Buy_customer.customer_name is 'test'
-    assert Buy_customer.added_by is user
+def test_read_BuyCustomer(buy_customer: BuyCustomer, user: User) -> None:
+    assert buy_customer.parking is True
+    assert buy_customer.customer_name is 'test'
+    assert buy_customer.added_by is user
     
-def test_read_Rent(rent_customer: RentCustomer, user: User) -> None:
-    assert Buy_customer.parking is True
+def test_read_RentCustomer(rent_customer: RentCustomer, user: User) -> None:
+    assert rent_customer.parking is True
     assert rent_customer.customer_name is 'test'
     assert rent_customer.added_by is user
     
-def test_read_BuyComment(Buy_comment: BuyComment, user: User) -> None:
+def test_read_BuyComment(buy_comment: BuyComment, user: User) -> None:
     assert buy_comment.body is 'test body'
     assert buy_comment.user is user
     

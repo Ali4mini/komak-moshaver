@@ -1,81 +1,186 @@
 {% extends '_base.html' %}
 {% load static %}
 {% block title %}
-New File
+New customer
 {% endblock title%}
 
 {% block content %}
 
-<div class="flex border-2 bg-gray-50 rounded-xl mx-4 mt-10 h-auto shadow-lg">
+<div class="flex border-2 shadow-lg bg-gray-50 rounded-xl mx-4 mt-10 h-auto">
     <form action="" method="post" class="flex flex-row flex-wrap w-full">
         {% csrf_token %}
-        <select name="property_type" id="propery_type"
+        <select name="property_type" id=""
             class="bg-gray-50 border focus:ring-blue-300 text-center focus:border-blue-300 shadow-md mx-3 my-3 w-32 h-10 rounded-lg">
             <option value="A" {% if customer.type == "A" %} selected {% endif %}>آپارتمان</option>
             <option value="L" {% if customer.type == "L" %} selected {% endif %}>زمین</option>
             <option value="S" {% if customer.type == "S" %} selected {% endif %}>مغازه</option>
             <option value="H" {% if customer.type == "H" %} selected {% endif %}>خانه و ویلا</option>
         </select>
+
         <div class="grid grid-cols-5 auto-cols-max flex-row gap-4 my-3">
-            <input id="budget" name="budget" type="number" placeholder="قیمت" value="{{customer.budget}}"
-                class="inline bg-gray-100 basis-1/6 border border-gray-800 text-black mx-3 shadow-md placeholder-gray-400 px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400">
-            <input name="m2" type="number" placeholder="متراژ" value="{{customer.m2}}"
-                class="inline bg-gray-100 basis-1/6 text-black mx-3 border-gray-400 border shadow-md placeholder-gray-400 px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400">
-            <input name="bedroom" type="number" placeholder="اتاق خواب" value="{{customer.bedroom}}"
-                class="inline bg-gray-100 basis-1/6 text-black mx-3 border-gray-400 border shadow-md placeholder-gray-400 px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400">
-            <input name="year" type="number" placeholder="سال ساخت" value="{{customer.year}}"
-                class="inline bg-gray-100 basis-1/6 text-black mx-3 border-gray-400 border shadow-md placeholder-gray-400 px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400">
-            <input name="floor" type="number" placeholder="طبقه" value="{{customer.floor}}"
-                class="inline bg-gray-100 basis-1/6 text-black mx-3 border-gray-400 border shadow-md placeholder-gray-400 px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400">
+            {% if customer.budget %}
+            <div id="sell_file">
+              <div class="relative mx-3" data-te-input-wrapper-init>
+                <input type="number" value="{{customer.budget}}"
+                  class="peer w-full px-3 rounded-lg shadow border h-10 border-gray-300  placeholder-transparent
+                focus:outline-none"
+                  id="budget" name="budget" placeholder="بودجه" />
+                <label for="budget"
+                  class="absolute text-gray-500 right-4 text-sm -top-3.5 px-2 bg-white-200 transition-all
+                peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-placeholder-shown:bg-transparent
+                peer-focus:text-gray-500 peer-focus:-top-3.5 peer-focus:bg-white peer-focus:px-2">
+                  بودجه
+                </label>
+              </div>
+            </div>
+            {% else %}
+              <div id="rent_file" class="flex flex-row gap-2 ">
+                <div class="relative mx-3 mb-2" data-te-input-wrapper-init>
+                  <input type="number" value="{{customer.up_budget}}"
+                    class="peer w-full px-3 rounded-lg shadow border h-10 border-gray-300  placeholder-transparent
+                  focus:outline-none"
+                    id="up_budget" name="up_budget" placeholder="ودیعه" />
+                  <label for="up_budget"
+                    class="absolute text-gray-500 right-4 text-sm -top-3.5 px-2 bg-white-200 transition-all
+                  peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-placeholder-shown:bg-transparent
+                  peer-focus:text-gray-500 peer-focus:-top-3.5 peer-focus:bg-white peer-focus:px-2">
+                    ودیعه
+                  </label>
+                </div>
+                <div class="relative mx-3" data-te-input-wrapper-init>
+                  <input type="number" value="{{customer.rent_budget}}"
+                    class="peer w-full px-3 rounded-lg shadow border h-10 border-gray-300  placeholder-transparent
+                  focus:outline-none"
+                    id="rent_budget" name="rent_budget" placeholder="اجاره" />
+                  <label for="rent_budget"
+                    class="absolute text-gray-500 right-4 text-sm -top-3.5 px-2 bg-white-200 transition-all
+                  peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-placeholder-shown:bg-transparent
+                  peer-focus:text-gray-500 peer-focus:-top-3.5 peer-focus:bg-white peer-focus:px-2">
+                    اجاره
+                  </label>
+                </div>
+              </div>
+            {% endif%}
+            
+            <div class="relative mx-3" data-te-input-wrapper-init>
+                <input type="number" value="{{customer.m2}}"
+                    class="peer w-full px-3 rounded-lg shadow border h-10 border-gray-300  placeholder-transparent
+                  focus:outline-none"
+                    id="m2" name="m2" placeholder="متراژ" />
+                <label for="m2"
+                    class="absolute text-gray-500 right-4 text-sm -top-3.5 px-2 bg-white-200 transition-all
+                  peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-placeholder-shown:bg-transparent
+                  peer-focus:text-gray-500 peer-focus:-top-3.5 peer-focus:bg-white peer-focus:px-2">
+                    متراژ
+                </label>
+            </div>
+            <div class="relative mx-3" data-te-input-wrapper-init>
+                <input type="number" value="{{customer.bedroom}}"
+                    class="peer w-full px-3 rounded-lg shadow border h-10 border-gray-300  placeholder-transparent
+                  focus:outline-none"
+                    id="bedroom" name="bedroom" placeholder="اتاق خواب" />
+                <label for="bedroom"
+                    class="absolute text-gray-500 right-4 text-sm -top-3.5 px-2 bg-white-200 transition-all
+                  peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-placeholder-shown:bg-transparent
+                  peer-focus:text-gray-500 peer-focus:-top-3.5 peer-focus:bg-white peer-focus:px-2">
+                    اتاق خواب
+                </label>
+            </div>
+            <div class="relative mx-3" data-te-input-wrapper-init>
+                <input type="number" value="{{customer.year}}"
+                    class="peer w-full px-3 rounded-lg shadow border h-10 border-gray-300  placeholder-transparent
+                  focus:outline-none"
+                    id="year" name="year" placeholder="سال ساخت" />
+                <label for="year"
+                    class="absolute text-gray-500 right-4 text-sm -top-3.5 px-2 bg-white-200 transition-all
+                  peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-placeholder-shown:bg-transparent
+                  peer-focus:text-gray-500 peer-focus:-top-3.5 peer-focus:bg-white peer-focus:px-2">
+                    سال ساخت
+                </label>
+            </div>
+            <div class="relative mx-3" data-te-input-wrapper-init>
+                <input type="number" value="{{customer.floor}}"
+                    class="peer w-full px-3 rounded-lg shadow border h-10 border-gray-300  placeholder-transparent
+                  focus:outline-none"
+                    id="floor" name="floor" placeholder="طبقه" />
+                <label for="floor"
+                    class="absolute text-gray-500 right-4 text-sm -top-3.5 px-2 bg-white-200 transition-all
+                  peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-placeholder-shown:bg-transparent
+                  peer-focus:text-gray-500 peer-focus:-top-3.5 peer-focus:bg-white peer-focus:px-2">
+                    طبقه
+                </label>
+            </div>
+ 
+            
         </div>
 
         <div class="flex basis-full gap-4 my-4">
-            <input id="customer_phone" name="customer_name" type="text" placeholder="شماره مشتری" value="{{customer.customer_name}}"
-                class="inline bg-gray-100 basis-1/2 border border-gray-800 text-black mx-3 shadow-md placeholder-gray-400 px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400">
-            <input id="cusotmer_name" name="customer_phone" type="text" placeholder="نام مشتری" value="{{customer.customer_phone}}"
-                class="inline bg-gray-100 basis-1/2 border border-gray-800 text-black mx-3 shadow-md placeholder-gray-400 px-4 py-2.5 mt-2 text-base   transition duration-500 ease-in-out transform border-transparent rounded-lg  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400">
+            <div class="relative mx-3" data-te-input-wrapper-init>
+                <input type="text" value="{{customer.customer_phone}}"
+                    class="peer w-full px-3 rounded-lg shadow border h-10 border-gray-300  placeholder-transparent
+                  focus:outline-none"
+                    id="customer_phone" name="customer_phone" placeholder="شماره مشتری" />
+                <label for="customer_phone"
+                    class="absolute text-gray-500 right-4 text-sm -top-3.5 px-2 bg-white-200 transition-all
+                  peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-placeholder-shown:bg-transparent
+                  peer-focus:text-gray-500 peer-focus:-top-3.5 peer-focus:bg-white peer-focus:px-2">
+                    شماره مشتری
+                </label>
+            </div>
+            <div class="relative mx-3" data-te-input-wrapper-init>
+                <input type="text" value="{{customer.customer_name}}"
+                    class="peer w-full px-3 rounded-lg shadow border h-10 border-gray-300  placeholder-transparent
+                  focus:outline-none"
+                    id="customer_name" name="customer_name" placeholder="نام مشتری" />
+                <label for="customer_name"
+                    class="absolute text-gray-500 right-4 text-sm -top-3.5 px-2 bg-white-200 transition-all
+                  peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-placeholder-shown:bg-transparent
+                  peer-focus:text-gray-500 peer-focus:-top-3.5 peer-focus:bg-white peer-focus:px-2">
+                    نام مشتری
+                </label>
+            </div>
         </div>
         <div class="flex flex-col-2 mr-2">
             <div class=" items-center mx-3 my-3">
-                <input id="default-checkbox" type="checkbox" name="parking" {% if customer.parking %}checked {% endif%}
+                <input id="parking" type="checkbox" name="parking" {% if customer.parking %}checked {% endif%}
                     class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded  transition duration-500 ease-in-out transform border-transparent  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400">
-                <label for="default-checkbox"
+                <label for="parking"
                     class="mr-2 text-sm font-medium text-gray-900 dark:text-gray-300">پارکینگ</label>
             </div>
             <div class=" items-center mx-3 my-3">
-                <input id="default-checkbox" type="checkbox" name="elevetaor" {% if customer.elevator %}checked {% endif%}
+                <input id="elevator" type="checkbox" name="elevetaor" {% if customer.elevator %}checked {% endif%}
                     class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded  transition duration-500 ease-in-out transform border-transparent  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400">
-                <label for="default-checkbox"
+                <label for="elevator"
                     class="mr-2 text-sm font-medium text-gray-900 dark:text-gray-300">آسانسور</label>
             </div>
             <div class=" items-center mx-3 my-3">
-                <input id="default-checkbox" type="checkbox" name="storage" {% if customer.storage %}checked {% endif%}
+                <input id="storage" type="checkbox" name="storage" {% if customer.storage %}checked {% endif%}
                     class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded  transition duration-500 ease-in-out transform border-transparent  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400">
-                <label for="default-checkbox"
+                <label for="storage"
                     class="mr-2 text-sm font-medium text-gray-900 dark:text-gray-300">انباری</label>
             </div>
             <div class=" items-center mx-3 my-3">
-                <input id="default-checkbox" type="checkbox" name="parking_motor" {% if customer.parking_motor %}checked {% endif%}
+                <input id="parking_motor" type="checkbox" name="parking_motor" {% if customer.parking_motor %}checked {% endif%}
                     class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded  transition duration-500 ease-in-out transform border-transparent  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400">
-                <label for="default-checkbox" class="mr-2 text-sm font-medium text-gray-900 dark:text-gray-300">پارکینگ
+                <label for="parking_motor" class="mr-2 text-sm font-medium text-gray-900 dark:text-gray-300">پارکینگ
                     موتور</label>
             </div>
             <div class=" items-center mx-3 my-3">
-                <input id="default-checkbox" type="checkbox" name="komod_divari" {% if customer.komod_divari %}checked {% endif%}
+                <input id="komod_divari" type="checkbox" name="komod_divari" {% if customer.komod_divari %}checked {% endif%}
                     class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded  transition duration-500 ease-in-out transform border-transparent  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400">
-                <label for="default-checkbox" class="mr-2 text-sm font-medium text-gray-900 dark:text-gray-300">کمد
+                <label for="komod_divari" class="mr-2 text-sm font-medium text-gray-900 dark:text-gray-300">کمد
                     دیواری</label>
             </div>
             <div class=" items-center mx-3 my-3">
-                <input id="default-checkbox" type="checkbox" name="balkon" {% if customer.balkon %}checked {% endif%}
+                <input id="balkon" type="checkbox" name="balkon" {% if customer.balkon %}checked {% endif%}
                     class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded  transition duration-500 ease-in-out transform border-transparent  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400">
-                <label for="default-checkbox"
+                <label for="balkon"
                     class="mr-2 text-sm font-medium text-gray-900 dark:text-gray-300">بالکن</label>
             </div>
         </div>
-        <input type="submit" value="ثبت"
+        <input id="submit" type="submit" value="ثبت"
             class="basis-full mt-4 h-10 rounded-lg hover:bg-blue-100 bg-gray-200 border w-full bottom-0">
     </form>
 </div>
-
-{% endblock content %}ali4mini
+<script src="{% static 'JS/rent.js' %}"></script>
+{% endblock content %}

@@ -4,8 +4,8 @@ customer/__pycache__
 listing/__pycache__
 images
 agents/__pycache__
-.vscode
-.VSCodeCounter
+.vscode/
+.VSCodeCounter/
 checked_links.txt
 *.log
 out
@@ -13,3 +13,6 @@ __pycache__
 .venv/
 .env
 cookies
+.vscode
+.VSCodeCounter
+
