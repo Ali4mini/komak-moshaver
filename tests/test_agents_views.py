@@ -8,7 +8,7 @@ class AgentsViewsTest(SeleniumTestCase):
     '''
     tests all views of agents app
     '''
-    def test_buy_customer(self) -> None:
+    def test_agent_login(self) -> None:
         self.driver.get(self.live_server_url)
         self.driver.implicitly_wait(10)
         #SECTION - login

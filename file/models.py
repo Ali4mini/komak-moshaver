@@ -59,6 +59,8 @@ class Sell(models.Model):
     def get_absolute_url(self):
         return reverse("file:sell_file_detail", args=[self.id])
     
+    def get_pk(self) -> int:
+        return self.pk
 
 class Rent(models.Model):
     class Types(models.TextChoices):
@@ -85,9 +87,7 @@ class Rent(models.Model):
     added_by = models.ForeignKey(settings.AUTH_USER_MODEL,
                                  verbose_name=("added to site by "),
                                  on_delete=models.DO_NOTHING,
-                                 blank=False,
-                                 default=1
-                                 )
+                                 blank=False,)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     bedroom = models.IntegerField(blank=True, null=True)
@@ -113,6 +113,9 @@ class Rent(models.Model):
     
     def get_absolute_url(self):
         return reverse("file:rent_file_detail", args=[self.id])
+    
+    def get_pk(self) -> int:
+        return self.pk
 
 class SellComment(models.Model):
     file = models.ForeignKey("Sell",
@@ -137,6 +140,10 @@ class SellComment(models.Model):
 
     def get_absolute_url(self):
         return reverse("sell_comment", kwargs={"pk": self.pk})
+    
+    def get_pk(self) -> int:
+        return self.pk
+    
 class RentComment(models.Model):
     file = models.ForeignKey("Rent",
                              on_delete=models.CASCADE,
@@ -159,6 +166,9 @@ class RentComment(models.Model):
 
     def get_absolute_url(self):
         return reverse("rent_comment", kwargs={"pk": self.pk})
+    
+    def get_pk(self) -> int:
+        return self.pk
     
 class SellImages(models.Model):
     post = models.ManyToManyField("Sell", verbose_name=("post"), related_name='Images')

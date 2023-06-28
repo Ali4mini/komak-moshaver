@@ -14,8 +14,12 @@ home
             <h1 class="block basis-full w-full shadow-md py-3 px-4">{{file.address}}</h2>
                 <div class="flex flex-row gap-20 py-6 px-4 shadow">
                     <p>متراژ: {{file.m2}}</p>
-                    <p>قیمت: {{file.price}}</p>
-                    <p>سال ساخت: {{file.year}}</p>
+                    {% if file.price %}
+                    <p>بودجه: {{file.price}}</p>
+                    {% else %}
+                    <p>ودیعه: {{file.price_up}}</p>
+                    <p>اجاره: {{file.price_rent}}</p>
+                    {% endif %}                    <p>سال ساخت: {{file.year}}</p>
                     <p>طبقه: {{file.floor}}</p>
                     <p>تعداد اتاق خواب: {{file.bedroom}}</p>
                     <p>تعداد واحد: {{file.vahedha}}</p>

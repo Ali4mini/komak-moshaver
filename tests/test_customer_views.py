@@ -19,6 +19,7 @@ class CustomerViewsTest(SeleniumTestCase):
         #!SECTION
         #SECTION - adding customer
         self.driver.find_element(By.ID, 'new_customer').click()
+        time.sleep(2)
         self.driver.implicitly_wait(10)
         self.driver.find_element(By.ID, 'budget').send_keys(6000)
         self.driver.find_element(By.ID, 'm2').send_keys(80)
@@ -28,6 +29,7 @@ class CustomerViewsTest(SeleniumTestCase):
         self.driver.find_element(By.ID, 'customer_phone').send_keys('test')
         self.driver.find_element(By.ID, 'customer_name').send_keys('test')
         self.driver.find_element(By.ID, 'submit').click()
+        time.sleep(4)
         #!SECTION
         # SECTION - checking new file
         element = WebDriverWait(self.driver, 30).until(
@@ -92,7 +94,7 @@ class CustomerViewsTest(SeleniumTestCase):
         self.driver.find_element(By.ID, 'new_customer').click()
         self.driver.implicitly_wait(10)
         self.driver.find_element(By.ID, 'customer_type').click()
-        time.sleep(4)
+        time.sleep(2)
         self.driver.find_element(By.XPATH, '//*[@value="rent"]').click()
         time.sleep(2)
         self.driver.find_element(By.ID, 'up_budget').send_keys(600)
@@ -103,6 +105,7 @@ class CustomerViewsTest(SeleniumTestCase):
         self.driver.find_element(By.ID, 'floor').send_keys(80)
         self.driver.find_element(By.ID, 'customer_phone').send_keys('test')
         self.driver.find_element(By.ID, 'customer_name').send_keys('test')
+        time.sleep(2)
         self.driver.find_element(By.ID, 'submit').click()
         #!SECTION
         # SECTION - checking new file

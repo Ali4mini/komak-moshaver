@@ -5,186 +5,152 @@ home
 {% endblock title%}
 
 {% block content %}
-<div id="filter" class="flex border-2 rounded-xl mx-4 mt-20 h-auto shadow-lg">
-    <form action="" method="post" class="flex flex-row flex-wrap w-full">
-        {% csrf_token %}
-        <select name="file_type" id="" onchange="showRentDiv(this)" 
-        class="bg-gray-50 border focus:ring-blue-300 text-center focus:border-blue-300 shadow-md mx-3 my-3 w-32 h-10 rounded-lg">
-            <option id="sell" value="sell">فروش</option>
-            <option id="rent" value="rent">اجاره</option>
-        </select>
-        <select name="property_type" id=""
-            class="bg-gray-50 border focus:ring-blue-300 text-center focus:border-blue-300 shadow-md mx-3 my-3 w-32 h-10 rounded-lg">
-            <option value="A" selected="">آپارتمان</option>
-            <option value="L">زمین</option>
-            <option value="S">مغازه</option>
-            <option value="H">خانه و ویلا</option>
-        </select>
-        <div class="flex flex-row gap-2 my-4">
-            <div id="sell_file">
-                <div class="relative mx-3" data-te-input-wrapper-init>
-                    <input
-                      type="number"
-                      class="peer w-full px-3 rounded-lg shadow border h-10 border-gray-300  placeholder-transparent
-                  focus:outline-none"
-                      id="price"
-                      name="price"
-                      placeholder="قیمت" />
-                    <label
-                      for="price"
-                      class="absolute text-gray-500 right-4 text-sm -top-3.5 px-2 bg-white-200 transition-all
+<div id="filter_pk" class="flex border-2 w-1/2 rounded-xl mx-4 mt-20 py-3 h-auto shadow">
+  <p class="absolute text-gray-500 right-4 text-sm -top-3.5 px-2 bg-white-200">filter</p>
+  <form action="pk/" method="get" class="flex flex-row gap-3 flex-wrap w-full basis-full">
+    <select name="file_type" id="file_type"
+      class="bg-gray-50 border focus:ring-blue-300 text-center focus:border-blue-300 shadow-md mx-3 my-3 w-32 h-10 rounded-lg">
+      <option id="sell" value="sell">فروش</option>
+      <option id="rent" value="rent">اجاره</option>
+    </select>
+    <div class="relative my-3">
+      <input type="number" class="peer w-full px-3 rounded-lg shadow border h-10 border-gray-300  placeholder-transparent
+        focus:outline-none" id="pk" name="pk" placeholder="کد فایل" required />
+      <label for="pk" class="absolute text-gray-500 right-4 text-sm -top-3.5 px-2 bg-gray-100 transition-all
+        peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-placeholder-shown:bg-transparent
+        peer-focus:text-gray-500 peer-focus:-top-3.5 peer-focus:bg-gray-50 peer-focus:px-2">کد فایل
+      </label>
+    </div>
+    <input id="pk_submit" type="submit" value="فیلتر"
+      class="w-32 my-3 h-10 rounded-lg hover:bg-blue-400 bg-blue-300 border bottom-0">
+  </form>
+</div>
+<div id="filter" class="flex border-2 rounded-xl mx-4 my-3 h-auto shadow-lg">
+  <form action="" method="post" class="flex flex-row flex-wrap w-full basis-full">
+    {% csrf_token %}
+    <select name="file_type" id="file_type" onchange="showRentDiv(this)"
+      class="bg-gray-50 border focus:ring-blue-300 text-center focus:border-blue-300 shadow-md mx-3 my-3 w-32 h-10 rounded-lg">
+      <option id="sell" value="sell">فروش</option>
+      <option id="rent" value="rent">اجاره</option>
+    </select>
+    <select name="property_type" id=""
+      class="bg-gray-50 border focus:ring-blue-300 text-center focus:border-blue-300 shadow-md mx-3 my-3 w-32 h-10 rounded-lg">
+      <option value="A" selected="">آپارتمان</option>
+      <option value="L">زمین</option>
+      <option value="S">مغازه</option>
+      <option value="H">خانه و ویلا</option>
+    </select>
+    <div class="flex flex-row gap-2 my-4">
+      <div id="sell_file">
+        <div class="relative mx-3">
+          <input type="number" class="peer w-full px-3 rounded-lg shadow border h-10 border-gray-300  placeholder-transparent
+                  focus:outline-none" id="price" name="price" placeholder="قیمت" />
+          <label for="price" class="absolute text-gray-500 right-4 text-sm -top-3.5 px-2 bg-white-200 transition-all
                   peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-placeholder-shown:bg-transparent
-                  peer-focus:text-gray-500 peer-focus:-top-3.5 peer-focus:bg-white peer-focus:px-2"
-                      >قیمت
-                    </label>
-                  </div>
-            </div>
-            <div id="rent_file" class="flex flex-row gap-2 " style="display: none;">
-                <div class="relative mx-3 mb-2" data-te-input-wrapper-init>
-                    <input
-                      type="number"
-                      class="peer w-full px-3 rounded-lg shadow border h-10 border-gray-300  placeholder-transparent
-                      focus:outline-none"
-                      id="up_price"
-                      name="up_price"
-                      placeholder="ودیعه" />
-                    <label
-                      for="up_price"
-                      class="absolute text-gray-500 right-4 text-sm -top-3.5 px-2 bg-white-200 transition-all
-                  peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-placeholder-shown:bg-transparent
-                  peer-focus:text-gray-500 peer-focus:-top-3.5 peer-focus:bg-white peer-focus:px-2"
-                      >ودیعه
-                    </label>
-                  </div>
-                  <div class="relative mx-3" data-te-input-wrapper-init>
-                    <input
-                      type="number"
-                      class="peer w-full px-3 rounded-lg shadow border h-10 border-gray-300  placeholder-transparent
-                  focus:outline-none"
-                      id="rent_price"
-                      name="rent_price"
-                      placeholder="اجاره" />
-                    <label
-                      for="rent_price"
-                      class="absolute text-gray-500 right-4 text-sm -top-3.5 px-2 bg-white-200 transition-all
-                  peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-placeholder-shown:bg-transparent
-                  peer-focus:text-gray-500 peer-focus:-top-3.5 peer-focus:bg-white peer-focus:px-2"
-                      >اجاره
-                    </label>
-                  </div>
-            </div>
-            <div class="relative mx-3" data-te-input-wrapper-init>
-                <input
-                  type="number"
-                  class="peer w-full px-3 rounded-lg shadow border h-10 border-gray-300  placeholder-transparent
-                  focus:outline-none"
-                  id="m2"
-                  name="m2"
-                  placeholder="متراژ" />
-                <label
-                  for="m2"
-                  class="absolute text-gray-500 right-4 text-sm -top-3.5 px-2 bg-white-200 transition-all
-                  peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-placeholder-shown:bg-transparent
-                  peer-focus:text-gray-500 peer-focus:-top-3.5 peer-focus:bg-white peer-focus:px-2"
-                  >متراژ
-                </label>
-              </div>
-              <div class="relative mx-3" data-te-input-wrapper-init>
-                <input
-                  type="number"
-                  class="peer w-full px-3 rounded-lg shadow border h-10 border-gray-300  placeholder-transparent
-                  focus:outline-none"
-                  id="bedroom"
-                  name="bedroom"
-                  placeholder="اتاق خواب" />
-                <label
-                  for="bedroom"
-                  class="absolute text-gray-500 right-4 text-sm -top-3.5 px-2 bg-white-200 transition-all
-                  peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-placeholder-shown:bg-transparent
-                  peer-focus:text-gray-500 peer-focus:-top-3.5 peer-focus:bg-white peer-focus:px-2"
-                  >اتاق خواب
-                </label>
-              </div>
-              <div class="relative mx-3" data-te-input-wrapper-init>
-                <input
-                  type="number"
-                  class="peer w-full px-3 rounded-lg shadow border h-10 border-gray-300  placeholder-transparent
-                  focus:outline-none"
-                  id="year"
-                  name="year"
-                  placeholder="سال ساخت" />
-                <label
-                  for="year"
-                  class="absolute text-gray-500 right-4 text-sm -top-3.5 px-2 bg-white-200 transition-all
-                  peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-placeholder-shown:bg-transparent
-                  peer-focus:text-gray-500 peer-focus:-top-3.5 peer-focus:bg-white peer-focus:px-2"
-                  >سال ساخت
-                </label>
-              </div> 
-            </div>
-
-        <div class="flex flex-row gap-4 mr-2">
-            <div class=" items-center mx-3 my-3">
-                <input id="default-checkbox" type="checkbox" name="parking"
-                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded  transition duration-500 ease-in-out transform border-transparent  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400">
-                <label for="default-checkbox"
-                    class="mr-2 text-sm font-medium text-gray-900 dark:text-gray-300">پارکینگ</label>
-            </div>
-            <div class=" items-center mx-3 my-3">
-                <input id="default-checkbox" type="checkbox" name="elevetaor"
-                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded  transition duration-500 ease-in-out transform border-transparent  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400">
-                <label for="default-checkbox"
-                    class="mr-2 text-sm font-medium text-gray-900 dark:text-gray-300">آسانسور</label>
-            </div>
-            <div class=" items-center mx-3 my-3">
-                <input id="default-checkbox" type="checkbox" name="storage"
-                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded  transition duration-500 ease-in-out transform border-transparent  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400">
-                <label for="default-checkbox"
-                    class="mr-2 text-sm font-medium text-gray-900 dark:text-gray-300">انباری</label>
-            </div>
+                  peer-focus:text-gray-500 peer-focus:-top-3.5 peer-focus:bg-gray-50 peer-focus:px-2">قیمت
+          </label>
         </div>
-        <input id="submit" type="submit" value="فیلتر"
-            class="basis-full mt-4 h-10 rounded-lg hover:bg-blue-100 bg-gray-200 border w-full bottom-0">
-    </form>
+      </div>
+      <div id="rent_file" class="flex flex-row gap-2 " style="display: none;">
+        <div class="relative mx-3 mb-2">
+          <input type="number" class="peer w-full px-3 rounded-lg shadow border h-10 border-gray-300  placeholder-transparent
+                      focus:outline-none" id="up_price" name="up_price" placeholder="ودیعه" />
+          <label for="up_price" class="absolute text-gray-500 right-4 text-sm -top-3.5 px-2 bg-white-200 transition-all
+                  peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-placeholder-shown:bg-transparent
+                  peer-focus:text-gray-500 peer-focus:-top-3.5 peer-focus:bg-gray-50 peer-focus:px-2">ودیعه
+          </label>
+        </div>
+        <div class="relative mx-3">
+          <input type="number" class="peer w-full px-3 rounded-lg shadow border h-10 border-gray-300  placeholder-transparent
+                  focus:outline-none" id="rent_price" name="rent_price" placeholder="اجاره" />
+          <label for="rent_price" class="absolute text-gray-500 right-4 text-sm -top-3.5 px-2 bg-white-200 transition-all
+                  peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-placeholder-shown:bg-transparent
+                  peer-focus:text-gray-500 peer-focus:-top-3.5 peer-focus:bg-gray-50 peer-focus:px-2">اجاره
+          </label>
+        </div>
+      </div>
+      <div class="relative mx-3">
+        <input type="number" class="peer w-full px-3 rounded-lg shadow border h-10 border-gray-300  placeholder-transparent
+                  focus:outline-none" id="m2" name="m2" placeholder="متراژ" />
+        <label for="m2" class="absolute text-gray-500 right-4 text-sm -top-3.5 px-2 bg-white-200 transition-all
+                  peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-placeholder-shown:bg-transparent
+                  peer-focus:text-gray-500 peer-focus:-top-3.5 peer-focus:bg-gray-50 peer-focus:px-2">متراژ
+        </label>
+      </div>
+      <div class="relative mx-3">
+        <input type="number" class="peer w-full px-3 rounded-lg shadow border h-10 border-gray-300  placeholder-transparent
+                  focus:outline-none" id="bedroom" name="bedroom" placeholder="اتاق خواب" />
+        <label for="bedroom" class="absolute text-gray-500 right-4 text-sm -top-3.5 px-2 bg-white-200 transition-all
+                  peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-placeholder-shown:bg-transparent
+                  peer-focus:text-gray-500 peer-focus:-top-3.5 peer-focus:bg-gray-50 peer-focus:px-2">اتاق خواب
+        </label>
+      </div>
+      <div class="relative mx-3">
+        <input type="number" class="peer w-full px-3 rounded-lg shadow border h-10 border-gray-300  placeholder-transparent
+                  focus:outline-none" id="year" name="year" placeholder="سال ساخت" />
+        <label for="year" class="absolute text-gray-500 right-4 text-sm -top-3.5 px-2 bg-white-200 transition-all
+                  peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-placeholder-shown:bg-transparent
+                  peer-focus:text-gray-500 peer-focus:-top-3.5 peer-focus:bg-gray-50 peer-focus:px-2">سال ساخت
+        </label>
+      </div>
+    </div>
+
+    <div class="flex flex-row gap-4 mr-2">
+      <div class=" items-center mx-3 my-3">
+        <input id="parking" type="checkbox" name="parking"
+          class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded  transition duration-500 ease-in-out transform border-transparent  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400">
+        <label for="parking" class="mr-2 text-sm font-medium text-gray-900 dark:text-gray-300">پارکینگ</label>
+      </div>
+      <div class=" items-center mx-3 my-3">
+        <input id="elevator" type="checkbox" name="elevator"
+          class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded  transition duration-500 ease-in-out transform border-transparent  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400">
+        <label for="elevator" class="mr-2 text-sm font-medium text-gray-900 dark:text-gray-300">آسانسور</label>
+      </div>
+      <div class=" items-center mx-3 my-3">
+        <input id="storage" type="checkbox" name="storage"
+          class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded  transition duration-500 ease-in-out transform border-transparent  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400">
+        <label for="storage" class="mr-2 text-sm font-medium text-gray-900 dark:text-gray-300">انباری</label>
+      </div>
+    </div>
+    <input id="submit" type="submit" value="فیلتر"
+      class="basis-full mt-4 h-10 rounded-lg hover:bg-blue-100 bg-gray-200 border w-full bottom-0">
+  </form>
 </div>
 
 {% for file in files %}
 <a href="{{file.get_absolute_url}}">
-    <div class="block border-2 shadow-md rounded-2xl bg-gray-50 hover:bg-gray-100 hover:shadow-xl mx-4 py-1 my-4">
-        <div class="flex flex-col" id="file">
-            <h1 class="block basis-full w-full shadow-md py-3 px-4">{{file.address}}</h1>
-            <div class="flex flex-row gap-20 py-6 px-4 shadow">
-                <p>متراژ: {{file.m2}}</p>
-                {% if file.price %}
-                <p>بودجه: {{file.price}}</p>
-                {% else %}
-                <p>ودیعه: {{file.price_up}}</p>
-                <p>اجاره: {{file.price_rent}}</p>
-                {% endif %}
-                <p>سال ساخت: {{file.year}}</p>
-                <p>طبقه: {{file.floor}}</p>
-                <p>تعداد اتاق خواب: {{file.bedroom}}</p>
-                <p>تعداد واحد: {{file.vahedha}}</p>
-            </div>
-            <div class="side flex flex-row botton-0 gap-2 pt-3 w-full h-10">
-                {% if file.parking %}
-                <img src="{% static 'images/parking.svg' %}" alt="" width="40px" class="mx-auto">
-                {% endif %}
-                {% if file.elevator %}
-                <img src="{% static 'images/elevator.svg' %}" alt="" width="30px" class="mx-auto">
-                {% endif %}
-                {% if file.storage %}
-                <img src="{% static 'images/storage.svg' %}" alt="" width="30px" class="mx-auto">
-                {% endif %}
-                {% if file.parking_motor %}
-                <img src="{% static 'images/motor.svg' %}" alt="" width="40px" class="mx-auto">
-                {% endif %}
-                {% if file.komod_divari %}
-                <img src="{% static 'images/elevator.svg' %}" alt="" width="30px" class="mx-auto">
-                {% endif %}
-            </div>
-        </div>
+  <div class="block border-2 shadow-md rounded-2xl bg-gray-50 hover:bg-gray-100 hover:shadow-xl mx-4 py-1 my-4">
+    <div class="flex flex-col" id="file">
+      <h1 class="block basis-full w-full shadow-md py-3 px-4">{{file.address}}</h1>
+      <div class="flex flex-row gap-20 py-6 px-4 shadow">
+        <p>متراژ: {{file.m2}}</p>
+        {% if file.price %}
+        <p>بودجه: {{file.price}}</p>
+        {% else %}
+        <p>ودیعه: {{file.price_up}}</p>
+        <p>اجاره: {{file.price_rent}}</p>
+        {% endif %}
+        <p>سال ساخت: {{file.year}}</p>
+        <p>طبقه: {{file.floor}}</p>
+        <p>تعداد اتاق خواب: {{file.bedroom}}</p>
+        <p>تعداد واحد: {{file.vahedha}}</p>
+      </div>
+      <div class="side flex flex-row botton-0 gap-2 pt-3 w-full h-10">
+        {% if file.parking %}
+        <img src="{% static 'images/parking.svg' %}" id="has_parking" alt="پارکینگ" width="40px" class="mx-auto">
+        {% endif %}
+        {% if file.elevator %}
+        <img src="{% static 'images/elevator.svg' %}" id="has_elevator" alt="آسانسور" width="30px" class="mx-auto">
+        {% endif %}
+        {% if file.storage %}
+        <img src="{% static 'images/storage.svg' %}" id="has_storage" alt="انباری" width="30px" class="mx-auto">
+        {% endif %}
+        {% if file.parking_motor %}
+        <img src="{% static 'images/motor.svg' %}" id="has_parking_motor" alt="پارکینگ موتور" width="40px" class="mx-auto">
+        {% endif %}
+      </div>
     </div>
+  </div>
 </a>
 {% endfor %}
 <script src="{% static 'JS/rent.js' %}"></script>

@@ -9,7 +9,7 @@ class FileViewsTest(SeleniumTestCase):
     '''
     tests all views of file app
     '''
-
+    
     def test_sell_file(self) -> None:
 
         self.driver.get(self.live_server_url)
@@ -35,7 +35,9 @@ class FileViewsTest(SeleniumTestCase):
         self.driver.find_element(By.ID, 'bazdid').send_keys('test')
         self.driver.find_element(By.ID, 'owner_phone').send_keys('test')
         self.driver.find_element(By.ID, 'owner_name').send_keys('test')
+        time.sleep(2)
         self.driver.find_element(By.ID, 'submit').click()
+        
         #!SECTION
         # SECTION - checking new file
         element = WebDriverWait(self.driver, 30).until(
@@ -135,11 +137,14 @@ class FileViewsTest(SeleniumTestCase):
         #!SECTION
         # SECTION - updating file
         self.driver.find_element(By.ID, 'update').click()
+        time.sleep(5)
         self.driver.find_element(By.ID, 'address').clear()
         self.driver.find_element(By.ID, 'address').send_keys('updated')
 
-        self.driver.find_element(By.ID, 'price').clear()
-        self.driver.find_element(By.ID, 'price').send_keys(8800)
+        self.driver.find_element(By.ID, 'price_up').clear()
+        self.driver.find_element(By.ID, 'price_up').send_keys(500)
+        self.driver.find_element(By.ID, 'price_rent').clear()
+        self.driver.find_element(By.ID, 'price_rent').send_keys(5)
         self.driver.find_element(By.ID, 'm2').clear()
         self.driver.find_element(By.ID, 'm2').send_keys(88)
 
@@ -174,7 +179,7 @@ class FileViewsTest(SeleniumTestCase):
         element.click()
         elements = [element.text for element in self.driver.find_elements(By.TAG_NAME, 'p')]
         assert 'نوع فایل: اجاره' in elements
-        assert 'ودیعه: 800' in elements
+        assert 'ودیعه: 500' in elements
         #!SECTION
         # SECTION - deleting file
         self.driver.find_element(By.ID, 'delete').click()

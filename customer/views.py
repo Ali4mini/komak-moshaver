@@ -47,9 +47,9 @@ class NewCustomer(View):
                                                                   added_by=request.user)
             if not created:
                 messages.error(request, 'there is already a customer with this info in DB')
-                return redirect('/cusotmer/')
+                return redirect('/customers/')
             messages.success(request, 'مشتری با موفقیت ثبت شد.',)
-            return redirect('/customer/')
+            return redirect('/customers/')
         elif data['customer_type'] == 'rent':
             customer, created = RentCustomer.objects.get_or_create(customer_name=data['customer_name'],
                                                                     customer_phone=data['customer_phone'],
@@ -64,18 +64,11 @@ class NewCustomer(View):
                                                                     added_by=request.user)
             if not created:
                 messages.error(request, 'there is already a customer with this info in DB')
-                return redirect('/customer/')
+                return redirect('/customers/')
             messages.success(request, 'مشتری با موفقیت ثبت شد.',)
-            return redirect('/customer/')
+            return redirect('/customers/')
     def get(self, request, *args, **kwargs):
         return render(request, 'customer/new_customer.html')
-
-class CustomerListing(View):
-    def get(self, request, *args, **kwargs):
-        buy_customers = BuyCustomer.objects.all()
-        rent_customer = RentCustomer.objects.all()
-        result_customers = list(chain(buy_customers, rent_customer))
-        return render(request, 'customer/customers.html', {'customers': result_customers})
     
 
 @method_decorator((login_required, csrf_exempt), name='dispatch')
@@ -128,12 +121,8 @@ class RentCustomerDetails(View):
                 return redirect('/agents/login')
     def get(self, request, pk, *args, **kwargs):
         customer = get_object_or_404(RentCustomer, pk=pk, )
-        up_budget = customer.up_budget
-        min_budget, max_budget = up_budget-300 , up_budget+300
         comment_form = forms.CommentForm()
         comments = customer.rent_customer_comments.all()
-        files = Sell.objects.filter(type=customer.type ,price__lte=max_budget,price__gte=min_budget).exclude(owner_name='UNKNOWN')
-        print(files)
         return render(request, 'customer/customer_detail.html', {'customer': customer,
                                                          'comments': comments,
                                                          'comment_form': comment_form,
@@ -148,7 +137,7 @@ class BuyCustomerDelete(View):
             messages.success(request, 'all done')
         except:
             messages.error(request, 'something went wrong!')
-        return redirect('/customer/')     
+        return redirect('/customers/')     
 
 class RentCustomerDelete(View):
     def post(self, request, pk, *args, **kwargs):
@@ -158,12 +147,12 @@ class RentCustomerDelete(View):
             messages.success(request, 'all done')
         except:
             messages.error(request, 'something went wrong!')
-        return redirect('/customer/')     
+        return redirect('/customers/')     
     
 class BuyUpdateView(UpdateView):
     model = BuyCustomer
     template_name = 'customer/sell_update_form.html'
-    success_url = '/customer/'
+    success_url = '/customers/'
     form_class = forms.SellUpdateForm
 
     def get(self, request, pk, *args, **kwargs):
@@ -173,7 +162,7 @@ class BuyUpdateView(UpdateView):
 class RentUpdateView(UpdateView):
     model = RentCustomer
     template_name = 'customer/rent_update_form.html'
-    success_url = '/customer/'
+    success_url = '/customers/'
     form_class = forms.RentUpdateForm
 
     def get(self, request, pk, *args, **kwargs):

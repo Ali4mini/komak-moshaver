@@ -56,19 +56,31 @@ def match_customers(instance, file_type) -> bool:
 #SECTION - Signals
 @receiver(signal=post_save, sender=Sell)
 def new_sell_file_signal(sender, instance, created, *args, **kwargs):
-    if created:
+    if instance.added_by != 'listing_bot' and created:
         try:
             welcome_message(instance=instance)
             match_customers(instance=instance, file_type='sell')
         except: 
-            pass 
+            pass
+    elif instance.added_by == 'listing_bot' and not created:
+        try:
+            welcome_message(instance=instance)
+            match_customers(instance=instance, file_type='sell')
+        except: 
+            pass
         
 @receiver(signal=post_save, sender=Rent)
 def new_rent_file_signal(sender, instance, created, *args, **kwargs):
-    if created:
+    if instance.added_by != 'listing_bot' and created:
         try:
             welcome_message(instance=instance)
             match_customers(instance=instance, file_type='rent')
         except: 
-            pass 
+            pass
+    elif instance.added_by == 'listing_bot' and not created:
+        try:
+            welcome_message(instance=instance)
+            match_customers(instance=instance, file_type='rent')
+        except: 
+            pass
 #!SECTION

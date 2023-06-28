@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from file import models
 from listing.scripts.divar.divar import Divar
 import time
@@ -6,17 +7,10 @@ import logging, logging.handlers
 import requests
 import pickle
 # ! Custom exceptions
-  
 
-class Listing:
-    def __init__(self) -> None:
-        
-        self.logger = logging.getLogger('Listing')
-        self.logger.info('initialized listing object')
-        
-    class DivarBot:
-        def __init__(self, *args, **kwargs) -> None:
-            super().__init__(*args, **kwargs)
+class DivarBot:
+        def __init__(self) -> None:
+            self.bot_user = User.objects.get_by_natural_key('listing_bot')
             self.divar_url = 'https://divar.ir/s/tehran/real-estate/doolab?districts=1017%2C273%2C974%2C1016&user_type=personal&sort=sort_date'
             self.divar_obj = Divar(headless=True)
             self.logger = logging.getLogger('Divar')
@@ -26,9 +20,9 @@ class Listing:
                                                            fromaddr='divar.bot@test.xyz',
                                                            toaddrs='ali.4mini@proton.me',
                                                            subject='Divar Bot Errors')
-            self.smtphandler.setFormatter("%(process)d-%(levelname)s-%(message)s")
-            self.smtphandler.setLevel(logging.ERROR)
-            self.logger.addHandler(self.smtphandler)
+            # self.smtphandler.setFormatter("%(process)d-%(levelname)s-%(message)s")
+            # self.smtphandler.setLevel(logging.ERROR)
+            # self.logger.addHandler(self.smtphandler)
         def BurntCookie(self, cookie):
             """this method should called when a cookie is burnt"""
             template = f'''
@@ -200,7 +194,7 @@ class Listing:
                                                     parking=res['ویژگی ها'][2],
                                                     storage=res['ویژگی ها'][1],
                                                     type=res['نوع'],
-                                                    )
+                                                    added_by=self.bot_user)
                                 file.tag_manager.add(res['تگ ها'])
                                 if not created:
                                     self.logger.warning('it was in DB')
@@ -230,7 +224,7 @@ class Listing:
                                                         parking=res['ویژگی ها'][2],
                                                         storage=res['ویژگی ها'][1],
                                                         type=res['نوع'],
-                                                        )
+                                                        added_by=self.bot_user)
                                     file.tags_manager.add(res['تگ ها'])
                                     if not created:
                                         self.logger.info('it was in DB')
@@ -297,8 +291,7 @@ class Listing:
                 valid_types = [ 'A', 
                                 'L',
                                 'S',
-                                'H',
-                                   ]
+                                'H',]
 
                 if "فروش" in res["شاخه"][1] and res['نوع'] in valid_types:
                     if not res['شمارهٔ موبایل'] == 'None':
@@ -315,7 +308,7 @@ class Listing:
                                                     parking=res['ویژگی ها'][2],
                                                     storage=res['ویژگی ها'][1],
                                                     type=res['نوع'],
-                                                    )                            
+                                                    added_by=self.bot_user)                            
                             if not created:
                                     self.logger.info('it was in DB')
 
@@ -345,7 +338,7 @@ class Listing:
                                                     parking=res['ویژگی ها'][2],
                                                     storage=res['ویژگی ها'][1],
                                                     type=res['نوع'],
-                                                    )  
+                                                    added_by=self.bot_user)  
                                 if not created:
                                     self.logger.info('it was in DB')
                                     
