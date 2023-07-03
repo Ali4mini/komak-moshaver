@@ -18,6 +18,11 @@ class NewCustomer(View):
     def post(self, request, *args, **kwargs):
         data = request.POST.copy()
         
+        if data['m2'] == '':
+            data['m2'] = 0
+        if data['year'] == '':
+            data['year'] = 0
+
         try:
             data['elevator']
             data['elevator'] = True

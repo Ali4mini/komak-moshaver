@@ -12,6 +12,7 @@ out
 __pycache__
 .venv/
 .env
+.env_dev
 cookies
 .vscode
 .VSCodeCounter

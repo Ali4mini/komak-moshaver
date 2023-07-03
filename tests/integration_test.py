@@ -23,3 +23,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         cls.driver.close()
         cls.driver.quit()
         super().tearDownClass()
+
+
+
+        

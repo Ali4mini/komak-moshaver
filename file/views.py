@@ -24,6 +24,9 @@ class NewFile(View):
         data['image3'] = ''
         data['image4'] = ''
         data['image5'] = ''
+        if data['vahedha'] == '':
+            vahedha = 0
+            
         
         try:
             data['elevator']

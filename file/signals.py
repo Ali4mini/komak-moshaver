@@ -19,13 +19,28 @@ def welcome_message(instance) -> Response:
 
 def match_customers(instance, file_type) -> bool:
     data = model_to_dict(instance=instance)
-    
+    if data['parking'] == True:
+        data['parking'] = 'دارد'
+    else: 
+        data['parking'] = 'ندارد'
+    if data['elevator'] == True:
+        data['elevator'] = 'دارد'
+    else: 
+        data['elevator'] = 'ندارد'
+    if data['storage'] == True:
+        data['storage'] = 'دارد'
+    else: 
+        data['storage'] = 'ندارد'
+
     if file_type == 'sell':
         sell_template = f'''مشتری عزیز یک فایل جدید برای شما پیدا شد
         قیمت:{data['price']}
         متراژ:{data['m2']}
         آدرس:{data['address']}
-        طبقه:{data['floor']}'''
+        طبقه:{data['floor']}
+        پارکینگ:{data['parking']}
+        آسانسور:{data['elevator']}
+        انباری:{data['storage']}'''
         customers = BuyCustomer.objects.filter(budget__gte=data['price'],
                                                m2__lte=data['m2'],).all()
         customers = [customer.customer_phone for customer in customers]
@@ -40,7 +55,10 @@ def match_customers(instance, file_type) -> bool:
         اجاره:{data['price_rent']}
         متراژ:{data['m2']}
         آدرس:{data['address']}
-        طبقه:{data['floor']}'''
+        طبقه:{data['floor']}
+        پارکینگ:{data['parking']}
+        آسانسور:{data['elevator']}
+        انباری:{data['storage']}'''
         customers = RentCustomer.objects.filter(up_budget__gte=data['price_up'],
                                                 rent_budget__gte=data['price_rent'],
                                                 m2__lte=data['m2'])

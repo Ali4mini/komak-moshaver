@@ -12,7 +12,7 @@ def welcome_message(instance) -> Response:
 
     template = f'''مشتری عزیز شما با موفقیت به سامانه املاک ولیعصر اضافه شدید'''
     
-    message_data = {'from':'50004001845778', 'to':[data['owner_phone']], 'text':template, 'udh':''}
+    message_data = {'from':'50004001845778', 'to':[data['customer_phone']], 'text':template, 'udh':''}
     response = requests.post('https://console.melipayamak.com/api/send/advanced/b59dd6ca1de047aabf4416be63da2c01',
                              json=message_data)
     return response
@@ -24,7 +24,8 @@ def new_buy_customer_signal(sender, instance, created, *args, **kwargs):
     if created:
         try:
             welcome_message(instance=instance)
-        except: 
+        except Exception as E: 
+            print('there was an error in customer signals:' + str(E))
             pass
 
 @receiver(signal=post_save, sender=RentCustomer)
@@ -32,5 +33,9 @@ def new_rent_customer_signal(sender, instance, created, *args, **kwargs):
     if created:
         try:
             welcome_message(instance=instance)
-        except: 
-            pass    
+        except Exception as E: 
+            print('there was an error in customer signals:' + str(E))    
+            pass
+
+
+
