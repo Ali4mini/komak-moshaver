@@ -24,7 +24,7 @@ class FileViewsTest(SeleniumTestCase):
         # SECTION - adding file
         self.driver.find_element(By.ID, 'new_file').click()
         self.driver.implicitly_wait(10)
-        self.driver.find_element(By.ID, 'address').send_keys('test')
+        self.driver.find_element(By.ID, 'address').send_keys('تست')
         self.driver.find_element(By.ID, 'price').send_keys(8000)
         self.driver.find_element(By.ID, 'm2').send_keys(80)
         self.driver.find_element(By.ID, 'bedroom').send_keys(2)
@@ -32,9 +32,9 @@ class FileViewsTest(SeleniumTestCase):
         self.driver.find_element(By.ID, 'floor').send_keys(3)
         self.driver.find_element(By.ID, 'tabaghat').send_keys(4)
         self.driver.find_element(By.ID, 'vahedha').send_keys(8)
-        self.driver.find_element(By.ID, 'bazdid').send_keys('test')
-        self.driver.find_element(By.ID, 'owner_phone').send_keys('test')
-        self.driver.find_element(By.ID, 'owner_name').send_keys('test')
+        self.driver.find_element(By.ID, 'bazdid').send_keys('تست')
+        self.driver.find_element(By.ID, 'owner_phone').send_keys('تست')
+        self.driver.find_element(By.ID, 'owner_name').send_keys('تست')
         time.sleep(2)
         self.driver.find_element(By.ID, 'submit').click()
         
@@ -45,7 +45,18 @@ class FileViewsTest(SeleniumTestCase):
         element.click()
         elements = [element.text for element in self.driver.find_elements(By.TAG_NAME, 'p')]
         assert 'نوع فایل: فروش' in elements
+        assert 'نوع ملک: آپارتمان' in elements
+        assert 'نام مالک: تست' in elements
+        assert 'شماره مالک: تست' in elements
         assert 'قیمت: 8000' in elements
+        assert 'متراژ: 80' in elements
+        assert 'سال ساخت: 1396' in elements
+        assert 'طبقه: 3' in elements
+        assert 'طبقات: 4' in elements
+        assert 'تعداد اتاق خواب: 2' in elements
+        assert 'تعداد واحد: 8' in elements
+        assert 'تخلیه: 0' in elements
+        assert 'آدرس: تست' in elements
         #!SECTION
         # SECTION - updating file
         self.driver.find_element(By.ID, 'update').click()
@@ -88,7 +99,18 @@ class FileViewsTest(SeleniumTestCase):
         element.click()
         elements = [element.text for element in self.driver.find_elements(By.TAG_NAME, 'p')]
         assert 'نوع فایل: فروش' in elements
+        assert 'نوع ملک: آپارتمان' in elements
+        assert 'نام مالک: updated' in elements
+        assert 'شماره مالک: updated' in elements
         assert 'قیمت: 8800' in elements
+        assert 'متراژ: 88' in elements
+        assert 'سال ساخت: 1402' in elements
+        assert 'طبقه: 3' in elements
+        assert 'طبقات: 4' in elements
+        assert 'تعداد اتاق خواب: 2' in elements
+        assert 'تعداد واحد: 12' in elements
+        assert 'تخلیه: 0' in elements
+        assert 'آدرس: updated' in elements
         #!SECTION
         # SECTION - deleting file
         self.driver.find_element(By.ID, 'delete').click()
@@ -113,18 +135,18 @@ class FileViewsTest(SeleniumTestCase):
         self.driver.find_element(By.ID, 'file_type').click()
         self.driver.find_element(By.XPATH, '//*[@value="rent"]').click()
         
-        self.driver.find_element(By.ID, 'address').send_keys('test')
+        self.driver.find_element(By.ID, 'address').send_keys('تست')
         self.driver.find_element(By.ID, 'price_up').send_keys(800)
-        self.driver.find_element(By.ID, 'price_rent').send_keys(8)
+        self.driver.find_element(By.ID, 'price_rent').send_keys(4.5)
         self.driver.find_element(By.ID, 'm2').send_keys(80)
         self.driver.find_element(By.ID, 'bedroom').send_keys(2)
         self.driver.find_element(By.ID, 'year').send_keys(1396)
         self.driver.find_element(By.ID, 'floor').send_keys(3)
         self.driver.find_element(By.ID, 'tabaghat').send_keys(4)
         self.driver.find_element(By.ID, 'vahedha').send_keys(8)
-        self.driver.find_element(By.ID, 'bazdid').send_keys('test')
-        self.driver.find_element(By.ID, 'owner_phone').send_keys('test')
-        self.driver.find_element(By.ID, 'owner_name').send_keys('test')
+        self.driver.find_element(By.ID, 'bazdid').send_keys('تست')
+        self.driver.find_element(By.ID, 'owner_phone').send_keys('تست')
+        self.driver.find_element(By.ID, 'owner_name').send_keys('تست')
         self.driver.find_element(By.ID, 'submit').click()
         #!SECTION
         # SECTION - checking new file
@@ -133,7 +155,19 @@ class FileViewsTest(SeleniumTestCase):
         element.click()
         elements = [element.text for element in self.driver.find_elements(By.TAG_NAME, 'p')]
         assert 'نوع فایل: اجاره' in elements
+        assert 'نوع ملک: آپارتمان' in elements
+        assert 'نام مالک: تست' in elements
+        assert 'شماره مالک: تست' in elements
         assert 'ودیعه: 800' in elements
+        assert 'اجاره: 4.5' in elements
+        assert 'متراژ: 80' in elements
+        assert 'سال ساخت: 1396' in elements
+        assert 'طبقه: 3' in elements
+        assert 'طبقات: 4' in elements
+        assert 'تعداد اتاق خواب: 2' in elements
+        assert 'تعداد واحد: 8' in elements
+        assert 'تخلیه: 0' in elements
+        assert 'آدرس: تست' in elements
         #!SECTION
         # SECTION - updating file
         self.driver.find_element(By.ID, 'update').click()
@@ -179,7 +213,19 @@ class FileViewsTest(SeleniumTestCase):
         element.click()
         elements = [element.text for element in self.driver.find_elements(By.TAG_NAME, 'p')]
         assert 'نوع فایل: اجاره' in elements
+        assert 'نوع ملک: آپارتمان' in elements
+        assert 'نام مالک: updated' in elements
+        assert 'شماره مالک: updated' in elements
         assert 'ودیعه: 500' in elements
+        assert 'اجاره: 5' in elements
+        assert 'متراژ: 88' in elements
+        assert 'سال ساخت: 1402' in elements
+        assert 'طبقه: 3' in elements
+        assert 'طبقات: 4' in elements
+        assert 'تعداد اتاق خواب: 2' in elements
+        assert 'تعداد واحد: 12' in elements
+        assert 'تخلیه: 0' in elements
+        assert 'آدرس: updated' in elements
         #!SECTION
         # SECTION - deleting file
         self.driver.find_element(By.ID, 'delete').click()

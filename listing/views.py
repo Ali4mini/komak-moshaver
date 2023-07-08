@@ -35,8 +35,8 @@ class Panel(View):
                                         m2__gte=m2, 
                                         year__gte=year).exclude(owner_name='UNKNOWN')
         elif data['file_type'] == 'rent':
-            budget_up = data['price_up']
-            budget_rent = data['price_rent']
+            budget_up = data['up_price']
+            budget_rent = data['rent_price']
             if budget_up == '':
                 budget_up = 999999999999
             if budget_rent == '':

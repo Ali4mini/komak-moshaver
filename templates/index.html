@@ -8,10 +8,11 @@ home
 <div id="filter_pk" class="flex border-2 w-1/2 rounded-xl mx-4 mt-20 py-3 h-auto shadow">
   <p class="absolute text-gray-500 right-4 text-sm -top-3.5 px-2 bg-white-200">filter</p>
   <form action="pk/" method="get" class="flex flex-row gap-3 flex-wrap w-full basis-full">
-    <select name="file_type" id="file_type"
+    <select name="file_type" id="filter_file_type"
       class="bg-gray-50 border focus:ring-blue-300 text-center focus:border-blue-300 shadow-md mx-3 my-3 w-32 h-10 rounded-lg">
-      <option id="sell" value="sell">فروش</option>
-      <option id="rent" value="rent">اجاره</option>
+      <option id="pk_sell" value="sell">فروش</option>
+      <option id="pk_rent" value="rent">اجاره</option>
+      #
     </select>
     <div class="relative my-3">
       <input type="number" class="peer w-full px-3 rounded-lg shadow border h-10 border-gray-300  placeholder-transparent
@@ -121,7 +122,10 @@ home
 <a href="{{file.get_absolute_url}}">
   <div class="block border-2 shadow-md rounded-2xl bg-gray-50 hover:bg-gray-100 hover:shadow-xl mx-4 py-1 my-4">
     <div class="flex flex-col" id="file">
-      <h1 class="block basis-full w-full shadow-md py-3 px-4">{{file.address}}</h1>
+      <div class="flex flex-row gap-0">
+        <p class="flex justify-center m-auto h-auto shadow-md py-3 px-4 text-gray-500">{{file.id}}</p>
+        <h1 class="inline basis-full w-full shadow-md py-3 px-4">{{file.address}}</h1>
+    </div>
       <div class="flex flex-row gap-20 py-6 px-4 shadow">
         <p>متراژ: {{file.m2}}</p>
         {% if file.price %}
@@ -137,16 +141,16 @@ home
       </div>
       <div class="side flex flex-row botton-0 gap-2 pt-3 w-full h-10">
         {% if file.parking %}
-        <img src="{% static 'images/parking.svg' %}" id="has_parking" alt="پارکینگ" width="40px" class="mx-auto">
+        <img src="{% static 'images/car.png' %}" id="has_parking" alt="پارکینگ" width="40px" class="mx-auto">
         {% endif %}
         {% if file.elevator %}
-        <img src="{% static 'images/elevator.svg' %}" id="has_elevator" alt="آسانسور" width="30px" class="mx-auto">
+        <img src="{% static 'images/elevator.png' %}" id="has_elevator" alt="آسانسور" width="30px" class="mx-auto">
         {% endif %}
         {% if file.storage %}
-        <img src="{% static 'images/storage.svg' %}" id="has_storage" alt="انباری" width="30px" class="mx-auto">
+        <img src="{% static 'images/storage.png' %}" id="has_storage" alt="انباری" width="30px" class="mx-auto">
         {% endif %}
         {% if file.parking_motor %}
-        <img src="{% static 'images/motor.svg' %}" id="has_parking_motor" alt="پارکینگ موتور" width="40px" class="mx-auto">
+        <img src="{% static 'images/motor.png' %}" id="has_parking_motor" alt="پارکینگ موتور" width="40px" class="mx-auto">
         {% endif %}
       </div>
     </div>

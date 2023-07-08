@@ -45,8 +45,8 @@ class RentCustomer(models.Model):
     customer_name = models.CharField(max_length=150)
     customer_phone = models.CharField(max_length=12)
     type = models.CharField(choices=Types.choices, max_length=1,default=Types.APARTEMANT)
-    up_budget = models.IntegerField()
-    rent_budget = models.IntegerField()
+    up_budget = models.FloatField()
+    rent_budget = models.FloatField()
     m2 = models.IntegerField(null=True)
     year = models.IntegerField(null=True)
     added_by = models.ForeignKey(settings.AUTH_USER_MODEL,

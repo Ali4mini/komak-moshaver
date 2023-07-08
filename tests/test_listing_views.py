@@ -85,26 +85,87 @@ class ListingViewsTest(SeleniumTestCase):
         self.driver.find_element(By.ID, 'price').send_keys(4000)
         self.driver.find_element(By.ID, 'submit').click()
         price_elements = self.driver.find_elements(By.XPATH, '//*[@id="file"]/div/p[2]')
-        price_elements = [int(element.text.replace('بودجه: ', '')) for element in price_elements]
+        price_elements = [float(element.text.replace('بودجه: ', '')) for element in price_elements]
         assert any(price <= 4000 for price in price_elements)
 
         self.driver.find_element(By.ID, 'm2').send_keys(75)
         self.driver.find_element(By.ID, 'submit').click()
         m2_elements = self.driver.find_elements(By.XPATH, '//*[@id="file"]/div/p[1]')
-        m2_elements = [int(element.text.replace('متراژ: ', '')) for element in m2_elements]
+        m2_elements = [float(element.text.replace('متراژ: ', '')) for element in m2_elements]
         assert any(m2 >= 75 for m2 in m2_elements)
         
 
         self.driver.find_element(By.ID, 'year').send_keys(1390)
         self.driver.find_element(By.ID, 'submit').click()
         year_elements = self.driver.find_elements(By.XPATH, '//*[@id="file"]/div/p[3]')
-        year_elements = [int(element.text.replace('سال ساخت: ', '')) for element in year_elements]
+        year_elements = [float(element.text.replace('سال ساخت: ', '')) for element in year_elements]
         assert any(year >= 1390 for year in year_elements)
 
         self.driver.find_element(By.ID, 'bedroom').send_keys(1)
         self.driver.find_element(By.ID, 'submit').click()
         bedroom_elements = self.driver.find_elements(By.XPATH, '//*[@id="file"]/div/p[5]')
-        bedroom_elements = [int(element.text.replace('تعداد اتاق خواب: ', '')) for element in bedroom_elements]
+        bedroom_elements = [float(element.text.replace('تعداد اتاق خواب: ', '')) for element in bedroom_elements]
+        assert any(bedroom >= 1 for bedroom in bedroom_elements)
+
+        self.driver.find_element(By.ID, 'parking').click()
+        self.driver.find_element(By.ID, 'submit').click()
+        parking_elements = self.driver.find_elements(By.ID, 'has_parking')
+        assert len(parking_elements) == self.sell_files_with_parking
+        
+        self.driver.find_element(By.ID, 'elevator').click()
+        self.driver.find_element(By.ID, 'submit').click()
+        elevator_elements = self.driver.find_elements(By.ID, 'has_elevator')
+        assert len(elevator_elements) == self.sell_files_with_elevator
+        
+        self.driver.find_element(By.ID, 'storage').click()
+        self.driver.find_element(By.ID, 'submit').click()
+        storage_elements = self.driver.find_elements(By.ID, 'has_storage')
+        assert len(storage_elements) == self.sell_files_with_storage
+
+        #!SECTION 
+        
+    def test_panel_rent_filter(self) -> None:
+        self.driver.get(self.live_server_url)
+        self.driver.implicitly_wait(10)
+        #SECTION - login
+        self.driver.find_element(By.ID, 'agents').click()
+        self.driver.find_element(By.ID, 'username').send_keys('test')
+        self.driver.find_element(By.ID, 'password').send_keys('test')
+        self.driver.find_element(By.ID, 'submit').click()
+        #!SECTION
+        #SECTION - filter
+        self.driver.find_element(By.XPATH, '//*[@id="file_type"]').click()
+        self.driver.find_element(By.XPATH, '//*[@id="rent"]').click()
+        self.driver.implicitly_wait(5)
+        self.driver.find_element(By.ID, 'up_price').send_keys(700)
+        self.driver.find_element(By.ID, 'rent_price').send_keys(7)
+        self.driver.find_element(By.ID, 'submit').click()
+        price_elements = self.driver.find_elements(By.XPATH, '//*[@id="file"]/div/p[2]')
+        price_elements = [float(element.text.replace('ودیعه: ', '')) for element in price_elements]
+        assert any(price <= 700 for price in price_elements)
+
+        price_elements = self.driver.find_elements(By.XPATH, '//*[@id="file"]/div/p[3]')
+        price_elements = [float(element.text.replace('اجاره: ', '')) for element in price_elements]
+        assert any(price <= 700 for price in price_elements)
+
+
+        self.driver.find_element(By.ID, 'm2').send_keys(75)
+        self.driver.find_element(By.ID, 'submit').click()
+        m2_elements = self.driver.find_elements(By.XPATH, '//*[@id="file"]/div/p[1]')
+        m2_elements = [float(element.text.replace('متراژ: ', '')) for element in m2_elements]
+        assert any(m2 >= 75 for m2 in m2_elements)
+        
+
+        self.driver.find_element(By.ID, 'year').send_keys(1390)
+        self.driver.find_element(By.ID, 'submit').click()
+        year_elements = self.driver.find_elements(By.XPATH, '//*[@id="file"]/div/p[3]')
+        year_elements = [float(element.text.replace('سال ساخت: ', '')) for element in year_elements]
+        assert any(year >= 1390 for year in year_elements)
+
+        self.driver.find_element(By.ID, 'bedroom').send_keys(1)
+        self.driver.find_element(By.ID, 'submit').click()
+        bedroom_elements = self.driver.find_elements(By.XPATH, '//*[@id="file"]/div/p[5]')
+        bedroom_elements = [float(element.text.replace('تعداد اتاق خواب: ', '')) for element in bedroom_elements]
         assert any(bedroom >= 1 for bedroom in bedroom_elements)
 
         self.driver.find_element(By.ID, 'parking').click()
@@ -159,8 +220,8 @@ class ListingViewsTest(SeleniumTestCase):
         self.driver.find_element(By.ID, 'submit').click()
         #!SECTION
         #SECTION - filter
-        self.driver.find_element(By.XPATH, '//*[@id="file_type"]').click()
-        self.driver.find_element(By.XPATH, '//*[@value="rent"]').click()
+        self.driver.find_element(By.XPATH, '//*[@id="filter_file_type"]').click()
+        self.driver.find_element(By.XPATH, '//*[@value="pk_rent"]').click()
         self.driver.find_element(By.ID, 'pk').send_keys(3)
         self.driver.find_element(By.ID, 'pk_submit').click()
         #!SECTION
