@@ -217,7 +217,7 @@ class FileViewsTest(SeleniumTestCase):
         assert 'نام مالک: updated' in elements
         assert 'شماره مالک: updated' in elements
         assert 'ودیعه: 500' in elements
-        assert 'اجاره: 5' in elements
+        assert 'اجاره: 5.0' in elements
         assert 'متراژ: 88' in elements
         assert 'سال ساخت: 1402' in elements
         assert 'طبقه: 3' in elements

@@ -17,6 +17,7 @@ class BuyCustomer(models.Model):
     budget = models.IntegerField()
     m2 = models.IntegerField(null=True)
     year = models.IntegerField(null=True)
+    bedroom = models.IntegerField(null=True)
     added_by = models.ForeignKey(settings.AUTH_USER_MODEL,
                                  verbose_name=("added to site by "),
                                  on_delete=models.DO_NOTHING,
@@ -40,15 +41,18 @@ class RentCustomer(models.Model):
         LAND = 'L', 'زمین و کلنگی'
         STORE = 'S', 'مغازه و غرفه'
         VILA = 'H', 'خانه و ویلا'
+
     class Meta:
         ordering = ['-created']
+
     customer_name = models.CharField(max_length=150)
     customer_phone = models.CharField(max_length=12)
     type = models.CharField(choices=Types.choices, max_length=1,default=Types.APARTEMANT)
-    up_budget = models.FloatField()
+    up_budget = models.IntegerField()
     rent_budget = models.FloatField()
     m2 = models.IntegerField(null=True)
     year = models.IntegerField(null=True)
+    bedroom = models.IntegerField(null=True)
     added_by = models.ForeignKey(settings.AUTH_USER_MODEL,
                                  verbose_name=("added to site by "),
                                  on_delete=models.DO_NOTHING,

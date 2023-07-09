@@ -25,7 +25,6 @@ class Sell(models.Model):
     elevator = models.BooleanField(default=True)
     storage = models.BooleanField(default=True)
     parking = models.BooleanField(default=True)
-    # pictures = models.ImageField(upload_to='pictures', blank=True)
     type = models.CharField(max_length=1, choices=Types.choices, default=Types.APARTEMANT)
     added_by = models.ForeignKey(settings.AUTH_USER_MODEL,
                                  verbose_name=("added to site by "),
@@ -76,7 +75,7 @@ class Rent(models.Model):
     owner_phone = models.CharField(max_length=12)
     address = models.TextField()
     m2 = models.IntegerField()
-    price_up = models.FloatField()
+    price_up = models.IntegerField()
     price_rent = models.FloatField()
     year = models.IntegerField()
     floor = models.IntegerField()

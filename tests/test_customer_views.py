@@ -23,7 +23,7 @@ class CustomerViewsTest(SeleniumTestCase):
         self.driver.implicitly_wait(10)
         self.driver.find_element(By.ID, 'budget').send_keys(6000)
         self.driver.find_element(By.ID, 'm2').send_keys(80)
-        self.driver.find_element(By.ID, 'bedroom').send_keys(80)
+        self.driver.find_element(By.ID, 'bedroom').send_keys(2)
         self.driver.find_element(By.ID, 'year').send_keys(1390)
         self.driver.find_element(By.ID, 'floor').send_keys(4)
         self.driver.find_element(By.ID, 'customer_phone').send_keys('تست')
@@ -48,6 +48,7 @@ class CustomerViewsTest(SeleniumTestCase):
         assert 'متراژ: 80' in elements
         assert 'بودجه: 6000' in elements
         assert 'سال ساخت: 1390' in elements
+        assert 'اتاق خواب: 2' in elements
         # assert 'طبقه: 4' in elements
         
         #!SECTION
@@ -61,7 +62,7 @@ class CustomerViewsTest(SeleniumTestCase):
         self.driver.find_element(By.ID, 'm2').send_keys(50)
         
         self.driver.find_element(By.ID, 'bedroom').clear()
-        self.driver.find_element(By.ID, 'bedroom').send_keys(50)
+        self.driver.find_element(By.ID, 'bedroom').send_keys(1)
         
         self.driver.find_element(By.ID, 'year').clear()
         self.driver.find_element(By.ID, 'year').send_keys(1399)
@@ -93,7 +94,7 @@ class CustomerViewsTest(SeleniumTestCase):
         assert 'متراژ: 50' in elements
         assert 'بودجه: 5000' in elements
         assert 'سال ساخت: 1399' in elements
-        # assert 'طبقه: 4' in elements
+        assert 'اتاق خواب: 1' in elements
         
         #!SECTION
         # SECTION - deleting file
@@ -121,7 +122,7 @@ class CustomerViewsTest(SeleniumTestCase):
         self.driver.find_element(By.XPATH, '//*[@value="rent"]').click()
         time.sleep(2)
         self.driver.find_element(By.ID, 'up_budget').send_keys(600)
-        self.driver.find_element(By.ID, 'rent_budget').send_keys(5)
+        self.driver.find_element(By.ID, 'rent_budget').send_keys(5.5)
         self.driver.find_element(By.ID, 'm2').send_keys(80)
         self.driver.find_element(By.ID, 'bedroom').send_keys(2)
         self.driver.find_element(By.ID, 'year').send_keys(1390)
@@ -145,8 +146,9 @@ class CustomerViewsTest(SeleniumTestCase):
         assert 'شماره مشتری: تست' in elements
         assert 'متراژ: 80' in elements
         assert 'ودیعه: 600' in elements
-        assert 'اجاره: 5' in elements
+        assert 'اجاره: 5.5' in elements
         assert 'سال ساخت: 1390' in elements
+        assert 'اتاق خواب: 2' in elements
         # assert 'طبقه: 4' in elements
         
         #!SECTION
@@ -193,8 +195,9 @@ class CustomerViewsTest(SeleniumTestCase):
         assert 'شماره مشتری: updated' in elements
         assert 'متراژ: 50' in elements
         assert 'ودیعه: 500' in elements
-        assert 'اجاره: 6' in elements
+        assert 'اجاره: 6.0' in elements
         assert 'سال ساخت: 1399' in elements
+        assert 'اتاق خواب: 1' in elements
         # assert 'طبقه: 3' in elements
         
         #!SECTION
