@@ -18,6 +18,7 @@ class BuyCustomer(models.Model):
     m2 = models.IntegerField(null=True)
     year = models.IntegerField(null=True)
     bedroom = models.IntegerField(null=True)
+    vahedha = models.IntegerField(null=True)
     added_by = models.ForeignKey(settings.AUTH_USER_MODEL,
                                  verbose_name=("added to site by "),
                                  on_delete=models.DO_NOTHING,
@@ -53,6 +54,7 @@ class RentCustomer(models.Model):
     m2 = models.IntegerField(null=True)
     year = models.IntegerField(null=True)
     bedroom = models.IntegerField(null=True)
+    vahedha = models.IntegerField(null=True)
     added_by = models.ForeignKey(settings.AUTH_USER_MODEL,
                                  verbose_name=("added to site by "),
                                  on_delete=models.DO_NOTHING,

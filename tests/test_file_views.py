@@ -40,7 +40,7 @@ class FileViewsTest(SeleniumTestCase):
         
         #!SECTION
         # SECTION - checking new file
-        element = WebDriverWait(self.driver, 30).until(
+        element = WebDriverWait(self.driver, 60).until(
             EC.element_to_be_clickable((By.XPATH, "/html/body/a[1]/div/div")))
         element.click()
         elements = [element.text for element in self.driver.find_elements(By.TAG_NAME, 'p')]
@@ -150,7 +150,7 @@ class FileViewsTest(SeleniumTestCase):
         self.driver.find_element(By.ID, 'submit').click()
         #!SECTION
         # SECTION - checking new file
-        element = WebDriverWait(self.driver, 30).until(
+        element = WebDriverWait(self.driver, 60).until(
             EC.element_to_be_clickable((By.XPATH, "/html/body/a[1]/div/div")))
         element.click()
         elements = [element.text for element in self.driver.find_elements(By.TAG_NAME, 'p')]

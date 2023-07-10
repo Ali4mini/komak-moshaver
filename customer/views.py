@@ -22,6 +22,10 @@ class NewCustomer(View):
             data['m2'] = 0
         if data['year'] == '':
             data['year'] = 0
+        if data['bedroom'] == '':
+            data['bedroom'] = 0
+        if data['vahedha'] == '':
+            data['vahedha'] = 0
 
         try:
             data['elevator']
@@ -46,6 +50,8 @@ class NewCustomer(View):
                                                                   budget=data['budget'],
                                                                   m2=data['m2'],
                                                                   year=data['year'],
+                                                                  bedroom=data['bedroom'],
+                                                                  vahedha=data['vahedha'],
                                                                   elevator=data['elevator'],
                                                                   parking=data['parking'],
                                                                   storage=data['storage'],
@@ -63,6 +69,8 @@ class NewCustomer(View):
                                                                     rent_budget=data['rent_budget'],
                                                                     m2=data['m2'],
                                                                     year=data['year'],
+                                                                    bedroom=data['bedroom'],
+                                                                    vahedha=data['vahedha'],
                                                                     elevator=data['elevator'],
                                                                     parking=data['parking'],
                                                                     storage=data['storage'],

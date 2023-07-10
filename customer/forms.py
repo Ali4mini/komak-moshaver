@@ -29,6 +29,8 @@ class SellUpdateForm(forms.ModelForm):
             'budget',
             'm2',
             'year',
+            'bedroom',
+            'vahedha',
             'customer_name',
             'customer_phone',
             'elevator',
@@ -42,6 +44,8 @@ class SellUpdateForm(forms.ModelForm):
         self.fields['budget'].required = False
         self.fields['m2'].required = False
         self.fields['year'].required = False
+        self.fields['bedroom'].required = False
+        self.fields['vahedha'].required = False
         self.fields['customer_name'].required = False
         self.fields['customer_phone'].required = False
         self.fields['elevator'].required = False
@@ -57,6 +61,8 @@ class RentUpdateForm(forms.ModelForm):
             'rent_budget',
             'm2',
             'year',
+            'bedroom',
+            'vahedha',
             'customer_name',
             'customer_phone',
             'elevator',
@@ -71,6 +77,8 @@ class RentUpdateForm(forms.ModelForm):
         self.fields['rent_budget'].required = False
         self.fields['m2'].required = False
         self.fields['year'].required = False
+        self.fields['bedroom'].required = False
+        self.fields['vahedha'].required = False
         self.fields['customer_name'].required = False
         self.fields['customer_phone'].required = False
         self.fields['elevator'].required = False

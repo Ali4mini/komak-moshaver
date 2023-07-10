@@ -145,7 +145,7 @@ class ListingViewsTest(SeleniumTestCase):
         assert any(price <= 700 for price in price_elements)
 
         price_elements = self.driver.find_elements(By.XPATH, '//*[@id="file"]/div/p[3]')
-        price_elements = [int(element.text.replace('اجاره: ', '')) for element in price_elements]
+        price_elements = [float(element.text.replace('اجاره: ', '')) for element in price_elements]
         assert any(price <= 7 for price in price_elements)
 
 
@@ -202,7 +202,7 @@ class ListingViewsTest(SeleniumTestCase):
         #!SECTION
         #SECTION - checking
         file_id = self.driver.find_element(By.ID, 'file_id')
-        assert file_id == 3
+        assert file_id.text == '3'
         
     def test_rent_pk_filter(self) -> None:
         self.driver.get(self.live_server_url)
@@ -215,11 +215,11 @@ class ListingViewsTest(SeleniumTestCase):
         #!SECTION
         #SECTION - filter
         self.driver.find_element(By.XPATH, '//*[@id="filter_file_type"]').click()
-        self.driver.find_element(By.XPATH, '//*[@value="pk_rent"]').click()
+        self.driver.find_element(By.ID, 'pk_rent').click()
         self.driver.find_element(By.ID, 'pk').send_keys(3)
         self.driver.find_element(By.ID, 'pk_submit').click()
         #!SECTION
         #SECTION - checking
         file_id = self.driver.find_element(By.ID, 'file_id')
-        assert file_id == 3
+        assert file_id.text == '3'
         

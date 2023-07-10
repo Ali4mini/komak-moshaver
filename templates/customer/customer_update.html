@@ -48,7 +48,7 @@ New customer
                   </label>
                 </div>
                 <div class="relative mx-3" data-te-input-wrapper-init>
-                  <input type="number" value="{{customer.rent_budget}}"
+                  <input type="number" step='0.5' min='0' value="{{customer.rent_budget}}"
                     class="peer w-full px-3 rounded-lg shadow border h-10 border-gray-300  placeholder-transparent
                   focus:outline-none"
                     id="rent_budget" name="rent_budget" placeholder="اجاره" />
@@ -97,6 +97,15 @@ New customer
                   peer-focus:text-gray-500 peer-focus:-top-3.5 peer-focus:bg-white peer-focus:px-2">
                     سال ساخت
                 </label>
+            </div>
+            <div class="relative mx-3">
+              <input type="number" value="{{customer.vahedha}}" class="peer w-full px-3 rounded-lg shadow border h-10 border-gray-300  placeholder-transparent
+                        focus:outline-none" id="vahedha" name="vahedha" placeholder="سال ساخت" />
+              <label for="year" class="absolute text-gray-500 right-4 text-sm -top-3.5 px-2 bg-white-200 transition-all
+                        peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-placeholder-shown:bg-transparent
+                        peer-focus:text-gray-500 peer-focus:-top-3.5 peer-focus:bg-white peer-focus:px-2">
+                تعداد واحد
+              </label>
             </div>
             <div class="relative mx-3" data-te-input-wrapper-init>
                 <input type="number" value="{{customer.floor}}"
