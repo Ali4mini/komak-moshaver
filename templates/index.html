@@ -7,7 +7,7 @@ home
 {% block content %}
 <div id="filter_pk" class="flex border-2 w-1/2 rounded-xl mx-4 mt-20 py-3 h-auto shadow">
   <p class="absolute text-gray-500 right-4 text-sm -top-3.5 px-2 bg-white-200">filter</p>
-  <form action="pk/" method="get" class="flex flex-row gap-3 flex-wrap w-full basis-full">
+  <form action="{% url 'listing:pk_filter' %}" method="get" class="flex flex-row gap-3 flex-wrap w-full basis-full">
     <select name="file_type" id="filter_file_type"
       class="bg-gray-50 border focus:ring-blue-300 text-center focus:border-blue-300 shadow-md mx-3 my-3 w-32 h-10 rounded-lg">
       <option id="pk_sell" value="sell">فروش</option>

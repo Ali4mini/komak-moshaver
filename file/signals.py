@@ -1,104 +1,38 @@
-from django.db.models.signals import post_save
-from django.forms.models import model_to_dict
-from django.dispatch import receiver
-from .models import Sell, Rent
-from customer.models import BuyCustomer, RentCustomer
-from requests import Response
-import requests
+# from django.db.models.signals import post_save
+# from django.forms.models import model_to_dict
+# from django.dispatch import receiver
+# from .tasks import welcome_message, match_customers
+# from .models import Sell, Rent
 
-#SECTION - Tasks
-def welcome_message(instance) -> Response:
-    data = model_to_dict(instance=instance)
 
-    template = f'''مشتری عزیز شما با موفقیت به سامانه املاک ولیعصر اضافه شدید'''
-    
-    message_data = {'from':'50004001845778', 'to':[data['owner_phone']], 'text':template, 'udh':''}
-    response = requests.post('https://console.melipayamak.com/api/send/advanced/b59dd6ca1de047aabf4416be63da2c01',
-                             json=message_data)
-    return response
+# #SECTION - Signals
+# @receiver(signal=post_save, sender=Sell)
+# def new_sell_file_signal(sender, instance, created, *args, **kwargs):
+#     data = model_to_dict(instance, exclude=['image1','image2','image3','image4','image5',])
 
-def match_customers(instance, file_type) -> bool:
-    data = model_to_dict(instance=instance)
-    if data['parking'] == True:
-        data['parking'] = 'دارد'
-    else: 
-        data['parking'] = 'ندارد'
-    if data['elevator'] == True:
-        data['elevator'] = 'دارد'
-    else: 
-        data['elevator'] = 'ندارد'
-    if data['storage'] == True:
-        data['storage'] = 'دارد'
-    else: 
-        data['storage'] = 'ندارد'
-
-    if file_type == 'sell':
-        sell_template = f'''مشتری عزیز یک فایل جدید برای شما پیدا شد
-        قیمت:{data['price']}
-        متراژ:{data['m2']}
-        آدرس:{data['address']}
-        طبقه:{data['floor']}
-        پارکینگ:{data['parking']}
-        آسانسور:{data['elevator']}
-        انباری:{data['storage']}'''
-        customers = BuyCustomer.objects.filter(budget__gte=data['price'],
-                                               m2__lte=data['m2'],).all()
-        customers = [customer.customer_phone for customer in customers]
-        message_data = {'from':'50004001845778', 'to':customers, 'text':sell_template, 'udh':''}
-        response = requests.post('https://console.melipayamak.com/api/send/advanced/b59dd6ca1de047aabf4416be63da2c01', 
-                                 json=message_data)
-        print(response)
-    elif file_type == 'rent':
+#     if instance.added_by != 'listing_bot' and created:
+#         welcome_message.delay(data=data)
+#         match_customers.delay(data=data, file_type='sell')
+       
+#     elif instance.added_by == 'listing_bot' and not created:
+#         try:
+#             welcome_message(instance=instance)
+#             match_customers(instance=instance, file_type='sell')
+#         except: 
+#             pass
         
-        rent_template = f'''مشتری عزیز یک فایل جدید برای شما پیدا شد
-        ودیعه:{data['price_up']}
-        اجاره:{data['price_rent']}
-        متراژ:{data['m2']}
-        آدرس:{data['address']}
-        طبقه:{data['floor']}
-        پارکینگ:{data['parking']}
-        آسانسور:{data['elevator']}
-        انباری:{data['storage']}'''
-        customers = RentCustomer.objects.filter(up_budget__gte=data['price_up'],
-                                                rent_budget__gte=data['price_rent'],
-                                                m2__lte=data['m2'])
-        customers = [customer.customer_phone for customer in customers]
-        message_data = {'from':'50004001845778', 'to':customers, 'text':rent_template, 'udh':''}
-        response = requests.post('https://console.melipayamak.com/api/send/advanced/b59dd6ca1de047aabf4416be63da2c01', 
-                                 json=message_data)
-        print(response)
-#!SECTION
+# @receiver(signal=post_save, sender=Rent)
+# def new_rent_file_signal(sender, instance, created, *args, **kwargs):
+#     data = model_to_dict(instance, exclude=['image1','image2','image3','image4','image5',])
 
+#     if instance.added_by != 'listing_bot' and created:
+#         welcome_message.delay(data=data)
+#         match_customers.delay(data=data, file_type='rent')
 
-
-#SECTION - Signals
-@receiver(signal=post_save, sender=Sell)
-def new_sell_file_signal(sender, instance, created, *args, **kwargs):
-    if instance.added_by != 'listing_bot' and created:
-        try:
-            welcome_message(instance=instance)
-            match_customers(instance=instance, file_type='sell')
-        except: 
-            pass
-    elif instance.added_by == 'listing_bot' and not created:
-        try:
-            welcome_message(instance=instance)
-            match_customers(instance=instance, file_type='sell')
-        except: 
-            pass
-        
-@receiver(signal=post_save, sender=Rent)
-def new_rent_file_signal(sender, instance, created, *args, **kwargs):
-    if instance.added_by != 'listing_bot' and created:
-        try:
-            welcome_message(instance=instance)
-            match_customers(instance=instance, file_type='rent')
-        except: 
-            pass
-    elif instance.added_by == 'listing_bot' and not created:
-        try:
-            welcome_message(instance=instance)
-            match_customers(instance=instance, file_type='rent')
-        except: 
-            pass
-#!SECTION
+#     elif instance.added_by == 'listing_bot' and not created:
+#         try:
+#             welcome_message(instance=instance)
+#             match_customers(instance=instance, file_type='rent')
+#         except: 
+#             pass
+# #!SECTION
