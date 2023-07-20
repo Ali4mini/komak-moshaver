@@ -96,6 +96,7 @@ class BuyComment(models.Model):
 
     def get_absolute_url(self):
         return reverse("sell_comment", kwargs={"pk": self.pk})
+        
 class RentComment(models.Model):
     file = models.ForeignKey("RentCustomer",
                              on_delete=models.CASCADE,

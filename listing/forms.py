@@ -31,3 +31,4 @@ class SellFilter(forms.ModelForm):
         self.fields['m2'].widget.attrs['class'] = 'input'
         self.fields['year'].widget.attrs['class'] = 'input'
         self.fields['parking'].widget.attrs['class'] = 'checkbox'
+
