@@ -9,5 +9,6 @@ urlpatterns = [
     path("rent/new/", views.NewRentFile.as_view(), name="new_rent_file"),
     path('sell/<int:pk>/', views.SellFileDetails.as_view(), name='sell_file_detail'),
     path('rent/<int:pk>/', views.RentFileDetails.as_view(), name='rent_file_detail'),
-
+    path('sell/<int:pk>/send/', views.SellSendInfo.as_view(), name='sell_send_info'),
+    path('rent/<int:pk>/send/', views.SellSendInfo.as_view(), name='rent_send_info'),
 ]

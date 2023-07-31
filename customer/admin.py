@@ -5,12 +5,12 @@ from .models import BuyCustomer, RentCustomer
 
 @admin.register(BuyCustomer)
 class SellAdmin(admin.ModelAdmin):
-    list_display = ['type','customer_name', 'customer_phone', 'budget', ]
+    list_display = ['property_type','customer_name', 'customer_phone', 'budget', ]
     list_filter = ['budget', ]
 
 
 
 @admin.register(RentCustomer)
 class RentAdmin(admin.ModelAdmin):
-    list_display = ['type','customer_name', 'customer_phone', 'up_budget', 'rent_budget']
+    list_display = ['property_type','customer_name', 'customer_phone', 'up_budget', 'rent_budget']
     list_filter = ['up_budget', 'rent_budget']

@@ -1,0 +1,212 @@
+import FloatLabel from "../common/input";
+import Checkbox from "../common/checkbox";
+import { useState } from "react";
+import api from "../common/api";
+import { useNavigate } from "react-router-dom";
+
+const NewFile = () => {
+  const [fileType, setFileType] = useState("sell");
+  const [propertyType, setPropertyType] = useState("A");
+  const [address, setAddress] = useState(null);
+  const [m2, setM2] = useState(null);
+  const [year, setYear] = useState(null);
+  const [bedroom, setBedroom] = useState(null);
+  const [price, setPrice] = useState(null);
+  const [upPrice, setUpPrice] = useState(null);
+  const [rentPrice, setRentPrice] = useState(null);
+  const [floor, setFloor] = useState(null);
+  const [floors, setFloors] = useState(null);
+  const [units, setUnits] = useState(null);
+  const [parking, setParking] = useState(false);
+  const [elevator, setElevator] = useState(false);
+  const [storage, setStorage] = useState(false);
+  const [motorSpot, setMotorSpot] = useState(false);
+  const [ownerName, setOwnerName] = useState(null);
+  const [ownerPhone, setOwnerPhone] = useState(null);
+  const navigate = useNavigate();
+
+  let fileEntery = {
+    file_type: fileType,
+    property_type: propertyType,
+    address: address,
+    m2: m2,
+    year: year,
+    bedroom: bedroom,
+    price: price,
+    price_up: upPrice,
+    price_rent: rentPrice,
+    floor: floor,
+    tabaghat: floors,
+    vahedha: units,
+    parking: parking,
+    elevator: elevator,
+    storage: storage,
+    parking_motor: motorSpot,
+    owner_name: ownerName,
+    owner_phone: ownerPhone,
+  };
+
+  if (fileType === "sell") {
+    delete fileEntery.price_up;
+    delete fileEntery.price_rent;
+  } else if (fileType === "rent") {
+    delete fileEntery.price;
+  }
+
+  const create = (fileEntery) => {
+    console.log(fileEntery);
+    api
+      .post(`file/${fileEntery.file_type}/new/`, fileEntery)
+      .then((response) => console.log(response.data))
+      .catch((error) => console.log(error.data));
+    navigate("/", { replace: true });
+  };
+  return (
+    <div className="block border shadow-lg rounded-xl bg-white mx-4 px-4 py-2 my-2">
+      <div className="flex flex-col gap-5">
+        <div className="flex basis-full flex-row gap-2">
+          <select
+            name="file_type"
+            id="file_type"
+            onChange={(e) => {
+              setFileType(e.target.value);
+            }}
+            className="bg-gray-50 border focus:ring-blue-300 text-center focus:border-blue-300 shadow-md w-32 h-10 rounded-lg"
+          >
+            <option id="sell" value="sell">
+              فروش
+            </option>
+
+            <option id="rent" value="rent">
+              اجاره
+            </option>
+          </select>
+          <select
+            name="property_type"
+            id="property_type"
+            onChange={(e) => {
+              setPropertyType(e.target.value);
+            }}
+            className="bg-gray-50 border focus:ring-blue-300 text-center focus:border-blue-300 shadow-md  w-32 h-10 rounded-lg"
+          >
+            <option value="A">آپارتمان</option>
+            <option value="L">زمین</option>
+            <option value="S">مغازه</option>
+            <option value="H">خانه و ویلا</option>
+          </select>
+        </div>
+        <div className="grid grid-cols-1  w-full ">
+          <FloatLabel
+            type="text"
+            name={"address"}
+            label={"آدرس"}
+            setter={setAddress}
+            isRequired={true}
+          />
+        </div>
+        <div className="grid md:grid-cols-6 w-full flex-wrap gap-2">
+          {fileType === "sell" ? (
+            <FloatLabel
+              type="number"
+              name={"price"}
+              label={"قیمت"}
+              setter={setPrice}
+              isRequired={true}
+            />
+          ) : (
+            <>
+              <FloatLabel
+                type="number"
+                name={"upPrice"}
+                label={"ودیعه"}
+                setter={setUpPrice}
+                isRequired={true}
+              />
+              <FloatLabel
+                type="number"
+                name={"rentPrice"}
+                label={"اجاره"}
+                setter={setRentPrice}
+                isRequired={true}
+              />
+            </>
+          )}
+
+          <FloatLabel
+            type="number"
+            name={"m2"}
+            label={"متراژ"}
+            setter={setM2}
+            isRequired={true}
+          />
+          <FloatLabel
+            type="number"
+            name={"year"}
+            label={"سال ساخت"}
+            setter={setYear}
+            isRequired={true}
+          />
+          <FloatLabel
+            type="number"
+            name={"bedroom"}
+            label={"اتاق خواب"}
+            setter={setBedroom}
+            isRequired={true}
+          />
+
+          <FloatLabel
+            type="number"
+            name={"floor"}
+            label={"طبقه"}
+            setter={setFloor}
+            isRequired={true}
+          />
+          <FloatLabel
+            type="number"
+            name={"floors"}
+            label={"طبقات"}
+            setter={setFloors}
+            isRequired={true}
+          />
+          <FloatLabel
+            type="number"
+            name={"units"}
+            label={"واحد ها"}
+            setter={setUnits}
+            isRequired={true}
+          />
+        </div>
+        <div className="flex basis-full flex-row gap-2">
+          <FloatLabel
+            type="text"
+            name={"ownerPhone"}
+            label={"شماره مالک"}
+            setter={setOwnerPhone}
+            isRequired={true}
+          />
+          <FloatLabel
+            type="text"
+            name={"ownerName"}
+            label={"نام مالک"}
+            setter={setOwnerName}
+            isRequired={true}
+          />
+        </div>
+        <div className="flex basis-full gap-5">
+          <Checkbox label="پارکینگ" name="parking" setter={setParking} />
+          <Checkbox label="آسانسور" name="elevator" setter={setElevator} />
+          <Checkbox label="انباری" name="storage" setter={setStorage} />
+          <Checkbox label="پارک موتور" name="motorSpot" setter={setMotorSpot} />
+        </div>
+        <button
+          onClick={() => create(fileEntery)}
+          className="basis-full rounded-lg bg-blue-300 hover:bg-blue-400 py-1.5 border w-full bottom-0"
+        >
+          ثبت
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default NewFile;

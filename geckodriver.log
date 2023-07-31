@@ -55668,3 +55668,131 @@ console.warn: LoginRecipes: "Falling back to a synchronous message for: http://l
 console.warn: LoginRecipes: "Falling back to a synchronous message for: http://localhost:41539."
 console.warn: LoginRecipes: "Falling back to a synchronous message for: http://localhost:41539."
 1688983034116	Marionette	INFO	Stopped listening on port 42167
+1690647865351	geckodriver	INFO	Listening on 127.0.0.1:56413
+1690647867419	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-headless" "--remote-debugging-port" "39489" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofileQK8eOl"
+*** You are running in headless mode.
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1690647871810	Marionette	INFO	Marionette enabled
+1690647871838	Marionette	INFO	Listening on port 39695
+Read port: 39695
+WebDriver BiDi listening on ws://127.0.0.1:39489
+1690647872810	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.error: ({})
+DevTools listening on ws://127.0.0.1:39489/devtools/browser/52d0a705-5dd1-4bf0-9034-8330b3d76b3e
+console.error: (new TypeError("linkMap is undefined", "resource://gre/modules/NewTabUtils.sys.mjs", 2009))
+console.error: "update.locale" " file doesn't exist in either the application or GRE directories"
+1690647981298	geckodriver	INFO	Listening on 127.0.0.1:43541
+1690647981610	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-headless" "--remote-debugging-port" "34825" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofileZUul56"
+*** You are running in headless mode.
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1690647982701	Marionette	INFO	Marionette enabled
+1690647982706	Marionette	INFO	Listening on port 41515
+Read port: 41515
+WebDriver BiDi listening on ws://127.0.0.1:34825
+1690647982881	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.error: ({})
+DevTools listening on ws://127.0.0.1:34825/devtools/browser/76fc346a-8a14-4075-b4ec-ba059f9f4ae6
+console.error: RemoteSecuritySettings.jsm: 
+  Failed to download attachment: DownloadError: Could not download https://firefox-settings-attachments.cdn.mozilla.net/security-state-staging/intermediates/a1ed91a3-f011-4b67-80e2-2d9cda92eccc.pem
+console.error: "update.locale" " file doesn't exist in either the application or GRE directories"
+1690648035729	geckodriver	INFO	Listening on 127.0.0.1:34399
+1690648036220	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-headless" "--remote-debugging-port" "59273" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofilegioF3r"
+*** You are running in headless mode.
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1690648038442	Marionette	INFO	Marionette enabled
+1690648038449	Marionette	INFO	Listening on port 41049
+Read port: 41049
+WebDriver BiDi listening on ws://127.0.0.1:59273
+1690648038798	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.error: ({})
+DevTools listening on ws://127.0.0.1:59273/devtools/browser/8f3978a9-3301-47df-bfe2-80249409913f
+console.error: "update.locale" " file doesn't exist in either the application or GRE directories"
+1690648173983	geckodriver	INFO	Listening on 127.0.0.1:51221
+1690648174850	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-headless" "--remote-debugging-port" "42687" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofilemomVNY"
+*** You are running in headless mode.
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1690648176811	Marionette	INFO	Marionette enabled
+1690648176821	Marionette	INFO	Listening on port 38311
+Read port: 38311
+WebDriver BiDi listening on ws://127.0.0.1:42687
+1690648177039	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.error: ({})
+DevTools listening on ws://127.0.0.1:42687/devtools/browser/ffca7915-f3f8-4a46-b27b-520e1498ce0d
+console.error: "update.locale" " file doesn't exist in either the application or GRE directories"
+JavaScript warning: , line 0: WebGL warning: texImage: Alpha-premult and y-flip are deprecated for non-DOM-Element uploads.
+JavaScript warning: , line 0: WebGL warning: texImage: Alpha-premult and y-flip are deprecated for non-DOM-Element uploads.
+JavaScript warning: , line 0: WebGL warning: texImage: Alpha-premult and y-flip are deprecated for non-DOM-Element uploads.
+JavaScript warning: , line 0: WebGL warning: texImage: Alpha-premult and y-flip are deprecated for non-DOM-Element uploads.
+JavaScript warning: , line 0: WebGL warning: texImage: Alpha-premult and y-flip are deprecated for non-DOM-Element uploads.
+JavaScript warning: , line 0: WebGL warning: texImage: Alpha-premult and y-flip are deprecated for non-DOM-Element uploads.
+JavaScript warning: , line 0: WebGL warning: texImage: Alpha-premult and y-flip are deprecated for non-DOM-Element uploads.
+JavaScript warning: , line 0: WebGL warning: texImage: Alpha-premult and y-flip are deprecated for non-DOM-Element uploads.
+JavaScript warning: , line 0: WebGL warning: texImage: Alpha-premult and y-flip are deprecated for non-DOM-Element uploads.
+JavaScript warning: , line 0: WebGL warning: texImage: Alpha-premult and y-flip are deprecated for non-DOM-Element uploads.
+JavaScript warning: , line 0: WebGL warning: texImage: Alpha-premult and y-flip are deprecated for non-DOM-Element uploads.
+JavaScript warning: , line 0: WebGL warning: texImage: Alpha-premult and y-flip are deprecated for non-DOM-Element uploads.
+JavaScript warning: , line 0: WebGL warning: texImage: Alpha-premult and y-flip are deprecated for non-DOM-Element uploads.
+JavaScript warning: , line 0: WebGL warning: texImage: Alpha-premult and y-flip are deprecated for non-DOM-Element uploads.
+JavaScript warning: , line 0: WebGL warning: texImage: Alpha-premult and y-flip are deprecated for non-DOM-Element uploads.
+JavaScript warning: , line 0: WebGL warning: texImage: Alpha-premult and y-flip are deprecated for non-DOM-Element uploads.
+JavaScript warning: , line 0: WebGL warning: texImage: Alpha-premult and y-flip are deprecated for non-DOM-Element uploads.
+JavaScript warning: , line 0: WebGL warning: texImage: Alpha-premult and y-flip are deprecated for non-DOM-Element uploads.
+JavaScript warning: , line 0: WebGL warning: texImage: Alpha-premult and y-flip are deprecated for non-DOM-Element uploads.
+console.error: RemoteSecuritySettings.jsm: 
+  Failed to download attachment: DownloadError: Could not download https://firefox-settings-attachments.cdn.mozilla.net/security-state-staging/intermediates/c13e4075-4455-4d13-b078-eb10f272dd6f.pem
+1690648401771	geckodriver	INFO	Listening on 127.0.0.1:54171
+1690648404468	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-headless" "--remote-debugging-port" "41827" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofileRWv26Q"
+*** You are running in headless mode.
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1690648407724	Marionette	INFO	Marionette enabled
+1690648407735	Marionette	INFO	Listening on port 46151
+Read port: 46151
+WebDriver BiDi listening on ws://127.0.0.1:41827
+1690648408744	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.error: ({})
+console.error: Region.sys.mjs: "Error fetching region" (new Error("TIMEOUT", "resource://gre/modules/Region.sys.mjs", 762))
+console.error: Region.sys.mjs: "Failed to fetch region" (new Error("TIMEOUT", "resource://gre/modules/Region.sys.mjs", 414))
+DevTools listening on ws://127.0.0.1:41827/devtools/browser/3d78371b-94af-446c-a08b-a3d7a0d29f03
+console.error: "update.locale" " file doesn't exist in either the application or GRE directories"
+1690648697347	geckodriver	INFO	Listening on 127.0.0.1:40865
+1690648699925	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-headless" "--remote-debugging-port" "51169" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofilewbLdnZ"
+*** You are running in headless mode.
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1690648706358	Marionette	INFO	Marionette enabled
+1690648706395	Marionette	INFO	Listening on port 46627
+Read port: 46627
+Read port: 46627
+Read port: 46627
+WebDriver BiDi listening on ws://127.0.0.1:51169
+1690648709437	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.error: ({})
+console.error: Region.sys.mjs: "Error fetching region" (new Error("TIMEOUT", "resource://gre/modules/Region.sys.mjs", 762))
+console.error: Region.sys.mjs: "Failed to fetch region" (new Error("TIMEOUT", "resource://gre/modules/Region.sys.mjs", 414))
+DevTools listening on ws://127.0.0.1:51169/devtools/browser/6d5ae2c2-a301-411b-b823-eb03e26e161a
+1690648735326	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "--remote-debugging-port" "35323" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofileA4CsDy"
+1690648732457	geckodriver	INFO	Listening on 127.0.0.1:48767
+console.error: "update.locale" " file doesn't exist in either the application or GRE directories"
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+ATTENTION: default value of option mesa_glthread overridden by environment.
+1690648742905	Marionette	INFO	Marionette enabled
+1690648742915	Marionette	INFO	Listening on port 46421
+Read port: 46421
+ATTENTION: default value of option mesa_glthread overridden by environment.
+WebDriver BiDi listening on ws://127.0.0.1:35323
+Read port: 46421
+1690648744191	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.error: Region.sys.mjs: "Error fetching region" (new Error("TIMEOUT", "resource://gre/modules/Region.sys.mjs", 762))
+console.error: Region.sys.mjs: "Failed to fetch region" (new Error("TIMEOUT", "resource://gre/modules/Region.sys.mjs", 414))

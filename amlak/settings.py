@@ -56,7 +56,10 @@ INSTALLED_APPS = [
     'django_extensions',
     'compressor',
     'rest_framework',
+    'corsheaders',
 ]
+
+SMS_API = 'https://console.melipayamak.com/api/send/advanced/b59dd6ca1de047aabf4416be63da2c01'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
@@ -68,7 +71,7 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=10),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=30),
     "ROTATE_REFRESH_TOKENS": False,
     "BLACKLIST_AFTER_ROTATION": False,
@@ -83,7 +86,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware",
 ]
+
+CORS_ORIGIN_ALLOW_ALL = True
 
 ROOT_URLCONF = 'amlak.urls'
 
@@ -180,3 +187,23 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # CELERY_TIMEZONE = "Iran/Tehran"
 CELERY_BROKER_URL = "redis://localhost:6379"
 CELERY_RESULT_BACKEND = "redis://localhost:6379"
+
+
+
+'''
+const FloatLabel = ({label, id, type, setter, className}) => {
+    return(
+        <div className="relative">
+            <input type={type} className="peer w-full px-3 rounded-lg shadow border h-10 border-gray-300  placeholder-transparent
+                  focus:outline-none" id={id} name={id} onChange={(e) => setter(e.target.value)} placeholder=" " />
+            <label htmlFor={id} className="absolute text-gray-500 right-4 text-sm -top-3.5 px-2 bg-white-200 transition-all
+                  peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-placeholder-shown:bg-transparent
+                  peer-focus:text-gray-500 peer-focus:-top-3.5 peer-focus:bg-white peer-focus:px-2">
+                    {label}
+            </label>
+        </div>
+    )
+}
+
+export default FloatLabel;
+'''

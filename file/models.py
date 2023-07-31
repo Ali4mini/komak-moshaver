@@ -25,7 +25,7 @@ class Sell(models.Model):
     elevator = models.BooleanField(default=True)
     storage = models.BooleanField(default=True)
     parking = models.BooleanField(default=True)
-    type = models.CharField(max_length=1, choices=Types.choices, default=Types.APARTEMANT)
+    property_type = models.CharField(max_length=1, choices=Types.choices, default=Types.APARTEMANT)
     added_by = models.ForeignKey(settings.AUTH_USER_MODEL,
                                  verbose_name=("added to site by "),
                                  on_delete=models.DO_NOTHING,
@@ -82,7 +82,7 @@ class Rent(models.Model):
     elevator = models.BooleanField(default=True)
     storage = models.BooleanField(default=True)
     parking = models.BooleanField()
-    type = models.CharField(max_length=1, choices=Types.choices, default=Types.APARTEMANT)
+    property_type = models.CharField(max_length=1, choices=Types.choices, default=Types.APARTEMANT)
     added_by = models.ForeignKey(settings.AUTH_USER_MODEL,
                                  verbose_name=("added to site by "),
                                  on_delete=models.DO_NOTHING,

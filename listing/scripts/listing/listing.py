@@ -244,6 +244,7 @@ class DivarBot:
                         
             def id_generator(link: str) -> str:
                 return link[-8:]
+
             temp_c = 0
             try:
                 while True:
@@ -262,14 +263,14 @@ class DivarBot:
                     time.sleep(180)
                     temp_c = temp_c + 1
                     if temp_c == 5:
-                        self.divar_obj.login('9199328173', cookie='9199328173.pkl')
-                        self.logger.warning('logged in with "9199328173"')
-                        current_cookie['cookie']= '9199328173'
+                        self.divar_obj.login('9373990837', cookie='9373990837.pkl')
+                        self.logger.warning('logged in with "9373990837"')
+                        current_cookie['cookie']= '9373990837'
+                    # if temp_c == 10:
+                    #     self.divar_obj.login('9212031469', cookie='9212031469.pkl')
+                    #     self.logger.warning('logged in with "9212031469"')
+                    #     current_cookie['cookie'] = '9212031469'
                     if temp_c == 10:
-                        self.divar_obj.login('9212031469', cookie='9212031469.pkl')
-                        self.logger.warning('logged in with "9212031469"')
-                        current_cookie['cookie'] = '9212031469'
-                    if temp_c == 15:
                         temp_c = 0
                         
                     if current_cookie['passed'] > 2:
@@ -351,9 +352,9 @@ class DivarBot:
                 self.logger.info(f'done => {post}  ')
 
         def run(self) -> None:
-            self.logger.warning('running Divar bot.')
-            self.last_24_files()
-            self.logger.info('done extracting last 24 files.')
-            self.scanner()
-            # self.cookie_saver('9212396361.pkl')
+            # self.logger.warning('running Divar bot.')
+            # self.last_24_files()
+            # self.logger.info('done extracting last 24 files.')
+            # self.scanner()
+            self.cookie_saver('9212396361.pkl')
 

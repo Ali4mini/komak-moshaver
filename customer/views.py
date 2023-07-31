@@ -14,7 +14,7 @@ from file.models import Sell, Rent
 from rest_framework.views import APIView
 from rest_framework import generics
 from rest_framework.response import Response
-from .serializers import BuyCustomerSerializer
+from .serializers import BuyCustomerSerializer, RentCustomerSerializer
 # Create your views here.
 
 #SECTION - API
@@ -32,7 +32,7 @@ class NewBuyCustomer(generics.CreateAPIView):
 
 class NewRentCustomer(generics.CreateAPIView):
     queryset = RentCustomer.objects.all()
-    serializer_class = BuyCustomerSerializer
+    serializer_class = RentCustomerSerializer
 
 
 #!SECTION

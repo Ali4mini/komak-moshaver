@@ -5,7 +5,7 @@
 {% endblock title%}
 
 {% block content %}
-<div id="filter" class="flex border-2 bg-white rounded-lg mx-4 mt-20 h-auto shadow-lg">
+<div id="details" class="flex border-2 bg-white rounded-lg mx-4 mt-20 h-auto shadow-lg">
     <div class="flex flex-col">
         <div class="flex flex-row-2 gap-20 my-3 px-4">
             <p>نوع فایل: {% if file_type == 'sell' %}فروش{% elif file_type == 'rent' %}اجاره{% endif %} </p>
@@ -80,4 +80,5 @@
        
 
     </div>
+</div>
     {% endblock content %}
