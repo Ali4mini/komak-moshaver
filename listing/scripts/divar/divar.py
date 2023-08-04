@@ -3,6 +3,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 import datetime
 import pickle
@@ -14,19 +16,23 @@ logging.basicConfig(filename="divar.log", filemode="w", format="%(asctime)s - %(
 
 
 class Divar:
-
     def __init__(self, headless=True):
-
         self.options = Options()
         self.options.headless = headless
         self.driver = webdriver.Firefox(options=self.options)
         self.terms_agreement_done = False
+        self.wait = WebDriverWait(self.driver, 10) # waits up to 10 seconds
         logging.warning("initialized Divar object")
 
-    # def __del__(self):
-    #     self.driver.close()
-    #     self.driver.quit()
-    #     logging.warning("deleting Divar object")
+    def exit(self):
+        self.driver.close()
+        self.driver.quit()
+        logging.warning("deleting Divar object")
+
+    def __del__(self):
+        self.driver.close()
+        self.driver.quit()
+        logging.warning("deleting Divar object")
 
     def __enter__(self):
         self.__init__()
@@ -60,39 +66,40 @@ class Divar:
         self.driver.get("https://divar.ir/s/tehran")
         time.sleep(3)
 
+    def load_cookie(self, path):
+        with open(path, 'rb') as cookiesfile:
+            cookies = pickle.load(cookiesfile)
+            for cookie in cookies:
+                self.driver.add_cookie(cookie)
+        logging.info(f"logged in with cookie: {path}")
+    
     def last_post(self,page):
         self.driver.get(page)
         self.driver.implicitly_wait(15)
-        post = self.driver.find_element(By.XPATH, "//a[@class='']")
-        return post.get_attribute("href")
+        post = self.driver.find_element(By.XPATH, "//a[starts-with(@href, '/v/')]")
+        return post.get_attribute('href')
         logging.info(f"returned first post of page: {page}")
+
 
     def all_posts(self,page):
         self.driver.get(page)
-        time.sleep(3)
-        posts = self.driver.find_elements(By.XPATH, "//a[@class='']")
+        posts = self.driver.find_elements(By.XPATH, "//a[starts-with(@href, '/v/')]")
 
-        all_posts_links = []
-        for i in posts:
-            all_posts_links.append(i.get_attribute("href"))
-
-        #del all_posts_links[0]
+        all_posts_links = [post.get_attribute("href")[-8:] for post in posts]
         logging.info(f"found all post of page: {page}")
+
         return all_posts_links
 
 
     def post_details(self, post) -> dict:
+        
         logging.info(f"extracting data from '{post}'")
-        self.driver.get(post)
-        phone_button = self.driver.find_element(By.CSS_SELECTOR, "#app > div.container--has-footer-d86a9.kt-container > div > div > div.kt-col-5 > div.post-actions > button.kt-button.kt-button--primary.post-actions__get-contact").click()
         time.sleep(5)
-        logging.warning(f"terms of agreements: {self.terms_agreement_done}")
-        if self.terms_agreement_done == False:
-            try:
-                agree_button = self.driver.find_element(By.XPATH, "/html/body/div[2]/div/div/div/footer/button[2]").click()
-                self.terms_agreement_done = True
-            except:
-                pass
+        self.driver.get(post)
+        time.sleep(3)
+        phone_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[1]/div[2]/div/div[1]/div[1]/div[2]/button[1]")))
+        phone_button.click()
+
 
         # finding a post's category and sub categorys
         category_e = self.driver.find_elements(By.CLASS_NAME, "kt-breadcrumbs__link")
@@ -140,6 +147,8 @@ class Divar:
             res["ویژگی ها"] = ["None", "None", "None"]
 
         res["توضیحات"] = description
+        res['توکن'] = post[-8:]
+        print(res['توکن'])
         ## deleting useless data from result
 
         if "شماره مخفی شده است" in res:
@@ -157,19 +166,5 @@ class Divar:
             pickle.dump(self.driver.get_cookies(), filehandler)
         logging.warning(f"saved a cookie: {path}")
 
-    def load_cookie(self, path):
-         with open(path, 'rb') as cookiesfile:
-             cookies = pickle.load(cookiesfile)
-             for cookie in cookies:
-                 self.driver.add_cookie(cookie)
-         logging.info(f"logged in with cookie: {path}")
-
-
-
-
-
-
-
-
-
+    
 

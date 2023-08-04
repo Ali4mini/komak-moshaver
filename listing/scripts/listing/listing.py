@@ -9,21 +9,24 @@ import pickle
 # ! Custom exceptions
 
 class DivarBot:
-        def __init__(self) -> None:
-            self.bot_user = User.objects.get_by_natural_key('listing_bot')
-            self.divar_url = 'https://divar.ir/s/tehran/real-estate/doolab?districts=1017%2C273%2C974%2C1016&user_type=personal&sort=sort_date'
-            self.divar_obj = Divar(headless=True)
-            self.logger = logging.getLogger('Divar')
-            self.logger.setLevel(logging.INFO)
-            
-            self.smtphandler = logging.handlers.SMTPHandler(mailhost='localhost',
-                                                           fromaddr='divar.bot@test.xyz',
-                                                           toaddrs='ali.4mini@proton.me',
-                                                           subject='Divar Bot Errors')
-            # self.smtphandler.setFormatter("%(process)d-%(levelname)s-%(message)s")
-            # self.smtphandler.setLevel(logging.ERROR)
-            # self.logger.addHandler(self.smtphandler)
-        def BurntCookie(self, cookie):
+       def __init__(self):
+        self.bot_user = User.objects.get_by_natural_key('listing_bot')
+        self.divar_url = 'https://divar.ir/s/tehran/real-estate/doolab?districts=1017%2C273%2C974%2C1016&user_type=personal&sort=sort_date'
+        self.divar_obj = Divar(headless=False)
+        self.logger = self._setup_logger()
+        self.available_cookies = {
+            '9212031469.pkl': 0,
+        }
+        self.burnt_cookies
+        self.valid_types = ['A', 'L', 'S', 'H']
+
+        @staticmethod
+        def _setup_logger():
+            logger = logging.getLogger('Divar')
+            logger.setLevel(logging.INFO)
+            return logger
+
+        def burnt_cookie(self, cookie):
             """this method should called when a cookie is burnt"""
             template = f'''
                         we have a burnt cookie
@@ -35,184 +38,136 @@ class DivarBot:
         def validation(self, post_detail: dict) -> dict:
             self.logger.info(f'extracted info: {post_detail}')
 
-            if "کوتاه مدت" in post_detail['شاخه'][1]:
-                post_detail['ودیعه'] = 0
-                post_detail['اجارهٔ ماهانه'] = 0
-                post_detail['اجاره'] = 0
-            post_detail['نوع'] = 'NOT'
-            if "آپارتمان" in post_detail["شاخه"][2]:
-                post_detail['نوع'] = 'A'
-            elif "زمین و کلنگی" in post_detail["شاخه"][2]:
-                post_detail['نوع'] = 'L'
-            elif 'خانه و ویلا' in post_detail["شاخه"][2]:
-                post_detail['نوع'] = 'H'
-            elif 'مغازه و غرفه' in post_detail["شاخه"][2]:
-                post_detail['نوع'] = 'S'
-            try:
-                post_detail['شمارهٔ موبایل']
-            except:
-                post_detail['شمارهٔ موبایل'] = 'None'
-            try:
-                post_detail['طبقه'] = post_detail['طبقه'].replace('٬', '')
-                post_detail['طبقه'] = post_detail['طبقه'].replace('از', '')
-                post_detail['طبقه'] = post_detail['طبقه'].split(' ')
-                post_detail['طبقه'] = [int(_) for _ in post_detail['طبقه']]
-            except:
-                post_detail['طبقه'] = [999999]
-            try:
-                post_detail['ساخت']
-            except:
-                post_detail['ساخت'] = 999999
-            try:
-                post_detail['متراژ'] = post_detail['متراژ'].replace('٬', '')
-                post_detail['متراژ'] = int(post_detail['متراژ'].replace(' متر', ''))
-            except:
-                post_detail['متراژ'] = 999999
-            try:
-                post_detail['ساخت'] = post_detail['ساخت'].replace('٬', '')
-                post_detail['ساخت'] = int(post_detail['ساخت'].replace(' قبل از ', ''))
-            except:
-                post_detail['ساخت'] = 999999
-            if "فروش" in post_detail["شاخه"][1]:
-                try:
-                    post_detail['قیمت کل'] = post_detail['قیمت کل'].replace('٬', '')
-                    post_detail['قیمت کل'] = int(post_detail['قیمت کل'].replace(' تومان', ''))
-                    post_detail['قیمت کل'] = post_detail['قیمت کل'] / 1000000
-                except:
-                    if post_detail['قیمت کل'] == 'توافقی':
-                        post_detail['قیمت کل'] = 9999999
-            elif "اجاره" in post_detail["شاخه"][1]:
-                try:
-                    try:
-                        post_detail['ودیعه'] = post_detail['ودیعه'].replace('٬', '')
-                        post_detail['ودیعه'] = int(post_detail['ودیعه'].replace(' تومان', ''))
-                        post_detail['ودیعه'] = post_detail['ودیعه'] / 1000000   
-                    except:
-                        post_detail['ودیعه'] = post_detail['ودیعه (تومان)'].replace('٬', '')
-                        post_detail['ودیعه'] = int(post_detail['ودیعه'].replace(' میلیون', ''))
-                except:
-                    if post_detail['ودیعه'] == 'توافقی':
-                        post_detail['ودیعه'] = 9999999
-                    
-                try:
-                    try:
-                        post_detail['اجاره'] = post_detail['اجارهٔ ماهانه'].replace('٬', '')
-                        post_detail['اجاره'] = float(post_detail['اجاره'].replace(' تومان', ''))
-                        post_detail['اجاره'] = post_detail['اجاره'] / 1000000
-                    except:
-                        post_detail['اجاره'] = post_detail['اجارهٔ ماهانه (تومان)'].replace('٬', '')
-                        post_detail['اجاره'] = float(post_detail['اجاره'].replace(' میلیون', ''))
-                except Exception:
-                    traceback.print_exc()
-                    try:
-                       if post_detail['اجارهٔ ماهانه'] == 'توافقی':
-                          post_detail['اجاره'] = 9999999
-                       if post_detail['اجارهٔ ماهانه'] == 'مجانی':
-                          post_detail['اجاره'] = 0
-                    except:
-                       post_detail['اجاره'] = 0
-                          
-            try:            
-                
-                if post_detail['ویژگی ها'][0] == "آسانسور":
-                    post_detail['ویژگی ها'][0] = True
-                else:
-                    post_detail['ویژگی ها'][0] = False
-                    
-                if post_detail['ویژگی ها'][1] == "پارکینگ":
-                    post_detail['ویژگی ها'][1] = True
-                else:
-                    post_detail['ویژگی ها'][1] = False
-                    
-                if post_detail['ویژگی ها'][2] == "انباری":
-                    post_detail['ویژگی ها'][2] = True
-                else:
-                    post_detail['ویژگی ها'][2] = False            
-            except IndexError: 
-                post_detail['ویژگی ها'] = ["None","None","None"]
-                if post_detail['ویژگی ها'][0] == "آسانسور":
-                    post_detail['ویژگی ها'][0] = True
-                else:
-                    post_detail['ویژگی ها'][0] = False
-                    
-                if post_detail['ویژگی ها'][1] == "پارکینگ":
-                    post_detail['ویژگی ها'][1] = True
-                else:
-                    post_detail['ویژگی ها'][1] = False
-                    
-                if post_detail['ویژگی ها'][2] == "انباری":
-                    post_detail['ویژگی ها'][2] = True
-                else:
-                    post_detail['ویژگی ها'][2] = False  
-                    
-                    
+            post_detail = self._set_defaults(post_detail)
+            post_detail = self._set_type(post_detail)
+            post_detail = self._set_mobile_number(post_detail)
+            post_detail = self._set_floor(post_detail)
+            post_detail = self._set_area(post_detail)
+            post_detail = self._set_price(post_detail)
+            post_detail = self._set_features(post_detail)
+            post_detail['تگ ها'] = 'دیوار'
 
-                
-            post_detail['تگ ها'] = 'دیوار'  
             self.logger.info(f'ready to use info: {post_detail}')
-            
             return post_detail
+
+            def _set_defaults(self, post_detail):
+                if "کوتاه مدت" in post_detail['شاخه'][1]:
+                    post_detail['ودیعه'] = 0
+                    post_detail['اجارهٔ ماهانه'] = 0
+                    post_detail['اجاره'] = 0
+                    post_detail['نوع'] = 'NOT'
+                return post_detail
+
+            def _set_type(self, post_detail):
+                if "آپارتمان" in post_detail["شاخه"][2]:
+                    post_detail['نوع'] = 'A'
+                elif "زمین و کلنگی" in post_detail["شاخه"][2]:
+                    post_detail['نوع'] = 'L'
+                elif 'خانه و ویلا' in post_detail["شاخه"][2]:
+                    post_detail['نوع'] = 'H'
+                elif 'مغازه و غرفه' in post_detail["شاخه"][2]:
+                    post_detail['نوع'] = 'S'
+                return post_detail
+
+            def _set_mobile_number(self, post_detail):
+                post_detail['شمارهٔ موبایل'] = post_detail.get('شمارهٔ موبایل', 'None')
+                return post_detail
+
+            def _set_floor(self, post_detail):
+                floor = post_detail.get('طبقه', '999999').replace('٬', '').replace('از', '').split(' ')
+                post_detail['طبقه'] = [int(_) for _ in floor if _.isdigit()]
+                return post_detail
+
+            def _set_area(self, post_detail):
+                area = post_detail.get('متراژ', '999999').replace('٬', '').replace(' متر', '')
+                post_detail['متراژ'] = int(area) if area.isdigit() else 999999
+                return post_detail
+
+            def _set_price(self, post_detail):
+                if "فروش" in post_detail["شاخه"][1]:
+                    price = post_detail.get('قیمت کل', '9999999').replace('٬', '').replace(' تومان', '')
+                    post_detail['قیمت کل'] = int(price) / 1000000 if price.isdigit() else 9999999
+                elif "اجاره" in post_detail["شاخه"][1]:
+                    deposit = post_detail.get('ودیعه', '9999999').replace('٬', '').replace(' تومان', '')
+                    post_detail['ودیعه'] = int(deposit) / 1000000 if deposit.isdigit() else 9999999
+                    rent = post_detail.get('اجارهٔ ماهانه', '0').replace('٬', '').replace(' تومان', '')
+                    post_detail['اجاره'] = float(rent) / 1000000 if rent.isdigit() else 0
+                return post_detail
+
+            def _set_features(self, post_detail):
+                features = post_detail.get('ویژگی ها', ["None","None","None"])
+                post_detail['ویژگی ها'] = [feature == "آسانسور" for feature in features]
+                return post_detail
+
+
         def cookie_saver(self, cookie: str) -> None:
             """
             it open's login page and give you 60 sec to login, than it's going to save a cookie
             """
-            self.divar_obj1 = Divar(headless=False)
+            self.temp_divar_obj = Divar(headless=False)
 
-            self.divar_obj1.login('9212031469', cookie='9212396361.pkl')
+            self.temp_divar_obj.login('9212031469', cookie='9212396361.pkl')
             time.sleep(60)
             self.divar_obj.save_cookie(cookie)
-            del self.divar_obj1
+            del self.temp_divar_obj
             
-        def scanner(self):
-            current_cookie = {'cookie': '', 'passed': 0}
-            def searcher(post, outf="checked_links.txt", inf="checked_links.txt"):
-                if post in open(inf,"r").readlines():
-                    self.logger.warning(f"{post} is here!!!")
-                    
-                else:
-                    file = f'https://divar.ir/v/{post}'
-                    time.sleep(30)
-                    res = self.divar_obj.post_details(file)
-                    res = self.validation(res)
-                    valid_types = ['A', 
-                                   'L',
-                                   'S',
-                                   'H',
-                                   ]
-                    if "فروش" in res["شاخه"][1] and res['نوع'] in valid_types:
-                        if not res['شمارهٔ موبایل'] == 'None':
-                            current_cookie['passed'] = 0
-                            try:
-                                file, created = models.Sell.objects.get_or_create(owner_name="UNKNOWN",
-                                                    owner_phone=res['شمارهٔ موبایل'],
-                                                    address=res["شاخه"][-1],
-                                                    m2=res['متراژ'],
-                                                    price=res['قیمت کل'],
-                                                    year=res['ساخت'],
-                                                    floor=res['طبقه'][0],
-                                                    elevator=res['ویژگی ها'][0],
-                                                    parking=res['ویژگی ها'][2],
-                                                    storage=res['ویژگی ها'][1],
-                                                    type=res['نوع'],
-                                                    added_by=self.bot_user)
-                                file.tag_manager.add(res['تگ ها'])
-                                if not created:
-                                    self.logger.warning('it was in DB')
-                                else:
-                                    self.logger.info('a new file added')
-                            except Exception as e:
-                                self.logger.exception('there was a error while adding sell file to DB')
-                        else:
-                            self.logger.warning('phone wan None')
-                            current_cookie['passed'] += 1 
-                    elif "اجاره" in res["شاخه"][1] and res['نوع'] in valid_types:
-                        if res["شاخه"][1] == 'اجاره کوتاه مدت':
-                            pass
-                        else:
-                            if not res['شمارهٔ موبایل'] == 'None':
-                                current_cookie['passed'] = 0
-                                try:
-                                    file, created = models.Rent.objects.get_or_create(owner_name="UNKNOWN",
+
+        def last_24_files(self) -> None:
+            self.divar_obj.login('9212396361', cookie='9212396361.pkl')
+            posts = self.divar_obj.all_posts(page=self.divar_url)
+            time.sleep(3)
+            valid_types = ['A', 'L', 'S', 'H']
+
+            for post in posts:
+                self.logger.info(f'in => {post}  ')
+                res = self.divar_obj.post_details(post)
+                res = self.validation(res)
+                self.logger.debug(f'extracted data: {res}')
+
+                if "فروش" in res["شاخه"][1] and res['نوع'] in valid_types:
+                    self.handle_sell(res)
+                elif "اجاره" in res["شاخه"][1] and res['نوع'] in valid_types:
+                    self.handle_rent(res)
+
+                self.logger.info(f'done => {post}  ')
+
+        def handle_sell(self, res):
+            if res['شمارهٔ موبایل'] == 'None':
+                self.logger.warning('phone was None!! ')
+                return
+
+            try:
+                file, created = models.Sell.objects.get_or_create(owner_name="UNKNOWN",
+                                                        owner_phone=res['شمارهٔ موبایل'],
+                                                        address=res["شاخه"][-1],
+                                                        m2=res['متراژ'],
+                                                        price=res['قیمت کل'],
+                                                        year=res['ساخت'],
+                                                        floor=res['طبقه'][0],
+                                                        elevator=res['ویژگی ها'][0],
+                                                        parking=res['ویژگی ها'][2],
+                                                        storage=res['ویژگی ها'][1],
+                                                        type=res['نوع'],
+                                                        added_by=self.bot_user)                            
+                if not created:
+                    self.logger.info('it was in DB')
+
+                file.tag_manager.add(res['تگ ها'])
+            except:
+                self.logger.exception('an Error hapend while adding sell file')
+
+        def handle_rent(self, res):
+            if res["شاخه"][1] == 'اجاره کوتاه مدت':
+                print('اجاره کوتاه مدت')
+                return
+
+            if res['شمارهٔ موبایل'] == 'None':
+                self.logger.warning('phone was None')
+                print('   !!!!ejare!!!!  \n')
+                return
+
+            try:
+                file, created = models.Rent.objects.get_or_create(owner_name="UNKNOWN",
                                                         owner_phone=res['شمارهٔ موبایل'],
                                                         address=res["شاخه"][-1],
                                                         m2=res['متراژ'],
@@ -224,137 +179,73 @@ class DivarBot:
                                                         parking=res['ویژگی ها'][2],
                                                         storage=res['ویژگی ها'][1],
                                                         type=res['نوع'],
-                                                        added_by=self.bot_user)
-                                    file.tags_manager.add(res['تگ ها'])
-                                    if not created:
-                                        self.logger.info('it was in DB')
-                                    else:
-                                        self.logger.info('a new file added')
-                                except:
-                                    self.logger.exception('there was a error while adding rent file to DB')
-                            else:
-                                self.logger.warning('phone wan None')
-                                current_cookie['passed'] += 1
+                                                        added_by=self.bot_user)  
+                if not created:
+                    self.logger.info('it was in DB')
+                                            
+                file.tags_manager.add(res['تگ ها'])
+            except:
+                self.logger.exception('an Error hapend while adding rent file')
 
-                    else:
-                        print('it is not sell')
-                    with open(outf, 'w') as f1:
-                        f1.write(post)
-                        self.logger.info(f"{post}  is added ")
-                        
-            def id_generator(link: str) -> str:
-                return link[-8:]
+        def searcher(self, post, outf="checked_links.txt", inf="checked_links.txt"):
+            if post in open(inf,"r").readlines():
+                self.logger.warning(f"{post} is here!!!")
+                return
 
-            temp_c = 0
+            file = f'https://divar.ir/v/{post}'
+            time.sleep(30)
+            res = self.divar_obj.post_details(file)
+            res = self.validation(res)
+
+            if "فروش" in res["شاخه"][1] and res['نوع'] in self.valid_types:
+                self.handle_sell(res)
+            elif "اجاره" in res["شاخه"][1] and res['نوع'] in self.valid_types:
+                self.handle_rent(res)
+            else:
+                print('it is not sell')
+
+            with open(outf, 'w') as f1:
+                f1.write(post)
+                self.logger.info(f"{post}  is added ")
+
+        def id_generator(self, link: str) -> str:
+            return link[-8:]
+
+        def scanner(self):
+            fail_counter = 0
             try:
                 while True:
                     self.logger.warning('starting the loop')
 
-                    if temp_c == 0:
-                        self.divar_obj.login('9212396361', cookie='9212396361.pkl')
-                        self.logger.warning('logged in with "9212396361"')
-                        current_cookie['cookie'] = '9212396361'
+                    for cookie, fail in available_cookies:
+                        self.divar_obj.login('9373990837', cookie='9373990837.pkl')
 
-                    post = self.divar_obj.last_post(page=self.divar_url)
-                    self.logger.info(f'scraping info from {post}') 
-                    post_id = id_generator(post)
-                    searcher(post=post_id)
-                    self.logger.info(f'current cookie: {current_cookie}')
-                    time.sleep(180)
-                    temp_c = temp_c + 1
-                    if temp_c == 5:
+                        post = self.divar_obj.last_post(page=self.divar_url)
+                        self.logger.info(f'scraping info from {post}') 
+                        post_id = self.id_generator(post)
+                        self.searcher(post=post_id)
+                        self.logger.info(f'current cookie: {self.current_cookie}')
+                        time.sleep(180)
+                        fail_counter 
+                    
+                    if fail_counter == 5:
                         self.divar_obj.login('9373990837', cookie='9373990837.pkl')
                         self.logger.warning('logged in with "9373990837"')
-                        current_cookie['cookie']= '9373990837'
-                    # if temp_c == 10:
-                    #     self.divar_obj.login('9212031469', cookie='9212031469.pkl')
-                    #     self.logger.warning('logged in with "9212031469"')
-                    #     current_cookie['cookie'] = '9212031469'
-                    if temp_c == 10:
-                        temp_c = 0
-                        
-                    if current_cookie['passed'] > 2:
-                        self.BurntCookie(cookie=current_cookie['cookie'])
+                        self.current_cookie['cookie']= '9373990837'
+                    if fail_counter == 10:
+                        fail_counter = 0
+                            
+                    if self.current_cookie['passed'] > 2:
+                        self.burnt_cookie(cookie=self.current_cookie['cookie'])
             except Exception as e:
-                self.logger.exception('we have a Error: ')
-
-        def last_24_files(self) -> None:
-            self.divar_obj.login('9212396361', cookie='9212396361.pkl')
-            posts = self.divar_obj.all_posts(page=self.divar_url)
-            time.sleep(3)
-            for post in posts:
-                self.logger.info(f'in => {post}  ')
-                res = self.divar_obj.post_details(post)
-                res = self.validation(res)
-                self.logger.debug(f'extracted data: {res}')
-                sell_file_count = models.Sell.objects.count()
-                rent_file_count = models.Rent.objects.count()
-                valid_types = [ 'A', 
-                                'L',
-                                'S',
-                                'H',]
-
-                if "فروش" in res["شاخه"][1] and res['نوع'] in valid_types:
-                    if not res['شمارهٔ موبایل'] == 'None':
-                        
-                        try:
-                            file, created = models.Sell.objects.get_or_create(owner_name="UNKNOWN",
-                                                    owner_phone=res['شمارهٔ موبایل'],
-                                                    address=res["شاخه"][-1],
-                                                    m2=res['متراژ'],
-                                                    price=res['قیمت کل'],
-                                                    year=res['ساخت'],
-                                                    floor=res['طبقه'][0],
-                                                    elevator=res['ویژگی ها'][0],
-                                                    parking=res['ویژگی ها'][2],
-                                                    storage=res['ویژگی ها'][1],
-                                                    type=res['نوع'],
-                                                    added_by=self.bot_user)                            
-                            if not created:
-                                    self.logger.info('it was in DB')
-
-                            file.tag_manager.add(res['تگ ها'])
-                        
-                        except:
-                            self.logger.exception('an Error hapend while adding sell file')
-                    else:
-                        self.logger.warning('phone was None!! ')
+                self.logger.exception(f'we have a Error: {e}')
 
 
-                if "اجاره" in res["شاخه"][1] and res['نوع'] in valid_types:
-                    if res["شاخه"][1] == 'اجاره کوتاه مدت':
-                            print('اجاره کوتاه مدت')
-                    else:
-                        if not res['شمارهٔ موبایل'] == 'None':
-                            try:
-                                file, created = models.Rent.objects.get_or_create(owner_name="UNKNOWN",
-                                                    owner_phone=res['شمارهٔ موبایل'],
-                                                    address=res["شاخه"][-1],
-                                                    m2=res['متراژ'],
-                                                    price_up=res['ودیعه'],
-                                                    price_rent=res['اجاره'],
-                                                    year=res['ساخت'],
-                                                    floor=res['طبقه'][0],
-                                                    elevator=res['ویژگی ها'][0],
-                                                    parking=res['ویژگی ها'][2],
-                                                    storage=res['ویژگی ها'][1],
-                                                    type=res['نوع'],
-                                                    added_by=self.bot_user)  
-                                if not created:
-                                    self.logger.info('it was in DB')
-                                    
-                                file.tags_manager.add(res['تگ ها'])
-                            except:
-                                self.logger.exception('an Error hapend while adding rent file')
-                        else:
-                            self.logger.warning('phone was None')
-                            print('   !!!!ejare!!!!  \n')
-                self.logger.info(f'done => {post}  ')
 
         def run(self) -> None:
             # self.logger.warning('running Divar bot.')
             # self.last_24_files()
             # self.logger.info('done extracting last 24 files.')
-            # self.scanner()
+            # # self.scanner()
             self.cookie_saver('9212396361.pkl')
 
