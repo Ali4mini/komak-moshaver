@@ -1,18 +1,24 @@
 import { useState } from "react";
 import FloatLabel from "../common/input";
 import api from "../common/api";
+import { useDispatch } from "react-redux";
+import { setFiles } from "./filesSlice";
 
-const PkFilter = ({ setter }) => {
+const PkFilter = () => {
+  const dispatch = useDispatch();
   const [pk, setPk] = useState(null);
 
   const filter = (pk) => {
     api
-      .get("/", {
+      .get("listing/", {
         params: {
           id: pk,
         },
       })
-      .then((response) => setter(response.data))
+      .then((response) => {
+        console.log(response.data);
+        dispatch(setFiles(response.data));
+      })
       .catch((error) => console.log(error));
   };
   return (
@@ -34,7 +40,7 @@ const PkFilter = ({ setter }) => {
         #
       </select>
 
-      <FloatLabel label="کد فایل" name={'pk'} setter={setPk} type="text" />
+      <FloatLabel label="کد فایل" name={"pk"} setter={setPk} type="text" />
       <button
         onClick={() => filter(pk)}
         className="w-1/2  h-10 rounded-lg hover:bg-blue-400 bg-blue-300 border bottom-0"

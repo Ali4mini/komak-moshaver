@@ -1,9 +1,5 @@
-amlak/__pycache__
-file/__pycache__
-customer/__pycache__
-listing/__pycache__
+__pycache__/
 images
-agents/__pycache__
 .vscode/
 .VSCodeCounter/
 checked_links.txt
@@ -16,4 +12,5 @@ __pycache__
 cookies
 .vscode
 .VSCodeCounter
+gunicorn_config.py
 
