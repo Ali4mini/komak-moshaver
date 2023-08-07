@@ -1,9 +1,11 @@
 import { useState } from "react";
 import FloatLabel from "../common/input";
 import api from "../common/api";
-import Checkbox from '../common/checkbox'
+import Checkbox from "../common/checkbox";
+import { useDispatch } from "react-redux";
+import { setFiles } from "./filesSlice";
 
-const Filter = ({ setter }) => {
+const Filter = () => {
   const [fileType, setFileType] = useState("sell");
   const [propertyType, setPropertyType] = useState("A");
   const [price, setPrice] = useState(null);
@@ -15,6 +17,7 @@ const Filter = ({ setter }) => {
   const [parking, setParking] = useState(null);
   const [elevator, setElevator] = useState(null);
   const [storage, setStorage] = useState(null);
+  const dispatch = useDispatch();
 
   let filterEntery = {
     file_type: fileType,
@@ -39,9 +42,9 @@ const Filter = ({ setter }) => {
     }
 
     api
-      .get("/", { params: data })
+      .get("listing/", { params: data })
       .then((response) => {
-        setter(response.data);
+        dispatch(setFiles(response.data));
       })
       .catch((error) => console.log(`error: ${error}`));
   };
