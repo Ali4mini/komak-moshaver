@@ -76,9 +76,9 @@ class FileFilter(APIView):
             files = Rent.objects.filter(**filter_entery).all()
             serializer = RentFileSerializer(files, many=True)
         else:
-            sell_files = Sell.objects.filter().all()
+            sell_files = Sell.objects.filter(**filter_entery).all()
             sell_files = SellFileSerializer(sell_files, many=True)
-            rent_files = Rent.objects.filter().all()
+            rent_files = Rent.objects.filter(**filter_entery).all()
             rent_files = RentFileSerializer(rent_files, many=True)
             return Response(list(chain(sell_files.data, rent_files.data)))
 
@@ -138,9 +138,9 @@ class CustomerFilter(APIView):
             serializer = RentCustomerSerializer(customers, many=True)
 
         else:
-            buy_customers = BuyCustomer.objects.filter().all()
+            buy_customers = BuyCustomer.objects.filter(**filter_entery).all()
             buy_customers = BuyCustomerSerializer(buy_customers, many=True)
-            rent_customers = RentCustomer.objects.filter().all()
+            rent_customers = RentCustomer.objects.filter(**filter_entery).all()
             rent_customers = RentCustomerSerializer(rent_customers, many=True)
             customers = list(chain(buy_customers.data, rent_customers.data))
             return Response(customers)

@@ -2,6 +2,8 @@ import { useState } from "react";
 import FloatLabel from "../common/input";
 import Checkbox from "../common/checkbox";
 import api from "../common/api";
+import { useDispatch } from "react-redux";
+import { setCustomers } from "./customerSlice";
 
 const Filter = ({ setter }) => {
   const [customerType, setCustomerType] = useState("buy");
@@ -15,6 +17,7 @@ const Filter = ({ setter }) => {
   const [parking, setParking] = useState(null);
   const [elevator, setElevator] = useState(null);
   const [storage, setStorage] = useState(null);
+  const dispatch = useDispatch()
 
   const filter_entery = {
     customer_type: customerType,
@@ -39,9 +42,9 @@ const Filter = ({ setter }) => {
     }
 
     api
-      .get("customers/", { params: data })
+      .get("listing/customers/", { params: data })
       .then((response) => {
-        setter(response.data);
+        dispatch(setCustomers(response.data))
       })
       .catch((error) => console.log(`error: ${error}`));
   };

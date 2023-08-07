@@ -1,23 +1,23 @@
-import { useState } from "react";
 import NavBar from "./common/nav";
 import { Routes, Route } from "react-router-dom";
-import Home from "./home/home";
 import Login from "./agents/login";
 import FileDetails from "./file/details";
 import CustomerDetail from "./customer/details";
-import Customer from "./home/customer_card";
 import Customers from "./home/customers";
 import NewFile from "./file/new";
 import NewCustomer from "./customer/new";
 import UpdateFile from "./file/update";
 import UpdateCustomer from "./customer/update";
+import Files from "./home/files";
+import Scanner from "./home/scanner";
 
 function App() {
   return (
     <>
       <NavBar />
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Files />} />
+        <Route path="listing/" element={<Scanner />} />
         <Route path="customers/" element={<Customers />} />
         <Route path="file/">
           <Route path="new/" element={<NewFile />} />

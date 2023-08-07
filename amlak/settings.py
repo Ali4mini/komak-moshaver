@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 from datetime import timedelta
-from pathlib import Path
+import pathlib
 import os
 
 
@@ -20,7 +20,7 @@ from dotenv import dotenv_values
 config = dotenv_values(".env")  
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = pathlib.Path(__file__).resolve(strict=True).parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -29,7 +29,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config['DEBUG']
+DEBUG = False
 
 
 MEDIA_URL = 'media/'
@@ -99,7 +99,7 @@ SITE_ID = 1
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [os.path.join(BASE_DIR, 'front-end', 'dist')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -112,7 +112,10 @@ TEMPLATES = [
     },
 ]
 
-COMPRESS_ROOT = BASE_DIR / 'static'
+STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'front-end', 'dist', 'assets')
+
+COMPRESS_ROOT = os.path.join(BASE_DIR, 'front-end', 'dist', 'assets') 
 
 COMPRESS_ENABLED = True
 
@@ -137,7 +140,7 @@ DATABASES = {
     }
 }
 
-ALLOWED_HOSTS = ['87.107.165.126', '127.0.0.1', '192.168.1.105', '0.0.0.0']
+ALLOWED_HOSTS = ['0.0.0.0', '87.107.54.39']
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -173,8 +176,6 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 
 # Default primary key field type
@@ -187,23 +188,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # CELERY_TIMEZONE = "Iran/Tehran"
 CELERY_BROKER_URL = "redis://localhost:6379"
 CELERY_RESULT_BACKEND = "redis://localhost:6379"
-
-
-
-'''
-const FloatLabel = ({label, id, type, setter, className}) => {
-    return(
-        <div className="relative">
-            <input type={type} className="peer w-full px-3 rounded-lg shadow border h-10 border-gray-300  placeholder-transparent
-                  focus:outline-none" id={id} name={id} onChange={(e) => setter(e.target.value)} placeholder=" " />
-            <label htmlFor={id} className="absolute text-gray-500 right-4 text-sm -top-3.5 px-2 bg-white-200 transition-all
-                  peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-placeholder-shown:bg-transparent
-                  peer-focus:text-gray-500 peer-focus:-top-3.5 peer-focus:bg-white peer-focus:px-2">
-                    {label}
-            </label>
-        </div>
-    )
-}
-
-export default FloatLabel;
-'''

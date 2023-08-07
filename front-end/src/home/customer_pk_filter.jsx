@@ -1,18 +1,21 @@
 import { useState } from "react";
 import FloatLabel from "../common/input";
 import api from "../common/api";
+import { useDispatch } from "react-redux";
+import { setCustomers } from "./customerSlice";
 
-const PkFilter = ({ setter }) => {
+const PkFilter = () => {
   const [pk, setPk] = useState(null);
+  const dispatch = useDispatch();
 
   const filter = (pk) => {
     api
-      .get("customers/", {
+      .get("listing/customers/", {
         params: {
           id: pk,
         },
       })
-      .then((response) => setter(response.data))
+      .then((response) => dispatch(setCustomers(response.data)))
       .catch((error) => console.log(error));
   };
   return (
