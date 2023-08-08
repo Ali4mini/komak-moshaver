@@ -6,7 +6,7 @@ import api from "../common/api";
 import { setFiles } from "./filesSlice";
 import { useSelector, useDispatch } from "react-redux";
 
-const Files = ({ isListing = false }) => {
+const Files = () => {
   const store = useSelector((state) => state.files);
   const dispatch = useDispatch();
 
