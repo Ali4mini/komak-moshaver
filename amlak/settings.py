@@ -29,7 +29,7 @@ BASE_DIR = pathlib.Path(__file__).resolve(strict=True).parent.parent
 SECRET_KEY = config['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config['DEBUG']
+DEBUG = False
 
 
 MEDIA_URL = 'media/'
@@ -112,8 +112,8 @@ TEMPLATES = [
     },
 ]
 
-STATIC_URL = 'assets/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'front-end', 'dist', 'assets')]
+STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'front-end', 'dist', 'assets')
 
 COMPRESS_ROOT = os.path.join(BASE_DIR, 'front-end', 'dist', 'assets') 
 
