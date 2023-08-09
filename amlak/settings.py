@@ -29,11 +29,8 @@ BASE_DIR = pathlib.Path(__file__).resolve(strict=True).parent.parent
 SECRET_KEY = config['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+# DEBUG = True
 
-
-MEDIA_URL = 'media/'
-MEDITA_ROOT = os.path.join(BASE_DIR,'media')
 
 # Application definition
 
@@ -79,6 +76,7 @@ SIMPLE_JWT = {
 }
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -86,9 +84,12 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
+STATIC_URL = '/assets/'
+STATIC_ROOT =  os.path.join(BASE_DIR, 'front-end/dist/assets')
+WHITENOISE_ROOT = os.path.join(BASE_DIR, 'front-end/dist')
 
 CORS_ORIGIN_ALLOW_ALL = True
 
@@ -112,14 +113,15 @@ TEMPLATES = [
     },
 ]
 
-STATIC_URL = 'static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'front-end', 'dist', 'assets')
 
-COMPRESS_ROOT = os.path.join(BASE_DIR, 'front-end', 'dist', 'assets') 
+MEDIA_URL = 'media/'
+MEDITA_ROOT = os.path.join(BASE_DIR,'media')
 
-COMPRESS_ENABLED = True
+# COMPRESS_ROOT = os.path.join(BASE_DIR, 'front-end', 'dist', 'assets') 
 
-STATICFILES_FINDERS = ('compressor.finders.CompressorFinder',)
+# COMPRESS_ENABLED = True
+
+# STATICFILES_FINDERS = ('compressor.finders.CompressorFinder',)
 
 WSGI_APPLICATION = 'amlak.wsgi.application'
 
@@ -140,7 +142,7 @@ DATABASES = {
     }
 }
 
-ALLOWED_HOSTS = ['0.0.0.0', '87.107.54.39']
+ALLOWED_HOSTS = ['0.0.0.0', '87.107.54.39', '*']
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
