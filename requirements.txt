@@ -39,8 +39,8 @@ MarkupSafe==2.1.2
 multidict==6.0.4
 outcome==1.2.0
 packaging==23.1
-Pillow==9.4.0
-platformdirs==3.2.0
+pacman-mirrors==4.23.2
+Pillow==9.5.0
 pluggy==1.2.0
 prompt-toolkit==3.0.39
 psycopg2-binary==2.9.5
