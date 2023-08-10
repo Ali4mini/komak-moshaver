@@ -33,6 +33,7 @@ class FileFilter(APIView):
                         'parking',
                         'elevator',
                         'storage',
+                        'status',
                         ]
 
         int_filter_fields = ['price__lte',
@@ -76,6 +77,7 @@ class FileFilter(APIView):
             files = Rent.objects.filter(**filter_entery).all()
             serializer = RentFileSerializer(files, many=True)
         else:
+            print(filter_entery)
             sell_files = Sell.objects.filter(**filter_entery).all()
             sell_files = SellFileSerializer(sell_files, many=True)
             rent_files = Rent.objects.filter(**filter_entery).all()
@@ -100,6 +102,7 @@ class CustomerFilter(APIView):
                         'parking',
                         'elevator',
                         'storage',
+                        'status',
                         ]
 
         int_filter_fields = ['budget__gte',

@@ -12,8 +12,11 @@ const Files = () => {
 
   useEffect(() => {
     api
-      .get("listing/",)
+      .get("listing/", {params: {
+        status: 'ACTIVE'
+      }})
       .then((response) => {
+        console.log(response.data);
         dispatch(setFiles(response.data));
       })
       .catch((error) => console.log(error));

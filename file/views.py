@@ -10,7 +10,7 @@ from django.views.generic.edit import UpdateView, DeleteView
 from django.views import View
 from django.utils.decorators import method_decorator
 import requests
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.views import APIView
 from .serializers import SellFileSerializer, RentFileSerializer
 from rest_framework.response import Response
@@ -21,10 +21,23 @@ from django.conf import settings
 class SellFileDetails(generics.RetrieveUpdateDestroyAPIView):
     queryset = Sell.objects.all()
     serializer_class = SellFileSerializer
+    def destroy(self, request, pk=None):
+        print('in delete')
+        file = self.get_object()
+        file.status = "UNACTIVE"
+        file.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 class RentFileDetails(generics.RetrieveUpdateDestroyAPIView):
     queryset = Rent.objects.all()
     serializer_class = RentFileSerializer
+    def destroy(self, request, pk=None):
+        print('in delete')
+        file = self.get_object()
+        file.status = "UNACTIVE"
+        file.save()
+        
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 class NewSellFile(generics.CreateAPIView):
     queryset = Sell.objects.all()

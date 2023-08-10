@@ -3,6 +3,7 @@ import Checkbox from "../common/checkbox";
 import { useState } from "react";
 import api from "../common/api";
 import { useNavigate } from "react-router-dom";
+import { DatePicker } from "zaman";
 
 const NewFile = () => {
   const [fileType, setFileType] = useState("sell");
@@ -23,6 +24,10 @@ const NewFile = () => {
   const [motorSpot, setMotorSpot] = useState(false);
   const [ownerName, setOwnerName] = useState(null);
   const [ownerPhone, setOwnerPhone] = useState(null);
+  const [bazdid, setBazdid] = useState("هماهنگی");
+  const [tenetPhone, setTenetPhone] = useState(null);
+  const [tenetName, setTenetName] = useState(null);
+
   const navigate = useNavigate();
 
   let fileEntery = {
@@ -44,6 +49,9 @@ const NewFile = () => {
     parking_motor: motorSpot,
     owner_name: ownerName,
     owner_phone: ownerPhone,
+    bazdid: bazdid,
+    tenet_name: tenetName,
+    tenet_phone: tenetPhone,
   };
 
   if (fileType === "sell") {
@@ -54,6 +62,7 @@ const NewFile = () => {
   }
 
   const create = (fileEntery) => {
+    console.log(fileEntery);
     console.log(fileEntery);
     api
       .post(`file/${fileEntery.file_type}/new/`, fileEntery)
@@ -139,42 +148,116 @@ const NewFile = () => {
             setter={setM2}
             isRequired={true}
           />
-          <FloatLabel
-            type="number"
-            name={"year"}
-            label={"سال ساخت"}
-            setter={setYear}
-            isRequired={true}
-          />
-          <FloatLabel
-            type="number"
-            name={"bedroom"}
-            label={"اتاق خواب"}
-            setter={setBedroom}
-            isRequired={true}
-          />
 
-          <FloatLabel
-            type="number"
-            name={"floor"}
-            label={"طبقه"}
-            setter={setFloor}
-            isRequired={true}
-          />
-          <FloatLabel
-            type="number"
-            name={"floors"}
-            label={"طبقات"}
-            setter={setFloors}
-            isRequired={true}
-          />
-          <FloatLabel
-            type="number"
-            name={"units"}
-            label={"واحد ها"}
-            setter={setUnits}
-            isRequired={true}
-          />
+          {propertyType === "A" ? (
+            <>
+              <FloatLabel
+                type="number"
+                name={"bedroom"}
+                label={"اتاق خواب"}
+                setter={setBedroom}
+                isRequired={true}
+              />
+              <FloatLabel
+                type="number"
+                name={"year"}
+                label={"سال ساخت"}
+                setter={setYear}
+                isRequired={true}
+              />
+
+              <FloatLabel
+                type="number"
+                name={"floor"}
+                label={"طبقه"}
+                setter={setFloor}
+                isRequired={true}
+              />
+              <FloatLabel
+                type="number"
+                name={"floors"}
+                label={"طبقات"}
+                setter={setFloors}
+                isRequired={true}
+              />
+              <FloatLabel
+                type="number"
+                name={"units"}
+                label={"واحد ها"}
+                setter={setUnits}
+                isRequired={true}
+              />
+            </>
+          ) : propertyType === "S" ? (
+            <>
+              <FloatLabel
+                type="number"
+                name={"year"}
+                label={"سال ساخت"}
+                setter={setYear}
+                isRequired={true}
+              />
+            </>
+          ) : propertyType === "H" ? (
+            <>
+              <FloatLabel
+                type="number"
+                name={"floors"}
+                label={"طبقات"}
+                setter={setFloors}
+                isRequired={true}
+              />
+              <FloatLabel
+                type="number"
+                name={"bedroom"}
+                label={"اتاق خواب"}
+                setter={setBedroom}
+                isRequired={true}
+              />
+            </>
+          ) : null}
+        </div>
+        <div className="flex basis-full flex-row gap-2 ">
+          <div className="flex gap-2">
+            <label
+              htmlFor="bazdid"
+              className="h-full px-auto pt-1 text-gray-500 text-lg"
+            >
+              بازدید:
+            </label>
+            <select
+              name="bazdid"
+              id="bazdid"
+              onChange={(e) => {
+                setBazdid(e.target.value);
+              }}
+              className="bg-gray-50 border focus:ring-blue-300 text-center focus:border-blue-300 shadow-md  w-32 h-10 rounded-lg"
+            >
+              <option value="هماهنگی">هماهنگی</option>
+              <option value="صبح">صبح</option>
+              <option value="بعدازظهر">بعدازظهر</option>
+              <option value="مستاجر">مستاجر</option>
+            </select>
+          </div>
+
+          {bazdid === "مستاجر" ? (
+            <>
+              <FloatLabel
+                type="text"
+                name={"ownerPhone"}
+                label={"شماره مستاجر"}
+                setter={setTenetPhone}
+                isRequired={true}
+              />
+              <FloatLabel
+                type="text"
+                name={"ownerName"}
+                label={"نام مستاجر"}
+                setter={setTenetName}
+                isRequired={true}
+              />
+            </>
+          ) : null}
         </div>
         <div className="flex basis-full flex-row gap-2">
           <FloatLabel

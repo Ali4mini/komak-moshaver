@@ -11,17 +11,22 @@ class Sell(models.Model):
         LAND = 'L', 'زمین و کلنگی'
         STORE = 'S', 'مغازه و غرفه'
         VILA = 'H', 'خانه و ویلا'
-        
+    
+    class Status(models.TextChoices):
+        ACTIVE = 'ACTIVE', 'برای فروش'
+        UNACTIVE = 'UNACTIVE', 'فروخته شد'
+        CANCELED = 'CANCELED', 'برای فروش نیست'
+
     class Meta:
         ordering = ['-created']
         
     owner_name = models.CharField(max_length=1000)
     owner_phone = models.CharField(max_length=12)
     address = models.TextField()
-    m2 = models.IntegerField()
+    m2 = models.IntegerField(null=True)
     price = models.IntegerField()
-    year = models.IntegerField()
-    floor = models.IntegerField(blank=True)
+    year = models.IntegerField(null=True)
+    floor = models.IntegerField(null=True)
     elevator = models.BooleanField(default=True)
     storage = models.BooleanField(default=True)
     parking = models.BooleanField(default=True)
@@ -41,7 +46,10 @@ class Sell(models.Model):
     tabaghat = models.IntegerField(null=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    
+    tenet_name = models.CharField(max_length=100, null=True, blank=True)
+    tenet_phone = models.CharField(max_length=12, null=True, blank=True)
+    status = models.CharField(max_length=12, choices=Status.choices, default=Status.ACTIVE)
+
     image1 = models.ImageField(upload_to='images/', blank=True)
     image2 = models.ImageField(upload_to='images/', blank=True)
     image3 = models.ImageField(upload_to='images/', blank=True)
@@ -67,18 +75,23 @@ class Rent(models.Model):
         LAND = 'L', 'زمین و کلنگی'
         STORE = 'S', 'اداری و تجاری'
         VILA = 'H', 'خانه و ویلا'
-        
+    
+    class Status(models.TextChoices):
+        ACTIVE = 'ACTIVE', 'برای اجاره'
+        UNACTIVE = 'UNACTIVE', 'اجاره داده شد'
+        CANCELED = 'CANCELED', 'برای اجاره نیست'
+
     class Meta:
         ordering = ['-created']
         
     owner_name = models.CharField(max_length=1000)
     owner_phone = models.CharField(max_length=12)
     address = models.TextField()
-    m2 = models.IntegerField()
+    m2 = models.IntegerField(null=True)
     price_up = models.IntegerField()
     price_rent = models.FloatField()
-    year = models.IntegerField()
-    floor = models.IntegerField()
+    year = models.IntegerField(null=True)
+    floor = models.IntegerField(null=True)
     elevator = models.BooleanField(default=True)
     storage = models.BooleanField(default=True)
     parking = models.BooleanField()
@@ -97,6 +110,9 @@ class Rent(models.Model):
     bazdid = models.CharField(max_length=100, null=True)
     tabdil = models.BooleanField(default=False)
     tabaghat = models.IntegerField(null=True)
+    tenet_name = models.CharField(max_length=100, null=True, blank=True)
+    tenet_phone = models.CharField(max_length=12, null=True, blank=True)
+    status = models.CharField(max_length=12, choices=Status.choices, default=Status.ACTIVE)
 
     image1 = models.ImageField(upload_to='images/', blank=True)
     image2 = models.ImageField(upload_to='images/', blank=True)
