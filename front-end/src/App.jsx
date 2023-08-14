@@ -10,11 +10,18 @@ import UpdateFile from "./file/update";
 import UpdateCustomer from "./customer/update";
 import Files from "./home/files";
 import Scanner from "./home/scanner";
+import ShowFlashMessage from "./common/flash";
+import { useSelector } from "react-redux";
 
 function App() {
+  const store = useSelector((state) => state.flash);
+
   return (
     <>
       <NavBar />
+      {store.message ? (
+        <ShowFlashMessage type={store.type} message={store.message} />
+      ) : null}
       <Routes>
         <Route path="/" element={<Files />} />
         <Route path="listing/" element={<Scanner />} />
@@ -23,13 +30,11 @@ function App() {
           <Route path="new/" element={<NewFile />} />
           <Route path=":fileType/:id" element={<FileDetails />} />
           <Route path=":fileType/:id/edit/" element={<UpdateFile />} />
-
         </Route>
         <Route path="customer/">
           <Route path="new/" element={<NewCustomer />} />
           <Route path=":customerType/:id" element={<CustomerDetail />} />
           <Route path=":customerType/:id/edit/" element={<UpdateCustomer />} />
-
         </Route>
         <Route path="agents/login" element={<Login />}></Route>
       </Routes>

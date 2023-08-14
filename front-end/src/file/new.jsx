@@ -3,7 +3,8 @@ import Checkbox from "../common/checkbox";
 import { useState } from "react";
 import api from "../common/api";
 import { useNavigate } from "react-router-dom";
-import { DatePicker } from "zaman";
+import { setFlashMessage } from "../common/flashSlice";
+import { useDispatch } from "react-redux";
 
 const NewFile = () => {
   const [fileType, setFileType] = useState("sell");
@@ -29,6 +30,7 @@ const NewFile = () => {
   const [tenetName, setTenetName] = useState(null);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   let fileEntery = {
     file_type: fileType,
@@ -63,10 +65,20 @@ const NewFile = () => {
 
   const create = (fileEntery) => {
     console.log(fileEntery);
-    console.log(fileEntery);
     api
       .post(`file/${fileEntery.file_type}/new/`, fileEntery)
-      .then((response) => console.log(response.data))
+      .then((response) => {
+        switch (response.status) {
+          case 201:
+            dispatch(
+              setFlashMessage({
+                type: "SUCCESS",
+                message: "یک فایل اضافه شد",
+              })
+            );
+            break;
+        }
+      })
       .catch((error) => console.log(error.data));
     navigate("/", { replace: true });
   };

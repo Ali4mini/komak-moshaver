@@ -3,7 +3,7 @@ import PkFilter from "./customer_pk_filter";
 import { useEffect } from "react";
 import api from "../common/api";
 import Customer from "./customer_card";
-import { setCustomers } from "./customerSlice";
+import { setCustomers } from "./customersSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const Customers = () => {

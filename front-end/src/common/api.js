@@ -1,8 +1,11 @@
 import Axios from "axios";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+
+const apiUrl = import.meta.env.VITE_API
+console.log(apiUrl);
 const api = Axios.create({
-  baseURL: "http://0.0.0.0:8080/",
+  baseURL: apiUrl,
   headers: {
     Authorization: `Bearer ${localStorage.getItem("access_token")}`,
     "Content-type": "application/json",
@@ -17,16 +20,17 @@ api.interceptors.response.use(
 
       try {
         const response = await axios.post(
-          "http://0.0.0.0:8080/token/refresh/",
+          `${apiUrl}token/refresh/`,
           {
             refresh: refreshToken,
           }
         );
-
         console.log(response.data.access);
         localStorage.setItem("access_token", response.data.access);
-        error.config.headers["Authorization"] = `Bearer ${response.data.token}`;
+        // error.config.headers["Authorization"] = `Bearer ${response.data.token}`;
         console.log("changed the access token");
+        console.log(error.config);
+        location.reload()
 
         return api(error.config);
       } catch (refreshError) {

@@ -16,7 +16,6 @@ const Files = () => {
         status: 'ACTIVE'
       }})
       .then((response) => {
-        console.log(response.data);
         dispatch(setFiles(response.data));
       })
       .catch((error) => console.log(error));

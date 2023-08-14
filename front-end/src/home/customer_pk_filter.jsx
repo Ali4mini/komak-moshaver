@@ -2,7 +2,7 @@ import { useState } from "react";
 import FloatLabel from "../common/input";
 import api from "../common/api";
 import { useDispatch } from "react-redux";
-import { setCustomers } from "./customerSlice";
+import { setCustomers } from "./customersSlice";
 
 const PkFilter = () => {
   const [pk, setPk] = useState(null);

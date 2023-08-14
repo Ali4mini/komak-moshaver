@@ -3,9 +3,9 @@ import FloatLabel from "../common/input";
 import Checkbox from "../common/checkbox";
 import api from "../common/api";
 import { useDispatch } from "react-redux";
-import { setCustomers } from "./customerSlice";
+import { setCustomers } from "./customersSlice";
 
-const Filter = ({ setter }) => {
+const Filter = () => {
   const [customerType, setCustomerType] = useState("buy");
   const [propertyType, setPropertyType] = useState("A");
   const [budget, setBudget] = useState(null);
