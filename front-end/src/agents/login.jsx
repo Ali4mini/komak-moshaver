@@ -9,12 +9,12 @@ const Login = () => {
   const loginUser = async (credentials) => {
     try {
       const response = await api.post("token/", credentials);
-      console.log(response);
       localStorage.setItem("access_token", response.data.access);
       localStorage.setItem("refresh_token", response.data.refresh);
       switch (response.status) {
         case 200:
-          navigate("/", {replace: true});
+          navigate("/", { replace: true });
+          getUser(credentials)
           break;
 
         default:
@@ -24,6 +24,27 @@ const Login = () => {
       console.log(error);
     }
   };
+
+  const getUser = async (credentials) => {
+    try {
+      const response = await api.get(`agents/profile/${credentials.username}/`);
+      const agentsField = response.data.field
+      const userId = response.data.user
+      localStorage.setItem("agents_field", agentsField);
+      localStorage.setItem("user_id", userId)
+      switch (response.status) {
+        case 200:
+          navigate("/", { replace: true });
+          break;
+
+        default:
+          break;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const [username, setUsername] = useState(null);
   const [password, setPassword] = useState(null);
   const credentials = {

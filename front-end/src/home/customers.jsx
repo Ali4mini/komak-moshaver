@@ -8,11 +8,19 @@ import { useDispatch, useSelector } from "react-redux";
 
 const Customers = () => {
   const store = useSelector((state) => state.customers);
+  const agentsField =
+    localStorage.getItem("agents_field") === "sell" ? "buy" : "rent";
   const dispatch = useDispatch();
   useEffect(() => {
-    api.get("listing/customers/").then((response) => {
-      dispatch(setCustomers(response.data));
-    });
+    api
+      .get("listing/customers/", {
+        params: {
+          customer_type: agentsField,
+        },
+      })
+      .then((response) => {
+        dispatch(setCustomers(response.data));
+      });
   }, []);
 
   return (

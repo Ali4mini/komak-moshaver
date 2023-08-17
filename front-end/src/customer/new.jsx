@@ -5,7 +5,9 @@ import api from "../common/api";
 import { useNavigate } from "react-router-dom";
 
 const NewCustomer = () => {
-  const [customerType, setcustomerType] = useState("buy");
+  const [customerType, setcustomerType] = useState(
+    localStorage.getItem("agents_field")
+  );
   const [propertyType, setPropertyType] = useState("A");
   const [m2, setM2] = useState(null);
   const [year, setYear] = useState(null);
@@ -20,10 +22,13 @@ const NewCustomer = () => {
   const [motorSpot, setMotorSpot] = useState(false);
   const [customerName, setCustomerName] = useState(null);
   const [customerPhone, setCustomerPhone] = useState(null);
+  const user = localStorage.getItem("user_id");
+
   const navigate = useNavigate();
 
   let customerEntery = {
-    customer_type: customerType,
+    added_by: user,
+    customer_type: customerType === "sell" ? "buy" : "rent",
     property_type: propertyType,
     m2: m2,
     year: year,
@@ -62,6 +67,7 @@ const NewCustomer = () => {
           <select
             name="customer_type"
             id="customer_type"
+            defaultValue={customerType}
             onChange={(e) => {
               setcustomerType(e.target.value);
             }}
@@ -89,7 +95,7 @@ const NewCustomer = () => {
             <option value="H">خانه و ویلا</option>
           </select>
         </div>
-        <div className="grid md:grid-cols-3 w-full flex-wrap gap-2">
+        <div className="flex w-full flex-wrap gap-2">
           {customerType === "buy" ? (
             <FloatLabel
               type="number"

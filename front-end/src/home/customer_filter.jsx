@@ -6,7 +6,9 @@ import { useDispatch } from "react-redux";
 import { setCustomers } from "./customersSlice";
 
 const Filter = () => {
-  const [customerType, setCustomerType] = useState("buy");
+  const [customerType, setCustomerType] = useState(
+    localStorage.getItem("agents_field") === "sell" ? "buy" : "rent"
+  );
   const [propertyType, setPropertyType] = useState("A");
   const [budget, setBudget] = useState(null);
   const [up_budget, setUpBudget] = useState(null);
@@ -17,7 +19,7 @@ const Filter = () => {
   const [parking, setParking] = useState(null);
   const [elevator, setElevator] = useState(null);
   const [storage, setStorage] = useState(null);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const filter_entery = {
     customer_type: customerType,
@@ -44,7 +46,7 @@ const Filter = () => {
     api
       .get("listing/customers/", { params: data })
       .then((response) => {
-        dispatch(setCustomers(response.data))
+        dispatch(setCustomers(response.data));
       })
       .catch((error) => console.log(`error: ${error}`));
   };
@@ -58,6 +60,7 @@ const Filter = () => {
         <select
           name="customer_type"
           id="customer_type"
+          defaultValue={customerType}
           onChange={(e) => {
             setCustomerType(e.target.value);
           }}

@@ -12,9 +12,12 @@ const Files = () => {
 
   useEffect(() => {
     api
-      .get("listing/", {params: {
-        status: 'ACTIVE'
-      }})
+      .get("listing/", {
+        params: {
+          status: "ACTIVE",
+          file_type: localStorage.getItem("agents_field"),
+        },
+      })
       .then((response) => {
         dispatch(setFiles(response.data));
       })

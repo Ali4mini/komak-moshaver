@@ -7,7 +7,9 @@ import { setFlashMessage } from "../common/flashSlice";
 import { useDispatch } from "react-redux";
 
 const NewFile = () => {
-  const [fileType, setFileType] = useState("sell");
+  const [fileType, setFileType] = useState(
+    localStorage.getItem("agents_field")
+  );
   const [propertyType, setPropertyType] = useState("A");
   const [address, setAddress] = useState(null);
   const [m2, setM2] = useState(null);
@@ -28,11 +30,13 @@ const NewFile = () => {
   const [bazdid, setBazdid] = useState("هماهنگی");
   const [tenetPhone, setTenetPhone] = useState(null);
   const [tenetName, setTenetName] = useState(null);
+  const user = localStorage.getItem("user_id");
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   let fileEntery = {
+    added_by: user,
     file_type: fileType,
     property_type: propertyType,
     address: address,
@@ -56,10 +60,10 @@ const NewFile = () => {
     tenet_phone: tenetPhone,
   };
 
-  if (fileType === "sell") {
+  if (fileType === "SELL") {
     delete fileEntery.price_up;
     delete fileEntery.price_rent;
-  } else if (fileType === "rent") {
+  } else if (fileType === "RENT") {
     delete fileEntery.price;
   }
 
@@ -92,6 +96,7 @@ const NewFile = () => {
             onChange={(e) => {
               setFileType(e.target.value);
             }}
+            defaultValue={fileType}
             className="bg-gray-50 border focus:ring-blue-300 text-center focus:border-blue-300 shadow-md w-32 h-10 rounded-lg"
           >
             <option id="sell" value="sell">
@@ -105,6 +110,7 @@ const NewFile = () => {
           <select
             name="property_type"
             id="property_type"
+            defaultValue={propertyType}
             onChange={(e) => {
               setPropertyType(e.target.value);
             }}

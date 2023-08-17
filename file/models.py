@@ -34,9 +34,7 @@ class Sell(models.Model):
     added_by = models.ForeignKey(settings.AUTH_USER_MODEL,
                                  verbose_name=("added to site by "),
                                  on_delete=models.DO_NOTHING,
-                                 blank=False,
-                                 default=1
-                                 )
+                                 blank=False,)
     bedroom = models.IntegerField(blank=True, null=True)
     parking_motor = models.BooleanField(default=False)
     takhlie = models.CharField(max_length=100, null=True)

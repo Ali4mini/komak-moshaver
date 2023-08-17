@@ -6,7 +6,9 @@ import { useDispatch } from "react-redux";
 import { setFiles } from "./filesSlice";
 
 const Filter = () => {
-  const [fileType, setFileType] = useState("sell");
+  const [fileType, setFileType] = useState(
+    localStorage.getItem("agents_field")
+  );
   const [propertyType, setPropertyType] = useState("A");
   const [price, setPrice] = useState(null);
   const [priceUp, setPriceUp] = useState(null);
@@ -58,6 +60,7 @@ const Filter = () => {
         <select
           name="file_type"
           id="file_type"
+          defaultValue={fileType}
           onChange={(e) => {
             setFileType(e.target.value);
           }}
