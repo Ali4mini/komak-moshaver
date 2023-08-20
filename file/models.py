@@ -55,7 +55,7 @@ class Sell(models.Model):
     image5 = models.ImageField(upload_to='images/', blank=True)   
     
     tag_manager = TaggableManager(blank=True)
-
+    divar_token = models.CharField(max_length=8, blank=True, null=True)
 
 
     def __str__(self):
@@ -117,9 +117,9 @@ class Rent(models.Model):
     image3 = models.ImageField(upload_to='images/', blank=True)
     image4 = models.ImageField(upload_to='images/', blank=True)
     image5 = models.ImageField(upload_to='images/', blank=True)   
-    
 
     tags_manager = TaggableManager(blank=True)
+    divar_token = models.CharField(max_length=8, blank=True, null=True)
 
     def __str__(self):
         return f"owner: {self.owner_name} owner's phone: {self.owner_phone}"
