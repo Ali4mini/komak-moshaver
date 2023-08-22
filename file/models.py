@@ -106,7 +106,7 @@ class Rent(models.Model):
     vahedha = models.IntegerField(null=True)
     komod_divari = models.BooleanField(default=False)
     bazdid = models.CharField(max_length=100, null=True)
-    tabdil = models.BooleanField(default=False)
+    tabdil = models.IntegerField(default=None, null=True, blank=True)
     tabaghat = models.IntegerField(null=True)
     tenet_name = models.CharField(max_length=100, null=True, blank=True)
     tenet_phone = models.CharField(max_length=12, null=True, blank=True)

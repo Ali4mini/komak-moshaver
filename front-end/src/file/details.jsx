@@ -58,11 +58,12 @@ const FileDetails = () => {
           <p>تعداد اتاق خواب: {file?.bedroom}</p>
           <p>تعداد واحد: {file?.vahedha}</p>
           <p>بازدید: {file?.bazdid}</p>
+          <p>تبدیل: {file?.tabdil}</p>
+
         </div>
         <div className="flex flex-row gap-20 my-3 px-4">
           <p>شماره مستاجر: {file?.tenet_phone}</p>
           <p>نام مستاجر: {file?.tenet_name}</p>
-
         </div>
         <div className="flex flex-row gap-20 my-3 px-4">
           <p>آدرس: {file?.address}</p>

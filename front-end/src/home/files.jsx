@@ -11,17 +11,26 @@ const Files = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    api
-      .get("listing/", {
-        params: {
-          status: "ACTIVE",
-          file_type: localStorage.getItem("agents_field"),
-        },
-      })
-      .then((response) => {
-        dispatch(setFiles(response.data));
-      })
-      .catch((error) => console.log(error));
+    if (store.lastFilter) {
+      api
+        .get(store.lastFilter)
+        .then((response) => {
+          dispatch(setFiles(response.data));
+        })
+        .catch((error) => console.log(error));
+    } else {
+      api
+        .get("listing/", {
+          params: {
+            status: "ACTIVE",
+            file_type: localStorage.getItem("agents_field"),
+          },
+        })
+        .then((response) => {
+          dispatch(setFiles(response.data));
+        })
+        .catch((error) => console.log(error));
+    }
   }, []);
 
   return (

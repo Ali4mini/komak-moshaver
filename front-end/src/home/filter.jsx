@@ -1,15 +1,20 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import FloatLabel from "../common/input";
 import api from "../common/api";
 import Checkbox from "../common/checkbox";
-import { useDispatch } from "react-redux";
-import { setFiles } from "./filesSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { setFiles, setLastFilter, clearLastFilter } from "./filesSlice";
+import Files from "./files";
 
 const Filter = () => {
+  const dispatch = useDispatch();
+  const store = useSelector((state) => state.files);
+  let lastFilter = store.lastFilter;
+
   const [fileType, setFileType] = useState(
     localStorage.getItem("agents_field")
   );
-  const [propertyType, setPropertyType] = useState("A");
+  const [propertyType, setPropertyType] = useState();
   const [price, setPrice] = useState(null);
   const [priceUp, setPriceUp] = useState(null);
   const [priceRent, setPriceRent] = useState(null);
@@ -19,7 +24,6 @@ const Filter = () => {
   const [parking, setParking] = useState(null);
   const [elevator, setElevator] = useState(null);
   const [storage, setStorage] = useState(null);
-  const dispatch = useDispatch();
 
   let filterEntery = {
     file_type: fileType,
@@ -47,8 +51,13 @@ const Filter = () => {
       .get("listing/", { params: data })
       .then((response) => {
         dispatch(setFiles(response.data));
+        dispatch(setLastFilter(data));
       })
       .catch((error) => console.log(`error: ${error}`));
+  };
+  const cancelFilter = () => {
+    dispatch(clearLastFilter());
+    location.reload();
   };
 
   return (
@@ -131,12 +140,22 @@ const Filter = () => {
         <Checkbox label="آسانسور" name="elevator" setter={setElevator} />
         <Checkbox label="انباری" name="storage" setter={setStorage} />
       </div>
-      <button
-        onClick={() => filter(filterEntery)}
-        className="basis-full rounded-lg bg-blue-300 hover:bg-blue-400 py-1 border w-full bottom-0"
-      >
-        فیلتر
-      </button>
+      <div className="flex flex-col gap-3">
+        <button
+          onClick={() => filter(filterEntery)}
+          className="basis-full rounded-lg bg-blue-300 hover:bg-blue-400 py-1 border w-full bottom-0"
+        >
+          فیلتر
+        </button>
+        {lastFilter ? (
+          <button
+            onClick={() => cancelFilter()}
+            className="basis-full rounded-lg bg-red-300 hover:bg-red-400 py-1 border w-full bottom-0"
+          >
+            حذف فیلتر
+          </button>
+        ) : null}
+      </div>
     </div>
   );
 };

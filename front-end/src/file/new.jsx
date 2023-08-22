@@ -18,6 +18,7 @@ const NewFile = () => {
   const [price, setPrice] = useState(null);
   const [upPrice, setUpPrice] = useState(null);
   const [rentPrice, setRentPrice] = useState(null);
+  const [tabdil, setTabdil] = useState(null);
   const [floor, setFloor] = useState(null);
   const [floors, setFloors] = useState(null);
   const [units, setUnits] = useState(null);
@@ -46,6 +47,7 @@ const NewFile = () => {
     price: price,
     price_up: upPrice,
     price_rent: rentPrice,
+    tabdil: tabdil,
     floor: floor,
     tabaghat: floors,
     vahedha: units,
@@ -154,6 +156,13 @@ const NewFile = () => {
                 name={"rentPrice"}
                 label={"اجاره"}
                 setter={setRentPrice}
+                isRequired={true}
+              />
+              <FloatLabel
+                type="number"
+                name={"tabdil"}
+                label={"تبدیل"}
+                setter={setTabdil}
                 isRequired={true}
               />
             </>
