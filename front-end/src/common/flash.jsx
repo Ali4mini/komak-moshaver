@@ -17,9 +17,9 @@ const ShowFlashMessage = ({ type, message }) => {
 
   if (flashMessage) {
     return(
-      <p className="">
+      <div className="">
         {message}
-      </p>
+      </div>
     )
   }
 };

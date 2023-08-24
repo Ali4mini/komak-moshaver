@@ -9,6 +9,12 @@ class BuyCustomer(models.Model):
         LAND = 'L', 'زمین و کلنگی'
         STORE = 'S', 'مغازه و غرفه'
         VILA = 'H', 'خانه و ویلا'
+
+    class Status(models.TextChoices):
+        ACTIVE = 'ACTIVE', 'پیدا نکرده'
+        UNACTIVE = 'UNACTIVE', 'پیدا کرد'
+        CANCELED = 'CANCELED', 'منصرف شد'
+
     class Meta:
         ordering = ['-created']
     customer_name = models.CharField(max_length=150)
@@ -30,6 +36,8 @@ class BuyCustomer(models.Model):
     parking = models.BooleanField(blank=True)
     elevator = models.BooleanField(default=False)
     storage = models.BooleanField(default=True)
+    status = models.CharField(max_length=12, choices=Status.choices, default=Status.ACTIVE)
+
     
     def __str__(self) -> str:
         return self.customer_name
@@ -42,6 +50,11 @@ class RentCustomer(models.Model):
         LAND = 'L', 'زمین و کلنگی'
         STORE = 'S', 'مغازه و غرفه'
         VILA = 'H', 'خانه و ویلا'
+
+    class Status(models.TextChoices):
+        ACTIVE = 'ACTIVE', 'پیدا نکرده'
+        UNACTIVE = 'UNACTIVE', 'پیدا کرد'
+        CANCELED = 'CANCELED', 'منصرف شد'
 
     class Meta:
         ordering = ['-created']
@@ -66,6 +79,8 @@ class RentCustomer(models.Model):
     parking = models.BooleanField(blank=True)
     elevator = models.BooleanField(default=False)
     storage = models.BooleanField(default=True)
+    status = models.CharField(max_length=12, choices=Status.choices, default=Status.ACTIVE)
+
     
     def __str__(self) -> str:
         return self.customer_name

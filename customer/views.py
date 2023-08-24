@@ -10,7 +10,6 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.views.generic.edit import UpdateView, DeleteView
-from file.models import Sell, Rent
 from rest_framework.views import APIView
 from rest_framework import generics
 from rest_framework.response import Response
@@ -21,10 +20,22 @@ from .serializers import BuyCustomerSerializer, RentCustomerSerializer
 class BuyCustomerDetails(generics.RetrieveUpdateDestroyAPIView):
     queryset = BuyCustomer.objects.all()
     serializer_class = BuyCustomerSerializer
+    def destroy(self, request, pk=None):
+        print('in delete')
+        customer = self.get_object()
+        customer.status = "UNACTIVE"
+        customer.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 class RentCustomerDetails(generics.RetrieveUpdateDestroyAPIView):
     queryset = RentCustomer.objects.all()
-    serializer_class = BuyCustomerSerializer
+    serializer_class = RentCustomerSerializer
+    def destroy(self, request, pk=None):
+        print('in delete')
+        customer = self.get_object()
+        customer.status = "UNACTIVE"
+        customer.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 class NewBuyCustomer(generics.CreateAPIView):
     queryset = BuyCustomer.objects.all()

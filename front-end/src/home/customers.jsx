@@ -16,6 +16,7 @@ const Customers = () => {
       .get("listing/customers/", {
         params: {
           customer_type: agentsField,
+          status: 'ACTIVE',
         },
       })
       .then((response) => {
