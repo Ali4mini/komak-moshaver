@@ -2,15 +2,21 @@ import { useState, Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import api from "./api";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setFlashMessage } from "./flashSlice";
 
 const DeleteConfirm = ({ app, model, id, title, description }) => {
   const [isOpen, setIsOpen] = useState(true);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const Delete = () => {
     console.log(`${app}/${model}/${id}/`);
     api
       .delete(`${app}/${model}/${id}/`)
-      .then(navigate("/", { replace: true }))
+      .then((response) => {
+        navigate("/", { replace: true });
+        dispatch(setFlashMessage({ type: "SUCCESS", message: "فایل حذف شد" }));
+      })
       .catch((error) => console.log(`problem in DELETE request: ${error}`));
   };
   return (

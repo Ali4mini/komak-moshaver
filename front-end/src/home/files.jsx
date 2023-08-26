@@ -1,5 +1,5 @@
 import Filter from "./filter";
-import PkFilter from "./pk_filter";
+import Search from "./search";
 import File from "./property_card";
 import { useEffect, useState } from "react";
 import api from "../common/api";
@@ -35,7 +35,7 @@ const Files = () => {
 
   return (
     <div className="home flex flex-col gap-3">
-      <PkFilter />
+      {/* <Search /> */}
       <Filter />
       <div className="flex flex-col ">
         {store.files ? (

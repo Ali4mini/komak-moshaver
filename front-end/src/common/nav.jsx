@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
+import Search from "../home/search";
 
 const NavBar = () => {
   return (
-    <nav id="NavBar" className="text-left py-2 px-2 sticky top-0 h-14 border-gray-gray bg-white  z-50">
+    <nav id="NavBar" className="flex border-b justify-between mb-4 px-5 sticky top-0 h-14 border-gray-gray bg-white  z-50">
       <div className="flex items-center gap-4">
         <Link
           id="home"
@@ -47,6 +48,7 @@ const NavBar = () => {
           ورود
         </Link>
       </div>
+      <Search />
     </nav>
   );
 };

@@ -10,7 +10,7 @@ import UpdateFile from "./file/update";
 import UpdateCustomer from "./customer/update";
 import Files from "./home/files";
 import Scanner from "./home/scanner";
-import ShowFlashMessage from "./common/flash";
+import ShowMessage from "./common/flash";
 import { useSelector } from "react-redux";
 
 function App() {
@@ -20,7 +20,7 @@ function App() {
     <>
       <NavBar />
       {store.message ? (
-        <ShowFlashMessage type={store.type} message={store.message} />
+        <ShowMessage type={store.type} message={store.message} />
       ) : null}
       <Routes>
         <Route path="/" element={<Files />} />
