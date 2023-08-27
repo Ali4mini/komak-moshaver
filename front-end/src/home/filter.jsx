@@ -26,6 +26,7 @@ const Filter = () => {
   const [storage, setStorage] = useState(null);
 
   let filterEntery = {
+    status: "ACTIVE",
     file_type: fileType,
     property_type: propertyType,
     price__lte: price,

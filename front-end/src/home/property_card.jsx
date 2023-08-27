@@ -7,7 +7,7 @@ import parking from '../assets/car.png'
 const File = ({ file }) => {
   return (
     <Link to={`file/${file.file_type}/${file.id}`}>
-      <div className="block border-2 shadow-md rounded-2xl bg-gray-50 hover:bg-gray-100 hover:shadow-xl mx-4 py-1 my-2">
+      <div className={`${file.status} block border-2 shadow-md rounded-2xl  hover:shadow-xl mx-4 py-1 my-2`}>
         <div className="flex flex-col" id="file">
           <div className="flex flex-row gap-0">
             <p

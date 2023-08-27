@@ -1,10 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FloatLabel from "../common/input";
 import api from "../common/api";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const navigate = useNavigate();
+
+  // redirect if user_id is in localstorage
+  useEffect(() => {
+    if (localStorage.getItem('user_id')){
+      navigate('/', {replace: true})
+    }
+  }, [])
 
   const loginUser = async (credentials) => {
     try {
