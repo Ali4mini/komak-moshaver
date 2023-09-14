@@ -30,18 +30,18 @@ const FileDetails = () => {
   return (
     <div
       id="details"
-      className="flex border-2 bg-white rounded-lg mx-4 h-auto shadow-lg"
+      className="grid border-2 text-sm md:text-base bg-white rounded-lg mx-4 h-auto shadow-lg"
     >
       <div className="flex flex-col">
         <div className="flex flex-row-2 gap-20 my-3 px-4">
           <p>نوع فایل: {fileType === "sell" ? "فروش" : "اجاره"}</p>
-          <p>نوع ملک: {file?.type}</p>
+          <p>نوع ملک: {file?.property_type}</p>
         </div>
         <div className="flex flex-row-2 gap-20 my-3 px-4">
           <p>نام مالک: {file?.owner_name}</p>
           <p>شماره مالک: {file?.owner_phone}</p>
         </div>
-        <div className="grid grid-cols-4 gap-x-6 gap-y-3 my-3 px-4">
+        <div className="grid grid-cols-3 md:grid-cols-5 max-w-md gap-x-6 gap-y-3 my-3 px-4">
           <p>متراژ: {file?.m2}</p>
           {fileType === "sell" ? (
             <p>قیمت: {file?.price}</p>
@@ -52,13 +52,15 @@ const FileDetails = () => {
             </>
           )}
 
-          <p>سال ساخت: {file?.year}</p>
+          <p>ساخت: {file?.year}</p>
           <p>طبقه: {file?.floor}</p>
           <p>طبقات: {file?.tabaghat}</p>
-          <p>تعداد اتاق خواب: {file?.bedroom}</p>
-          <p>تعداد واحد: {file?.vahedha}</p>
-          <p>بازدید: {file?.bazdid}</p>
+          <p>خواب: {file?.bedroom}</p>
+          <p>واحد: {file?.vahedha}</p>
           <p>تبدیل: {file?.tabdil}</p>
+        </div>
+        <div className="flex flex-row my-3 px-4">
+        <p>بازدید: {file?.bazdid}</p>
 
         </div>
         <div className="flex flex-row gap-20 my-3 px-4">

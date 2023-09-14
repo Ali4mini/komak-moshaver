@@ -12,21 +12,31 @@ const Customers = () => {
     localStorage.getItem("agents_field") === "sell" ? "buy" : "rent";
   const dispatch = useDispatch();
   useEffect(() => {
-    api
-      .get("listing/customers/", {
-        params: {
-          customer_type: agentsField,
-          status: 'ACTIVE',
-        },
-      })
-      .then((response) => {
-        dispatch(setCustomers(response.data));
-      });
+    if (store.lastFilter) {
+      api
+        .get(store.lastFilter)
+        .then((response) => {
+          dispatch(setcustomers(response.data));
+        })
+        .catch((error) => console.log(error));
+    } else {
+      api
+        .get("listing/customers", {
+          params: {
+            status: "ACTIVE",
+            customer_type: localStorage.getItem("agents_field"),
+          },
+        })
+        .then((response) => {
+          dispatch(setCustomers(response.data));
+        })
+        .catch((error) => console.log(error));
+    }
   }, []);
 
   return (
     <div className="Customers flex flex-col gap-3">
-      <PkFilter />
+      {/* <PkFilter /> */}
       <Filter />
       <div className="flex flex-col ">
         {store.customers ? (

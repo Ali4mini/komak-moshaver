@@ -21,7 +21,7 @@ const Scanner = () => {
 
   return (
     <div className="home flex flex-col gap-3">
-      <Search />
+      {/* <Search /> */}
       <Filter />
       <div className="flex flex-col ">
         {store.scannerFiles ? (

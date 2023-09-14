@@ -1,13 +1,14 @@
 import { Link } from "react-router-dom";
-import car from "../assets/car.png";
 import elevator from "../assets/elevator.png";
 import storage from "../assets/storage.png";
-import parking from '../assets/car.png'
+import parking from "../assets/car.png";
 
-const Customer = ({ customer }) => {
+const customer = ({ customer }) => {
   return (
     <Link to={`/customer/${customer.customer_type}/${customer.id}`}>
-      <div className="block border-2 shadow-md rounded-2xl bg-gray-50 hover:bg-gray-100 hover:shadow-xl mx-4 py-1 my-2">
+      <div
+        className={`${customer.status} block border-2 shadow-md rounded-2xl  hover:shadow-xl mx-4 py-1 my-2`}
+      >
         <div className="flex flex-col" id="customer">
           <div className="flex flex-row gap-0">
             <p
@@ -16,25 +17,28 @@ const Customer = ({ customer }) => {
             >
               {customer.id}
             </p>
-            <h1 className="inline basis-full w-full shadow-md py-3 px-4">
+            <h1 className="flex text-sm truncate md:text-base max-h-sm w-full shadow-md py-3 px-4">
               {customer.customer_name}
             </h1>
           </div>
-          <div className="flex flex-row gap-20 py-6 px-4 shadow">
-            {(customer.customer_type === 'buy') ? (
-              <p>بودجه: {customer.budget}</p>
+          <div className="grid grid-cols-3 text-sm md:grid-cols-7 md:text-base gap-2 max-w-2xl  py-3 px-4 ">
+            {customer.customer_type === "sell" ? (
+              <p>بودجه: {customer.price}</p>
             ) : (
               <>
-                <p>ودیعه: {customer.up_budget}</p>
-                <p>اجاره: {customer.rent_budget}</p>
+                <p>ودیعه: {customer.price_up}</p>
+                <p>اجاره: {customer.price_rent}</p>
               </>
             )}
-            <p>سال ساخت: {customer.year}</p>
-            <p>تعداد اتاق خواب: {customer.bedroom}</p>
-            <p>تعداد واحد: {customer.vahedha}</p>
+            <p>متراژ: {customer.m2}</p>
+            <p>ساخت: {customer.year}</p>
+            <p>طبقه: {customer.floor}</p>
+            <p>خواب: {customer.bedroom}</p>
+            <p>واحد: {customer.vahedha}</p>
           </div>
-          <div className="flex flex-row justify-around p-2">
-          {customer.elevator ? (
+
+          <div className="flex sm:flex-row justify-around  m p-2">
+            {customer.elevator ? (
               <>
                 <div className="flex flex-col">
                   <img src={elevator} alt="" width="30px" className="mx-auto" />
@@ -62,4 +66,4 @@ const Customer = ({ customer }) => {
   );
 };
 
-export default Customer;
+export default customer;

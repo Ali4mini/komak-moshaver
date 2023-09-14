@@ -1,4 +1,5 @@
 import NavBar from "./common/nav";
+import MobileNavBar from "./common/mobile_nav";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import Login from "./agents/login";
 import FileDetails from "./file/details";
@@ -17,19 +18,20 @@ import { useEffect } from "react";
 function App() {
   const navigate = useNavigate();
   const flashStore = useSelector((state) => state.flash);
+  const hasAccessToken = localStorage.getItem("access_token");
   const isLoggedIn = localStorage.getItem("user_id");
+  let width = window.innerWidth;
 
   useEffect(() => {
-    if (!isLoggedIn){
+    if (!isLoggedIn) {
       navigate("agents/login");
-
     }
   }, []);
 
   if (isLoggedIn) {
     return (
       <>
-        <NavBar />
+        {width > 730 ? <NavBar /> : <MobileNavBar />}
         {flashStore.message ? (
           <ShowMessage type={flashStore.type} message={flashStore.message} />
         ) : null}

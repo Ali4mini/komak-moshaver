@@ -66,7 +66,7 @@ const Filter = () => {
       id="filter"
       className="flex flex-col border-2 rounded-xl mx-4 p-3 h-auto gap-5 shadow"
     >
-      <div className="flex sm:flex-col md:flex-row basis-full gap-5">
+      <div className="grid grid-cols-3 h-10 max-w-xs">
         <select
           name="file_type"
           id="file_type"
@@ -74,7 +74,7 @@ const Filter = () => {
           onChange={(e) => {
             setFileType(e.target.value);
           }}
-          className="bg-gray-50 border focus:ring-blue-300 text-center focus:border-blue-300 shadow-md w-32 h-10 rounded-lg"
+          className="bg-gray-50 border focus:ring-blue-300 text-center focus:border-blue-300 shadow-md w-24 rounded-lg"
         >
           <option id="sell" value="sell">
             فروش
@@ -90,7 +90,7 @@ const Filter = () => {
           onChange={(e) => {
             setPropertyType(e.target.value);
           }}
-          className="bg-gray-50 border focus:ring-blue-300 text-center focus:border-blue-300 shadow-md  w-32 h-10 rounded-lg"
+          className="bg-gray-50 border focus:ring-blue-300 text-center focus:border-blue-300 shadow-md  w-24 rounded-lg"
         >
           <option value="A">آپارتمان</option>
           <option value="L">زمین</option>
@@ -98,7 +98,7 @@ const Filter = () => {
           <option value="H">خانه و ویلا</option>
         </select>
       </div>
-      <div className="flex sm:flex-col md:flex-row basis-full gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 basis-full gap-3">
         {fileType === "sell" ? (
           <FloatLabel
             label="قیمت"
@@ -124,19 +124,19 @@ const Filter = () => {
         )}
         <FloatLabel label="متراژ" name="m2" type="number" setter={setM2} />
         <FloatLabel
-          label="اتاق خواب"
+          label="خواب"
           name="bedroom"
           type="number"
           setter={setBedroom}
         />
         <FloatLabel
-          label="سال ساخت"
+          label="ساخت"
           name="year"
           type="number"
           setter={setYear}
         />
       </div>
-      <div className="flex basis-full gap-5">
+      <div className="grid grid-cols-3 max-w-xs">
         <Checkbox label="پارکینگ" name="parking" setter={setParking} />
         <Checkbox label="آسانسور" name="elevator" setter={setElevator} />
         <Checkbox label="انباری" name="storage" setter={setStorage} />

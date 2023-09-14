@@ -90,8 +90,8 @@ const NewFile = () => {
   };
   return (
     <div className="block border shadow-lg rounded-xl bg-white mx-4 px-4 py-2 my-2">
-      <div className="flex flex-col gap-5">
-        <div className="flex basis-full flex-row gap-2">
+      <div className="flex flex-col gap-5 text-sm md:text-base">
+        <div className="grid grid-cols-3 max-w-xs h-10 gap-2">
           <select
             name="file_type"
             id="file_type"
@@ -99,8 +99,8 @@ const NewFile = () => {
               setFileType(e.target.value);
             }}
             defaultValue={fileType}
-            className="bg-gray-50 border focus:ring-blue-300 text-center focus:border-blue-300 shadow-md w-32 h-10 rounded-lg"
-          >
+            className="bg-gray-50 border focus:ring-blue-300 text-center focus:border-blue-300 shadow-md w-24 rounded-lg"
+            >
             <option id="sell" value="sell">
               فروش
             </option>
@@ -116,8 +116,8 @@ const NewFile = () => {
             onChange={(e) => {
               setPropertyType(e.target.value);
             }}
-            className="bg-gray-50 border focus:ring-blue-300 text-center focus:border-blue-300 shadow-md  w-32 h-10 rounded-lg"
-          >
+            className="bg-gray-50 border focus:ring-blue-300 text-center focus:border-blue-300 shadow-md w-24 rounded-lg"
+            >
             <option value="A">آپارتمان</option>
             <option value="L">زمین</option>
             <option value="S">مغازه</option>
@@ -133,7 +133,7 @@ const NewFile = () => {
             isRequired={true}
           />
         </div>
-        <div className="grid md:grid-cols-6 w-full flex-wrap gap-2">
+        <div className="grid grid-cols-2 gap-y-4 gap-x-2  md:grid-cols-4 lg:grid-cols-7 w-full flex-wrap gap-2">
           {fileType === "sell" ? (
             <FloatLabel
               type="number"
@@ -244,7 +244,7 @@ const NewFile = () => {
             </>
           ) : null}
         </div>
-        <div className="flex basis-full flex-row gap-2 ">
+        <div className="grid grid-cols-1 gap-2">
           <div className="flex gap-2">
             <label
               htmlFor="bazdid"
@@ -258,8 +258,8 @@ const NewFile = () => {
               onChange={(e) => {
                 setBazdid(e.target.value);
               }}
-              className="bg-gray-50 border focus:ring-blue-300 text-center focus:border-blue-300 shadow-md  w-32 h-10 rounded-lg"
-            >
+              className="bg-gray-50 border my-auto focus:ring-blue-300 text-center focus:border-blue-300 shadow-md w-24 h-10 rounded-lg"
+              >
               <option value="هماهنگی">هماهنگی</option>
               <option value="صبح">صبح</option>
               <option value="بعدازظهر">بعدازظهر</option>
@@ -268,7 +268,7 @@ const NewFile = () => {
           </div>
 
           {bazdid === "مستاجر" ? (
-            <>
+            <div className="flex flex-row gap-2 max-w-sm">
               <FloatLabel
                 type="text"
                 name={"ownerPhone"}
@@ -283,10 +283,10 @@ const NewFile = () => {
                 setter={setTenetName}
                 isRequired={true}
               />
-            </>
+            </div>
           ) : null}
         </div>
-        <div className="flex basis-full flex-row gap-2">
+        <div className="grid grid-cols-2 max-w-sm gap-2">
           <FloatLabel
             type="text"
             name={"ownerPhone"}
@@ -302,7 +302,7 @@ const NewFile = () => {
             isRequired={true}
           />
         </div>
-        <div className="flex basis-full gap-5">
+        <div className="grid grid-cols-3 md:grid-cols-4 max-w-sm gap-y-1">
           <Checkbox label="پارکینگ" name="parking" setter={setParking} />
           <Checkbox label="آسانسور" name="elevator" setter={setElevator} />
           <Checkbox label="انباری" name="storage" setter={setStorage} />

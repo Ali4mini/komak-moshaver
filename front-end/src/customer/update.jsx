@@ -88,15 +88,15 @@ const UpdateCustomer = () => {
   if (oldCustomer) {
     return (
       <div className="block border shadow-lg rounded-xl bg-white mx-4 px-4 py-2 my-2">
-        <div className="flex flex-col gap-5">
-          <div className="flex basis-full flex-row gap-2">
+        <div className="flex flex-col gap-5 text-sm md:text-base">
+        <div className="grid grid-cols-3 max-w-xs h-10 gap-2">
             <select
               name="property_type"
               id="property_type"
               onChange={(e) => {
                 setPropertyType(e.target.value);
               }}
-              className="bg-gray-50 border focus:ring-blue-300 text-center focus:border-blue-300 shadow-md  w-32 h-10 rounded-lg"
+              className="bg-gray-50 border focus:ring-blue-300 text-center focus:border-blue-300 shadow-md w-24 rounded-lg"
             >
               <option value="A">آپارتمان</option>
               <option value="L">زمین</option>
@@ -105,7 +105,7 @@ const UpdateCustomer = () => {
             </select>
           </div>
           
-          <div className="grid md:grid-cols-6 w-full flex-wrap gap-2">
+          <div className="grid grid-cols-2 gap-y-4 gap-x-2 md:grid-cols-4 lg:grid-cols-7 w-full flex-wrap">
             {customerType === "buy" ? (
               <FloatLabel
                 defValue={oldCustomer.budget}
@@ -118,7 +118,7 @@ const UpdateCustomer = () => {
             ) : (
               <>
                 <FloatLabel
-                  defValue={oldCustomer.upBudget}
+                  defValue={oldCustomer.up_budget}
                   type="number"
                   name={"upBudget"}
                   label={"ودیعه"}
@@ -126,7 +126,7 @@ const UpdateCustomer = () => {
                   isRequired={true}
                 />
                 <FloatLabel
-                  defValue={oldCustomer.rentbudget}
+                  defValue={oldCustomer.rent_budget}
                   type="number"
                   name={"rentbudget"}
                   label={"اجاره"}
@@ -148,7 +148,7 @@ const UpdateCustomer = () => {
               defValue={oldCustomer.year}
               type="number"
               name={"year"}
-              label={"سال ساخت"}
+              label={"ساخت"}
               setter={setYear}
               isRequired={true}
             />
@@ -156,7 +156,7 @@ const UpdateCustomer = () => {
               defValue={oldCustomer.bedroom}
               type="number"
               name={"bedroom"}
-              label={"اتاق خواب"}
+              label={"خواب"}
               setter={setBedroom}
               isRequired={true}
             />
@@ -169,7 +169,7 @@ const UpdateCustomer = () => {
               isRequired={true}
             />
           </div>
-          <div className="flex basis-full flex-row gap-2">
+          <div className="grid grid-cols-2 max-w-sm gap-2">
             <FloatLabel
               defValue={oldCustomer.customer_phone}
               type="text"
@@ -187,7 +187,7 @@ const UpdateCustomer = () => {
               isRequired={true}
             />
           </div>
-          <div className="flex basis-full gap-5">
+          <div className="grid grid-cols-3 md:grid-cols-4 max-w-sm gap-y-1">
             <Checkbox
               label="پارکینگ"
               name="parking"

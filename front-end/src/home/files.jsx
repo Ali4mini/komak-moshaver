@@ -37,7 +37,7 @@ const Files = () => {
     <div className="home flex flex-col gap-3">
       {/* <Search /> */}
       <Filter />
-      <div className="flex flex-col ">
+      <div className="grid grid-cols-1 ">
         {store.files ? (
           store.files.map((item, index) => <File key={index} file={item} />)
         ) : (

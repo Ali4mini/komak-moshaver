@@ -2,13 +2,15 @@ import { useState } from "react";
 import FloatLabel from "../common/input";
 import Checkbox from "../common/checkbox";
 import api from "../common/api";
-import { useDispatch } from "react-redux";
-import { setCustomers } from "./customersSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { setCustomers, setLastFilter, clearLastFilter  } from "./customersSlice";
 
 const Filter = () => {
   const [customerType, setCustomerType] = useState(
     localStorage.getItem("agents_field") === "sell" ? "buy" : "rent"
   );
+  const store = useSelector((state) => state.customers);
+  let lastFilter = store.lastFilter;
   const [propertyType, setPropertyType] = useState("A");
   const [budget, setBudget] = useState(null);
   const [up_budget, setUpBudget] = useState(null);
@@ -22,6 +24,7 @@ const Filter = () => {
   const dispatch = useDispatch();
 
   const filter_entery = {
+    status: "ACTIVE",
     customer_type: customerType,
     property_type: propertyType,
     budget__gte: budget,
@@ -47,8 +50,14 @@ const Filter = () => {
       .get("listing/customers/", { params: data })
       .then((response) => {
         dispatch(setCustomers(response.data));
+        dispatch(setLastFilter(data));
       })
       .catch((error) => console.log(`error: ${error}`));
+  };
+
+  const cancelFilter = () => {
+    dispatch(clearLastFilter());
+    location.reload();
   };
 
   return (
@@ -56,7 +65,7 @@ const Filter = () => {
       id="filter"
       className="flex flex-col border-2 rounded-xl mx-4 p-3 h-auto gap-5 shadow"
     >
-      <div className="flex basis-full gap-5">
+      <div className="grid grid-cols-3 h-10 max-w-xs">
         <select
           name="customer_type"
           id="customer_type"
@@ -64,7 +73,7 @@ const Filter = () => {
           onChange={(e) => {
             setCustomerType(e.target.value);
           }}
-          className="bg-gray-50 border focus:ring-blue-300 text-center focus:border-blue-300 shadow-md w-32 h-10 rounded-lg"
+          className="bg-gray-50 border focus:ring-blue-300 text-center focus:border-blue-300 shadow-md w-24 rounded-lg"
         >
           <option id="buy" value="buy">
             خرید
@@ -80,7 +89,7 @@ const Filter = () => {
           onChange={(e) => {
             setPropertyType(e.target.value);
           }}
-          className="bg-gray-50 border focus:ring-blue-300 text-center focus:border-blue-300 shadow-md  w-32 h-10 rounded-lg"
+          className="bg-gray-50 border focus:ring-blue-300 text-center focus:border-blue-300 shadow-md w-24 rounded-lg"
         >
           <option value="A">آپارتمان</option>
           <option value="L">زمین</option>
@@ -88,7 +97,7 @@ const Filter = () => {
           <option value="H">خانه و ویلا</option>
         </select>
       </div>
-      <div className="flex basis-full gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 basis-full gap-3">
         {customerType === "buy" ? (
           <FloatLabel
             label="بودچه"
@@ -126,7 +135,7 @@ const Filter = () => {
           setter={setYear}
         />
       </div>
-      <div className="flex basis-full gap-5">
+      <div className="grid grid-cols-3 max-w-xs">
         <Checkbox label="پارکینگ" name="parking" setter={setParking} />
         <Checkbox label="آسانسور" name="elevator" setter={setElevator} />
         <Checkbox label="انباری" name="storage" setter={setStorage} />
@@ -137,6 +146,14 @@ const Filter = () => {
       >
         فیلتر
       </button>
+      {lastFilter ? (
+        <button
+          onClick={() => cancelFilter()}
+          className="basis-full rounded-lg bg-red-300 hover:bg-red-400 py-1 border w-full bottom-0"
+        >
+          حذف فیلتر
+        </button>
+      ) : null}
     </div>
   );
 };
