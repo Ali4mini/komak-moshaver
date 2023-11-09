@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.urls import reverse
+# from file.models import Sell, Rent
 # Create your models here.
 
 class BuyCustomer(models.Model):
@@ -17,6 +18,7 @@ class BuyCustomer(models.Model):
 
     class Meta:
         ordering = ['-created']
+        
     customer_name = models.CharField(max_length=150)
     customer_phone = models.CharField(max_length=12)
     property_type = models.CharField(choices=Types.choices, max_length=1, default=Types.APARTEMANT)

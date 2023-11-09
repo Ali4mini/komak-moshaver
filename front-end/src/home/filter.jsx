@@ -4,7 +4,6 @@ import api from "../common/api";
 import Checkbox from "../common/checkbox";
 import { useDispatch, useSelector } from "react-redux";
 import { setFiles, setLastFilter, clearLastFilter } from "./filesSlice";
-import Files from "./files";
 
 const Filter = () => {
   const dispatch = useDispatch();

@@ -22,12 +22,12 @@ const customer = ({ customer }) => {
             </h1>
           </div>
           <div className="grid grid-cols-3 text-sm md:grid-cols-7 md:text-base gap-2 max-w-2xl  py-3 px-4 ">
-            {customer.customer_type === "sell" ? (
-              <p>بودجه: {customer.price}</p>
+            {customer.customer_type === "buy" ? (
+              <p>بودجه: {customer.budget}</p>
             ) : (
               <>
-                <p>ودیعه: {customer.price_up}</p>
-                <p>اجاره: {customer.price_rent}</p>
+                <p>ودیعه: {customer.up_budget}</p>
+                <p>اجاره: {customer.rent_budget}</p>
               </>
             )}
             <p>متراژ: {customer.m2}</p>

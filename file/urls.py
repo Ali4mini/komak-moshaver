@@ -11,4 +11,6 @@ urlpatterns = [
     path('rent/<int:pk>/', views.RentFileDetails.as_view(), name='rent_file_detail'),
     path('sell/<int:pk>/send/', views.SellSendInfo.as_view(), name='sell_send_info'),
     path('rent/<int:pk>/send/', views.SellSendInfo.as_view(), name='rent_send_info'),
+    path('sell/<int:pk>/related_customers/', views.SellRelatedCustomers.as_view(), name='sell_related_customer'),
+    path('rent/<int:pk>/related_customers/', views.RentRelatedCustomers.as_view(), name='rent_related_customer'),
 ]

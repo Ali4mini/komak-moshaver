@@ -28,7 +28,7 @@ const NewCustomer = () => {
 
   let customerEntery = {
     added_by: user,
-    customer_type: customerType === "sell" ? "buy" : "rent",
+    customer_type: customerType,
     property_type: propertyType,
     m2: m2,
     year: year,
@@ -53,7 +53,6 @@ const NewCustomer = () => {
   }
 
   const create = (customerEntery) => {
-    console.log(customerEntery);
     api
       .post(`customer/${customerEntery.customer_type}/new/`, customerEntery)
       .then((response) => console.log(response.data))
@@ -63,7 +62,7 @@ const NewCustomer = () => {
   return (
     <div className="block border shadow-lg rounded-xl bg-white mx-4 px-4 py-2 my-2">
       <div className="flex flex-col gap-5 text-sm md:text-base">
-      <div className="grid grid-cols-3 max-w-xs h-10 gap-2">
+        <div className="grid grid-cols-3 max-w-xs h-10 gap-2">
           <select
             name="customer_type"
             id="customer_type"
@@ -81,6 +80,7 @@ const NewCustomer = () => {
               اجاره
             </option>
           </select>
+
           <select
             name="property_type"
             id="property_type"

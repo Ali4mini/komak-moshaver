@@ -27,7 +27,7 @@ api.interceptors.response.use(
         const refreshToken = localStorage.getItem("refresh_token");
 
         try {
-          const response = await api.post(`${apiUrl}token/refresh/`, {
+          const response = await api.post(`${apiUrl}/token/refresh/`, {
             refresh: refreshToken,
           });
           localStorage.setItem("access_token", response.data.access);

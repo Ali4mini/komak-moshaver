@@ -1,5 +1,4 @@
 import Filter from "./filter";
-import Search from "./search";
 import File from "./property_card";
 import { useEffect, useState } from "react";
 import api from "../common/api";
@@ -11,6 +10,7 @@ const Files = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    // this section is for when an agent requests files from another field or range
     if (store.lastFilter) {
       api
         .get(store.lastFilter)
@@ -35,7 +35,6 @@ const Files = () => {
 
   return (
     <div className="home flex flex-col gap-3">
-      {/* <Search /> */}
       <Filter />
       <div className="grid grid-cols-1 ">
         {store.files ? (
@@ -46,6 +45,8 @@ const Files = () => {
       </div>
     </div>
   );
+
+
 };
 
 export default Files;

@@ -55,7 +55,7 @@ class FileFilter(APIView):
             param = params.get(field)
             if param:
                 if field in int_filter_fields:
-                    param = int(param)
+                    param = float(param)
                 elif field in bool_filter_fields:
                     param = bool(param)
                 
@@ -124,7 +124,7 @@ class CustomerFilter(APIView):
             param = params.get(field)
             if param:
                 if field in int_filter_fields:
-                    param = int(param)
+                    param = float(param)
                 elif field in bool_filter_fields:
                     param = bool(param)
                 
