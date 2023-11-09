@@ -168,9 +168,7 @@ const FileDetails = () => {
             <DeleteConfirm
               isOpen={isDeleteConfirm}
               setIsOpen={setIsDeleteConfirm}
-              app={"file"}
-              model={fileType}
-              id={id}
+              
               title={"آیا از پاک کردن این فایل مطمعنید؟"}
               description={
                 "اگر فایل را اشتباهی پاک کردید سریعا به مدیر مجموعه اطلاع رسانی کنید"

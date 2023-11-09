@@ -8,7 +8,7 @@ import { setFlashMessage } from "./flashSlice";
 const DeleteConfirm = ({ isOpen, setIsOpen }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const location = useLocation()
+  const location = useLocation();
   const Delete = () => {
     console.log(location.pathname);
     api
@@ -40,9 +40,12 @@ const DeleteConfirm = ({ isOpen, setIsOpen }) => {
 
           <div className="fixed inset-0 flex items-center justigy-center">
             <Dialog.Panel className="flex flex-col gap-2 mx-auto w-1/2 px-5 py-2 max-w-sm rounded-lg bg-white">
-              <Dialog.Title className="text-lg">{title}</Dialog.Title>
+              <Dialog.Title className="text-lg">
+                آیا از پاک کردن این فایل مطمعنید؟
+              </Dialog.Title>
               <Dialog.Description className="text-gray-500 text-sm">
-                {description}
+                اگر فایل را اشتباهی پاک کردید سریعا به مدیر مجموعه اطلاع رسانی
+                کنید
               </Dialog.Description>
               <div id="actions" className="flex flex-row justify-between mt-4">
                 <button
