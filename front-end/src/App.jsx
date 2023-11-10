@@ -52,7 +52,6 @@ function App() {
               element={<UpdateCustomer />}
             />
           </Route>
-          <Route path="agents/login" element={<Login />}></Route>
         </Routes>
       </>
     );

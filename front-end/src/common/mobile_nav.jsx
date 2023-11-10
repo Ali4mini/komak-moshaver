@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import Search from "../home/search";
 import { useState } from "react";
 import { Transition } from "@headlessui/react";
+
 const MobileNavBar = () => {
   const [isActive, setIsActive] = useState(false);
 
@@ -72,14 +73,17 @@ const MobileNavBar = () => {
           >
             مشتری ها
           </Link>
-          <Link
+          <button
             id="agents"
             className="flex w-full justify-center border border-gray-50 rounded hover:border-gray-200 text-blue-500 hover:bg-gray-200 py-1 px-3 active:ring-2"
-            to="agents/login"
-            onClick={() => setIsActive(!isActive)}
+            onClick={() => {
+              setIsActive(!isActive);
+              localStorage.clear();
+              window.location.reload();
+            }}
           >
-            ورود
-          </Link>
+            خروج
+          </button>
         </div>
       </Transition>
     </>

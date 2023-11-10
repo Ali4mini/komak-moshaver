@@ -57,7 +57,7 @@ class Sell(models.Model):
     status = models.CharField(
         max_length=12, choices=Status.choices, default=Status.ACTIVE
     )
-    notified_customers = models.ManyToManyField(BuyCustomer, blank=True, null=True)
+    notified_customers = models.ManyToManyField(BuyCustomer, blank=True)
 
     image1 = models.ImageField(upload_to="images/", blank=True)
     image2 = models.ImageField(upload_to="images/", blank=True)
@@ -146,7 +146,7 @@ class Rent(models.Model):
     status = models.CharField(
         max_length=12, choices=Status.choices, default=Status.ACTIVE
     )
-    notified_customers = models.ManyToManyField(RentCustomer, null=True, blank=True)
+    notified_customers = models.ManyToManyField(RentCustomer, blank=True)
 
     image1 = models.ImageField(upload_to="images/", blank=True)
     image2 = models.ImageField(upload_to="images/", blank=True)

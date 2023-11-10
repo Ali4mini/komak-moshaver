@@ -3,7 +3,10 @@ import Search from "../home/search";
 
 const NavBar = () => {
   return (
-    <nav id="NavBar" className="flex border-b justify-between mb-4 px-5 sticky top-0 h-14 border-gray-gray bg-white  z-50">
+    <nav
+      id="NavBar"
+      className="flex border-b justify-between mb-4 px-5 sticky top-0 h-14 border-gray-gray bg-white  z-50"
+    >
       <div className="flex items-center gap-4">
         <Link
           id="home"
@@ -40,13 +43,16 @@ const NavBar = () => {
         >
           مشتری ها
         </Link>
-        <Link
+        <button
           id="agents"
           className="inline-block border border-gray-50 rounded hover:border-gray-200 text-blue-500 hover:bg-gray-200 py-1 px-3 active:ring-2"
-          to="agents/login"
+          onClick={() => {
+            localStorage.clear();
+            window.location.reload();
+          }}
         >
-          ورود
-        </Link>
+          خروج
+        </button>
       </div>
       <Search />
     </nav>
