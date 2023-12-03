@@ -24,7 +24,7 @@ const Customers = () => {
         .get("listing/customers", {
           params: {
             status: "ACTIVE",
-            customer_type: localStorage.getItem("agents_field"),
+            customer_type: agentsField,
           },
         })
         .then((response) => {

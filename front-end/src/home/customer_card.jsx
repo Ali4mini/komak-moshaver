@@ -4,10 +4,17 @@ import storage from "../assets/storage.png";
 import parking from "../assets/car.png";
 
 const customer = ({ customer }) => {
+  const updatedDate = new Date(customer.updated);
+  const currentDate = new Date();
+  const diffTime = Math.abs(currentDate - updatedDate);
+  const diffdays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
   return (
     <Link to={`/customer/${customer.customer_type}/${customer.id}`}>
       <div
-        className={`${customer.status} block border-2 shadow-md rounded-2xl  hover:shadow-xl mx-4 py-1 my-2`}
+        className={`${
+          diffdays > 30 ? "bg-yellow-200" : customer.status
+        } block border-2 shadow-md rounded-2xl  hover:shadow-xl mx-4 py-1 my-2`}
       >
         <div className="flex flex-col" id="customer">
           <div className="flex flex-row gap-0">

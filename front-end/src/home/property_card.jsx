@@ -4,10 +4,17 @@ import storage from "../assets/storage.png";
 import parking from "../assets/car.png";
 
 const File = ({ file }) => {
+  const updatedDate = new Date(file.updated);
+  const currentDate = new Date();
+  const diffTime = Math.abs(currentDate - updatedDate);
+  const diffdays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
   return (
     <Link to={`file/${file.file_type}/${file.id}`}>
       <div
-        className={`${file.status} block border-2 shadow-md rounded-2xl  hover:shadow-xl mx-4 py-1 my-2`}
+        className={`${
+          diffdays > 30 ? "bg-yellow-200" : file.status
+        } block border-2 shadow-md rounded-2xl  hover:shadow-xl mx-4 py-1 my-2`}
       >
         <div className="flex flex-col" id="file">
           <div className="flex flex-row gap-0">

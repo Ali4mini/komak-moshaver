@@ -3,10 +3,12 @@ import Checkbox from "../common/checkbox";
 import { useState } from "react";
 import api from "../common/api";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setFlashMessage } from "../common/flashSlice";
 
 const NewCustomer = () => {
   const [customerType, setcustomerType] = useState(
-    localStorage.getItem("agents_field")
+    localStorage.getItem("agents_field") === "sell" ? "buy" : "rent"
   );
   const [propertyType, setPropertyType] = useState("A");
   const [m2, setM2] = useState(null);
@@ -25,6 +27,7 @@ const NewCustomer = () => {
   const user = localStorage.getItem("user_id");
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   let customerEntery = {
     added_by: user,
@@ -53,12 +56,25 @@ const NewCustomer = () => {
   }
 
   const create = (customerEntery) => {
+    console.log(customerEntery);
     api
       .post(`customer/${customerEntery.customer_type}/new/`, customerEntery)
-      .then((response) => console.log(response.data))
+      .then((response) => {
+        switch (response.status) {
+          case 201:
+            dispatch(
+              setFlashMessage({
+                type: "SUCCESS",
+                message: "یک مشتری اضافه شد",
+              })
+            );
+            break;
+        }
+      })
       .catch((error) => console.log(error.data));
     navigate("/customers/", { replace: true });
   };
+
   return (
     <div className="block border shadow-lg rounded-xl bg-white mx-4 px-4 py-2 my-2">
       <div className="flex flex-col gap-5 text-sm md:text-base">
