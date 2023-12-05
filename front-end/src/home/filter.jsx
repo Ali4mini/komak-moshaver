@@ -23,14 +23,58 @@ const Filter = () => {
   const [parking, setParking] = useState(null);
   const [elevator, setElevator] = useState(null);
   const [storage, setStorage] = useState(null);
+  let budgetRange = [],
+    budgetUpRange = [],
+    budgetRentRange = [];
 
+  // filter range
+  if (price) {
+    if (price <= 3000) {
+      budgetRange = [Math.floor(price * 0.8), Math.floor(price * 1.2)];
+    } else if (price > 3000 && price < 5000) {
+      budgetRange = [Math.floor(price * 0.85), Math.floor(price * 1.15)];
+    } else if (price >= 5000) {
+      budgetRange = [Math.floor(price * 0.9), Math.floor(price * 1.1)];
+    }
+  } else {
+    if (priceUp <= 300) {
+      budgetUpRange = [Math.floor(priceUp * 0.8), Math.floor(priceUp * 1.2)];
+    } else if (priceUp > 300 && priceUp < 700) {
+      budgetUpRange = [Math.floor(priceUp * 0.85), Math.floor(priceUp * 1.15)];
+    } else if (priceUp >= 700) {
+      budgetUpRange = [Math.floor(priceUp * 0.9), Math.floor(priceUp * 1.1)];
+    }
+
+    if (priceRent <= 3) {
+      budgetRentRange = [
+        Math.floor(priceRent * 0.7),
+        Math.floor(priceRent * 1.3),
+      ];
+    } else if (priceRent > 3 && priceRent < 7) {
+      budgetRentRange = [
+        Math.floor(priceRent * 0.8),
+        Math.floor(priceRent * 1.2),
+      ];
+    } else if (priceRent >= 7) {
+      budgetRentRange = [
+        Math.floor(priceRent * 0.85),
+        Math.floor(priceRent * 1.15),
+      ];
+    }
+  }
+
+  console.log(budgetRange);
+  // note: there is a list of allowed fields that you can filter in listing api
   let filterEntery = {
     status: "ACTIVE",
     file_type: fileType,
     property_type: propertyType,
-    price__lte: price,
-    price_up__lte: priceUp,
-    price_rent__lte: priceRent,
+    price__gte: budgetRange[0],
+    price__lte: budgetRange[1],
+    // price_up__gte: budgetRentRange[0],
+    // price_up__lte: budgetRentRange[1],
+    // price_rent__gte: budgetRentRange[0],
+    // price_rent__lte: budgetRentRange[0],
     m2__gte: m2,
     bedroom__gte: bedroom,
     year__gte: year,
@@ -39,12 +83,17 @@ const Filter = () => {
     storage: storage,
   };
 
+  // console.log(filterEntery)
+
   const filter = (data) => {
     if (data.file_type === "sell") {
       delete data.price_up__lte;
+      delete data.price_up__gte;
+      delete data.price_rent__gte;
       delete data.price_rent__lte;
     } else if (data.file_type === "rent") {
       delete data.price__lte;
+      delete data.price__gte;
     }
 
     api
@@ -128,12 +177,7 @@ const Filter = () => {
           type="number"
           setter={setBedroom}
         />
-        <FloatLabel
-          label="ساخت"
-          name="year"
-          type="number"
-          setter={setYear}
-        />
+        <FloatLabel label="ساخت" name="year" type="number" setter={setYear} />
       </div>
       <div className="grid grid-cols-3 max-w-xs">
         <Checkbox label="پارکینگ" name="parking" setter={setParking} />

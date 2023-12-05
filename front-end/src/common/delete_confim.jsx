@@ -15,7 +15,7 @@ const DeleteConfirm = ({ isOpen, setIsOpen }) => {
       .delete(location.pathname)
       .then((response) => {
         navigate("/", { replace: true });
-        dispatch(setFlashMessage({ type: "SUCCESS", message: "فایل حذف شد" }));
+        dispatch(setFlashMessage({ type: "SUCCESS", message: "حذف شد" }));
       })
       .catch((error) => console.log(`problem in DELETE request: ${error}`));
   };

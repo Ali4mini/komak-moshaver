@@ -74,6 +74,8 @@ const CustomerDetail = () => {
           </button>
           {isDeleteconfirm && (
             <DeleteConfirm
+              isOpen={isDeleteconfirm}
+              setIsOpen={setIsDeleteConfirm}
               app={'customer'}
               model={customerType}
               id={id}

@@ -78,10 +78,18 @@ class Sell(models.Model):
         return self.pk
 
     def get_related_customers(self) -> BuyCustomer:
+        if self.price <= 3000:
+            budget_range = (int(self.price * 0.80), int(self.price * 1.20))
+        elif self.price > 3000 and self.price < 5000:
+            budget_range = (int(self.price * 0.85), int(self.price * 1.15))
+        elif self.price > 5000:
+            budget_range = (int(self.price * 0.90), int(self.price * 1.10))
+
         filter_query = {
             "status": "ACTIVE",
             "property_type": self.property_type,
-            "budget__gte": self.price,
+            "budget__gte": budget_range[0],
+            "budget__lte": budget_range[1],
             # "m2__lte": self.m2,
             # "bedroom__lte": self.bedroom,
             # "year__lte": self.year,
@@ -167,6 +175,29 @@ class Rent(models.Model):
         return self.pk
 
     def get_related_customers(self) -> RentCustomer:
+        if self.price_up <= 300:
+            budget_up_range = (int(self.price_up * 0.80), int(self.price_up * 1.20))
+        elif self.price_up > 300 and self.price_up < 700:
+            budget_up_range = (int(self.price_up * 0.85), int(self.price_up * 1.15))
+        elif self.price_up > 700:
+            budget_up_range = (int(self.price_up * 0.90), int(self.price_up * 1.10))
+
+        if self.price_rent <= 3:
+            budget_rent_range = (
+                int(self.price_rent * 0.70),
+                int(self.price_rent * 1.30),
+            )
+        elif self.price_rent > 3 and self.price_rent < 7:
+            budget_rent_range = (
+                int(self.price_rent * 0.80),
+                int(self.price_rent * 1.20),
+            )
+        elif self.price_rent > 7:
+            budget_rent_range = (
+                int(self.price_rent * 0.85),
+                int(self.price_rent * 1.15),
+            )
+
         filter_query = {
             "status": "ACTIVE",
             "property_type": self.property_type,

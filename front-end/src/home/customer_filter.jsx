@@ -3,7 +3,7 @@ import FloatLabel from "../common/input";
 import Checkbox from "../common/checkbox";
 import api from "../common/api";
 import { useDispatch, useSelector } from "react-redux";
-import { setCustomers, setLastFilter, clearLastFilter  } from "./customersSlice";
+import { setCustomers, setLastFilter, clearLastFilter } from "./customersSlice";
 
 const Filter = () => {
   const [customerType, setCustomerType] = useState(
@@ -13,8 +13,8 @@ const Filter = () => {
   let lastFilter = store.lastFilter;
   const [propertyType, setPropertyType] = useState("A");
   const [budget, setBudget] = useState(null);
-  const [up_budget, setUpBudget] = useState(null);
-  const [rent_budget, setRentBudget] = useState(null);
+  const [budgetUp, setUpBudget] = useState(null);
+  const [budgetRent, setRentBudget] = useState(null);
   const [m2, setM2] = useState(null);
   const [bedroom, setBedroom] = useState(null);
   const [year, setYear] = useState(null);
@@ -22,14 +22,61 @@ const Filter = () => {
   const [elevator, setElevator] = useState(null);
   const [storage, setStorage] = useState(null);
   const dispatch = useDispatch();
+  let budgetRange = [],
+    budgetUpRange = [],
+    budgetRentRange = [];
 
+  // filter range
+  if (budget) {
+    if (budget <= 3000) {
+      budgetRange = [Math.floor(budget * 0.8), Math.floor(budget * 1.2)];
+    } else if (budget > 3000 && budget < 5000) {
+      budgetRange = [Math.floor(budget * 0.85), Math.floor(budget * 1.15)];
+    } else if (budget >= 5000) {
+      budgetRange = [Math.floor(budget * 0.9), Math.floor(budget * 1.1)];
+    }
+  } else {
+    if (budgetUp <= 300) {
+      budgetUpRange = [Math.floor(budgetUp * 0.8), Math.floor(budgetUp * 1.2)];
+    } else if (budgetUp > 300 && budgetUp < 700) {
+      budgetUpRange = [
+        Math.floor(budgetUp * 0.85),
+        Math.floor(budgetUp * 1.15),
+      ];
+    } else if (budgetUp >= 700) {
+      budgetUpRange = [Math.floor(budgetUp * 0.9), Math.floor(budgetUp * 1.1)];
+    }
+
+    if (budgetRent <= 3) {
+      budgetRentRange = [
+        Math.floor(budgetRent * 0.7),
+        Math.floor(budgetRent * 1.3),
+      ];
+    } else if (budgetRent > 3 && budgetRent < 7) {
+      budgetRentRange = [
+        Math.floor(budgetRent * 0.8),
+        Math.floor(budgetRent * 1.2),
+      ];
+    } else if (budgetRent >= 7) {
+      budgetRentRange = [
+        Math.floor(budgetRent * 0.85),
+        Math.floor(budgetRent * 1.15),
+      ];
+    }
+  }
+
+  // note: there is a list of allowed fields that you can filter in listing api
+  console.log(budgetRange);
   const filter_entery = {
     status: "ACTIVE",
     customer_type: customerType,
     property_type: propertyType,
-    budget__gte: budget,
-    up_budget__gte: up_budget,
-    rent_budget__gte: rent_budget,
+    budget__gte: budgetRange[0],
+    budget__lte: budgetRange[1],
+    budgetUp__gte: budgetUpRange[0],
+    budgetUp__lte: budgetUpRange[1],
+    budgetRent__gte: budgetRentRange[0],
+    budgetRent__lte: budgetRentRange[1],
     m2__lte: m2,
     bedroom__lte: bedroom,
     year__lte: year,
@@ -40,8 +87,8 @@ const Filter = () => {
 
   const filter = (data) => {
     if (data.cusotmer_type === "buy") {
-      delete data.up_budget__lte;
-      delete data.rent_budget__lte;
+      delete data.budgetUp__lte;
+      delete data.budgetRent__lte;
     } else if (data.customer_type === "rent") {
       delete data.budget__lte;
     }
@@ -109,13 +156,13 @@ const Filter = () => {
           <>
             <FloatLabel
               label="ودیعه"
-              name="price_up"
+              name="budget_up"
               type="number"
               setter={setUpBudget}
             />
             <FloatLabel
               label="اجاره"
-              name="price_rent"
+              name="budget_rent"
               type="number"
               setter={setRentBudget}
             />
