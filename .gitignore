@@ -10,7 +10,8 @@ __pycache__
 .env
 .env_dev
 cookies
-.vscode
-.VSCodeCounter
+.vscode/
+.VSCodeCounter/
+.pytest_cache/
 gunicorn_config.py
 
