@@ -63,7 +63,6 @@ const Filter = () => {
     }
   }
 
-  console.log(budgetRange);
   // note: there is a list of allowed fields that you can filter in listing api
   let filterEntery = {
     status: "ACTIVE",
@@ -71,10 +70,10 @@ const Filter = () => {
     property_type: propertyType,
     price__gte: budgetRange[0],
     price__lte: budgetRange[1],
-    // price_up__gte: budgetRentRange[0],
-    // price_up__lte: budgetRentRange[1],
-    // price_rent__gte: budgetRentRange[0],
-    // price_rent__lte: budgetRentRange[0],
+    price_up__gte: budgetRentRange[0],
+    price_up__lte: budgetRentRange[1],
+    price_rent__gte: budgetRentRange[0],
+    price_rent__lte: budgetRentRange[0],
     m2__gte: m2,
     bedroom__gte: bedroom,
     year__gte: year,
