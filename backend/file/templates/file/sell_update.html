@@ -1,0 +1,234 @@
+{% extends 'file/base.html' %}
+{% block title %} New File {% endblock title %}
+{% load static%}
+
+{% block content %}
+<div class="box m-5 p-5">
+  <form action="" method="post">
+    {% csrf_token%}
+    <label class='label'>نوع:</label>
+    <div class="select is-link">
+      <select class="" name="type" id="id_type">
+
+        <option value="A" {% if file.type == "A" %} selected {% endif %}>آپارتمان</option>
+        <option value="L" {% if file.type == "L" %} selected {% endif %}>زمین</option>
+        <option value="S" {% if file.type == "S" %} selected {% endif %}>مغازه</option>
+        <option value="H" {% if file.type == "H" %} selected {% endif %}>خانه و ویلا</option>
+
+        <option value="A" {% if file.type == "A" %} selected {% endif%}>آپارتمان</option>
+        <option value="L" {% if file.type == "L" %} selected {% endif%}>زمین</option>
+        <option value="S" {% if file.type == "S" %} selected {% endif%}>مغازه</option>
+        <option value="H" {% if file.type == "H" %} selected {% endif%}>خانه و ویلا</option>
+      </select>
+    </div>
+    <div class="column">
+      <div class="field">
+        <label class="label">آدرس:</label>
+        <textarea name="address" cols="10" rows="4" class="textarea is-small" required=""
+          id="id_address">{{file.address}}</textarea>
+      </div>
+    </div>
+    <div class="columns">
+      <div class="column">
+        <div class="field">
+          <label class="label">متراژ:</label>
+
+          <input class='input is-small' type="number" name="m2" id="id_m2" value="{{file.m2}}">
+        </div>
+      </div>
+      <div class="column">
+        <div class="field">
+          <label class="label">سال ساخت:</label>
+          <input class='input is-small' type="number" name="year" id="id_year" value="{{file.year}}">
+        </div>
+      </div>
+      <div class="column">
+        <div class="field">
+          <label class="label">طبقه:</label>
+          <input class='input is-small' type="number" name="floor" id="id_floor" value="{{file.floor}}">
+        </div>
+      </div>
+      <div class="column">
+        <div class="field">
+          <label class="label"> طبقات:</label>
+          <input class='input is-small' type="number" name="tabaghat" id="id_tabaghat" value="{{file.tabaghat}}">
+        </div>
+      </div>
+    </div>
+    <div class="columns">
+    <div class="column">
+      <div class="field">
+        <label class="label">اتاق خواب:</label>
+        <input class='input is-small' type="number" name="bedroom" id="id_bedroom" value="{{file.bedroom}}">
+      </div>
+    </div>
+    <div class="column">
+      <div class="field">
+        <label class="label">تعداد واحد:</label>
+        <input class='input is-small' type="number" name="vahedha" id="id_vahedha" value="{{file.vahedha}}">
+      </div>
+    </div>
+  </div>
+    <div class="column">
+      <div class="field">
+        <label class="label">بازدید:</label>
+        <input class='input is-small' name="bazdid" id="id_bazdid" value="{{file.bazdid}}">
+      </div>
+    </div>
+    <label class='label'>تخلیه:</label>
+    <div class="select is-link mb-4">
+      <select class="" name="takhlie" id="id_takhlie">
+        <option value="0" {% if file.takhlie == "0" %} selected {% endif%}>تخلیه</option>
+        <option value="1" {% if file.takhlie == "1" %} selected {% endif%}>فروردین</option>
+        <option value="2" {% if file.takhlie == "2" %} selected {% endif%}>اردیبهشت</option>
+        <option value="3" {% if file.takhlie == "3" %} selected {% endif%}>خرداد</option>
+        <option value="4" {% if file.takhlie == "4" %} selected {% endif%}>تیر</option>
+        <option value="5" {% if file.takhlie == "5" %} selected {% endif%}>مرداد</option>
+        <option value="6" {% if file.takhlie == "6" %} selected {% endif%}>شهریور</option>
+        <option value="7" {% if file.takhlie == "7" %} selected {% endif%}>مهر</option>
+        <option value="8" {% if file.takhlie == "8" %} selected {% endif%}>آبان</option>
+        <option value="9" {% if file.takhlie == "9" %} selected {% endif%}>آذر</option>
+        <option value="10" {% if file.takhlie == "10" %} selected {% endif%}>دی</option>
+        <option value="11" {% if file.takhlie == "11" %} selected {% endif%}>بهمن</option>
+        <option value="12" {% if file.takhlie == "12" %} selected {% endif%}>اسفند</option>
+      </select>
+    </div>
+
+    <div id="sell_filter">
+      <div class="columns">
+        <div class="column is-half">
+          <div class="field">
+            <label class="label">قیمت:</label>
+            <input type="number" name="price" class="input is-small" id="id_price" value="{{file.price}}">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="rent_filter" style="display: none;">
+      <div class="columns">
+        <div class="column">
+          <div class="field">
+            <label class="label">ودیعه:</label>
+            <input type="number" name="price_up" class="input is-small" id="id_price" value="{{file.up_price}}">
+          </div>
+        </div>
+        <div class="column">
+          <div class="field">
+            <label class="label">اجاره:</label>
+            <input type="number" name="price_rent" class="input is-small" id="id_price" value="{{file.rent_price}}">
+          </div>
+        </div>
+        <div class="columns">
+          <div class="field">
+            <label class='checkbox mt-3'>تبدیل:
+              <input type="checkbox" name="tabdil" id="id_tabdil" {% if file.tabdil %}checked {% endif%}>
+            </label>
+          </div>
+        </div>
+      </div>
+
+          <input class='input is-small' type="number" name="m2" required="" id="id_m2" value="{{file.m2}}">
+        </div>
+      </div>
+      <div class="column">
+        <div class="field">
+          <label class="label">سال ساخت:</label>
+          <input class='input is-small' type="number" name="year" required="" id="id_year" value="{{file.year}}">
+        </div>
+      </div>
+      <div class="column">
+        <div class="field">
+          <label class="label">طبقه:</label>
+          <input class='input is-small' type="number" name="floor" required="" id="id_floor" value="{{file.floor}}">
+        </div>
+      </div>
+    </div>
+    <div id="sell_filter">
+      <div class="columns">
+        <div class="column is-half">
+          <div class="field">
+            <label class="label">قیمت:</label>
+            <input type="number" name="price" class="input is-small" id="id_price" value="{{file.price}}">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="rent_filter" style="display: none;">
+      <div class="columns">
+        <div class="column">
+          <div class="field">
+            <label class="label">ودیعه:</label>
+            <input type="number" name="price_up" class="input is-small" id="id_price" value="{{file.up_price}}">
+          </div>
+        </div>
+        <div class="column">
+          <div class="field">
+            <label class="label">اجاره:</label>
+            <input type="number" name="price_rent" class="input is-small" id="id_price" value="{{file.rent_price}}">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <label class='checkbox mt-3'>آسانسور:
+        <input type="checkbox" name="elevator" id="id_elevator" {% if file.elevator %}checked {% endif%}>
+      </label>
+    </div>
+    <div class="field">
+      <label class='checkbox '>انباری:
+        <input type="checkbox" name="storage" id="id_storage" {% if file.storage %}checked {% endif%}>
+      </label>
+
+      <label class='checkbox mr-5'>کمد دیواری:
+        <input type="checkbox" name="" id="id_parking_motor" {% if file.komod_divari %}checked {% endif%}>
+      </label>
+
+
+    </div>
+    <div class="field">
+      <label class='checkbox mb-3'>پارکینگ:
+        <input type="checkbox" name="parking" id="id_parking" {% if file.parking %}checked {% endif%}>
+      </label>
+
+      <label class='checkbox mr-5'>پارکینگ موتور:
+        <input type="checkbox" name="parking_motor" id="id_parking_motor" {% if file.parking_motor %}checked {% endif%}>
+      </label>
+
+
+    </div>
+
+    <div class="field">
+      <div class="columns">
+        <div class="column">
+          <label class="label">مالک:</label>
+
+          <input class='input is-small' type="text" name="owner_name" maxlength="1000" required="" id="id_owner_name" value="{{file.owner_name}}">
+        </div>
+        <div class="column">
+          <label class="label ">شماره مالک:</label>
+          <input class='input is-small' type="text" name="owner_phone" maxlength="12" required="" id="id_owner_phone" value="{{file.owner_phone}}">
+
+          <input class='input is-small' type="text" name="owner_name" maxlength="1000" required="" id="id_owner_name">
+        </div>
+        <div class="column">
+          <label class="label ">شماره مالک:</label>
+          <input class='input is-small' type="text" name="owner_phone" maxlength="12" required="" id="id_owner_phone">
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class='label'>برچسب ها:</label>
+      <input class='input is-small' type="text" name="tag" id="id_tag" value="{{file.tags.all}}">
+    </div>
+</div>
+<div class="columns">
+  <div class="column">
+    <button type="submit" class="button is-medium is-primary mt-4 is-pulled-left">ثبت</button>
+  </div>
+</div>
+</form>
+</div>
+<script src="{% static 'JS/scripts.js'%}"></script>
+
+{% endblock content%}

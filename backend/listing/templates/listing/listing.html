@@ -1,0 +1,76 @@
+{% extends 'file/base.html' %}
+{% block title %}listing{% endblock title %}
+{% load static %}
+
+{% block content %}
+    <script src="{% static 'JS/scripts.js'%}"></script>
+
+
+
+    <div class="files">
+    {% if request.user.is_authenticated %}
+        {% for file in files %}
+            <a href="{{ file.get_absolute_url }}"> 
+                <div class="card m-4">
+                    <div class="card-header">
+                        <h1 class="card-header-title">                 
+                             {{ file.address}}
+                        </h1>
+                    </div>
+                    <div class="card-content">
+                        <div class="columns is-vcentered">
+                            <div class="column">
+                                متراژ:  {{file.m2}}
+                            </div>
+                            {% if file.price %}
+                                <div class="column">
+                                    <strong> قیمت:</strong>:  {{file.price}}
+                                </div>
+                            {% else %}
+                                <div class="column">
+                                    <strong>ودیعه:</strong>:  {{file.price_up}}
+                                </div>
+                                <div class="column">
+                                    <strong>اجاره:</strong>:  {{file.price_rent}}
+                                </div>
+                            {% endif %}
+                            <div class="column">
+                                <strong>سال: </strong> {{file.year}}
+                            </div>
+                            <div class="column">
+                                <strong> طبقه: </strong> {{file.floor}}
+                            </div>
+                            <div class="column is-pulled-left">
+                                <ul class="is-pulled-left">
+                                    {% if file.elevator %}
+                                    <li>
+                                        <img src="{% static 'images/elevator.svg'%}" alt="elevator" class="image is-24x24 mt-1">
+                                    </li>
+                                    {% endif %}
+                                    {% if file.storage %}
+                                    <li>
+                                        <img src="{% static 'images/storage.svg'%}" alt="storage" class="image is-24x24 mt-1">
+                                    </li>
+                                    {% endif %}
+
+                                    {% if file.parking %}
+                                    <li>
+                                        <img src="{% static 'images/parking.svg'%}" alt="parking" class="image is-24x24 mt-1">
+                                    </li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+        {% else %}
+            <h1>
+                <a href='/agents/login'> login first</a>
+            </h4>
+    {% endif %}
+
+
+{% endblock content %}

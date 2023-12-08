@@ -1,0 +1,129 @@
+{% extends 'file/base.html' %}
+{% block title %}listing{% endblock title %}
+{% load static %}
+
+{% block content %}
+    <script src="{% static 'JS/scripts.js'%}"></script>
+    <div class="filter">
+        <div class="box m-6">
+            <form action="" method="post">
+                {% csrf_token%}
+                <div class="select is-primary">
+                    <select name="file_type" id="id_type" onchange="rent_filter(this)">
+                        <option id="sell" value="sell">فروش</option>
+                        <option id="rent" value="rent">اجاره</option>
+                    </select>
+                </div>
+                <div class="select is-primary">
+                    <select name="property_type" id="id_type">
+                        <option value="A" selected="">آپارتمان</option>
+                        <option value="L">زمین</option>
+                        <option value="S">مغازه</option>
+                        <option value="H">خانه و ویلا</option>
+                    </select>
+                </div>
+                <div id="sell_filter">
+                    <div class="field">
+                        <label for="id_price">قیمت:</label>
+                        <input type="number" name="price" class="input is-small" id="id_price">
+                    </div>
+                </div>
+                <div id="rent_filter" style="display: none;">
+                    <div class="field">
+                        <label for="id_price">ودیعه:</label>
+                        <input type="number" name="price_up" class="input is-small" id="id_price">
+                    </div> 
+                    <div class="field">
+                        <label for="id_price">اجاره:</label>
+                        <input type="number" name="price_rent" class="input is-small" id="id_price">
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="id_m2">متراژ:</label>
+                    <input type="number" name="m2" class="input is-small" id="id_m2">
+                </div>
+                <div class="field">
+                    <label for="id_year">سال ساخت:</label>
+                    <input type="number" name="year" class="input is-small" id="id_year">
+                </div>
+                <!-- <div class="field">
+                    <label for="id_parking">                    
+                        <input type="checkbox" name="parking" class="checkbox" id="id_parking">
+                        پارکینگ  </label>
+                </div> -->
+                <button type="submit" class="button is-primary is-medium is-light  is-pulled-left">فیلتر</button>
+            </form>
+            <form method="get">
+                <button class="button is-danger is-light is-medium mr-3" type="submit">
+                    لغو
+                </button>
+            </form>
+
+        </div>
+    </div>
+
+
+    <div class="files">
+    {% if request.user.is_authenticated %}
+        {% for customer in customers %}
+            <a href="{{ customer.get_absolute_url }}"> 
+                <div class="card m-4">
+                    <div class="card-header">
+                        <h1 class="card-header-title">                 
+                             {{ customer.customer_name}}
+                        </h1>
+                    </div>
+                    <div class="card-content">
+                        <div class="columns is-vcentered">
+                            {% if customer.budget %}
+                                <div class="column">
+                                    <strong> قیمت:</strong>  {{customer.budget}}
+                                </div>
+                            {% else %}
+                                <div class="column">
+                                    <strong>ودیعه:</strong>  {{customer.up_budget}}
+                                </div>
+                                <div class="column">
+                                    <strong>اجاره:</strong> {{customer.rent_budget}}
+                                </div>
+                            {% endif %}
+                            <div class="column">
+                                متراژ:  {{customer.m2}}
+                            </div>
+                            <div class="column">
+                                <strong>سال: </strong> {{customer.year}}
+                            </div>
+                            <div class="column is-pulled-left">
+                                <ul class="is-pulled-left">
+                                    {% if customer.elevator %}
+                                    <li>
+                                        <img src="{% static 'images/elevator.svg'%}" alt="elevator" class="image is-24x24 mt-1">
+                                    </li>
+                                    {% endif %}
+                                    {% if customer.storage %}
+                                    <li>
+                                        <img src="{% static 'images/storage.svg'%}" alt="storage" class="image is-24x24 mt-1">
+                                    </li>
+                                    {% endif %}
+
+                                    {% if customer.parking %}
+                                    <li>
+                                        <img src="{% static 'images/parking.svg'%}" alt="parking" class="image is-24x24 mt-1">
+                                    </li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+        {% else %}
+            <h1>
+                <a href='/agents/login'> login first</a>
+            </h4>
+    {% endif %}
+
+
+{% endblock content %}

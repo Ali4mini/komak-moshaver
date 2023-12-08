@@ -1,0 +1,38 @@
+.form input{
+    width: 75%;
+    border-radius: 50px;
+    margin-top: 5px;
+    margin-bottom: 12px;
+    display: block;
+}
+
+.form input[type='submit']{
+    width: 30%;
+    border-radius: 50px;
+    margin-top: 10px;
+    margin-right: 22.5%;
+    margin-bottom: 12px;
+    background-color: rgb(118, 150, 179);
+    font-size: 1.5em;
+    display: block;
+}
+
+.form select{
+    display:table;
+}
+.form label{
+    display: inline-block;
+    margin-top: 10px;
+    background-color: rgb(231, 230, 230);
+}
+
+.form{
+    float: right;
+    width: 50%;
+    margin: 7px 20px;
+    padding: 15px;
+    border: solid rgba(121, 115, 115, 0.699);
+    box-shadow: 1px;
+    border-radius: 12px;
+}
+

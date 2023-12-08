@@ -1,0 +1,76 @@
+.files a {
+    text-decoration: none;
+    color: black;
+}
+
+.files .file-section{
+    border: rgb(243, 223, 223) dashed 0.5px;
+    border-radius: 4px;
+    margin: 10px 12px;
+    padding-bottom: 15px;
+    padding-right: 10px;
+    height: 100%;
+    box-shadow: 2px 4px 0 rgb(0 0 0 / 20%), 0 3px 10px 0 rgb(0 0 0 / 19%);
+}
+.files .file-section:hover{
+    border: rgb(243, 223, 223) dashed 0.5px;
+    border-radius: 4px;
+    margin: 10px 12px;
+    padding-bottom: 15px;
+    padding-right: 10px;
+    height: 100%;
+}
+
+.files .file-section h4{
+    font-size: 1.3em;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.files .file-section .top{
+    display: inline-block;
+    width: 80%;
+}
+
+.file-section .bottom{
+    height: auto;
+    background-color: white;
+    margin: 0;
+    width: 80%;
+
+}
+
+.file-section .bottom table{
+    display: inline;
+    margin-right: 8%;
+    clear: right;
+}
+.file-section .bottom table#type{
+    display: inline;
+    margin: 0;
+}
+
+.filter input{
+    display: block;
+}
+.filter label[for="id_price"]{
+    display: block;
+}
+
+.file-section .left-side{
+    float: left;
+    margin-top: 5px;
+    padding: 0 5px;
+
+}
+.file-section .left-side div{
+    width: 30px;
+    margin-bottom: 0;
+}
+.file-section .left-side img{
+    width: 100%;
+
+}
+
+
+
