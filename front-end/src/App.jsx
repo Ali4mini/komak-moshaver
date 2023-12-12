@@ -57,9 +57,14 @@ function App() {
     );
   } else {
     return (
-      <Routes>
-        <Route path="agents/login" element={<Login />}></Route>
-      </Routes>
+      <>
+        {flashStore.message ? (
+          <ShowMessage type={flashStore.type} message={flashStore.message} />
+        ) : null}
+        <Routes>
+          <Route path="agents/login" element={<Login />}></Route>
+        </Routes>{" "}
+      </>
     );
   }
 }

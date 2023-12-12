@@ -1,28 +1,20 @@
-import { useRef } from "react";
-
-const FloatLabel = ({
-  label,
-  name,
-  type,
-  setter,
-  defValue,
-  dir,
-  isRequired = false,
-}) => {
+import { useRef, useState } from "react";
+import Checkbox from "./checkbox";
+const PasswordInput = ({ label, name, setter }) => {
   const inputRef = useRef();
+  const [showPassword, setShowPassword] = useState(false);
   return (
     <div className="relative">
       <input
-        type={type}
+        type={showPassword ? "text" : "password"}
         className="peer w-full px-3 rounded-lg shadow border h-10 border-gray-300  placeholder-transparent
         focus:outline-none"
         name={name}
         id={name}
         placeholder={label}
-        required={isRequired}
-        defaultValue={defValue}
+        required={true}
         onChange={(e) => setter(e.target.value)}
-        dir={dir}
+        dir="ltr"
         ref={inputRef}
       />
 
@@ -34,8 +26,13 @@ const FloatLabel = ({
       >
         {label}
       </label>
+      <Checkbox
+        label={"show password"}
+        name={"showPassword"}
+        setter={setShowPassword}
+      />
     </div>
   );
 };
 
-export default FloatLabel;
+export default PasswordInput;

@@ -4,10 +4,9 @@ import { useEffect, useState } from "react";
 import { Transition } from "@headlessui/react";
 
 const ShowMessage = ({ type, message }) => {
-  console.log(message);
   const dispatch = useDispatch();
   const [flashMessage, setFlashMessage] = useState(true);
-  console.log(flashMessage);
+  
   useEffect(() => {
     const timer = setTimeout(() => {
       setFlashMessage(false);
