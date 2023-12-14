@@ -55,8 +55,8 @@ const NewCustomer = () => {
     delete customerEntery.budget;
   }
 
-  const create = (customerEntery) => {
-    console.log(customerEntery);
+  const create = (customerEntery, event) => {
+    event.preventDefault();
     api
       .post(`customer/${customerEntery.customer_type}/new/`, customerEntery)
       .then((response) => {
@@ -77,7 +77,10 @@ const NewCustomer = () => {
 
   return (
     <div className="block border shadow-lg rounded-xl bg-white mx-4 px-4 py-2 my-2">
-      <div className="flex flex-col gap-5 text-sm md:text-base">
+      <form
+        onSubmit={(e) => create(customerEntery, e)}
+        className="flex flex-col gap-5 text-sm md:text-base"
+      >
         <div className="grid grid-cols-3 max-w-xs h-10 gap-2">
           <select
             name="customer_type"
@@ -192,12 +195,12 @@ const NewCustomer = () => {
           <Checkbox label="پارک موتور" name="motorSpot" setter={setMotorSpot} />
         </div>
         <button
-          onClick={() => create(customerEntery)}
+          type="submit"
           className="basis-full rounded-lg bg-blue-300 hover:bg-blue-400 py-1.5 border w-full bottom-0"
         >
           ثبت
         </button>
-      </div>
+      </form>
     </div>
   );
 };

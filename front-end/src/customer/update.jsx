@@ -22,18 +22,32 @@ const UpdateCustomer = () => {
   );
   const [m2, setM2] = useState(oldCustomer ? oldCustomer.m2 : "");
   const [year, setYear] = useState(oldCustomer ? oldCustomer.year : "");
-  const [bedroom, setBedroom] = useState(oldCustomer ? oldCustomer.bedroom : "");
+  const [bedroom, setBedroom] = useState(
+    oldCustomer ? oldCustomer.bedroom : ""
+  );
   const [budget, setbudget] = useState(oldCustomer ? oldCustomer.budget : "");
-  const [upBudget, setUpBudget] = useState(oldCustomer ? oldCustomer.up_budget : "");
-  const [rentbudget, setRentBudget] = useState(oldCustomer ? oldCustomer.rent_budget : "");
+  const [upBudget, setUpBudget] = useState(
+    oldCustomer ? oldCustomer.up_budget : ""
+  );
+  const [rentbudget, setRentBudget] = useState(
+    oldCustomer ? oldCustomer.rent_budget : ""
+  );
   const [units, setUnits] = useState(oldCustomer ? oldCustomer.vahedha : "");
-  const [parking, setParking] = useState(oldCustomer ? oldCustomer.parking : "");
-  const [elevator, setElevator] = useState(oldCustomer ? oldCustomer.elevator : "");
-  const [storage, setStorage] = useState(oldCustomer ? oldCustomer.storage : "");
+  const [parking, setParking] = useState(
+    oldCustomer ? oldCustomer.parking : ""
+  );
+  const [elevator, setElevator] = useState(
+    oldCustomer ? oldCustomer.elevator : ""
+  );
+  const [storage, setStorage] = useState(
+    oldCustomer ? oldCustomer.storage : ""
+  );
   const [motorSpot, setMotorSpot] = useState(
     oldCustomer ? oldCustomer.parking_motor : ""
   );
-  const [customerName, setCustomerName] = useState(oldCustomer ? oldCustomer.customer_name : "");
+  const [customerName, setCustomerName] = useState(
+    oldCustomer ? oldCustomer.customer_name : ""
+  );
   const [customerPhone, setCustomerPhone] = useState(
     oldCustomer ? oldCustomer.customer_phone : ""
   );
@@ -77,8 +91,8 @@ const UpdateCustomer = () => {
     }
   }, [oldCustomer]);
 
-  const update = (updatedFile) => {
-    console.log(updatedEntery);
+  const update = (updatedFile, event) => {
+    event.preventDefault();
     api
       .patch(`customer/${customerType}/${id}/`, updatedFile)
       .then(navigate("/", { replace: true }))
@@ -88,8 +102,11 @@ const UpdateCustomer = () => {
   if (oldCustomer) {
     return (
       <div className="block border shadow-lg rounded-xl bg-white mx-4 px-4 py-2 my-2">
-        <div className="flex flex-col gap-5 text-sm md:text-base">
-        <div className="grid grid-cols-3 max-w-xs h-10 gap-2">
+        <form
+          onClick={(e) => update(updatedEntery, e)}
+          className="flex flex-col gap-5 text-sm md:text-base"
+        >
+          <div className="grid grid-cols-3 max-w-xs h-10 gap-2">
             <select
               name="property_type"
               id="property_type"
@@ -104,7 +121,7 @@ const UpdateCustomer = () => {
               <option value="H">خانه و ویلا</option>
             </select>
           </div>
-          
+
           <div className="grid grid-cols-2 gap-y-4 gap-x-2 md:grid-cols-4 lg:grid-cols-7 w-full flex-wrap">
             {customerType === "buy" ? (
               <FloatLabel
@@ -214,12 +231,12 @@ const UpdateCustomer = () => {
             />
           </div>
           <button
-            onClick={() => update(updatedEntery)}
+            type="submit"
             className="basis-full rounded-lg bg-blue-300 hover:bg-blue-400 py-1.5 border w-full bottom-0"
           >
             ثبت
           </button>
-        </div>
+        </form>
       </div>
     );
   }
