@@ -14,10 +14,10 @@ import pathlib
 import os
 
 
-
 # ! enviroment variables
 from dotenv import dotenv_values
-config = dotenv_values(".env")  
+
+config = dotenv_values(".env")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = pathlib.Path(__file__).resolve(strict=True).parent.parent
@@ -26,44 +26,44 @@ BASE_DIR = pathlib.Path(__file__).resolve(strict=True).parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config['SECRET_KEY']
+SECRET_KEY = config["SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config['DEBUG'] == 'ON'
+DEBUG = config["DEBUG"] == "ON"
 
 
 # Application definition
 
 INSTALLED_APPS = [
     #! my apps
-    'customer.apps.CustomerConfig',
-    'listing.apps.ListingConfig',
-    'agents_m.apps.AgentsMConfig',
-    'file.apps.FileConfig',
+    "customer.apps.CustomerConfig",
+    "listing.apps.ListingConfig",
+    "agents_m.apps.AgentsMConfig",
+    "file.apps.FileConfig",
     #! default apps
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.sites',
-    'django.contrib.staticfiles',
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.sites",
+    "django.contrib.staticfiles",
     #! third party apps
-    'taggit',
-    'django_extensions',
-    'compressor',
-    'rest_framework',
-    'corsheaders',
+    "taggit",
+    "django_extensions",
+    "compressor",
+    "rest_framework",
+    "corsheaders",
 ]
 
-SMS_API = 'https://console.melipayamak.com/api/send/advanced/b59dd6ca1de047aabf4416be63da2c01'
+SMS_API = (
+    "https://console.melipayamak.com/api/send/advanced/b59dd6ca1de047aabf4416be63da2c01"
+)
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
 }
 
@@ -77,72 +77,72 @@ SIMPLE_JWT = {
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
-STATIC_URL = '/assets/'
-STATIC_ROOT =  os.path.join(BASE_DIR, 'front-end/dist/assets')
-WHITENOISE_ROOT = os.path.join(BASE_DIR, 'front-end/dist')
+STATIC_URL = "/assets/"
+STATIC_ROOT = os.path.join(BASE_DIR, "front-end/dist/assets")
+WHITENOISE_ROOT = os.path.join(BASE_DIR, "front-end/dist")
 
 CORS_ORIGIN_ALLOW_ALL = True
 
-ROOT_URLCONF = 'amlak.urls'
+ROOT_URLCONF = "amlak.urls"
 
 SITE_ID = 1
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'front-end', 'dist')],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [os.path.join(BASE_DIR, "front-end", "dist")],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
             ],
         },
     },
 ]
 
 
-MEDIA_URL = 'media/'
-MEDITA_ROOT = os.path.join(BASE_DIR,'media')
+MEDIA_URL = "media/"
+MEDITA_ROOT = os.path.join(BASE_DIR, "media")
 
-# COMPRESS_ROOT = os.path.join(BASE_DIR, 'front-end', 'dist', 'assets') 
+# COMPRESS_ROOT = os.path.join(BASE_DIR, 'front-end', 'dist', 'assets')
 
 # COMPRESS_ENABLED = True
 
 # STATICFILES_FINDERS = ('compressor.finders.CompressorFinder',)
 
-WSGI_APPLICATION = 'amlak.wsgi.application'
+WSGI_APPLICATION = "amlak.wsgi.application"
 
-APPEND_SLASH=True
+APPEND_SLASH = True
 
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': config['DB_NAME'],
-        'USER': config['DB_USER'], 
-        'PASSWORD': config['DB_PASSWORD'],
-        'HOST': '127.0.0.1', 
-        'PORT': config['DB_PORT'],
+    "default": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": config["DB_NAME"],
+        "USER": config["DB_USER"],
+        "PASSWORD": config["DB_PASSWORD"],
+        "HOST": "127.0.0.1",
+        "PORT": config["DB_PORT"],
     }
 }
 
-ALLOWED_HOSTS = ['0.0.0.0', '87.107.54.39', '*']
+ALLOWED_HOSTS = ["0.0.0.0", "87.107.54.39", "*"]
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -155,10 +155,10 @@ AUTH_PASSWORD_VALIDATORS = [
     #     'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
     # },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
@@ -166,9 +166,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = 'fa-IR'
+LANGUAGE_CODE = "fa-IR"
 
-TIME_ZONE = 'Asia/Tehran'
+TIME_ZONE = "Asia/Tehran"
 
 USE_I18N = True
 
@@ -179,14 +179,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
-#! Celery Settings 
+#! Celery Settings
 # CELERY_TIMEZONE = "Iran/Tehran"
 CELERY_BROKER_URL = "redis://localhost:6379"
 CELERY_RESULT_BACKEND = "redis://localhost:6379"
