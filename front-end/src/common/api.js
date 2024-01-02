@@ -2,7 +2,6 @@ import axios from "axios";
 // Removed useNavigate as it was not used
 
 const apiUrl = import.meta.env.VITE_API;
-
 const api = axios.create({
   baseURL: apiUrl,
   headers: {
@@ -27,7 +26,7 @@ api.interceptors.response.use(
         const refreshToken = localStorage.getItem("refresh_token");
 
         try {
-          const response = await api.post(`${apiUrl}/token/refresh/`, {
+          const response = await api.post(`${apiUrl}token/refresh/`, {
             refresh: refreshToken,
           });
           localStorage.setItem("access_token", response.data.access);
@@ -36,11 +35,11 @@ api.interceptors.response.use(
           console.error("Failed to refresh JWT:", refreshError);
           if (refreshError.response.status === 401) {
             console.log("refresh token was expired");
-              // You should guide user to login again, this could be as simple as redirecting to login page
+            // You should guide user to login again, this could be as simple as redirecting to login page
             // window.location.href = '/login';
             // Or use history/navigate from your route library to navigate to login page
             history.push('/login');
-            
+
           }
           throw refreshError;
         }

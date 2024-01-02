@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import Checkbox from "./checkbox";
-const PasswordInput = ({ label, name, setter }) => {
+const PasswordInput = ({ label, name, setter, hasShowPassword }) => {
   const inputRef = useRef();
   const [showPassword, setShowPassword] = useState(false);
   return (
@@ -26,11 +26,13 @@ const PasswordInput = ({ label, name, setter }) => {
       >
         {label}
       </label>
-      <Checkbox
-        label={"show password"}
-        name={"showPassword"}
-        setter={setShowPassword}
-      />
+      {hasShowPassword ?
+        <Checkbox
+          label={"نمایش رمز"}
+          name={"showPassword"}
+          setter={setShowPassword}
+        /> : null
+      }
     </div>
   );
 };

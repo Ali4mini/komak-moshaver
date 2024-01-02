@@ -1,0 +1,5 @@
+
+  {
+      "django": true,
+      "extraPaths": ["path/to/your/project"]
+  }
