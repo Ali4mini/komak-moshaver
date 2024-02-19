@@ -57,6 +57,7 @@ class Sell(models.Model):
     status = models.CharField(
         max_length=12, choices=Status.choices, default=Status.ACTIVE
     )
+    description = models.CharField(max_length=1000, blank=True)
     notified_customers = models.ManyToManyField(BuyCustomer, blank=True)
 
     image1 = models.ImageField(upload_to="images/", blank=True)
@@ -143,8 +144,8 @@ class Rent(models.Model):
     updated = models.DateTimeField(auto_now=True)
     bedroom = models.IntegerField(blank=True, null=True)
     parking_motor = models.BooleanField(default=False)
-    takhlie = models.CharField(max_length=100, null=True)
-    vahedha = models.IntegerField(null=True)
+    takhlie = models.CharField(max_length=100, null=True, blank=True)
+    vahedha = models.IntegerField(blank=True, null=True)
     komod_divari = models.BooleanField(default=False)
     bazdid = models.CharField(max_length=100, null=True)
     tabdil = models.IntegerField(default=None, null=True, blank=True)
@@ -154,6 +155,7 @@ class Rent(models.Model):
     status = models.CharField(
         max_length=12, choices=Status.choices, default=Status.ACTIVE
     )
+    description = models.CharField(max_length=1000, blank=True)
     notified_customers = models.ManyToManyField(RentCustomer, blank=True)
 
     image1 = models.ImageField(upload_to="images/", blank=True)

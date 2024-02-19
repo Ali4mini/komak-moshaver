@@ -12,6 +12,7 @@ const UpdateFile = () => {
     api
       .get(`file/${fileType}/${id}/`)
       .then((response) => {
+        console.log(response.data.description)
         setOldFile(response.data);
       })
       .catch((error) => console.log(error.data));
@@ -41,6 +42,7 @@ const UpdateFile = () => {
     oldFile ? oldFile.owner_phone : ""
   );
 
+  const [description, setDescription] = useState(oldFile ? oldFile.description : "");
   const navigate = useNavigate();
 
   let updatedEntery = {
@@ -62,6 +64,7 @@ const UpdateFile = () => {
     parking_motor: motorSpot,
     owner_name: ownerName,
     owner_phone: ownerPhone,
+    description: description,
   };
 
   useEffect(() => {
@@ -222,6 +225,16 @@ const UpdateFile = () => {
               name={"ownerName"}
               label={"نام مالک"}
               setter={setOwnerName}
+              isRequired={true}
+            />
+          </div>
+          <div className="grid grid-cols-2 h-12 gap-2">
+            <FloatLabel
+              defValue={oldFile.description}
+              type="text"
+              name={"description"}
+              label={"توضیحات"}
+              setter={setDescription}
               isRequired={true}
             />
           </div>

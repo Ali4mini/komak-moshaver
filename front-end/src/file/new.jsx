@@ -31,6 +31,7 @@ const NewFile = () => {
   const [bazdid, setBazdid] = useState("هماهنگی");
   const [tenetPhone, setTenetPhone] = useState(null);
   const [tenetName, setTenetName] = useState(null);
+  const [description, setDescription] = useState(null);
   const user = localStorage.getItem("user_id");
 
   const navigate = useNavigate();
@@ -60,6 +61,7 @@ const NewFile = () => {
     bazdid: bazdid,
     tenet_name: tenetName,
     tenet_phone: tenetPhone,
+    description: description
   };
 
   if (fileType === "SELL") {
@@ -302,6 +304,15 @@ const NewFile = () => {
             name={"ownerName"}
             label={"نام مالک"}
             setter={setOwnerName}
+            isRequired={true}
+          />
+        </div>
+        <div className="grid grid-cols-2 h-12 gap-2">
+          <FloatLabel
+            type="text"
+            name={"description"}
+            label={"توضیحات"}
+            setter={setDescription}
             isRequired={true}
           />
         </div>

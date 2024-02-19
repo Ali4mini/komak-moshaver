@@ -144,6 +144,10 @@ const FileDetails = () => {
         <div className="flex flex-row gap-20 my-3 px-4">
           <p>آدرس: {file?.address}</p>
         </div>
+
+        <div className="flex flex-row gap-20 my-3 px-4">
+          <p>توضیحات: {file?.description}</p>
+        </div>
         <div className="flex gap-20 my-3 px-4">
           {features.map(
             ({ feature, image, text }, index) =>
