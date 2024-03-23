@@ -59,12 +59,6 @@ class Sell(models.Model):
     )
     notified_customers = models.ManyToManyField(BuyCustomer, blank=True)
 
-    image1 = models.ImageField(upload_to="images/", blank=True)
-    image2 = models.ImageField(upload_to="images/", blank=True)
-    image3 = models.ImageField(upload_to="images/", blank=True)
-    image4 = models.ImageField(upload_to="images/", blank=True)
-    image5 = models.ImageField(upload_to="images/", blank=True)
-
     tag_manager = TaggableManager(blank=True)
     divar_token = models.CharField(max_length=8, blank=True, null=True)
 
@@ -156,17 +150,11 @@ class Rent(models.Model):
     )
     notified_customers = models.ManyToManyField(RentCustomer, blank=True)
 
-    image1 = models.ImageField(upload_to="images/", blank=True)
-    image2 = models.ImageField(upload_to="images/", blank=True)
-    image3 = models.ImageField(upload_to="images/", blank=True)
-    image4 = models.ImageField(upload_to="images/", blank=True)
-    image5 = models.ImageField(upload_to="images/", blank=True)
-
     tags_manager = TaggableManager(blank=True)
     divar_token = models.CharField(max_length=8, blank=True, null=True)
 
     def __str__(self):
-        return f"owner: {self.owner_name} owner's phone: {self.owner_phone} address: {self.address}"
+        return f"code: {self.id} owner: {self.owner_name} owner's phone: {self.owner_phone} address: {self.address}"
 
     def get_absolute_url(self):
         return reverse("file:rent_file_detail", args=[self.id])
@@ -278,11 +266,11 @@ class RentComment(models.Model):
         return self.pk
 
 
-class SellImages(models.Model):
-    post = models.ManyToManyField("Sell", verbose_name=("post"), related_name="Images")
-    image = models.ImageField(upload_to="images", verbose_name="Image")
+class SellImage(models.Model):
+    file = models.ForeignKey(Sell, on_delete=models.CASCADE, related_name="images")
+    image = models.ImageField(upload_to="files")
 
 
-class RentImages(models.Model):
-    post = models.ManyToManyField("Rent", verbose_name=("post"), related_name="Images")
-    image = models.ImageField(upload_to="images", verbose_name="Image")
+class RentImage(models.Model):
+    file = models.ForeignKey(Rent, on_delete=models.CASCADE, related_name="images")
+    image = models.ImageField(upload_to="files")
