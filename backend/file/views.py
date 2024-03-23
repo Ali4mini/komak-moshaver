@@ -1,21 +1,22 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from . import forms
-from django.views.decorators.csrf import csrf_exempt
-from .models import Sell, Rent, SellImages
-from django.contrib import messages
-from django.urls import reverse_lazy
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
-from django.views.generic.edit import UpdateView, DeleteView
-from django.views import View
-from django.utils.decorators import method_decorator
-import requests
-from rest_framework import generics, status
+from .models import RentImage, Sell, Rent, SellImage
+from rest_framework.parsers import MultiPartParser
+from rest_framework.parsers import FileUploadParser
+from django.core.files.uploadedfile import UploadedFile
+from django.http import Http404
 from rest_framework.views import APIView
-from .serializers import SellFileSerializer, RentFileSerializer
-from customer.serializers import BuyCustomerSerializer, RentCustomerSerializer
 from rest_framework.response import Response
+from rest_framework import status
+import requests
+from rest_framework import generics
+from .serializers import (
+    SellFileSerializer,
+    RentFileSerializer,
+    SellImageSerializer,
+    RentImageSerializer,
+)
+from customer.serializers import BuyCustomerSerializer, RentCustomerSerializer
 from django.conf import settings
+
 
 # Create your views here.
 
@@ -49,7 +50,9 @@ class RentFileDetails(generics.RetrieveUpdateDestroyAPIView):
 class SellRelatedCustomers(APIView):
     def get(self, request, pk):
         if pk is None:
-            return Response({'error': 'pk is missing'}, status=400)  # 400 is the status code for "Bad Request"
+            return Response(
+                {"error": "pk is missing"}, status=400
+            )  # 400 is the status code for "Bad Request"
         file = Sell.objects.get(pk=pk)
         related_customers = file.get_related_customers()
         serializer = BuyCustomerSerializer(related_customers, many=True)
@@ -59,11 +62,14 @@ class SellRelatedCustomers(APIView):
 class RentRelatedCustomers(APIView):
     def get(self, request, pk):
         if pk is None:
-            return Response({'error': 'pk is missing'}, status=400)  # 400 is the status code for "Bad Request"
+            return Response(
+                {"error": "pk is missing"}, status=400
+            )  # 400 is the status code for "Bad Request"
         file = Rent.objects.get(pk=pk)
         related_customers = file.get_related_customers()
         serializer = RentCustomerSerializer(related_customers, many=True)
         return Response(serializer.data)
+
 
 class NewSellFile(generics.CreateAPIView):
     queryset = Sell.objects.all()
@@ -73,6 +79,51 @@ class NewSellFile(generics.CreateAPIView):
 class NewRentFile(generics.CreateAPIView):
     queryset = Rent.objects.all()
     serializer_class = RentFileSerializer
+
+
+class SellFileImages(APIView):
+    parser_class = (FileUploadParser, MultiPartParser)
+
+    def get(self, request, file_id):
+        try:
+            file = Sell.objects.get(id=file_id)
+        except Sell.DoesNotExist:
+            raise Http404("File does not exist")
+
+        images = SellImage.objects.filter(file=file)
+        if not images:
+            return Response(
+                {"detail": "No images found for this file."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        # Include the request context in the serializer
+        serializer = SellImageSerializer(
+            images, many=True, context={"request": request}
+        )
+        return Response(serializer.data)
+
+    def post(self, request, file_id):
+        file = Sell.objects.get(pk=file_id)
+        image_files = request.FILES.getlist("images")
+
+        if not image_files:
+            return Response(
+                {"detail": "No file was provided in the request."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # Create a new SellImage instance for each uploaded file
+        created_images = []
+        for image_file in image_files:
+            image = SellImage.objects.create(image=image_file, file=file)
+            created_images.append(image)
+
+        # Assuming you have a serializer for SellImage
+        serializer = SellImageSerializer(
+            created_images, many=True, context={"request": request}
+        )
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class SellSendInfo(APIView):
@@ -113,4 +164,4 @@ class SellSendInfo(APIView):
         return Response(response)
 
 
-#!SECTION
+# TODO: RentSendInfo

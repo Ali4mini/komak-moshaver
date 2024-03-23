@@ -8,6 +8,8 @@ import storage from "../assets/storage.png";
 import motor from "../assets/storage.png";
 import MenuButton from "../common/dropdown_button";
 import MatchedCustomers from "../common/matched_customers";
+import 'react-slideshow-image/dist/styles.css';
+import ImageSlider from "../common/slide";
 
 const FileDetails = () => {
   const navigate = useNavigate();
@@ -15,12 +17,19 @@ const FileDetails = () => {
   const [file, setFile] = useState(null);
   const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
   const [isMatchedCustomer, setIsMatchedCustomer] = useState(false);
+  const [images, setImages] = useState(null)
 
   useEffect(() => {
     api
       .get(`file/${fileType}/${id}/`)
-      .then((response) => setFile(response.data));
+      .then((response) => {
+        setFile(response.data);
+        api
+          .get(`file/${fileType}/${id}/images/`)
+          .then(response => setImages(response.data))
+      });
   }, []);
+  console.log(images)
 
   const features = [
     { feature: "parking", image: car, text: "پارکینگ دارد" },
@@ -103,94 +112,102 @@ const FileDetails = () => {
   ];
 
   return (
-    <div
-      id="details"
-      className="grid border-2 text-sm md:text-base bg-white rounded-lg mx-4 h-auto shadow-lg"
-    >
-      <div className="flex flex-col">
-        <div className="flex flex-row-2 gap-20 my-3 px-4">
-          <p>نوع فایل: {fileType === "sell" ? "فروش" : "اجاره"}</p>
-          <p>نوع ملک: {file?.property_type}</p>
-        </div>
-        <div className="flex flex-row-2 gap-20 my-3 px-4">
-          <p>نام مالک: {file?.owner_name}</p>
-          <p>شماره مالک: {file?.owner_phone}</p>
-        </div>
-        <div className="grid grid-cols-3 md:grid-cols-5 max-w-md gap-x-6 gap-y-3 my-3 px-4">
-          <p>متراژ: {file?.m2}</p>
-          {fileType === "sell" ? (
-            <p>قیمت: {file?.price}</p>
-          ) : (
-            <>
-              <p>ودیعه: {file?.price_up}</p>
-              <p>اجاره: {file?.price_rent}</p>
-            </>
-          )}
+    <div className="grid grid-cols-2 gap-5 m-2 p-2 h-full border rounded">
+      <div
+        id="details"
+        className="flex flex-row w-full border-2 text-sm md:text-base bg-white justify-between rounded-lg h-auto shadow"
+      >
 
-          <p>ساخت: {file?.year}</p>
-          <p>طبقه: {file?.floor}</p>
-          <p>طبقات: {file?.tabaghat}</p>
-          <p>خواب: {file?.bedroom}</p>
-          <p>واحد: {file?.vahedha}</p>
-          <p>تبدیل: {file?.tabdil}</p>
-        </div>
-        <div className="flex flex-row my-3 px-4">
-          <p>بازدید: {file?.bazdid}</p>
-        </div>
-        <div className="flex flex-row gap-20 my-3 px-4">
-          <p>شماره مستاجر: {file?.tenet_phone}</p>
-          <p>نام مستاجر: {file?.tenet_name}</p>
-        </div>
-        <div className="flex flex-row gap-20 my-3 px-4">
-          <p>آدرس: {file?.address}</p>
+        <div className="flex flex-col">
+
+          <div className="flex flex-col">
+            <div className="flex flex-row-2 gap-20 my-3 px-4">
+              <p>نوع فایل: {fileType === "sell" ? "فروش" : "اجاره"}</p>
+              <p>نوع ملک: {file?.property_type}</p>
+            </div>
+            <div className="flex flex-row-2 gap-20 my-3 px-4">
+              <p>نام مالک: {file?.owner_name}</p>
+              <p>شماره مالک: {file?.owner_phone}</p>
+            </div>
+            <div className="grid grid-cols-3 md:grid-cols-5 max-w-md gap-x-6 gap-y-3 my-3 px-4">
+              <p>متراژ: {file?.m2}</p>
+              {fileType === "sell" ? (
+                <p>قیمت: {file?.price}</p>
+              ) : (
+                <>
+                  <p>ودیعه: {file?.price_up}</p>
+                  <p>اجاره: {file?.price_rent}</p>
+                </>
+              )}
+
+              <p>ساخت: {file?.year}</p>
+              <p>طبقه: {file?.floor}</p>
+              <p>طبقات: {file?.tabaghat}</p>
+              <p>خواب: {file?.bedroom}</p>
+              <p>واحد: {file?.vahedha}</p>
+              <p>تبدیل: {file?.tabdil}</p>
+            </div>
+            <div className="flex flex-row my-3 px-4">
+              <p>بازدید: {file?.bazdid}</p>
+            </div>
+            <div className="flex flex-row gap-20 my-3 px-4">
+              <p>شماره مستاجر: {file?.tenet_phone}</p>
+              <p>نام مستاجر: {file?.tenet_name}</p>
+            </div>
+            <div className="flex flex-row gap-20 my-3 px-4">
+              <p>آدرس: {file?.address}</p>
+            </div>
+            <div className="flex gap-20 my-3 px-4">
+              {features.map(
+                ({ feature, image, text }, index) =>
+                  file?.[feature] && (
+                    <div key={index} className="flex flex-col">
+                      <img src={image} alt="" width="40px" className="mx-auto" />
+                      <span>{text}</span>
+                    </div>
+                  )
+              )}
+            </div>
+          </div>
+          <div className="flex flex-row justify-between my-3 px-4">
+            <MenuButton buttonText={"گزینه ها"} items={optionItems} />
+
+            {isMatchedCustomer && (
+              <MatchedCustomers
+                isOpen={isMatchedCustomer}
+                setIsOpen={setIsMatchedCustomer}
+                notifiedCustomers={file.notified_customers}
+              />
+            )}
+
+            {isDeleteConfirm && (
+              <DeleteConfirm
+                isOpen={isDeleteConfirm}
+                setIsOpen={setIsDeleteConfirm}
+                title={"آیا از پاک کردن این فایل مطمعنید؟"}
+                description={
+                  "اگر فایل را اشتباهی پاک کردید سریعا به مدیر مجموعه اطلاع رسانی کنید"
+                }
+              />
+            )}
+
+            <button
+              id="update"
+              onClick={() => {
+                navigate("edit/");
+              }}
+              className="text-white max-w-md bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+            >
+              ویرایش
+            </button>
+          </div>
         </div>
 
-        <div className="flex flex-row gap-20 my-3 px-4">
-          <p>توضیحات: {file?.description}</p>
-        </div>
-        <div className="flex gap-20 my-3 px-4">
-          {features.map(
-            ({ feature, image, text }, index) =>
-              file?.[feature] && (
-                <div key={index} className="flex flex-col">
-                  <img src={image} alt="" width="40px" className="mx-auto" />
-                  <span>{text}</span>
-                </div>
-              )
-          )}
-        </div>
-        <div className="flex flex-row justify-between my-3 px-4">
-          <MenuButton buttonText={"گزینه ها"} items={optionItems} />
+      </div >
 
-          {isMatchedCustomer && (
-            <MatchedCustomers
-              isOpen={isMatchedCustomer}
-              setIsOpen={setIsMatchedCustomer}
-              notifiedCustomers={file.notified_customers}
-            />
-          )}
+      <div id="gallery" className="flex justify-center items-center border-5 rounded">
+        {images ? <ImageSlider images={images} /> : "no image was found"}
 
-          {isDeleteConfirm && (
-            <DeleteConfirm
-              isOpen={isDeleteConfirm}
-              setIsOpen={setIsDeleteConfirm}
-              title={"آیا از پاک کردن این فایل مطمعنید؟"}
-              description={
-                "اگر فایل را اشتباهی پاک کردید سریعا به مدیر مجموعه اطلاع رسانی کنید"
-              }
-            />
-          )}
-
-          <button
-            id="update"
-            onClick={() => {
-              navigate("edit/");
-            }}
-            className="text-white max-w-md bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-          >
-            ویرایش
-          </button>
-        </div>
       </div>
     </div>
   );

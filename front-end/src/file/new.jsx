@@ -10,6 +10,7 @@ const NewFile = () => {
   const [fileType, setFileType] = useState(
     localStorage.getItem("agents_field")
   );
+  console.log(fileType)
   const [propertyType, setPropertyType] = useState("A");
   const [address, setAddress] = useState(null);
   const [m2, setM2] = useState(null);
@@ -31,7 +32,10 @@ const NewFile = () => {
   const [bazdid, setBazdid] = useState("هماهنگی");
   const [tenetPhone, setTenetPhone] = useState(null);
   const [tenetName, setTenetName] = useState(null);
-  const [description, setDescription] = useState(null);
+  const [description, setDescription] = useState(null)
+  const [id, setId] = useState(null) // used for uploading images
+
+  const [selectedFiles, setSelectedFiles] = useState(null);
   const user = localStorage.getItem("user_id");
 
   const navigate = useNavigate();
@@ -61,7 +65,7 @@ const NewFile = () => {
     bazdid: bazdid,
     tenet_name: tenetName,
     tenet_phone: tenetPhone,
-    description: description
+    description: description,
   };
 
   if (fileType === "SELL") {
@@ -78,6 +82,9 @@ const NewFile = () => {
       .then((response) => {
         switch (response.status) {
           case 201:
+            console.log(response.data)
+            handleUpload(`file/${response.data["file_type"]}/${response.data["id"]}/images/`)
+
             dispatch(
               setFlashMessage({
                 type: "SUCCESS",
@@ -90,7 +97,40 @@ const NewFile = () => {
       .catch((error) => console.log(error.data));
     navigate("/", { replace: true });
   };
+
+  const handleFileChange = (event) => {
+    setSelectedFiles(event.target.files);
+  };
+  const handleUpload = async (endpoint) => {
+    const formData = new FormData();
+    Array.from(selectedFiles).forEach((file) => {
+      formData.append('images', file);
+    });
+
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    };
+
+    try {
+      const response = await api.post(endpoint, formData, config);
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  // const MultipleImageUpload = ({ endpoint }) => {
+  //
+  //
+  //
+  //   return (
+  //     <div>
+  //     </div>
+  //   );
+  // };
   return (
+
     <div className="block border shadow-lg rounded-xl bg-white mx-4 px-4 py-2 my-2">
       <form
         onSubmit={(e) => create(fileEntery, e)}
@@ -316,6 +356,10 @@ const NewFile = () => {
             isRequired={true}
           />
         </div>
+
+        <div className="grid grid-cols-2 h-12 gap-2">
+          <input type="file" multiple onChange={handleFileChange} />
+        </div>
         <div className="grid grid-cols-3 md:grid-cols-4 max-w-sm gap-y-1">
           <Checkbox label="پارکینگ" name="parking" setter={setParking} />
           <Checkbox label="آسانسور" name="elevator" setter={setElevator} />
@@ -330,7 +374,7 @@ const NewFile = () => {
         </button>
       </form>
     </div>
-  );
+  ); 
 };
 
 export default NewFile;

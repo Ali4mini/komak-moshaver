@@ -16,10 +16,9 @@ import os
 
 
 # ! enviroment variables
-from dotenv import load_dotenv
+from dotenv import dotenv_values
 
-load_dotenv()
-
+config = dotenv_values(".env")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = pathlib.Path(__file__).resolve(strict=True).parent.parent
@@ -27,21 +26,21 @@ BASE_DIR = pathlib.Path(__file__).resolve(strict=True).parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "fmw^gpp&)c$30g0g@i2!1bu)sci$(a7vgjwl_&blgp&^a8ej=1"
+SECRET_KEY = config["SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config["DEBUG"] == "ON"
+
 
 # Application definition
 
 INSTALLED_APPS = [
-    # my apps
+    #! my apps
     "customer.apps.CustomerConfig",
     "listing.apps.ListingConfig",
     "agents_m.apps.AgentsMConfig",
     "file.apps.FileConfig",
-    # default apps
+    #! default apps
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -49,19 +48,19 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.sites",
     "django.contrib.staticfiles",
-    # third party apps
+    #! third party apps
     "taggit",
     "django_extensions",
     "compressor",
     "rest_framework",
     "corsheaders",
 ]
+SMS_API = (
+    "https://console.melipayamak.com/api/send/advanced/b59dd6ca1de047aabf4416be63da2c01"
+)
 
 REST_FRAMEWORK = {
-    "DEFAULT_PERMISSION_CLASSES": (
-        "rest_framework.permissions.IsAuthenticated",
-        "rest_framework.permissions.AllowAny",
-    ),
+    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
@@ -90,7 +89,7 @@ MIDDLEWARE = [
 ]
 STATIC_URL = "/assets/"
 STATIC_ROOT = os.path.join(BASE_DIR, "front-end/dist/assets")
-# WHITENOISE_ROOT = os.path.join(BASE_DIR, "front-end/dist")
+WHITENOISE_ROOT = os.path.join(BASE_DIR, "front-end/dist")
 
 CORS_ORIGIN_ALLOW_ALL = True
 
@@ -115,8 +114,8 @@ TEMPLATES = [
 ]
 
 
-# MEDIA_URL = "media/"
-# MEDITA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_URL = "media/"
+MEDITA_ROOT = os.path.join(BASE_DIR, "media")
 
 # COMPRESS_ROOT = os.path.join(BASE_DIR, 'front-end', 'dist', 'assets')
 
@@ -139,6 +138,12 @@ DATABASES = {
         "PASSWORD": os.getenv("DB_PASS"),
         "HOST": os.getenv("DB_HOST"),
         "PORT": os.getenv("DB_PORT"),
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": config["DB_NAME"],
+        "USER": config["DB_USER"],
+        "PASSWORD": config["DB_PASSWORD"],
+        "HOST": "127.0.0.1",
+        "PORT": config["DB_PORT"],
     }
 }
 
