@@ -12,6 +12,9 @@ __pycache__
 env
 cookies
 .vscode/
+# file images
+.backend/files/
+#
 .VSCodeCounter/
 .pytest_cache/
 gunicorn_config.py
