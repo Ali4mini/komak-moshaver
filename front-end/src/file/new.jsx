@@ -36,13 +36,13 @@ const NewFile = () => {
   const [id, setId] = useState(null) // used for uploading images
 
   const [selectedFiles, setSelectedFiles] = useState(null);
-  const user = localStorage.getItem("user_id");
+  const user = localStorage.getItem("user");
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   let fileEntery = {
-    added_by: user,
+    username: user,
     file_type: fileType,
     property_type: propertyType,
     address: address,
@@ -374,7 +374,7 @@ const NewFile = () => {
         </button>
       </form>
     </div>
-  ); 
+  );
 };
 
 export default NewFile;
