@@ -41,13 +41,12 @@ const MenuButton = ({ items, buttonText }) => {
           <div className="flex flex-col p-1 m-1 justify-center">
             {items.map((item) => (
               /* Use the `active` state to conditionally style the active item. */
-              <Menu.Item key={item.key} as={Fragment}>
+              <Menu.Item key={item.key} as={Fragment} disabled={item.disabled}>
                 {({ active }) => (
                   <button
                     onClick={item.handler}
-                    className={`group flex text-xs md:text-sm rounded-md px-2 py-2 justify-start gap-2 ${
-                      active ? "bg-gray-300" : "bg-white"
-                    } ${item.style}`}
+                    className={`${item.disabled ? "text-gray-600 cursor-not-allowed opacity-50" : null}group flex text-xs md:text-sm rounded-md px-2 py-2 justify-start gap-2 ${active ? "bg-gray-300" : "bg-white"
+                      } ${item.style}`}
                   >
                     {item.icon}
                     {item.label}

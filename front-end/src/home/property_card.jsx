@@ -12,9 +12,8 @@ const File = ({ file }) => {
   return (
     <Link to={`file/${file.file_type}/${file.id}`}>
       <div
-        className={`${
-          diffdays > 30 ? "bg-yellow-200" : file.status
-        } block border-2 shadow-md rounded-2xl  hover:shadow-xl mx-4 py-1 my-2`}
+        className={`${diffdays > 30 ? "bg-yellow-200" : file.status
+          } block border-2 shadow-md rounded-2xl  hover:shadow-xl mx-4 py-1 my-2`}
       >
         <div className="flex flex-col" id="file">
           <div className="flex flex-row gap-0">
@@ -48,7 +47,7 @@ const File = ({ file }) => {
             {file.elevator ? (
               <>
                 <div className="flex flex-col">
-                  <img src={elevator} alt="" width="30px" className="mx-auto" />
+                  <img src={elevator} alt="" width="30px" height="30px" className="mx-auto" />
                 </div>
               </>
             ) : null}

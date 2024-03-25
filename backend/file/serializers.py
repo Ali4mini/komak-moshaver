@@ -56,13 +56,13 @@ class RentFileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Rent
-        fields = "__all__"
+        exclude = ("added_by",)
 
     def get_file_type(self, obj):
         return "rent"
 
     def create(self, validated_data):
         username = validated_data.pop("username")
-        user = get_user_model().objects.get(username=username)
-        validated_data["added_by"] = user
+        profile = Profile.objects.get(user__username=username)
+        validated_data["added_by"] = profile.user
         return super().create(validated_data)

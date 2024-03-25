@@ -127,6 +127,52 @@ class SellFileImages(APIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
+class RentFileImages(APIView):
+    parser_class = (FileUploadParser, MultiPartParser)
+
+    def get(self, request, file_id):
+        try:
+            file = Rent.objects.get(id=file_id)
+        except Rent.DoesNotExist:
+            raise Http404("File does not exist")
+
+        images = RentImage.objects.filter(file=file)
+        if not images:
+            return Response(
+                {"detail": "No images found for this file."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        # Include the request context in the serializer
+        serializer = RentImageSerializer(
+            images, many=True, context={"request": request}
+        )
+        return Response(serializer.data)
+
+    def post(self, request, file_id):
+        file = Rent.objects.get(pk=file_id)
+        image_files = request.FILES.getlist("images")
+
+        if not image_files:
+            return Response(
+                {"detail": "No file was provided in the request."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # Create a new SellImage instance for each uploaded file
+        created_images = []
+        for image_file in image_files:
+            image = RentImage.objects.create(image=image_file, file=file)
+            created_images.append(image)
+
+        # Assuming you have a serializer for SellImage
+        serializer = RentImageSerializer(
+            created_images, many=True, context={"request": request}
+        )
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
 class SellSendInfo(APIView):
     def post(self, request, pk):
         phone_numbers = request.data.get("phone_numbers")

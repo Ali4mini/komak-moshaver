@@ -7,14 +7,14 @@
  width: 80%;
  margin: auto;
  text-align: center;
+ object-fit: contain;
+}
+.slide-image {
+  max-height: 600px;
+  width: auto;
 }
 .image-slider .slick-dots {
  bottom: -30px;
-}
-.image-slider img {
- max-width: 100%;
- height: auto;
- margin: auto;
 }
 
 

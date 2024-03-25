@@ -18,18 +18,25 @@ const FileDetails = () => {
   const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
   const [isMatchedCustomer, setIsMatchedCustomer] = useState(false);
   const [images, setImages] = useState(null)
+  const [isFileOld, setIsFileOld] = useState(false)
 
   useEffect(() => {
     api
       .get(`file/${fileType}/${id}/`)
       .then((response) => {
         setFile(response.data);
+        const today = new Date().getTime()
+        let updatedDate = new Date(response.data.updated).getTime(); // Use response.data directly
+        const differenceInDays = (today - updatedDate) / (1000 * 3600 * 24);
+        if (differenceInDays <= 30) {
+          setIsFileOld(true)
+        }
+
         api
           .get(`file/${fileType}/${id}/images/`)
           .then(response => setImages(response.data))
       });
   }, []);
-  console.log(images)
 
   const features = [
     { feature: "parking", image: car, text: "پارکینگ دارد" },
@@ -43,6 +50,7 @@ const FileDetails = () => {
     {
       key: "updated",
       label: "موجود است",
+      disabled: isFileOld,
       handler: () => {
         var now = new Date();
         api
@@ -65,6 +73,7 @@ const FileDetails = () => {
     {
       key: "matched_customers",
       label: "مشتریان مرتبط",
+      disabled: false,
       handler: () => {
         setIsMatchedCustomer(!isMatchedCustomer);
       },
@@ -88,6 +97,7 @@ const FileDetails = () => {
     {
       key: "delete",
       label: "حذف",
+      disabled: false,
       style: "text-red-600 ",
       handler: () => {
         setIsDeleteConfirm(!isDeleteConfirm);
@@ -112,10 +122,10 @@ const FileDetails = () => {
   ];
 
   return (
-    <div className="grid grid-cols-2 gap-5 m-2 p-2 h-full border rounded">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-5 m-2 p-2 h-full border rounded">
       <div
         id="details"
-        className="flex flex-row w-full border-2 text-sm md:text-base bg-white justify-between rounded-lg h-auto shadow"
+        className="flex flex-col w-full border-2 text-sm md:text-base bg-white justify-between rounded-lg h-auto shadow"
       >
 
         <div className="flex flex-col">
@@ -129,7 +139,7 @@ const FileDetails = () => {
               <p>نام مالک: {file?.owner_name}</p>
               <p>شماره مالک: {file?.owner_phone}</p>
             </div>
-            <div className="grid grid-cols-3 md:grid-cols-5 max-w-md gap-x-6 gap-y-3 my-3 px-4">
+            <div className="grid grid-cols-3 md:grid-cols-3 gap-x-6 gap-y-3 my-3 px-4">
               <p>متراژ: {file?.m2}</p>
               {fileType === "sell" ? (
                 <p>قیمت: {file?.price}</p>
@@ -146,18 +156,19 @@ const FileDetails = () => {
               <p>خواب: {file?.bedroom}</p>
               <p>واحد: {file?.vahedha}</p>
               <p>تبدیل: {file?.tabdil}</p>
-            </div>
-            <div className="flex flex-row my-3 px-4">
+
               <p>بازدید: {file?.bazdid}</p>
             </div>
-            <div className="flex flex-row gap-20 my-3 px-4">
-              <p>شماره مستاجر: {file?.tenet_phone}</p>
-              <p>نام مستاجر: {file?.tenet_name}</p>
+            {file?.tenet_phone ?
+              <div className="flex flex-row gap-10 my-3 px-4">
+                <p>شماره مستاجر: {file?.tenet_phone}</p>
+                <p>نام مستاجر: {file?.tenet_name}</p>
+              </div> : null}
+            <div className="flex flex-row gap-10 my-3 px-4">
+              <p>آدرس: </p>
+              <p>{file?.address}</p>
             </div>
-            <div className="flex flex-row gap-20 my-3 px-4">
-              <p>آدرس: {file?.address}</p>
-            </div>
-            <div className="flex flex-row gap-20 my-3 px-4">
+            <div className="flex flex-row gap-10 my-3 px-4">
               <p>توضیحات: </p>
               <p>{file?.description}</p>
 
@@ -167,14 +178,14 @@ const FileDetails = () => {
                 ({ feature, image, text }, index) =>
                   file?.[feature] && (
                     <div key={index} className="flex flex-col">
-                      <img src={image} alt="" width="40px" className="mx-auto" />
+                      <img src={image} alt="" width="30px" className="mx-auto" />
                       <span>{text}</span>
                     </div>
                   )
               )}
             </div>
           </div>
-          <div className="flex flex-row justify-between my-3 px-4">
+          <div className="flex flex-row justify-between my-3 px-4 z-10">
             <MenuButton buttonText={"گزینه ها"} items={optionItems} />
 
             {isMatchedCustomer && (
@@ -210,9 +221,8 @@ const FileDetails = () => {
 
       </div >
 
-      <div id="gallery" className="flex justify-center items-center border-5 rounded">
-        {images ? <ImageSlider images={images} /> : "no image was found"}
-
+      <div id="gallery" className="flex justify-center items-center border-5 rounded p-2 md:p-4">
+        {images && images.length > 0 ? <ImageSlider images={images} /> : <img src="https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg" alt="No image found" />}
       </div>
     </div>
   );

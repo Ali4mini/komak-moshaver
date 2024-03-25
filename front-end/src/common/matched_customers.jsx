@@ -90,6 +90,7 @@ const MatchedCustomers = ({ isOpen, setIsOpen, notifiedCustomers }) => {
         <Dialog
           open={isOpen}
           onClose={() => setIsOpen(false)}
+          size="sm"
           className="relative z-50"
         >
           <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
@@ -101,23 +102,6 @@ const MatchedCustomers = ({ isOpen, setIsOpen, notifiedCustomers }) => {
                 id="customers"
                 className="flex flex-col p-2 h-full rounded-md overflow-y-scroll border gap-2"
               >
-                {/* {customersList?.map((customer) =>
-                  notifiedCustomers.includes(customer.id) ? (
-                    <Customer
-                      customerName={customer.customer_name}
-                      customerPhone={customer.customer_phone}
-                      hasNotified={true}
-                      key={customer.id}
-                    />
-                  ) : (
-                    <Customer
-                      customerName={customer.customer_name}
-                      customerPhone={customer.customer_phone}
-                      hasNotified={false}
-                      key={customer.id}
-                    />
-                  )
-                )} */}
                 {customersList?.map((customer) => (
                   <Customer
                     customerName={customer.customer_name}
@@ -130,23 +114,22 @@ const MatchedCustomers = ({ isOpen, setIsOpen, notifiedCustomers }) => {
               </div>
               <div
                 id="actions"
-                className="flex lg:flex-row sm:flex-col gap-3 justify-between mt-4"
+                className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-between mt-4"
               >
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="px-3  text-8 h-10 rounded-lg bg-blue-400"
+                  className="px-3 sm:px-4 text-xs md:text-base h-10 rounded-lg bg-blue-400"
                 >
                   لغو
                 </button>
                 <button
                   onClick={() => notifyCustomers()}
-                  className="px-3 text-sm h-10 rounded-lg bg-yellow-400"
+                  className="px-3 sm:px-4 text-xs md:text-base h-10 rounded-lg bg-yellow-400"
                 >
                   اطلاع رسانی انجام شد
                 </button>
                 <button
-                  // onClick={() => Delete()}
-                  className="px-3 text-sm h-10 rounded-lg bg-red-400 cursor-not-allowed opacity-50"
+                  className="px-3 sm:px-4 text-xs md:text-base h-10 rounded-lg bg-red-400 cursor-not-allowed opacity-50"
                 >
                   اطلاع رسانی کن
                 </button>

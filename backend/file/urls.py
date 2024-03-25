@@ -18,6 +18,11 @@ urlpatterns = [
         name="sell_file_images",
     ),
     path(
+        "rent/<int:file_id>/images/",
+        views.RentFileImages.as_view(),
+        name="rent_file_images",
+    ),
+    path(
         "sell/<int:pk>/related_customers/",
         views.SellRelatedCustomers.as_view(),
         name="sell_related_customer",

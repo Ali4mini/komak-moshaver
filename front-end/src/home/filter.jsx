@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { useEffect } from "react";
 import FloatLabel from "../common/input";
 import api from "../common/api";
 import Checkbox from "../common/checkbox";
@@ -26,6 +27,7 @@ const Filter = () => {
   let budgetRange = [],
     budgetUpRange = [],
     budgetRentRange = [];
+
 
   // filter range
   if (price) {
@@ -82,7 +84,6 @@ const Filter = () => {
     storage: storage,
   };
 
-  // console.log(filterEntery)
 
   const filter = (data) => {
     if (data.file_type === "sell") {
