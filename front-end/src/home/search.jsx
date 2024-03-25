@@ -4,12 +4,14 @@ import api from "../common/api";
 import { useDispatch } from "react-redux";
 import { setFiles } from "./filesSlice";
 
+// search by code or name
 const Search = () => {
   const dispatch = useDispatch();
   const [searchField, setSearchField] = useState("id");
   const [key, setKey] = useState(null);
 
-  const filter = (key) => {
+  const filter = (key, e) => {
+    e.preventDefault()
     api
       .get("listing/", {
         params: {
@@ -23,7 +25,8 @@ const Search = () => {
       .catch((error) => console.log(error));
   };
   return (
-    <div
+    <form
+      onSubmit={(e) => filter(key, e)}
       id="filter_pk"
       className="flex border-r-2 py-2 justify-between gap-2 h-auto "
     >
@@ -49,12 +52,12 @@ const Search = () => {
         }}
       />
       <button
-        onClick={() => filter(key)}
+        type="submit"
         className=" rounded-lg bg-blue-300 hover:bg-blue-400 border w-1/4 bottom-0"
       >
         جستجو
       </button>
-    </div>
+    </form>
   );
 };
 

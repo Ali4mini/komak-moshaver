@@ -120,15 +120,6 @@ const NewFile = () => {
       console.error(error);
     }
   };
-  // const MultipleImageUpload = ({ endpoint }) => {
-  //
-  //
-  //
-  //   return (
-  //     <div>
-  //     </div>
-  //   );
-  // };
   return (
 
     <div className="block border shadow-lg rounded-xl bg-white mx-4 px-4 py-2 my-2">
