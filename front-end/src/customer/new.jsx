@@ -24,13 +24,13 @@ const NewCustomer = () => {
   const [motorSpot, setMotorSpot] = useState(false);
   const [customerName, setCustomerName] = useState(null);
   const [customerPhone, setCustomerPhone] = useState(null);
-  const user = localStorage.getItem("user_id");
+  const user = localStorage.getItem("user");
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   let customerEntery = {
-    added_by: user,
+    username: user,
     customer_type: customerType,
     property_type: propertyType,
     m2: m2,
@@ -147,21 +147,21 @@ const NewCustomer = () => {
             name={"m2"}
             label={"متراژ"}
             setter={setM2}
-            isRequired={true}
+            isRequired={false}
           />
           <FloatLabel
             type="number"
             name={"year"}
             label={"سال ساخت"}
             setter={setYear}
-            isRequired={true}
+            isRequired={false}
           />
           <FloatLabel
             type="number"
             name={"bedroom"}
             label={"اتاق خواب"}
             setter={setBedroom}
-            isRequired={true}
+            isRequired={false}
           />
 
           <FloatLabel
@@ -169,7 +169,7 @@ const NewCustomer = () => {
             name={"units"}
             label={"واحد ها"}
             setter={setUnits}
-            isRequired={true}
+            isRequired={false}
           />
         </div>
         <div className="grid grid-cols-2 max-w-sm gap-2">

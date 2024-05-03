@@ -28,15 +28,19 @@ const UpdateFile = () => {
   const [price, setPrice] = useState(oldFile ? oldFile.price : "");
   const [upPrice, setUpPrice] = useState(oldFile ? oldFile.price_up : "");
   const [rentPrice, setRentPrice] = useState(oldFile ? oldFile.price_rent : "");
+  const [tabdil, setTabdil] = useState(null);
   const [floor, setFloor] = useState(oldFile ? oldFile.floor : "");
   const [floors, setFloors] = useState(oldFile ? oldFile.tabaghat : "");
   const [units, setUnits] = useState(oldFile ? oldFile.vahedha : "");
+  const [bazdid, setBazdid] = useState("هماهنگی");
   const [parking, setParking] = useState(oldFile ? oldFile.parking : "");
   const [elevator, setElevator] = useState(oldFile ? oldFile.elevator : "");
   const [storage, setStorage] = useState(oldFile ? oldFile.storage : "");
   const [motorSpot, setMotorSpot] = useState(
     oldFile ? oldFile.parking_motor : ""
   );
+  const [tenetPhone, setTenetPhone] = useState(null);
+  const [tenetName, setTenetName] = useState(null);
   const [ownerName, setOwnerName] = useState(oldFile ? oldFile.owner_name : "");
   const [ownerPhone, setOwnerPhone] = useState(
     oldFile ? oldFile.owner_phone : ""
@@ -55,6 +59,7 @@ const UpdateFile = () => {
     price: price,
     price_up: upPrice,
     price_rent: rentPrice,
+    tabdil: tabdil,
     floor: floor,
     tabaghat: floors,
     vahedha: units,
@@ -64,6 +69,9 @@ const UpdateFile = () => {
     parking_motor: motorSpot,
     owner_name: ownerName,
     owner_phone: ownerPhone,
+    bazdid: bazdid,
+    tenet_name: tenetName,
+    tenet_phone: tenetPhone,
     description: description,
   };
 
@@ -160,13 +168,33 @@ const UpdateFile = () => {
               </>
             )}
 
+            {fileType == "rent" ?
+
+              <FloatLabel
+                defValue={oldFile.tabdil}
+                type="number"
+                name={"tabdil"}
+                label={"تبدیل"}
+                setter={setTabdil}
+                isRequired={false}
+              /> : null
+            }
             <FloatLabel
               defValue={oldFile.m2}
               type="number"
               name={"m2"}
               label={"متراژ"}
               setter={setM2}
-              isRequired={true}
+              isRequired={false}
+            />
+
+            <FloatLabel
+              defValue={oldFile.bedroom}
+              type="number"
+              name={"bedroom"}
+              label={"خواب"}
+              setter={setBedroom}
+              isRequired={false}
             />
             <FloatLabel
               defValue={oldFile.year}
@@ -174,15 +202,7 @@ const UpdateFile = () => {
               name={"year"}
               label={"ساخت"}
               setter={setYear}
-              isRequired={true}
-            />
-            <FloatLabel
-              defValue={oldFile.bedroom}
-              type="number"
-              name={"bedroom"}
-              label={"خواب"}
-              setter={setBedroom}
-              isRequired={true}
+              isRequired={false}
             />
 
             <FloatLabel
@@ -191,7 +211,7 @@ const UpdateFile = () => {
               name={"floor"}
               label={"طبقه"}
               setter={setFloor}
-              isRequired={true}
+              isRequired={false}
             />
             <FloatLabel
               defValue={oldFile.tabaghat}
@@ -199,7 +219,7 @@ const UpdateFile = () => {
               name={"floors"}
               label={"طبقات"}
               setter={setFloors}
-              isRequired={true}
+              isRequired={false}
             />
             <FloatLabel
               defValue={oldFile.vahedha}
@@ -207,8 +227,53 @@ const UpdateFile = () => {
               name={"units"}
               label={"واحد ها"}
               setter={setUnits}
-              isRequired={true}
+              isRequired={false}
             />
+          </div>
+
+          <div className="grid grid-cols-1 gap-2">
+            <div className="flex gap-2">
+              <label
+                htmlFor="bazdid"
+                className="h-full px-auto pt-1 text-gray-500 text-lg"
+              >
+                بازدید:
+              </label>
+              <select
+                name="bazdid"
+                id="bazdid"
+                onChange={(e) => {
+                  setBazdid(e.target.value);
+                }}
+                className="bg-gray-50 border my-auto focus:ring-blue-300 text-center focus:border-blue-300 shadow-md w-24 h-10 rounded-lg"
+              >
+                <option value="هماهنگی">هماهنگی</option>
+                <option value="صبح">صبح</option>
+                <option value="بعدازظهر">بعدازظهر</option>
+                <option value="مستاجر">مستاجر</option>
+              </select>
+            </div>
+
+            {bazdid === "مستاجر" ? (
+              <div className="flex flex-row gap-2 max-w-sm">
+                <FloatLabel
+                  defValue={oldFile.tenetName}
+                  type="text"
+                  name={"ownerPhone"}
+                  label={"شماره مستاجر"}
+                  setter={setTenetPhone}
+                  isRequired={false}
+                />
+                <FloatLabel
+                  defValue={oldFile.tenetPhone}
+                  type="text"
+                  name={"ownerName"}
+                  label={"نام مستاجر"}
+                  setter={setTenetName}
+                  isRequired={false}
+                />
+              </div>
+            ) : null}
           </div>
           <div className="grid grid-cols-2 max-w-sm gap-2">
             <FloatLabel
@@ -235,7 +300,7 @@ const UpdateFile = () => {
               name={"description"}
               label={"توضیحات"}
               setter={setDescription}
-              isRequired={true}
+              isRequired={false}
             />
           </div>
           <div className="grid grid-cols-3 md:grid-cols-4 max-w-sm gap-y-1">

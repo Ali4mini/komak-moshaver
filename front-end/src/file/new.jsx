@@ -344,7 +344,7 @@ const NewFile = () => {
             name={"description"}
             label={"توضیحات"}
             setter={setDescription}
-            isRequired={true}
+            isRequired={false}
           />
         </div>
 

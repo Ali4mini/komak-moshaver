@@ -8,7 +8,6 @@ import storage from "../assets/storage.png";
 import motor from "../assets/storage.png";
 import MenuButton from "../common/dropdown_button";
 import MatchedCustomers from "../common/matched_customers";
-import 'react-slideshow-image/dist/styles.css';
 import ImageSlider from "../common/slide";
 
 const FileDetails = () => {

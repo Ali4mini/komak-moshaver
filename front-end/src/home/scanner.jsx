@@ -12,7 +12,7 @@ const Scanner = () => {
 
   useEffect(() => {
     api
-      .get("listing/", { params: { owner_name: "UNKNOWN" } })
+      .get("listing/", { params: { owner_name: "UNKNOWN", status: "ACTIVE" } })
       .then((response) => {
         dispatch(setScannerFiles(response.data));
       })

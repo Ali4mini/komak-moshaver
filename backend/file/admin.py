@@ -6,12 +6,7 @@ from .models import Sell, Rent, SellComment, RentComment, SellImage, RentImage
 
 @admin.register(Sell)
 class SellAdmin(admin.ModelAdmin):
-    list_display = [
-        "owner_name",
-        "m2",
-        "address",
-        "property_type",
-    ]
+    list_display = ["owner_name", "m2", "address", "property_type", "divar_token"]
     list_filter = [
         "m2",
         "price",
@@ -25,12 +20,7 @@ class SellAdmin(admin.ModelAdmin):
 
 @admin.register(Rent)
 class RentAdmin(admin.ModelAdmin):
-    list_display = [
-        "owner_name",
-        "m2",
-        "address",
-        "property_type",
-    ]
+    list_display = ["owner_name", "m2", "address", "property_type", "divar_token"]
     list_filter = [
         "m2",
         "price_up",
@@ -56,4 +46,3 @@ class SellImage(admin.ModelAdmin):
 @admin.register(RentImage)
 class RentImage(admin.ModelAdmin):
     list_display = ["file", "image"]
-

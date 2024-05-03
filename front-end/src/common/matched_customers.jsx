@@ -1,7 +1,7 @@
 import { useState, Fragment, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import api from "./api";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setRelatedCustomers,
@@ -103,13 +103,17 @@ const MatchedCustomers = ({ isOpen, setIsOpen, notifiedCustomers }) => {
                 className="flex flex-col p-2 h-full rounded-md overflow-y-scroll border gap-2"
               >
                 {customersList?.map((customer) => (
-                  <Customer
-                    customerName={customer.customer_name}
-                    customerPhone={customer.customer_phone}
-                    customerId={customer.id}
-                    hasNotified={false}
-                    key={customer.id}
-                  />
+
+                  <Link key={customer.id} to={`/customer/${customer.customer_type}/${customer.id}/`}>
+
+                    < Customer
+                      customerName={customer.customer_name}
+                      customerPhone={customer.customer_phone}
+                      customerId={customer.id}
+                      hasNotified={false}
+                      key={customer.id}
+                    />
+                  </Link>
                 ))}
               </div>
               <div

@@ -159,7 +159,7 @@ const UpdateCustomer = () => {
               name={"m2"}
               label={"متراژ"}
               setter={setM2}
-              isRequired={true}
+              isRequired={false}
             />
             <FloatLabel
               defValue={oldCustomer.year}
@@ -167,7 +167,7 @@ const UpdateCustomer = () => {
               name={"year"}
               label={"ساخت"}
               setter={setYear}
-              isRequired={true}
+              isRequired={false}
             />
             <FloatLabel
               defValue={oldCustomer.bedroom}
@@ -175,7 +175,7 @@ const UpdateCustomer = () => {
               name={"bedroom"}
               label={"خواب"}
               setter={setBedroom}
-              isRequired={true}
+              isRequired={false}
             />
             <FloatLabel
               defValue={oldCustomer.vahedha}
@@ -183,7 +183,7 @@ const UpdateCustomer = () => {
               name={"units"}
               label={"واحد ها"}
               setter={setUnits}
-              isRequired={true}
+              isRequired={false}
             />
           </div>
           <div className="grid grid-cols-2 max-w-sm gap-2">

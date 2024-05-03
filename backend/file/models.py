@@ -1,3 +1,4 @@
+from enum import unique
 from django.db import models
 from taggit.managers import TaggableManager
 from django.urls import reverse
@@ -57,11 +58,11 @@ class Sell(models.Model):
     status = models.CharField(
         max_length=12, choices=Status.choices, default=Status.ACTIVE
     )
-    description = models.CharField(max_length=1000, blank=True)
+    description = models.CharField(max_length=1000, blank=True, null=True)
     notified_customers = models.ManyToManyField(BuyCustomer, blank=True)
 
     tag_manager = TaggableManager(blank=True)
-    divar_token = models.CharField(max_length=8, blank=True, null=True)
+    divar_token = models.CharField(max_length=8, blank=True, null=True, unique=True)
 
     def __str__(self):
         return f"owner: {self.owner_name} owner's phone: {self.owner_phone} address: {self.address}"
@@ -149,11 +150,11 @@ class Rent(models.Model):
     status = models.CharField(
         max_length=12, choices=Status.choices, default=Status.ACTIVE
     )
-    description = models.CharField(max_length=1000, blank=True)
+    description = models.CharField(max_length=1000, blank=True, null=True)
     notified_customers = models.ManyToManyField(RentCustomer, blank=True)
 
     tags_manager = TaggableManager(blank=True)
-    divar_token = models.CharField(max_length=8, blank=True, null=True)
+    divar_token = models.CharField(max_length=8, blank=True, null=True, unique=True)
 
     def __str__(self):
         return f"code: {self.id} owner: {self.owner_name} owner's phone: {self.owner_phone} address: {self.address}"

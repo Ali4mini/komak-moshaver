@@ -13,7 +13,7 @@ env
 cookies
 .vscode/
 # file images
-.backend/files/
+/.backend/files/
 #
 .VSCodeCounter/
 .pytest_cache/
