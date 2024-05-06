@@ -138,13 +138,17 @@ DATABASES = {
         "PASSWORD": os.getenv("DB_PASS"),
         "HOST": os.getenv("DB_HOST"),
         "PORT": os.getenv("DB_PORT"),
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": config["DB_NAME"],
-        "USER": config["DB_USER"],
-        "PASSWORD": config["DB_PASSWORD"],
-        "HOST": "127.0.0.1",
-        "PORT": config["DB_PORT"],
     }
+}
+
+# Django-storages configuration
+STORAGES = {
+  "default": {
+      "BACKEND": "storages.backends.s3.S3Storage",
+  },
+  "staticfiles": {
+      "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+  },
 }
 
 ALLOWED_HOSTS = ["0.0.0.0", "87.107.54.39", "*"]
@@ -166,6 +170,18 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# S3 Settings
+LIARA_ENDPOINT    = os.getenv("LIARA_ENDPOINT")
+LIARA_BUCKET_NAME = os.getenv("LIARA_BUCKET_NAME")
+LIARA_ACCESS_KEY  = os.getenv("LIARA_ACCESS_KEY")
+LIARA_SECRET_KEY  = os.getenv("LIARA_SECRET_KEY")
+
+# S3 Settings Based on AWS (optional)
+AWS_ACCESS_KEY_ID       = LIARA_ACCESS_KEY
+AWS_SECRET_ACCESS_KEY   = LIARA_SECRET_KEY
+AWS_STORAGE_BUCKET_NAME = LIARA_BUCKET_NAME
+AWS_S3_ENDPOINT_URL     = LIARA_ENDPOINT
+AWS_S3_REGION_NAME      = 'us-east-1'  
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
