@@ -2,7 +2,7 @@ import axios from "axios";
 // Removed useNavigate as it was not used
 
 // const apiUrl = import.meta.env.VITE_API;
-const apiUrl = "http://192.168.1.109:8000/"
+const apiUrl = "http://192.168.43.49:8000/"
 const api = axios.create({
   baseURL: apiUrl,
   headers: {

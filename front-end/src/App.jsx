@@ -15,6 +15,7 @@ import Files from "./home/files";
 import Scanner from "./home/scanner";
 import ShowMessage from "./common/flash";
 import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
 function App() {
   const navigate = useNavigate();
@@ -22,11 +23,14 @@ function App() {
   const isLoggedIn = localStorage.getItem("user");
   const width = window.innerWidth;
 
-  // useEffect(() => {
-  //   if (!isLoggedIn) {
-  //     navigate("agents/login");
-  //   }
-  // }, []);
+
+  // redirect to login if not logged in
+  useEffect(() => {
+    if (!isLoggedIn) {
+
+      navigate('agents/login')
+    }
+  }, [isLoggedIn, navigate])
 
   if (isLoggedIn) {
     return (
@@ -57,6 +61,7 @@ function App() {
       </>
     );
   }
+
   return (
     <>
       {flashStore.message ? (
