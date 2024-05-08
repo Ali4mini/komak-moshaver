@@ -1,7 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.urls import reverse
-# from file.models import Sell, Rent
+
 # Create your models here.
 
 class BuyCustomer(models.Model):
@@ -43,9 +43,50 @@ class BuyCustomer(models.Model):
     
     def __str__(self) -> str:
         return self.customer_name
+
     def get_absolute_url(self):
         return reverse("customer:buy_customer_detail", args=[self.id])
+
+    def get_related_files(self):
+        from file.models import Sell
+
+        budget_range = (0, 0) # Default value, adjust as necessary
+        if self.budget <= 3000:
+            budget_range = (int(self.budget * 0.80), int(self.budget * 1.20))
+        elif self.budget > 3000 and self.budget < 5000:
+            budget_range = (int(self.budget * 0.85), int(self.budget * 1.15))
+        elif self.budget > 5000:
+            budget_range = (int(self.budget * 0.90), int(self.budget * 1.10))
     
+
+        filter_query = {
+            "status": "ACTIVE",
+            "property_type": self.property_type,
+            "price__gte": budget_range[0],
+            "price__lte": budget_range[1],
+            # "m2__lte": self.m2,
+            # "bedroom__lte": self.bedroom,
+            # "year__lte": self.year,
+            # 'parking': self.parking,
+            # 'elevator': self.elevator,
+            # 'storage': self.storage,
+        }
+
+
+        all_files = Sell.objects.filter(**filter_query)
+
+        notified_files = []
+        unnotified_files = []
+        for file in all_files:
+            if self.id in file.notified_customers.values_list("id", flat=True):
+                notified_files.append(file)
+            else:
+                unnotified_files.append(file)
+
+        return unnotified_files
+
+
+
 class RentCustomer(models.Model):
     class Types(models.TextChoices):
         APARTEMANT = 'A', 'آپارتمان'
@@ -89,6 +130,63 @@ class RentCustomer(models.Model):
 
     def get_absolute_url(self):
         return reverse("customer:rent_customer_detail", args=[self.id])
+
+    def get_related_files(self):
+        from file.models import Rent
+
+        budget_up_range = (0, 0) # Default value, adjust as necessary
+        budget_rent_range = (0, 0) # Default value, adjust as necessary
+        if self.up_budget <= 300:
+            budget_up_range = (int(self.up_budget * 0.80), int(self.up_budget * 1.20))
+        elif self.up_budget > 300 and self.up_budget < 700:
+            budget_up_range = (int(self.up_budget * 0.85), int(self.up_budget * 1.15))
+        elif self.up_budget > 700:
+            budget_up_range = (int(self.up_budget * 0.90), int(self.up_budget * 1.10))
+
+        if self.rent_budget <= 3:
+            budget_rent_range = (
+                int(self.rent_budget * 0.70),
+                int(self.rent_budget * 1.30),
+            )
+        elif self.rent_budget > 3 and self.rent_budget < 7:
+            budget_rent_range = (
+                int(self.rent_budget * 0.80),
+                int(self.rent_budget * 1.20),
+            )
+        elif self.rent_budget > 7:
+            budget_rent_range = (
+                int(self.rent_budget * 0.85),
+                int(self.rent_budget * 1.15),
+            )
+    
+
+        filter_query = {
+            "status": "ACTIVE",
+            "property_type": self.property_type,
+            "price_up__gte": budget_up_range[0],
+            "price_up__lte": budget_up_range[1],
+            "price_rent__gte": budget_rent_range[0],
+            "price_rent__lte": budget_rent_range[1],
+            # "m2__lte": self.m2,
+            # "bedroom__lte": self.bedroom,
+            # "year__lte": self.year,
+            # 'parking': self.parking,
+            # 'elevator': self.elevator,
+            # 'storage': self.storage,
+        }
+
+
+        all_files = Rent.objects.filter(**filter_query)
+
+        notified_files = []
+        unnotified_files = []
+        for file in all_files:
+            if self.id in file.notified_customers.values_list("id", flat=True):
+                notified_files.append(file)
+            else:
+                unnotified_files.append(file)
+
+        return unnotified_files
     
 class BuyComment(models.Model):
     file = models.ForeignKey("BuyCustomer",

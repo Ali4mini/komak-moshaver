@@ -1,10 +1,12 @@
 from rest_framework import serializers
+
+from file.models import Sell
 from .models import BuyCustomer, RentCustomer
 from agents_m.models import Profile
 
 
 class BuyCustomerSerializer(serializers.ModelSerializer):
-    customer_type = serializers.SerializerMethodField()
+    customer_type = serializers.SerializerMethodField(read_only=True)
     username = serializers.CharField(max_length=100, write_only=True)
 
     class Meta:
@@ -13,6 +15,8 @@ class BuyCustomerSerializer(serializers.ModelSerializer):
 
     def get_customer_type(self, obj):
         return "buy"
+
+    
 
     def create(self, validated_data):
         print(validated_data)

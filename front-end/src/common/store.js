@@ -1,14 +1,16 @@
 import { configureStore } from "@reduxjs/toolkit";
 import filesSlice from "../home/filesSlice";
-import customerSlice from "../home/customersSlice";
+import customersSlice from "../home/customersSlice";
 import flashSlice from "./flashSlice";
 import fileSlice from "../file/fileSlice";
+import customerSlice from "../customer/customerSlice";
 
 export default configureStore({
   reducer: {
     files: filesSlice,
-    customers: customerSlice,
+    customers: customersSlice,
     flash: flashSlice,
     file: fileSlice,
+    customer: customerSlice
   },
 });

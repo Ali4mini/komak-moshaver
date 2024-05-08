@@ -4,37 +4,38 @@ import api from "./api";
 import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  setRelatedCustomers,
-  addToCustomersToNotify,
-  removeFromCustomersToNotify,
-} from "../file/fileSlice";
+  setRelatedFiles,
+  addToFilesToNotify,
+  removeFromFilesToNotify,
+} from "../customer/customerSlice";
 
-const Customer = ({ customerName, customerPhone, customerId, customerType, hasNotified }) => {
+const File = ({ fileName, fileAddress, fileId, fileType, hasNotified }) => {
+  console.log(fileAddress)
   const dispatch = useDispatch();
 
   const handleCheckboxChange = (e) => {
-    console.log(`in handler ${customerId}`);
+    console.log(`in handler ${fileId}`);
     if (e.target.checked) {
-      dispatch(addToCustomersToNotify(customerId));
+      dispatch(addToFilesToNotify(fileId));
     } else {
-      dispatch(removeFromCustomersToNotify(customerId));
+      dispatch(removeFromFilesToNotify(fileId));
     }
   };
 
   return (
     <div className="flex flex-row p-1 align-middle items-center justify-between ">
 
-      <Link key={customerId} to={`/customer/${customerType}/${customerId}/`}>
+      <Link key={fileId} to={`/file/${fileType}/${fileId}/`}>
         {hasNotified ? (
 
           <div className="flex flex-col">
-            <h3 className="text-lg text-gray-400 line-through">{customerName}</h3>
-            <p className="text-sm text-gray-400 line-through">{customerPhone}</p>
+            <h3 className="text-lg text-gray-400 line-through">{fileName}</h3>
+            <p className="text-sm text-gray-400 line-through">{fileAddress}</p>
           </div>
         ) : (
           <div className="flex flex-col">
-            <h3 className="text-lg text-black">{customerName}</h3>
-            <p className="text-sm text-gray-400">{customerPhone}</p>
+            <h3 className="text-lg text-black">{fileName}</h3>
+            <p className="text-sm text-gray-400">{fileAddress}</p>
           </div>
         )}
       </Link>
@@ -49,18 +50,18 @@ const Customer = ({ customerName, customerPhone, customerId, customerType, hasNo
   );
 };
 
-const MatchedCustomers = ({ isOpen, setIsOpen, notifiedCustomers }) => {
+const MatchedFiles = ({ isOpen, setIsOpen, notifiedfiles }) => {
   const dispatch = useDispatch();
-  const store = useSelector((state) => state.file);
-  const customersList = store.relatedCustomers;
-  const customersToNotify = store.customersToNotify;
+  const store = useSelector((state) => state.customer);
+  const filesList = store.relatedFiles;
+  const filesToNotify = store.filesToNotify;
 
   const location = useLocation();
 
-  const notifyCustomers = () => {
-    console.log(customersToNotify);
+  const notifyfiles = () => {
+    console.log(filesToNotify);
     api
-      .patch(`${location.pathname}/`, { notified_customers: customersToNotify })
+      .patch(`${location.pathname}/`, { notified_files: filesToNotify })
       .then((response) => {
         console.log(response.data);
         setIsOpen(false);
@@ -68,11 +69,12 @@ const MatchedCustomers = ({ isOpen, setIsOpen, notifiedCustomers }) => {
       .catch((error) => console.log(error));
   };
   useEffect(() => {
-    const apiUrl = `${location.pathname}/related_customers/`;
+    const apiUrl = `${location.pathname}/related_files/`;
     api
       .get(apiUrl)
       .then((response) => {
-        dispatch(setRelatedCustomers(response.data));
+        console.log(response.data)
+        dispatch(setRelatedFiles(response.data));
       })
       .catch((error) => {
         console.log(error);
@@ -101,21 +103,21 @@ const MatchedCustomers = ({ isOpen, setIsOpen, notifiedCustomers }) => {
 
           <div className="fixed inset-0 flex items-center justigy-center">
             <Dialog.Panel className="flex flex-col gap-2 h-5/6 mx-auto  px-5 py-2 max-w-md rounded-lg bg-white">
-              <Dialog.Title className="text-lg">مشتریان مرتبط</Dialog.Title>
+              <Dialog.Title className="text-lg">فایل های مرتبط</Dialog.Title>
               <div
-                id="customers"
+                id="files"
                 className="flex flex-col p-2 h-full rounded-md overflow-y-scroll border gap-2"
               >
-                {customersList?.map((customer) => (
+                {filesList?.map((file) => (
 
 
-                  < Customer
-                    customerName={customer.customer_name}
-                    customerPhone={customer.customer_phone}
-                    customerId={customer.id}
-                    customerType={customer.customer_type}
+                  <File
+                    fileName={file.owner_name}
+                    fileAddress={file.address}
+                    fileId={file.id}
+                    fileType={file.file_type}
                     hasNotified={false}
-                    key={customer.id}
+                    key={file.id}
                   />
                 ))}
               </div>
@@ -130,7 +132,7 @@ const MatchedCustomers = ({ isOpen, setIsOpen, notifiedCustomers }) => {
                   لغو
                 </button>
                 <button
-                  onClick={() => notifyCustomers()}
+                  onClick={() => notifyfiles()}
                   className="px-3 sm:px-4 text-xs md:text-base h-10 rounded-lg bg-yellow-400"
                 >
                   اطلاع رسانی انجام شد
@@ -149,4 +151,4 @@ const MatchedCustomers = ({ isOpen, setIsOpen, notifiedCustomers }) => {
   );
 };
 
-export default MatchedCustomers;
+export default MatchedFiles;

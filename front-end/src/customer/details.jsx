@@ -6,18 +6,31 @@ import car from "../assets/car.png";
 import elevator from "../assets/elevator.png";
 import storage from "../assets/storage.png";
 import motor from "../assets/storage.png";
+import MenuButton from "../common/dropdown_button";
+import MatchedFiles from "../common/matched_files";
 
 const CustomerDetail = () => {
   const navigate = useNavigate();
   const { customerType, id } = useParams();
   const [customer, setCustomer] = useState(null);
-  const [isDeleteconfirm, setIsDeleteConfirm] = useState(false);
+  const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
+  const [isMatchedFile, setIsMatchedFile] = useState(false);
+  const [isFileOld, setIsFileOld] = useState(false)
 
   useEffect(() => {
     api
       .get(`customer/${customerType}/${id}/`)
-      .then((response) => setCustomer(response.data));
-  }, []);
+      .then((response) => {
+        setCustomer(response.data);
+        const today = new Date().getTime()
+        let updatedDate = new Date(response.data.updated).getTime(); // Use response.data directly
+        const differenceInDays = (today - updatedDate) / (1000 * 3600 * 24);
+        if (differenceInDays <= 30) {
+          setIsFileOld(true)
+        }
+
+      });
+  }, [id, customerType]);
 
   const features = [
     { feature: 'parking', image: car, text: 'پارکینگ دارد' },
@@ -25,6 +38,81 @@ const CustomerDetail = () => {
     { feature: 'storage', image: storage, text: 'انباری دارد' },
     { feature: 'parking_motor', image: motor, text: 'پارکینگ موتور دارد' },
     { feature: 'komod_divari', image: car, text: 'کمددیواری دارد' },
+  ];
+
+  const optionItems = [
+    {
+      key: "updated",
+      label: "موجود است",
+      disabled: isFileOld,
+      handler: () => {
+        var now = new Date();
+        api
+          .patch(`customer/${customerType}/${id}/`, { updated_at: now })
+          .then(navigate("/", { replace: true }))
+          .catch((error) => console.log(error.data));
+      },
+      icon: (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          strokeWidth="1.5"
+          stroke="white"
+          className="w-6 h-6"
+        >
+          <path d="M12,2C6.48,2,2,6.48,2,12c0,5.52,4.48,10,10,10s10-4.48,10-10C22,6.48,17.52,2,12,2z M12.06,19v-2.01c-0.02,0-0.04,0-0.06,0 c-1.28,0-2.56-0.49-3.54-1.46c-1.71-1.71-1.92-4.35-0.64-6.29l1.1,1.1c-0.71,1.33-0.53,3.01,0.59,4.13c0.7,0.7,1.62,1.03,2.54,1.01 v-2.14l2.83,2.83L12.06,19z M16.17,14.76l-1.1-1.1c0.71-1.33,0.53-3.01-0.59-4.13C13.79,8.84,12.9,8.5,12,8.5c-0.02,0-0.04,0-0.06,0 v2.15L9.11,7.83L11.94,5v2.02c1.3-0.02,2.61,0.45,3.6,1.45C17.24,10.17,17.45,12.82,16.17,14.76z" />
+        </svg>
+      ),
+    },
+    {
+      key: "matched_customers",
+      label: "مشتریان مرتبط",
+      disabled: false,
+      handler: () => {
+        setIsMatchedFile(!isMatchedFile);
+      },
+      icon: (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth="1.5"
+          stroke="currentColor"
+          className="w-6 h-6"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
+          />
+        </svg>
+      ),
+    },
+    {
+      key: "delete",
+      label: "حذف",
+      disabled: false,
+      style: "text-red-600 ",
+      handler: () => {
+        setIsDeleteConfirm(!isDeleteConfirm);
+      },
+      icon: (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth="1.5"
+          stroke="currentColor"
+          className="w-5 h-6"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
+          />
+        </svg>
+      ),
+    },
   ];
 
   return (
@@ -59,22 +147,25 @@ const CustomerDetail = () => {
         <div className="flex gap-20 my-3 px-4">
           {features.map(({ feature, image, text }, index) => customer?.[feature] && (
             <div key={index} className="flex flex-col">
-              <img  src={image} alt="" width="40px" className="mx-auto" />
+              <img src={image} alt="" width="40px" className="mx-auto" />
               <span>{text}</span>
             </div>
           ))}
         </div>
         <div className="flex flex-row justify-between my-3 px-4">
-          <button
-            id="delete"
-            onClick={() => setIsDeleteConfirm(!isDeleteconfirm)}
-            className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
-          >
-            حذف
-          </button>
-          {isDeleteconfirm && (
+
+          <MenuButton buttonText={"گزینه ها"} items={optionItems} />
+
+          {isMatchedFile && (
+            <MatchedFiles
+              isOpen={isMatchedFile}
+              setIsOpen={setIsMatchedFile}
+            // notifiedCustomers={customer.notified_customers}
+            />
+          )}
+          {isDeleteConfirm && (
             <DeleteConfirm
-              isOpen={isDeleteconfirm}
+              isOpen={isDeleteConfirm}
               setIsOpen={setIsDeleteConfirm}
               app={'customer'}
               model={customerType}

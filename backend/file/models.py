@@ -64,8 +64,8 @@ class Sell(models.Model):
     tag_manager = TaggableManager(blank=True)
     divar_token = models.CharField(max_length=8, blank=True, null=True, unique=True)
 
-    def __str__(self):
-        return f"owner: {self.owner_name} owner's phone: {self.owner_phone} address: {self.address}"
+    def __str__(self) -> str:
+        return f"code: {self.id} owner: {self.owner_name} "
 
     def get_absolute_url(self):
         return reverse("file:sell_file_detail", args=[self.id])
@@ -74,6 +74,8 @@ class Sell(models.Model):
         return self.pk
 
     def get_related_customers(self) -> BuyCustomer:
+
+        budget_range = (0, 0) # Default value, adjust as necessary
         if self.price <= 3000:
             budget_range = (int(self.price * 0.80), int(self.price * 1.20))
         elif self.price > 3000 and self.price < 5000:
@@ -156,8 +158,8 @@ class Rent(models.Model):
     tags_manager = TaggableManager(blank=True)
     divar_token = models.CharField(max_length=8, blank=True, null=True, unique=True)
 
-    def __str__(self):
-        return f"code: {self.id} owner: {self.owner_name} owner's phone: {self.owner_phone} address: {self.address}"
+    def __str__(self) -> str:
+        return f"code: {self.id} owner: {self.owner_name} "
 
     def get_absolute_url(self):
         return reverse("file:rent_file_detail", args=[self.id])
@@ -192,8 +194,10 @@ class Rent(models.Model):
         filter_query = {
             "status": "ACTIVE",
             "property_type": self.property_type,
-            "up_budget__gte": self.price_up,
-            "rent_budget__gte": self.price_rent,
+            "up_budget__gte": budget_up_range[0],
+            "up_budget__lte": budget_up_range[1],
+            "rent_budget__gte": budget_rent_range[0],
+            "rent_budget__lte": budget_rent_range[1],
             # "m2__lte": self.m2,
             # "bedroom__lte": self.bedroom,
             # "year__lte": self.year,
