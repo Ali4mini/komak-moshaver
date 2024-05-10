@@ -1,15 +1,7 @@
-from django.shortcuts import render
-from . import forms
 from file.models import Sell, Rent
 from customer.models import BuyCustomer, RentCustomer
-from django.views import View
-from django.http import HttpResponse
-from .forms import SellFilter
 from itertools import chain
-from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
 from rest_framework.views import APIView
-from rest_framework import generics
 from rest_framework.response import Response
 from file.serializers import SellFileSerializer, RentFileSerializer
 from customer.serializers import BuyCustomerSerializer, RentCustomerSerializer
@@ -20,8 +12,10 @@ from customer.serializers import BuyCustomerSerializer, RentCustomerSerializer
 # SECTION - API
 class FileFilter(APIView):
     def get(self, request, *args, **kwargs):
+        # Copy the original query parameters to avoid modifying the original request
         params = request.query_params.copy()
-        ## alowed fields for filter
+        
+        # Define the allowed fields for filtering
         filter_fields = [
             "id",
             "owner_name",
@@ -41,7 +35,8 @@ class FileFilter(APIView):
             "storage",
             "status",
         ]
-
+        
+        # Define integer and boolean filter fields
         int_filter_fields = [
             "price__lte",
             "price__gte",
@@ -54,15 +49,16 @@ class FileFilter(APIView):
             "year__gte",
             "id",
         ]
-
         bool_filter_fields = [
             "parking",
             "elevator",
             "storage",
         ]
 
-        filter_entery = {}
+        # Initialize an empty dictionary to hold the filter entries
+        filter_entry = {}
 
+        # Iterate over all filter fields and populate the filter_entry dictionary
         for field in filter_fields:
             param = params.get(field)
             if param:
@@ -71,36 +67,54 @@ class FileFilter(APIView):
                 elif field in bool_filter_fields:
                     param = bool(param)
 
-                filter_entery[field] = param
+                filter_entry[field] = param
 
-        if filter_entery.get("file_type") == "sell":
-            filter_entery.pop("file_type")
-            # filter_entery.pop('price_up__lte')
-            # filter_entery.pop('price_rent__lte')
+        # Check if the file_type is "sell" and apply the filters accordingly
+        if filter_entry.get("file_type") == "sell":
+            filter_entry.pop("file_type")
 
-            files = Sell.objects.filter(**filter_entery).all()
+            # Apply the filters to the Sell model and check for the count parameter
+            files = Sell.objects.filter(**filter_entry)
+            if 'count' in params:
+                # If count is requested, return the count of matching records
+                count = files.count()
+                return Response({"count": count})
             serializer = SellFileSerializer(files, many=True)
+            return Response(serializer.data)
 
-        elif filter_entery.get("file_type") == "rent":
-            filter_entery.pop("file_type")
-            # filter_entery.pop('price__lte')
+        # Similar logic for "rent" file_type
+        elif filter_entry.get("file_type") == "rent":
+            filter_entry.pop("file_type")
 
-            files = Rent.objects.filter(**filter_entery).all()
+            files = Rent.objects.filter(**filter_entry)
+            if 'count' in params:
+                count = files.count()
+                return Response({"count": count})
             serializer = RentFileSerializer(files, many=True)
+            return Response(serializer.data)
         else:
-            print(filter_entery)
-            sell_files = Sell.objects.filter(**filter_entery).all()
-            sell_files = SellFileSerializer(sell_files, many=True)
-            rent_files = Rent.objects.filter(**filter_entery).all()
-            rent_files = RentFileSerializer(rent_files, many=True)
-            return Response(list(chain(sell_files.data, rent_files.data)))
+            # Handle cases where file_type is neither "sell" nor "rent"
+            print(filter_entry)
+            sell_files = Sell.objects.filter(**filter_entry)
+            rent_files = Rent.objects.filter(**filter_entry)
+            if 'count' in params:
+                # Calculate the total count across both models
+                count = sell_files.count() + rent_files.count()
+                return Response({"count": count})
+            sell_serializer = SellFileSerializer(sell_files, many=True)
+            rent_serializer = RentFileSerializer(rent_files, many=True)
+            return Response(list(chain(sell_serializer.data, rent_serializer.data)))
 
-        return Response(serializer.data)
+
+
 
 
 class CustomerFilter(APIView):
     def get(self, request, *args, **kwargs):
+        # Copy the original query parameters to avoid modifying the original request
         params = request.query_params.copy()
+        
+        # Define the allowed fields for filtering
         filter_fields = [
             "id",
             "customer_name",
@@ -120,7 +134,8 @@ class CustomerFilter(APIView):
             "storage",
             "status",
         ]
-
+        
+        # Define integer and boolean filter fields
         int_filter_fields = [
             "budget__lte",
             "budget__gte",
@@ -133,14 +148,16 @@ class CustomerFilter(APIView):
             "year__lte",
             "id",
         ]
-
         bool_filter_fields = [
             "parking",
             "elevator",
             "storage",
         ]
 
-        filter_entery = {}
+        # Initialize an empty dictionary to hold the filter entries
+        filter_entry = {}
+
+        # Iterate over all filter fields and populate the filter_entry dictionary
         for field in filter_fields:
             param = params.get(field)
             if param:
@@ -149,27 +166,43 @@ class CustomerFilter(APIView):
                 elif field in bool_filter_fields:
                     param = bool(param)
 
-                filter_entery[field] = param
+                filter_entry[field] = param
 
-        if filter_entery.get("customer_type") == "buy":
-            filter_entery.pop("customer_type")
-            customers = BuyCustomer.objects.filter(**filter_entery).all()
+        # Check if the customer_type is "buy" and apply the filters accordingly
+        if filter_entry.get("customer_type") == "buy":
+            filter_entry.pop("customer_type")
+            customers = BuyCustomer.objects.filter(**filter_entry)
+            if 'count' in params:
+                # If count is requested, return the count of matching records
+                count = customers.count()
+                return Response({"count": count})
             serializer = BuyCustomerSerializer(customers, many=True)
+            return Response(serializer.data)
 
-        elif filter_entery.get("customer_type") == "rent":
-            filter_entery.pop("customer_type")
-            customers = RentCustomer.objects.filter(**filter_entery).all()
+        # Similar logic for "rent" customer_type
+        elif filter_entry.get("customer_type") == "rent":
+            filter_entry.pop("customer_type")
+            customers = RentCustomer.objects.filter(**filter_entry)
+            if 'count' in params:
+                count = customers.count()
+                return Response({"count": count})
             serializer = RentCustomerSerializer(customers, many=True)
-
+            return Response(serializer.data)
         else:
-            buy_customers = BuyCustomer.objects.filter(**filter_entery).all()
-            buy_customers = BuyCustomerSerializer(buy_customers, many=True)
-            rent_customers = RentCustomer.objects.filter(**filter_entery).all()
-            rent_customers = RentCustomerSerializer(rent_customers, many=True)
-            customers = list(chain(buy_customers.data, rent_customers.data))
+            # Handle cases where customer_type is neither "buy" nor "rent"
+            buy_customers = BuyCustomer.objects.filter(**filter_entry)
+            rent_customers = RentCustomer.objects.filter(**filter_entry)
+            if 'count' in params:
+                # Calculate the total count across both models
+                count = buy_customers.count() + rent_customers.count()
+                return Response({"count": count})
+            buy_serializer = BuyCustomerSerializer(buy_customers, many=True)
+            rent_serializer = RentCustomerSerializer(rent_customers, many=True)
+            customers = list(chain(buy_serializer.data, rent_serializer.data))
             return Response(customers)
 
         return Response(serializer.data)
+
 
 
 #!SECTION

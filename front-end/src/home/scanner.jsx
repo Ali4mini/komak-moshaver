@@ -1,5 +1,4 @@
 import Filter from "./filter";
-import Search from "./search";
 import File from "./property_card";
 import { useEffect, useState } from "react";
 import api from "../common/api";
@@ -14,6 +13,7 @@ const Scanner = () => {
     api
       .get("listing/", { params: { owner_name: "UNKNOWN", status: "ACTIVE" } })
       .then((response) => {
+        console.log(response.data)
         dispatch(setScannerFiles(response.data));
       })
       .catch((error) => console.log(error));
