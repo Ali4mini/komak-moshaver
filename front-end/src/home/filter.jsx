@@ -1,5 +1,4 @@
-import { useRef, useState } from "react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import FloatLabel from "../common/input";
 import api from "../common/api";
 import Checkbox from "../common/checkbox";
@@ -24,46 +23,52 @@ const Filter = () => {
   const [parking, setParking] = useState(null);
   const [elevator, setElevator] = useState(null);
   const [storage, setStorage] = useState(null);
-  let budgetRange = [],
-    budgetUpRange = [],
-    budgetRentRange = [];
 
+  const [budgetRange, setBudgetRange] = useState([null, null]);
+  const [budgetUpRange, setBudgetUpRange] = useState([null, null]);
+  const [budgetRentRange, setBudgetRentRange] = useState([null, null]);
 
-  // filter range
-  if (price) {
-    if (price <= 3000) {
-      budgetRange = [Math.floor(price * 0.8), Math.floor(price * 1.2)];
-    } else if (price > 3000 && price < 5000) {
-      budgetRange = [Math.floor(price * 0.85), Math.floor(price * 1.15)];
-    } else if (price >= 5000) {
-      budgetRange = [Math.floor(price * 0.9), Math.floor(price * 1.1)];
-    }
-  } else {
-    if (priceUp <= 300) {
-      budgetUpRange = [Math.floor(priceUp * 0.8), Math.floor(priceUp * 1.2)];
-    } else if (priceUp > 300 && priceUp < 700) {
-      budgetUpRange = [Math.floor(priceUp * 0.85), Math.floor(priceUp * 1.15)];
-    } else if (priceUp >= 700) {
-      budgetUpRange = [Math.floor(priceUp * 0.9), Math.floor(priceUp * 1.1)];
+  useEffect(() => {
+    // sell filter budget range
+    if (fileType === "sell") {
+      if (price <= 3000) {
+        setBudgetRange([Math.floor(price * 0.8), Math.floor(price * 1.2)]);
+      } else if (price > 3000 && price < 5000) {
+        setBudgetRange([Math.floor(price * 0.85), Math.floor(price * 1.15)]);
+      } else if (price >= 5000) {
+        setBudgetRange([Math.floor(price * 0.9), Math.floor(price * 1.1)]);
+      }
     }
 
-    if (priceRent <= 3) {
-      budgetRentRange = [
-        Math.floor(priceRent * 0.7),
-        Math.floor(priceRent * 1.3),
-      ];
-    } else if (priceRent > 3 && priceRent < 7) {
-      budgetRentRange = [
-        Math.floor(priceRent * 0.8),
-        Math.floor(priceRent * 1.2),
-      ];
-    } else if (priceRent >= 7) {
-      budgetRentRange = [
-        Math.floor(priceRent * 0.85),
-        Math.floor(priceRent * 1.15),
-      ];
+    // rent filter budget range
+    if (priceUp === null) {
+
+      setBudgetUpRange([null, null])
     }
-  }
+    else if (fileType === "rent") {
+      if (priceUp <= 300) {
+        setBudgetUpRange([Math.floor(priceUp * 0.8), Math.floor(priceUp * 1.2)]);
+      } else if (priceUp > 300 && priceUp < 700) {
+        setBudgetUpRange([Math.floor(priceUp * 0.85), Math.floor(priceUp * 1.15)]);
+      } else if (priceUp >= 700) {
+        setBudgetUpRange([Math.floor(priceUp * 0.9), Math.floor(priceUp * 1.1)]);
+      }
+
+
+      if (priceRent === null) {
+
+        setBudgetRentRange([null, null])
+      }
+      else if (priceRent <= 3) {
+        setBudgetRentRange([Math.floor(priceRent * 0.7), Math.floor(priceRent * 1.3)]);
+      } else if (priceRent > 3 && priceRent < 7) {
+        setBudgetRentRange([Math.floor(priceRent * 0.8), Math.floor(priceRent * 1.2)]);
+      } else if (priceRent >= 7) {
+        setBudgetRentRange([Math.floor(priceRent * 0.85), Math.floor(priceRent * 1.15)]);
+      }
+    }
+  }, [fileType, price, priceUp, priceRent]);
+
 
   //WARN: there is a list of allowed fields that you have to filter based on it in listing api
   let filterEntery = {
@@ -95,6 +100,7 @@ const Filter = () => {
       delete data.price__lte;
       delete data.price__gte;
     }
+    console.log(data)
 
     api
       .get("listing/", { params: data })
@@ -121,6 +127,7 @@ const Filter = () => {
           defaultValue={fileType}
           onChange={(e) => {
             setFileType(e.target.value);
+            console.log(filterEntery)
           }}
           className="bg-gray-50 border focus:ring-blue-300 text-center focus:border-blue-300 shadow-md w-24 rounded-lg"
         >
