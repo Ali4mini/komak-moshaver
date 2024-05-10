@@ -5,6 +5,7 @@ import api from "../common/api";
 import Customer from "./customer_card";
 import { setCustomers } from "./customersSlice";
 import { useDispatch, useSelector } from "react-redux";
+import ScrollButton from "../common/goUpButton";
 
 const Customers = () => {
   const store = useSelector((state) => state.customers);
@@ -47,6 +48,7 @@ const Customers = () => {
           <p>no customer was found</p>
         )}
       </div>
+      <ScrollButton />
     </div>
   );
 };

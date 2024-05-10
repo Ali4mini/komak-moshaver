@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import api from "../common/api";
 import { setFiles } from "./filesSlice";
 import { useSelector, useDispatch } from "react-redux";
+import ScrollButton from "../common/goUpButton";
 
 const Files = () => {
   const store = useSelector((state) => state.files);
@@ -43,6 +44,9 @@ const Files = () => {
           <p>no files was found</p>
         )}
       </div>
+
+
+      <ScrollButton />
     </div>
   );
 

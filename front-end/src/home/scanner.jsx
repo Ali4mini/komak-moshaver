@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import api from "../common/api";
 import { setScannerFiles } from "./filesSlice";
 import { useSelector, useDispatch } from "react-redux";
+import ScrollButton from "../common/goUpButton";
 
 const Scanner = () => {
   const store = useSelector((state) => state.files);
@@ -32,6 +33,7 @@ const Scanner = () => {
           <p>no files was found</p>
         )}
       </div>
+      <ScrollButton />
     </div>
   );
 };
