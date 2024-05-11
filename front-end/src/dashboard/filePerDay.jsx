@@ -20,11 +20,12 @@ const FilePerDay = () => {
 
         uncleaned_data.sell[timeFrame].map((day) => {
           labels.push(day.date);
-        });
-
-        uncleaned_data.sell[timeFrame].map((day) => {
           sellValues.push(day.count);
         });
+
+        // uncleaned_data.sell[timeFrame].map((day) => {
+        //   sellValues.push(day.count);
+        // });
         uncleaned_data.rent[timeFrame].map((day) => {
           rentValues.push(day.count);
         });

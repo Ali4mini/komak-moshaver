@@ -8,6 +8,63 @@ from file.models import Sell, Rent
 from datetime import datetime
 
 
+
+class FileTypeDiversity(APIView):
+    def get(self, request, format=None):
+        # Count the occurrences of each property type
+        sell_property_type_counts = Sell.objects.values('property_type').annotate(count=Count('property_type'))
+        rent_property_type_counts = Rent.objects.values('property_type').annotate(count=Count('property_type'))
+        
+        # Calculate the total count of all property types
+        sell_total_count = sum([count['count'] for count in sell_property_type_counts])
+        rent_total_count = sum([count['count'] for count in rent_property_type_counts])
+        
+        # Calculate the percentage for each property type and round to two decimal places
+        sell_property_type_percentages = []
+        for count in sell_property_type_counts:
+            percentage = (count['count'] / sell_total_count) * 100
+            rounded_percentage = round(percentage, 2)  # Round to two decimal places
+            # Map the choice value to its human-readable name
+            human_readable_name = Sell.Types(count['property_type']).label
+            sell_property_type_percentages.append({
+                'type': human_readable_name,
+                'percentage': rounded_percentage
+            })
+        
+        rent_property_type_percentages = []
+        for count in rent_property_type_counts:
+            percentage = (count['count'] / rent_total_count) * 100
+            rounded_percentage = round(percentage, 2)  # Round to two decimal places
+            # Map the choice value to its human-readable name
+            human_readable_name = Rent.Types(count['property_type']).label
+            rent_property_type_percentages.append({
+                'type': human_readable_name,
+                'percentage': rounded_percentage
+            })
+
+        return Response({"sell": sell_property_type_percentages, "rent": rent_property_type_percentages})
+
+class CustomerTypeDiversity(APIView):
+    def get(self, request, format=None):
+        # Count the occurrences of each property type
+        property_type_counts = Sell.objects.values('property_type').annotate(count=Count('property_type'))
+        
+        # Calculate the total count of all property types
+        total_count = sum([count['count'] for count in property_type_counts])
+        
+        # Calculate the percentage for each property type and round to two decimal places
+        property_type_percentages = []
+        for count in property_type_counts:
+            percentage = (count['count'] / total_count) * 100
+            rounded_percentage = round(percentage, 2)  # Round to two decimal places
+            # Map the choice value to its human-readable name
+            human_readable_name = Sell.Types(count['property_type']).label
+            property_type_percentages.append({
+                'type': human_readable_name,
+                'percentage': rounded_percentage
+            })
+        
+        return property_type_percentages
 class CustomersCounts(APIView):
     def get(self, request, format=None):
         # Get the start date from the request query parameters
