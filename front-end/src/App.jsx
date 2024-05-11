@@ -16,6 +16,7 @@ import Scanner from "./home/scanner";
 import ShowMessage from "./common/flash";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
+import Dashboard from "./dashboard/dashboard";
 
 function App() {
   const navigate = useNavigate();
@@ -41,6 +42,7 @@ function App() {
         ) : null}
         <Routes>
           <Route path="/" element={<Files />} />
+          <Route path="dashboard/" element={<Dashboard />} />
           <Route path="listing/" element={<Scanner />} />
           <Route path="agents/profile" element={<Profile />} />
           <Route path="customers/" element={<Customers />} />
