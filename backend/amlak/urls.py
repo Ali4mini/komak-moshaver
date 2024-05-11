@@ -30,6 +30,7 @@ urlpatterns = (
         path("customer/", include("customer.urls", namespace="customer")),
         path("agents/", include("agents_m.urls", namespace="agents")),
         path("dashboard/", include("dashboard.urls", namespace="dashboard")),
+        path("logs/", include("logs.urls", namespace="logs")),
         path("token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
         path("token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     ]

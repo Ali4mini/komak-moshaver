@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "listing.apps.ListingConfig",
     "agents_m.apps.AgentsMConfig",
     "file.apps.FileConfig",
+    "logs.apps.LogsConfig",
     #! default apps
     "django.contrib.admin",
     "django.contrib.auth",

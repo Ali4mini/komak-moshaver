@@ -9,6 +9,7 @@ import motor from "../assets/storage.png";
 import MenuButton from "../common/dropdown_button";
 import MatchedCustomers from "../common/matched_customers";
 import ImageSlider from "../common/slide";
+import phoneIcon from "../assets/icons8-phone-50.png"
 
 const FileDetails = () => {
   const navigate = useNavigate();
@@ -46,6 +47,20 @@ const FileDetails = () => {
   ];
 
   const optionItems = [
+
+    {
+      key: "callLog",
+      label: "لاک تماس",
+      disabled: false,
+      handler: () => {
+        navigate("call-log/new/")
+      },
+      icon: (
+        <img src={phoneIcon} alt="phone" width={20} />
+
+      ),
+    }
+    ,
     {
       key: "updated",
       label: "موجود است",

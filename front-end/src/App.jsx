@@ -17,6 +17,7 @@ import ShowMessage from "./common/flash";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import Dashboard from "./dashboard/dashboard";
+import NewCallLog from "./log_app/logs";
 
 function App() {
   const navigate = useNavigate();
@@ -49,15 +50,14 @@ function App() {
           <Route path="file/">
             <Route path="new/" element={<NewFile />} />
             <Route path=":fileType/:id" element={<FileDetails />} />
+            <Route path=":fileType/:id/call-log/new/" element={<NewCallLog />} />
             <Route path=":fileType/:id/edit/" element={<UpdateFile />} />
           </Route>
           <Route path="customer/">
             <Route path="new/" element={<NewCustomer />} />
             <Route path=":customerType/:id" element={<CustomerDetail />} />
-            <Route
-              path=":customerType/:id/edit/"
-              element={<UpdateCustomer />}
-            />
+            <Route path=":customerType/:id/call-log/new/" element={<NewCallLog />} />
+            <Route path=":customerType/:id/edit/" element={<UpdateCustomer />} />
           </Route>
         </Routes>
       </>
