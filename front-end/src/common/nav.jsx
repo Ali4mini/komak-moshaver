@@ -3,11 +3,12 @@ import Search from "../home/search";
 import { useEffect, useState } from "react";
 import api from "./api";
 import { useDispatch } from "react-redux";
-import { setScannerFiles } from "../home/filesSlice";
+import LogOutConfirm from "./logout_confirm";
 
 const NavBar = () => {
   const dispatch = useDispatch()
   const [scannerFilesCount, setScannerFilesCount] = useState(0)
+  const [isLogOutConfirm, setIsLogOutConfirm] = useState(false);
 
   // count of divar bot added files
   useEffect(() => {
@@ -19,12 +20,17 @@ const NavBar = () => {
       .catch((error) => console.log(error));
   }, []);
 
+
   return (
     <nav
       id="NavBar"
       className="flex border-b justify-between mb-4 px-5 sticky top-0 h-14 border-gray-gray bg-white  z-50"
     >
       <div className="flex items-center gap-4">
+
+        {
+          isLogOutConfirm && <LogOutConfirm isOpen={isLogOutConfirm} setIsOpen={setIsLogOutConfirm} />
+        }
 
         <Link
           id="home"
@@ -78,13 +84,13 @@ const NavBar = () => {
           id="agents"
           className="inline-block border border-gray-50 rounded hover:border-gray-200 text-blue-500 hover:bg-gray-200 py-1 px-3 active:ring-2"
           onClick={() => {
-            localStorage.clear();
-            window.location.reload();
+            setIsLogOutConfirm(true)
           }}
         >
           خروج
         </button>
       </div>
+
       <Search />
     </nav>
   );
