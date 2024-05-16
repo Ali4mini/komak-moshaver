@@ -101,7 +101,7 @@ const UpdateFile = () => {
     event.preventDefault();
     api
       .patch(`file/${fileType}/${id}/`, updatedFile)
-      .then(navigate("/", { replace: true }))
+      .then(navigate(`/file/${fileType}/${id}/`, { replace: true }))
       .catch((error) => console.log(error.data));
   };
 

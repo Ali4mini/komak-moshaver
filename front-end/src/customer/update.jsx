@@ -95,7 +95,7 @@ const UpdateCustomer = () => {
     event.preventDefault();
     api
       .patch(`customer/${customerType}/${id}/`, updatedFile)
-      .then(navigate("/", { replace: true }))
+      .then(navigate(`/customer/${customerType}/${id}/`, { replace: true }))
       .catch((error) => console.log(error.data));
   };
 

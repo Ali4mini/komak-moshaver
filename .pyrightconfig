@@ -1,5 +1,5 @@
 
   {
       "django": true,
-      "extraPaths": ["path/to/your/project"]
+      "extraPaths": ["./backend/"]
   }
