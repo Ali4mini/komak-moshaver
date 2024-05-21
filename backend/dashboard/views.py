@@ -6,6 +6,22 @@ from rest_framework.response import Response
 from customer.models import BuyCustomer, RentCustomer
 from file.models import Sell, Rent
 from datetime import datetime
+from django.db import connection
+
+def find_last_update_date():
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT MAX(updated) FROM (
+                SELECT updated FROM file_Sell
+                WHERE owner_name <> 'UNKNOWN' AND owner_name IS NOT NULL
+                ORDER BY updated DESC
+            ) AS subquery;
+        """)
+        result = cursor.fetchone()
+        if result:
+            return result
+        else:
+            return None
 
 
 

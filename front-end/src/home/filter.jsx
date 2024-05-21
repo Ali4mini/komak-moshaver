@@ -31,43 +31,100 @@ const Filter = () => {
   useEffect(() => {
     // sell filter budget range
     if (fileType === "sell") {
-      if (price <= 3000) {
-        setBudgetRange([Math.floor(price * 0.8), Math.floor(price * 1.2)]);
-      } else if (price > 3000 && price < 5000) {
-        setBudgetRange([Math.floor(price * 0.85), Math.floor(price * 1.15)]);
-      } else if (price >= 5000) {
-        setBudgetRange([Math.floor(price * 0.9), Math.floor(price * 1.1)]);
+      let lowerBound = Math.floor(price * 0.8);
+      let upperBound = Math.floor(price * 1.2);
+
+      if (lowerBound === 0 && upperBound === 0) {
+        setBudgetRange([null, null]);
+      } else {
+        setBudgetRange([lowerBound, upperBound]);
+        console.log(budgetRange)
       }
+
+
+      console.log(budgetRange);
     }
 
-    // rent filter budget range
     if (priceUp === null) {
-
-      setBudgetUpRange([null, null])
+      setBudgetUpRange([null, null]);
     }
+    // rent filter budget range
     else if (fileType === "rent") {
-      if (priceUp <= 300) {
-        setBudgetUpRange([Math.floor(priceUp * 0.8), Math.floor(priceUp * 1.2)]);
-      } else if (priceUp > 300 && priceUp < 700) {
-        setBudgetUpRange([Math.floor(priceUp * 0.85), Math.floor(priceUp * 1.15)]);
-      } else if (priceUp >= 700) {
-        setBudgetUpRange([Math.floor(priceUp * 0.9), Math.floor(priceUp * 1.1)]);
+      let lowerBound = Math.floor(priceUp * 0.8);
+      let upperBound = Math.floor(priceUp * 1.2);
+
+      if (lowerBound === 0 && upperBound === 0) {
+        setBudgetUpRange([null, null]);
+      } else {
+        setBudgetUpRange([lowerBound, upperBound]);
       }
 
 
       if (priceRent === null) {
+        setBudgetRentRange([null, null]);
+      } else {
+        let lowerBoundRent = Math.floor(priceRent * 0.7);
+        let upperBoundRent = Math.floor(priceRent * 1.3);
 
-        setBudgetRentRange([null, null])
-      }
-      else if (priceRent <= 3) {
-        setBudgetRentRange([Math.floor(priceRent * 0.7), Math.floor(priceRent * 1.3)]);
-      } else if (priceRent > 3 && priceRent < 7) {
-        setBudgetRentRange([Math.floor(priceRent * 0.8), Math.floor(priceRent * 1.2)]);
-      } else if (priceRent >= 7) {
-        setBudgetRentRange([Math.floor(priceRent * 0.85), Math.floor(priceRent * 1.15)]);
+        if (lowerBoundRent === 0 && upperBoundRent === 0) {
+          setBudgetRentRange([null, null]);
+        } else {
+          setBudgetRentRange([lowerBoundRent, upperBoundRent]);
+        }
       }
     }
   }, [fileType, price, priceUp, priceRent]);
+
+  // useEffect(() => {
+  //
+  //   // sell filter budget range
+  //   if (fileType === "sell") {
+  //
+  //     if (price <= 3000) {
+  //       setBudgetRange([Math.floor(price * 0.8), Math.floor(price * 1.2)]);
+  //     } else if (price > 3000 && price < 5000) {
+  //       setBudgetRange([Math.floor(price * 0.85), Math.floor(price * 1.15)]);
+  //     } else if (price >= 5000) {
+  //       setBudgetRange([Math.floor(price * 0.9), Math.floor(price * 1.1)]);
+  //     }
+  //
+  //     //  default value for budgetRange
+  //     if (price === null) {
+  //
+  //       setBudgetRange([null, null])
+  //     }
+  //     console.log(budgetRange)
+  //   }
+  //
+  //   if (priceUp === null) {
+  //
+  //     setBudgetUpRange([null, null])
+  //   }
+  //   // rent filter budget range
+  //   else if (fileType === "rent") {
+  //
+  //     if (priceUp <= 300) {
+  //       setBudgetUpRange([Math.floor(priceUp * 0.8), Math.floor(priceUp * 1.2)]);
+  //     } else if (priceUp > 300 && priceUp < 700) {
+  //       setBudgetUpRange([Math.floor(priceUp * 0.85), Math.floor(priceUp * 1.15)]);
+  //     } else if (priceUp >= 700) {
+  //       setBudgetUpRange([Math.floor(priceUp * 0.9), Math.floor(priceUp * 1.1)]);
+  //     }
+  //
+  //
+  //     if (priceRent === null) {
+  //
+  //       setBudgetRentRange([null, null])
+  //     }
+  //     else if (priceRent <= 3) {
+  //       setBudgetRentRange([Math.floor(priceRent * 0.7), Math.floor(priceRent * 1.3)]);
+  //     } else if (priceRent > 3 && priceRent < 7) {
+  //       setBudgetRentRange([Math.floor(priceRent * 0.8), Math.floor(priceRent * 1.2)]);
+  //     } else if (priceRent >= 7) {
+  //       setBudgetRentRange([Math.floor(priceRent * 0.85), Math.floor(priceRent * 1.15)]);
+  //     }
+  //   }
+  // }, [fileType, price, priceUp, priceRent]);
 
 
   //WARN: there is a list of allowed fields that you have to filter based on it in listing api
