@@ -3,7 +3,7 @@ import FloatLabel from "../common/input";
 import api from "../common/api";
 import Checkbox from "../common/checkbox";
 import { useDispatch, useSelector } from "react-redux";
-import { setFiles, setLastFilter, clearLastFilter } from "./filesSlice";
+import { addFiles, setLastFilter, clearLastFilter, setFiles } from "./filesSlice";
 
 const Filter = () => {
   const dispatch = useDispatch();
@@ -75,56 +75,6 @@ const Filter = () => {
     }
   }, [fileType, price, priceUp, priceRent]);
 
-  // useEffect(() => {
-  //
-  //   // sell filter budget range
-  //   if (fileType === "sell") {
-  //
-  //     if (price <= 3000) {
-  //       setBudgetRange([Math.floor(price * 0.8), Math.floor(price * 1.2)]);
-  //     } else if (price > 3000 && price < 5000) {
-  //       setBudgetRange([Math.floor(price * 0.85), Math.floor(price * 1.15)]);
-  //     } else if (price >= 5000) {
-  //       setBudgetRange([Math.floor(price * 0.9), Math.floor(price * 1.1)]);
-  //     }
-  //
-  //     //  default value for budgetRange
-  //     if (price === null) {
-  //
-  //       setBudgetRange([null, null])
-  //     }
-  //     console.log(budgetRange)
-  //   }
-  //
-  //   if (priceUp === null) {
-  //
-  //     setBudgetUpRange([null, null])
-  //   }
-  //   // rent filter budget range
-  //   else if (fileType === "rent") {
-  //
-  //     if (priceUp <= 300) {
-  //       setBudgetUpRange([Math.floor(priceUp * 0.8), Math.floor(priceUp * 1.2)]);
-  //     } else if (priceUp > 300 && priceUp < 700) {
-  //       setBudgetUpRange([Math.floor(priceUp * 0.85), Math.floor(priceUp * 1.15)]);
-  //     } else if (priceUp >= 700) {
-  //       setBudgetUpRange([Math.floor(priceUp * 0.9), Math.floor(priceUp * 1.1)]);
-  //     }
-  //
-  //
-  //     if (priceRent === null) {
-  //
-  //       setBudgetRentRange([null, null])
-  //     }
-  //     else if (priceRent <= 3) {
-  //       setBudgetRentRange([Math.floor(priceRent * 0.7), Math.floor(priceRent * 1.3)]);
-  //     } else if (priceRent > 3 && priceRent < 7) {
-  //       setBudgetRentRange([Math.floor(priceRent * 0.8), Math.floor(priceRent * 1.2)]);
-  //     } else if (priceRent >= 7) {
-  //       setBudgetRentRange([Math.floor(priceRent * 0.85), Math.floor(priceRent * 1.15)]);
-  //     }
-  //   }
-  // }, [fileType, price, priceUp, priceRent]);
 
 
   //WARN: there is a list of allowed fields that you have to filter based on it in listing api
@@ -148,6 +98,7 @@ const Filter = () => {
 
 
   const filter = (data) => {
+
     if (data.file_type === "sell") {
       delete data.price_up__lte;
       delete data.price_up__gte;
@@ -157,12 +108,13 @@ const Filter = () => {
       delete data.price__lte;
       delete data.price__gte;
     }
-    console.log(data)
 
     api
       .get("listing/", { params: data })
       .then((response) => {
-        dispatch(setFiles(response.data));
+
+        console.log(response)
+        dispatch(setFiles(response.data.results));
         dispatch(setLastFilter(data));
       })
       .catch((error) => console.log(`error: ${error}`));
@@ -249,12 +201,6 @@ const Filter = () => {
         <Checkbox label="انباری" name="storage" setter={setStorage} />
       </div>
       <div className="flex flex-col gap-3">
-        <button
-          onClick={() => filter(filterEntery)}
-          className="basis-full rounded-lg bg-blue-300 hover:bg-blue-400 py-1 border w-full bottom-0"
-        >
-          فیلتر
-        </button>
         {lastFilter ? (
           <button
             onClick={() => cancelFilter()}
@@ -262,7 +208,15 @@ const Filter = () => {
           >
             حذف فیلتر
           </button>
-        ) : null}
+        ) :
+
+          <button
+            onClick={() => filter(filterEntery)}
+            className="basis-full rounded-lg bg-blue-300 hover:bg-blue-400 py-1 border w-full bottom-0"
+          >
+            فیلتر
+          </button>
+        }
       </div>
     </div>
   );

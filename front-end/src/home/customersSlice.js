@@ -3,12 +3,15 @@ import { createSlice } from "@reduxjs/toolkit";
 export const customerSlice = createSlice({
   name: "customer",
   initialState: {
-    customers: null,
+    customers: [],
     lastFilter: null,
   },
   reducers: {
     setCustomers: (state, action) => {
       state.customers = action.payload;
+    },
+    addCustomers: (state, action) => {
+      state.customers.push(...action.payload); // Use spread operator to append new items
     },
     setLastFilter: (state, action) => {
       state.lastFilter = action.payload;
@@ -19,5 +22,5 @@ export const customerSlice = createSlice({
   },
 });
 
-export const { setCustomers, setLastFilter, clearLastFilter } = customerSlice.actions;
+export const { setCustomers, setLastFilter, clearLastFilter, addCustomers } = customerSlice.actions;
 export default customerSlice.reducer;

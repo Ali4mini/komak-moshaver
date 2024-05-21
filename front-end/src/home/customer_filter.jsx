@@ -96,7 +96,7 @@ const Filter = () => {
     api
       .get("listing/customers/", { params: data })
       .then((response) => {
-        dispatch(setCustomers(response.data));
+        dispatch(setCustomers(response.data.results));
         dispatch(setLastFilter(data));
       })
       .catch((error) => console.log(`error: ${error}`));
@@ -187,12 +187,6 @@ const Filter = () => {
         <Checkbox label="آسانسور" name="elevator" setter={setElevator} />
         <Checkbox label="انباری" name="storage" setter={setStorage} />
       </div>
-      <button
-        onClick={() => filter(filter_entery)}
-        className="basis-full rounded-lg bg-blue-300 hover:bg-blue-400 py-1 border w-full bottom-0"
-      >
-        فیلتر
-      </button>
       {lastFilter ? (
         <button
           onClick={() => cancelFilter()}
@@ -200,7 +194,15 @@ const Filter = () => {
         >
           حذف فیلتر
         </button>
-      ) : null}
+      ) :
+
+        <button
+          onClick={() => filter(filter_entery)}
+          className="basis-full rounded-lg bg-blue-300 hover:bg-blue-400 py-1 border w-full bottom-0"
+        >
+          فیلتر
+        </button>
+      }
     </div>
   );
 };

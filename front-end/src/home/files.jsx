@@ -1,56 +1,76 @@
-import Filter from "./filter";
 import File from "./property_card";
 import { useEffect, useState } from "react";
 import api from "../common/api";
-import { setFiles } from "./filesSlice";
+import { addFiles, } from "./filesSlice";
 import { useSelector, useDispatch } from "react-redux";
 import ScrollButton from "../common/goUpButton";
+import Filter from "./filter";
 
 const Files = () => {
   const store = useSelector((state) => state.files);
   const dispatch = useDispatch();
+  const [pageNumber, setPageNumber] = useState(1);
+  const [isFetchingMore, setIsFetchingMore] = useState(false);
 
+  const getFiles = (filter = { status: "ACTIVE", file_type: localStorage.getItem("agents_field") }) => {
+    api.get(`/listing/?page=${pageNumber}`, { params: filter })
+      .then((response) => {
+        dispatch(addFiles(response.data.results));
+
+        setIsFetchingMore(false)
+      })
+      .catch((error) => console.error(error));
+  };
+
+  // Initial fetch
   useEffect(() => {
-    // this section is for when an agent requests files from another field or range
+    console.log(store)
     if (store.lastFilter) {
-      api
-        .get(store.lastFilter)
-        .then((response) => {
-          dispatch(setFiles(response.data));
-        })
-        .catch((error) => console.log(error));
-    } else {
-      api
-        .get("listing/", {
-          params: {
-            status: "ACTIVE",
-            file_type: localStorage.getItem("agents_field"),
-          },
-        })
-        .then((response) => {
-          dispatch(setFiles(response.data));
-        })
-        .catch((error) => console.log(error));
+      getFiles(store.lastFilter)
+
     }
-  }, []);
+    else {
+
+      getFiles();
+    }
+    console.log("Initial fetch triggered");
+  }, [pageNumber]);
+
+  // Fetch more on scroll
+  useEffect(() => {
+
+    const handleScroll = () => {
+      const scrolledTo = window.scrollY + window.innerHeight;
+      const isReachedBottom = document.body.scrollHeight === scrolledTo;
+
+      if (isReachedBottom) {
+        console.log("User has reached the bottom of the page.");
+        setIsFetchingMore(true)
+        setPageNumber(prevPageNumber => prevPageNumber + 1)
+
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [isFetchingMore]); // Correctly include isFetchingMore in the dependency array
+
 
   return (
     <div className="home flex flex-col gap-3">
       <Filter />
-      <div className="grid grid-cols-1 ">
+      <div className="grid grid-cols-1">
         {store.files ? (
-          store.files.map((item, index) => <File key={index} file={item} />)
+          store.files.map((file, index) => <File key={index} file={file} />)
+
         ) : (
-          <p>no files was found</p>
+          <p>No files were found</p>
         )}
       </div>
-
-
       <ScrollButton />
     </div>
   );
-
-
 };
 
 export default Files;

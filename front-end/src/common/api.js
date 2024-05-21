@@ -3,7 +3,6 @@ import axios from "axios";
 
 const apiUrl = import.meta.env.VITE_API;
 // const apiUrl = "http://192.168.43.49:8000/"
-console.log(apiUrl)
 const api = axios.create({
   baseURL: apiUrl,
   headers: {
