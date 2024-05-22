@@ -50,13 +50,11 @@ function App() {
           <Route path="file/">
             <Route path="new/" element={<NewFile />} />
             <Route path=":fileType/:id" element={<FileDetails />} />
-            <Route path=":fileType/:id/call-log/new/" element={<NewCallLog />} />
             <Route path=":fileType/:id/edit/" element={<UpdateFile />} />
           </Route>
           <Route path="customer/">
             <Route path="new/" element={<NewCustomer />} />
             <Route path=":customerType/:id" element={<CustomerDetail />} />
-            <Route path=":customerType/:id/call-log/new/" element={<NewCallLog />} />
             <Route path=":customerType/:id/edit/" element={<UpdateCustomer />} />
           </Route>
         </Routes>

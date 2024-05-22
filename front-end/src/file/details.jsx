@@ -10,6 +10,7 @@ import MenuButton from "../common/dropdown_button";
 import MatchedCustomers from "../common/matched_customers";
 import ImageSlider from "../common/slide";
 import phoneIcon from "../assets/icons8-phone-50.png"
+import NewCallLog from "../log_app/logs";
 
 const FileDetails = () => {
   const navigate = useNavigate();
@@ -19,6 +20,8 @@ const FileDetails = () => {
   const [isMatchedCustomer, setIsMatchedCustomer] = useState(false);
   const [images, setImages] = useState(null)
   const [isFileOld, setIsFileOld] = useState(false)
+  const [isCallLog, setIsCallLog] = useState(false)
+
 
   useEffect(() => {
     api
@@ -53,7 +56,7 @@ const FileDetails = () => {
       label: "لاک تماس",
       disabled: false,
       handler: () => {
-        navigate("call-log/new/")
+        setIsCallLog(true)
       },
       icon: (
         <img src={phoneIcon} alt="phone" width={20} />
@@ -220,6 +223,9 @@ const FileDetails = () => {
                 }
               />
             )}
+            {isCallLog &&
+              <NewCallLog isOpen={isCallLog} setIsOpen={setIsCallLog} />
+            }
 
             <button
               id="update"
