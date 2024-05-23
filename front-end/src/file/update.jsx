@@ -3,11 +3,15 @@ import Checkbox from "../common/checkbox";
 import { useEffect, useState } from "react";
 import api from "../common/api";
 import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setFlashMessage } from "../common/flashSlice";
 
 const UpdateFile = () => {
   const { fileType, id } = useParams();
   const [oldFile, setOldFile] = useState(null);
+  const dispatch = useDispatch();
 
+  // get the old file
   useEffect(() => {
     api
       .get(`file/${fileType}/${id}/`)
@@ -48,6 +52,7 @@ const UpdateFile = () => {
 
   const [description, setDescription] = useState(oldFile ? oldFile.description : "");
   const navigate = useNavigate();
+  const [selectedFiles, setSelectedFiles] = useState(null);
 
   let updatedEntery = {
     file_type: fileType,
@@ -101,8 +106,46 @@ const UpdateFile = () => {
     event.preventDefault();
     api
       .patch(`file/${fileType}/${id}/`, updatedFile)
-      .then(navigate(`/file/${fileType}/${id}/`, { replace: true }))
+      .then((response) => {
+
+        switch (response.status) {
+          case 200:
+            handleUpload(`file/${fileType}/${id}/images/`)
+            navigate(`/file/${fileType}/${id}/`, { replace: true })
+
+            dispatch(
+              setFlashMessage({
+                type: "SUCCESS",
+                message: "یک فایل اضافه شد",
+              }))
+        }
+      }
+
+      )
       .catch((error) => console.log(error.data));
+  };
+
+  const handleFileChange = (event) => {
+    setSelectedFiles(event.target.files);
+  };
+  const handleUpload = async (endpoint) => {
+    const formData = new FormData();
+    Array.from(selectedFiles).forEach((file) => {
+      formData.append('images', file);
+    });
+
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    };
+
+    try {
+      const response = await api.post(endpoint, formData, config);
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   if (oldFile) {
@@ -302,6 +345,12 @@ const UpdateFile = () => {
               setter={setDescription}
               isRequired={false}
             />
+          </div>
+
+          <div className="flex h-12 gap-2">
+            <input type="file" multiple id="customFileInput" onChange={handleFileChange} className="hidden" />
+
+            <label htmlFor="customFileInput" className="flex cursor-pointer w-32 bg-blue-200 text-black items-center justify-center align-middle font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-blue-400 transition duration-150 ease-in-out">انتحاب عکس</label>
           </div>
           <div className="grid grid-cols-3 md:grid-cols-4 max-w-sm gap-y-1">
             <Checkbox

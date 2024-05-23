@@ -5,6 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from customer.models import BuyCustomer, RentCustomer
 from file.models import Sell, Rent
+from customer.models import BuyCustomer
 from datetime import datetime
 from django.db import connection
 
@@ -46,7 +47,26 @@ class FilePriceDiversity(APIView):
         
         return Response(sell_price_diversity)
         
+class CustomerBudgetDiversity(APIView):
+    def get(self, request):
+        sell_file_counts = BuyCustomer.objects.count()
+        
+        sell_lte_2000 = BuyCustomer.objects.filter(budget__lte=2000).count()
+        sell_2000_3000 = BuyCustomer.objects.filter(budget__gte=2000, budget__lte=3000).count()
+        sell_3000_5000 = BuyCustomer.objects.filter(budget__gte=3000, budget__lte=5000).count()
+        sell_5000_8000 = BuyCustomer.objects.filter(budget__gte=5000, budget__lte=8000).count()
+        sell_gte_8000 = BuyCustomer.objects.filter(budget__gte=8000).count()
 
+        sell_budget_diversity = {
+            "below_2000": round(sell_lte_2000 / (sell_file_counts / 100), 2), 
+            "2000_3000": round(sell_2000_3000 / (sell_file_counts / 100), 2),
+            "3000_5000": round(sell_3000_5000 / (sell_file_counts / 100), 2),
+            "5000_8000": round(sell_5000_8000 / (sell_file_counts / 100), 2),
+            "higher_8000": round(sell_gte_8000 / (sell_file_counts / 100), 2), 
+        }
+
+        
+        return Response(sell_budget_diversity)
 
 class FileTypeDiversity(APIView):
     def get(self, request, format=None):

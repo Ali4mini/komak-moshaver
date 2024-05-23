@@ -3,6 +3,7 @@ import CustomerPerDay from "./customerPerDay";
 import FilePerDay from "./filePerDay";
 import PropertyDiversity from "./propertyTypeDiversity";
 import FilePriceDiversity from "./filePriceDiversity";
+import CustomerBudgetDiversity from "./customerBudgetDiversity";
 
 ChartJS.register(...registerables)
 
@@ -15,6 +16,7 @@ const Dashboard = () => {
 
       <PropertyDiversity />
       <FilePriceDiversity />
+      <CustomerBudgetDiversity />
       <CustomerPerDay startDate={"2023-01-01"} />
 
       <FilePerDay startDate={"2023-01-01"} />
