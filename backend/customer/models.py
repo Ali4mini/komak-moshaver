@@ -40,6 +40,8 @@ class BuyCustomer(models.Model):
     storage = models.BooleanField(default=True)
     status = models.CharField(max_length=12, choices=Status.choices, default=Status.ACTIVE)
 
+    description = models.CharField(max_length=1000, blank=True, null=True)
+
     
     def __str__(self) -> str:
         return self.customer_name
@@ -124,6 +126,7 @@ class RentCustomer(models.Model):
     storage = models.BooleanField(default=True)
     status = models.CharField(max_length=12, choices=Status.choices, default=Status.ACTIVE)
 
+    description = models.CharField(max_length=1000, blank=True, null=True)
     
     def __str__(self) -> str:
         return self.customer_name

@@ -24,6 +24,7 @@ const NewCustomer = () => {
   const [motorSpot, setMotorSpot] = useState(false);
   const [customerName, setCustomerName] = useState(null);
   const [customerPhone, setCustomerPhone] = useState(null);
+  const [description, setDescription] = useState(null)
   const user = localStorage.getItem("user");
 
   const navigate = useNavigate();
@@ -46,6 +47,7 @@ const NewCustomer = () => {
     parking_motor: motorSpot,
     customer_name: customerName,
     customer_phone: customerPhone,
+    description: description,
   };
 
   if (customerType === "buy") {
@@ -186,6 +188,15 @@ const NewCustomer = () => {
             label={"نام مشتری"}
             setter={setCustomerName}
             isRequired={true}
+          />
+        </div>
+        <div className="grid grid-cols-2 h-12 gap-2">
+          <FloatLabel
+            type="text"
+            name={"description"}
+            label={"توضیحات"}
+            setter={setDescription}
+            isRequired={false}
           />
         </div>
         <div className="grid grid-cols-3 md:grid-cols-4 max-w-sm gap-y-1">

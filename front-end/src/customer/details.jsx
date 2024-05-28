@@ -152,6 +152,11 @@ const CustomerDetail = () => {
             </div>
           ))}
         </div>
+        <div className="flex flex-row gap-10 my-3 px-4">
+          <p>توضیحات: </p>
+          <p>{customer?.description}</p>
+
+        </div>
         <div className="flex flex-row justify-between my-3 px-4">
 
           <MenuButton buttonText={"گزینه ها"} items={optionItems} />
