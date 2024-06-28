@@ -75,7 +75,7 @@ class Sell(models.Model):
 
     def get_related_customers(self) -> BuyCustomer:
 
-        budget_range = (0, 0) # Default value, adjust as necessary
+        budget_range = (0, 0)  # Default value, adjust as necessary
         if self.price <= 3000:
             budget_range = (int(self.price * 0.80), int(self.price * 1.20))
         elif self.price > 3000 and self.price < 5000:
@@ -142,7 +142,7 @@ class Rent(models.Model):
     bedroom = models.IntegerField(blank=True, null=True)
     parking_motor = models.BooleanField(default=False)
     takhlie = models.CharField(max_length=100, null=True, blank=True)
-    vahedha = models.IntegerField(blank=True, null=True )
+    vahedha = models.IntegerField(blank=True, null=True)
     komod_divari = models.BooleanField(default=False)
     bazdid = models.CharField(max_length=100, null=True, blank=True)
     tabdil = models.IntegerField(default=None, null=True, blank=True)

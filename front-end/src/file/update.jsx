@@ -9,48 +9,65 @@ import { setFlashMessage } from "../common/flashSlice";
 const UpdateFile = () => {
   const { fileType, id } = useParams();
   const [oldFile, setOldFile] = useState(null);
+  const [isLoading, setIsLoading] = useState(true); // Add loading state
   const dispatch = useDispatch();
 
-  // get the old file
+  // Fetch the old file
   useEffect(() => {
-    api
-      .get(`file/${fileType}/${id}/`)
-      .then((response) => {
-        console.log(response.data.description)
-        setOldFile(response.data);
-      })
-      .catch((error) => console.log(error.data));
+    api.get(`file/${fileType}/${id}/`).then((response) => {
+      console.log(response.data.description);
+      setOldFile(response.data);
+      setIsLoading(false); // Set loading to false after fetching the data
+    }).catch((error) => console.log(error.data));
   }, []);
 
-  const [propertyType, setPropertyType] = useState(
-    oldFile ? oldFile.property_type : ""
-  );
-  const [address, setAddress] = useState(oldFile ? oldFile.address : "");
-  const [m2, setM2] = useState(oldFile ? oldFile.m2 : "");
-  const [year, setYear] = useState(oldFile ? oldFile.year : "");
-  const [bedroom, setBedroom] = useState(oldFile ? oldFile.bedroom : "");
-  const [price, setPrice] = useState(oldFile ? oldFile.price : "");
-  const [upPrice, setUpPrice] = useState(oldFile ? oldFile.price_up : "");
-  const [rentPrice, setRentPrice] = useState(oldFile ? oldFile.price_rent : "");
+  // Initialize state based on oldFile only if it's not loading
+  useEffect(() => {
+    if (!isLoading && oldFile) {
+      setPropertyType(oldFile.property_type);
+      setAddress(oldFile.address);
+      setM2(oldFile.m2);
+      setYear(oldFile.year);
+      setBedroom(oldFile.bedroom);
+      setPrice(oldFile.price);
+      setUpPrice(oldFile.price_up);
+      setRentPrice(oldFile.price_rent);
+      setFloor(oldFile.floor);
+      setFloors(oldFile.tabaghat);
+      setUnits(oldFile.vahedha);
+      setParking(oldFile.parking);
+      setElevator(oldFile.elevator);
+      setStorage(oldFile.storage);
+      setMotorSpot(oldFile.parking_motor);
+      setOwnerName(oldFile.owner_name);
+      setOwnerPhone(oldFile.owner_phone);
+      setDescription(oldFile.description);
+    }
+  }, [oldFile, isLoading]); // Depend on isLoading to re-run this effect
+
+  const [propertyType, setPropertyType] = useState("");
+  const [address, setAddress] = useState("");
+  const [m2, setM2] = useState("");
+  const [year, setYear] = useState("");
+  const [bedroom, setBedroom] = useState("");
+  const [price, setPrice] = useState("");
+  const [upPrice, setUpPrice] = useState("");
+  const [rentPrice, setRentPrice] = useState("");
   const [tabdil, setTabdil] = useState(null);
-  const [floor, setFloor] = useState(oldFile ? oldFile.floor : "");
-  const [floors, setFloors] = useState(oldFile ? oldFile.tabaghat : "");
-  const [units, setUnits] = useState(oldFile ? oldFile.vahedha : "");
+  const [floor, setFloor] = useState("");
+  const [floors, setFloors] = useState("");
+  const [units, setUnits] = useState("");
   const [bazdid, setBazdid] = useState("هماهنگی");
-  const [parking, setParking] = useState(oldFile ? oldFile.parking : "");
-  const [elevator, setElevator] = useState(oldFile ? oldFile.elevator : "");
-  const [storage, setStorage] = useState(oldFile ? oldFile.storage : "");
-  const [motorSpot, setMotorSpot] = useState(
-    oldFile ? oldFile.parking_motor : ""
-  );
+  const [parking, setParking] = useState(false);
+  const [elevator, setElevator] = useState(false);
+  const [storage, setStorage] = useState(false);
+  const [motorSpot, setMotorSpot] = useState(false);
   const [tenetPhone, setTenetPhone] = useState(null);
   const [tenetName, setTenetName] = useState(null);
-  const [ownerName, setOwnerName] = useState(oldFile ? oldFile.owner_name : "");
-  const [ownerPhone, setOwnerPhone] = useState(
-    oldFile ? oldFile.owner_phone : ""
-  );
+  const [ownerName, setOwnerName] = useState("");
+  const [ownerPhone, setOwnerPhone] = useState("");
+  const [description, setDescription] = useState("");
 
-  const [description, setDescription] = useState(oldFile ? oldFile.description : "");
   const navigate = useNavigate();
   const [selectedFiles, setSelectedFiles] = useState(null);
 
@@ -80,57 +97,28 @@ const UpdateFile = () => {
     description: description,
   };
 
-  useEffect(() => {
-    if (oldFile) {
-      setPropertyType(oldFile.property_type);
-      setAddress(oldFile.address);
-      setM2(oldFile.m2);
-      setYear(oldFile.year);
-      setBedroom(oldFile.bedroom);
-      setPrice(oldFile.price);
-      setUpPrice(oldFile.price_up);
-      setRentPrice(oldFile.price_rent);
-      setFloor(oldFile.floor);
-      setFloors(oldFile.tabaghat);
-      setUnits(oldFile.vahedha);
-      setParking(oldFile.parking);
-      setElevator(oldFile.elevator);
-      setStorage(oldFile.storage);
-      setMotorSpot(oldFile.parking_motor);
-      setOwnerName(oldFile.owner_name);
-      setOwnerPhone(oldFile.owner_phone);
-    }
-  }, [oldFile]);
-
   const update = (updatedFile, event) => {
     event.preventDefault();
-    api
-      .patch(`file/${fileType}/${id}/`, updatedFile)
-      .then((response) => {
-
-        switch (response.status) {
-          case 200:
-            handleUpload(`file/${fileType}/${id}/images/`)
-            navigate(`/file/${fileType}/${id}/`, { replace: true })
-
-            dispatch(
-              setFlashMessage({
-                type: "SUCCESS",
-                message: "یک فایل اضافه شد",
-              }))
-        }
+    api.patch(`file/${fileType}/${id}/`, updatedFile).then((response) => {
+      switch (response.status) {
+        case 200:
+          handleUpload(`file/${fileType}/${id}/images/`);
+          navigate(`/file/${fileType}/${id}/`, { replace: true });
+          dispatch(setFlashMessage({ type: "SUCCESS", message: "یک فایل اضافه شد" }));
+          break;
+        default:
+          console.log("Error updating file");
       }
-
-      )
-      .catch((error) => console.log(error.data));
+    }).catch((error) => console.log(error.data));
   };
 
   const handleFileChange = (event) => {
     setSelectedFiles(event.target.files);
   };
+
   const handleUpload = async (endpoint) => {
     const formData = new FormData();
-    Array.from(selectedFiles).forEach((file) => {
+    Array.from(selectedFiles || []).forEach((file) => {
       formData.append('images', file);
     });
 
@@ -148,8 +136,12 @@ const UpdateFile = () => {
     }
   };
 
-  if (oldFile) {
-    return (
+  if (isLoading) {
+    return <div>Loading...</div>; // Render a loading indicator or message
+  }
+
+  return (
+    <div className="block border shadow-lg rounded-xl bg-white mx-4 px-4 py-2 my-2">
       <div className="block border shadow-lg rounded-xl bg-white mx-4 px-4 py-2 my-2">
         <form
           onSubmit={(e) => update(updatedEntery, e)}
@@ -350,7 +342,7 @@ const UpdateFile = () => {
           <div className="flex h-12 gap-2">
             <input type="file" multiple id="customFileInput" onChange={handleFileChange} className="hidden" />
 
-            <label htmlFor="customFileInput" className="flex cursor-pointer w-32 bg-blue-200 text-black items-center justify-center align-middle font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-blue-400 transition duration-150 ease-in-out">انتحاب عکس</label>
+            <label htmlFor="customFileInput" className="flex cursor-pointer w-32 bg-blue-200 text-black items-center justify-center align-middle font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-blue-400 transition duration-150 ease-in-out">اضافه کردن عکس</label>
           </div>
           <div className="grid grid-cols-3 md:grid-cols-4 max-w-sm gap-y-1">
             <Checkbox
@@ -386,8 +378,9 @@ const UpdateFile = () => {
           </button>
         </form>
       </div>
-    );
-  }
+
+    </div>
+  );
 };
 
 export default UpdateFile;

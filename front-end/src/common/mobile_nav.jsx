@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import Search from "../home/search";
 import { useState } from "react";
 import { Transition } from "@headlessui/react";
 
@@ -33,7 +32,7 @@ const MobileNavBar = () => {
       </div>
       <Transition
         show={isActive}
-        enter="transition-opacity duration-500"
+        enter="transition-opacity duration-700"
         enterFrom="opacity-0"
         enterTo="opacity-100"
         leave="transition-opacity duration-400"
@@ -41,14 +40,16 @@ const MobileNavBar = () => {
         leaveTo="opacity-0"
       >
         <div className="flex flex-col-reverse border-b-2 border-gray-300 mb-3 rounded-b-lg w-full items-center ">
+
           <Link
             id="listing"
             className="flex w-full justify-center border border-gray-50 rounded hover:border-gray-200 text-blue-500 hover:bg-gray-200 py-1 px-3 active:ring-2"
             to="listing"
             onClick={() => setIsActive(!isActive)}
           >
-            لیست
+            ربات
           </Link>
+
           <Link
             id="new_file"
             className="flex w-full justify-center border border-gray-50 rounded hover:border-gray-200 text-blue-500 hover:bg-gray-200 py-1 px-3 active:ring-2"

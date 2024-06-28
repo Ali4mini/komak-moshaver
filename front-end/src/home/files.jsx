@@ -5,6 +5,7 @@ import { addFiles, } from "./filesSlice";
 import { useSelector, useDispatch } from "react-redux";
 import ScrollButton from "../common/goUpButton";
 import Filter from "./filter";
+import LoadingSpinner from "../common/loadingSpinner";
 
 const Files = () => {
   const store = useSelector((state) => state.files);
@@ -61,6 +62,7 @@ const Files = () => {
     <div className="home flex flex-col gap-3">
       <Filter />
       <div className="grid grid-cols-1">
+        {isFetchingMore && <LoadingSpinner />}
         {store.files ? (
           store.files.map((file, index) => <File key={index} file={file} />)
 

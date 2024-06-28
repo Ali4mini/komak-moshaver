@@ -46,7 +46,7 @@ const CustomerPerDay = () => {
       labels: tempData.labels,
       datasets: [
         {
-          label: 'Buy Customers',
+          label: 'مشتری خرید',
           data: tempData.buyCustomerValues,
           backgroundColor: 'rgba(75, 192, 192, 0.2)',
           borderColor: 'rgba(75, 192, 192, 1)',
@@ -54,7 +54,7 @@ const CustomerPerDay = () => {
         },
 
         {
-          label: 'Rent Customers',
+          label: 'مشتری اجاره',
           data: tempData.rentCustomerValues,
           backgroundColor: 'rgba(255, 99, 132, 0.2)', // Different color for the second dataset
           borderColor: 'rgba(255, 99, 132, 1)',
@@ -72,7 +72,8 @@ const CustomerPerDay = () => {
     };
     return (
 
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+      <div className="flex flex-col items-center justify-center py-4 bg-gray-100 min-h-screen">
+        <label className="my-3 font-bold ">تعداد مشتری ها در روز</label>
 
         <DatePicker
           selected={selectedDate}
