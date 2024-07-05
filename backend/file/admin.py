@@ -20,7 +20,15 @@ class SellAdmin(admin.ModelAdmin):
 
 @admin.register(Rent)
 class RentAdmin(admin.ModelAdmin):
-    list_display = ["owner_name", "m2", "address", "property_type", "divar_token"]
+    list_display = [
+        "owner_name",
+        "m2",
+        "address",
+        "property_type",
+        "divar_token",
+        "created",
+        "updated",
+    ]
     list_filter = [
         "m2",
         "price_up",

@@ -10,7 +10,6 @@ const NewFile = () => {
   const [fileType, setFileType] = useState(
     localStorage.getItem("agents_field")
   );
-  console.log(fileType)
   const [propertyType, setPropertyType] = useState("A");
   const [address, setAddress] = useState(null);
   const [m2, setM2] = useState(null);
@@ -32,8 +31,9 @@ const NewFile = () => {
   const [bazdid, setBazdid] = useState("هماهنگی");
   const [tenetPhone, setTenetPhone] = useState(null);
   const [tenetName, setTenetName] = useState(null);
+  const [lobbyManName, setLobbyManName] = useState(null);
+  const [lobbyManPhone, setLobbyManPhone] = useState(null);
   const [description, setDescription] = useState(null)
-  const [id, setId] = useState(null) // used for uploading images
 
   const [selectedFiles, setSelectedFiles] = useState(null);
   const user = localStorage.getItem("user");
@@ -65,6 +65,8 @@ const NewFile = () => {
     bazdid: bazdid,
     tenet_name: tenetName,
     tenet_phone: tenetPhone,
+    lobbyMan_name: lobbyManName,
+    lobbyMan_phone: lobbyManPhone,
     description: description,
   };
 
@@ -300,6 +302,7 @@ const NewFile = () => {
               <option value="صبح">صبح</option>
               <option value="بعدازظهر">بعدازظهر</option>
               <option value="مستاجر">مستاجر</option>
+              <option value="سرایدار">سرایدار</option>
             </select>
           </div>
 
@@ -317,6 +320,25 @@ const NewFile = () => {
                 name={"ownerName"}
                 label={"نام مستاجر"}
                 setter={setTenetName}
+                isRequired={true}
+              />
+            </div>
+          ) : null}
+
+          {bazdid === "سرایدار" ? (
+            <div className="flex flex-row gap-2 max-w-sm">
+              <FloatLabel
+                type="text"
+                name={"ownerPhone"}
+                label={"شماره سرایدار"}
+                setter={setLobbyManPhone}
+                isRequired={true}
+              />
+              <FloatLabel
+                type="text"
+                name={"ownerName"}
+                label={"نام سرایدار"}
+                setter={setLobbyManName}
                 isRequired={true}
               />
             </div>

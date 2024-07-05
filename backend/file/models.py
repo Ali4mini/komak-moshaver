@@ -55,6 +55,8 @@ class Sell(models.Model):
     updated = models.DateTimeField(auto_now=True)
     tenet_name = models.CharField(max_length=100, null=True, blank=True)
     tenet_phone = models.CharField(max_length=12, null=True, blank=True)
+    lobbyMan_name = models.CharField(max_length=100, null=True, blank=True)
+    lobbyMan_phone = models.CharField(max_length=12, null=True, blank=True)
     status = models.CharField(
         max_length=12, choices=Status.choices, default=Status.ACTIVE
     )
@@ -88,8 +90,8 @@ class Sell(models.Model):
             "property_type": self.property_type,
             "budget__gte": budget_range[0],
             "budget__lte": budget_range[1],
-            # "m2__lte": self.m2,
-            # "bedroom__lte": self.bedroom,
+            "m2__lte": self.m2,
+            "bedroom__lte": self.bedroom,
             # "year__lte": self.year,
             # 'parking': self.parking,
             # 'elevator': self.elevator,
@@ -149,6 +151,8 @@ class Rent(models.Model):
     tabaghat = models.IntegerField(null=True, blank=True)
     tenet_name = models.CharField(max_length=100, null=True, blank=True)
     tenet_phone = models.CharField(max_length=12, null=True, blank=True)
+    lobbyMan_name = models.CharField(max_length=100, null=True, blank=True)
+    lobbyMan_phone = models.CharField(max_length=12, null=True, blank=True)
     status = models.CharField(
         max_length=12, choices=Status.choices, default=Status.ACTIVE
     )
@@ -198,8 +202,8 @@ class Rent(models.Model):
             "up_budget__lte": budget_up_range[1],
             "rent_budget__gte": budget_rent_range[0],
             "rent_budget__lte": budget_rent_range[1],
-            # "m2__lte": self.m2,
-            # "bedroom__lte": self.bedroom,
+            "m2__lte": self.m2,
+            "bedroom__lte": self.bedroom,
             # "year__lte": self.year,
             # 'parking': self.parking,
             # 'elevator': self.elevator,

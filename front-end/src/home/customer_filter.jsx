@@ -4,6 +4,7 @@ import Checkbox from "../common/checkbox";
 import api from "../common/api";
 import { useDispatch, useSelector } from "react-redux";
 import { setCustomers, setLastFilter, clearLastFilter } from "./customersSlice";
+import { useEffect } from "react";
 
 const Filter = () => {
   const [customerType, setCustomerType] = useState(
@@ -22,48 +23,57 @@ const Filter = () => {
   const [elevator, setElevator] = useState(null);
   const [storage, setStorage] = useState(null);
   const dispatch = useDispatch();
-  let budgetRange = [],
-    budgetUpRange = [],
-    budgetRentRange = [];
+  const [budgetRange, setBudgetRange] = useState([null, null]);
+  const [budgetUpRange, setBudgetUpRange] = useState([null, null]);
+  const [budgetRentRange, setBudgetRentRange] = useState([null, null]);
 
   // filter range
-  if (budget) {
-    if (budget <= 3000) {
-      budgetRange = [Math.floor(budget * 0.8), Math.floor(budget * 1.2)];
-    } else if (budget > 3000 && budget < 5000) {
-      budgetRange = [Math.floor(budget * 0.85), Math.floor(budget * 1.15)];
-    } else if (budget >= 5000) {
-      budgetRange = [Math.floor(budget * 0.9), Math.floor(budget * 1.1)];
-    }
-  } else {
-    if (budgetUp <= 300) {
-      budgetUpRange = [Math.floor(budgetUp * 0.8), Math.floor(budgetUp * 1.2)];
-    } else if (budgetUp > 300 && budgetUp < 700) {
-      budgetUpRange = [
-        Math.floor(budgetUp * 0.85),
-        Math.floor(budgetUp * 1.15),
-      ];
-    } else if (budgetUp >= 700) {
-      budgetUpRange = [Math.floor(budgetUp * 0.9), Math.floor(budgetUp * 1.1)];
+  useEffect(() => {
+    // sell filter budget range
+    if (customerType === "buy") {
+      let lowerBound = Math.floor(budget * 0.8);
+      let upperBound = Math.floor(budget * 1.2);
+
+      if (lowerBound === 0 && upperBound === 0) {
+        setBudgetRange([null, null]);
+      } else {
+        setBudgetRange([lowerBound, upperBound]);
+        console.log(budgetRange)
+      }
+
+
+      console.log(budgetRange);
     }
 
-    if (budgetRent <= 3) {
-      budgetRentRange = [
-        Math.floor(budgetRent * 0.7),
-        Math.floor(budgetRent * 1.3),
-      ];
-    } else if (budgetRent > 3 && budgetRent < 7) {
-      budgetRentRange = [
-        Math.floor(budgetRent * 0.8),
-        Math.floor(budgetRent * 1.2),
-      ];
-    } else if (budgetRent >= 7) {
-      budgetRentRange = [
-        Math.floor(budgetRent * 0.85),
-        Math.floor(budgetRent * 1.15),
-      ];
+    if (budgetUp === null) {
+      setBudgetUpRange([null, null]);
     }
-  }
+    // rent filter budget range
+    else if (customerType === "rent") {
+      let lowerBound = Math.floor(budgetUp * 0.8);
+      let upperBound = Math.floor(budgetUp * 1.2);
+
+      if (lowerBound === 0 && upperBound === 0) {
+        setBudgetUpRange([null, null]);
+      } else {
+        setBudgetUpRange([lowerBound, upperBound]);
+      }
+
+
+      if (budgetRent === null) {
+        setBudgetRentRange([null, null]);
+      } else {
+        let lowerBoundRent = Math.floor(budgetRent * 0.7);
+        let upperBoundRent = Math.floor(budgetRent * 1.3);
+
+        if (lowerBoundRent === 0 && upperBoundRent === 0) {
+          setBudgetRentRange([null, null]);
+        } else {
+          setBudgetRentRange([lowerBoundRent, upperBoundRent]);
+        }
+      }
+    }
+  }, [customerType, budget, budgetUp, budgetRent]);
 
   // note: there is a list of allowed fields that you can filter in listing api
   console.log(budgetRange);
@@ -73,10 +83,10 @@ const Filter = () => {
     property_type: propertyType,
     budget__gte: budgetRange[0],
     budget__lte: budgetRange[1],
-    budgetUp__gte: budgetUpRange[0],
-    budgetUp__lte: budgetUpRange[1],
-    budgetRent__gte: budgetRentRange[0],
-    budgetRent__lte: budgetRentRange[1],
+    up_budget__gte: budgetUpRange[0],
+    up_budget__lte: budgetUpRange[1],
+    rent_budget__gte: budgetRentRange[0],
+    rent_budget__lte: budgetRentRange[1],
     m2__lte: m2,
     bedroom__lte: bedroom,
     year__lte: year,

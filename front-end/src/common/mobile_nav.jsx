@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { Transition } from "@headlessui/react";
+import Search from "../home/search";
 
 const MobileNavBar = () => {
   const [isActive, setIsActive] = useState(false);
@@ -85,6 +86,7 @@ const MobileNavBar = () => {
           >
             خروج
           </button>
+          <Search />
         </div>
       </Transition>
     </>

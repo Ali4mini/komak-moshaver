@@ -181,6 +181,12 @@ const FileDetails = () => {
                 <p>شماره مستاجر: {file?.tenet_phone}</p>
                 <p>نام مستاجر: {file?.tenet_name}</p>
               </div> : null}
+
+            {file?.lobbyMan_phone ?
+              <div className="flex flex-row gap-10 my-3 px-4">
+                <p>شماره سرایدار: {file?.lobbyMan_phone}</p>
+                <p>نام سرایدار: {file?.lobbyMan_name}</p>
+              </div> : null}
             <div className="flex flex-row gap-10 my-3 px-4">
               <p>آدرس: </p>
               <p>{file?.address}</p>
