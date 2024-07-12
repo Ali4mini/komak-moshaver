@@ -3,7 +3,7 @@ import PkFilter from "./customer_pk_filter";
 import { useEffect, useState } from "react";
 import api from "../common/api";
 import Customer from "./customer_card";
-import { addCustomers } from "./customersSlice";
+import { addCustomers, setCustomers } from "./customersSlice";
 import { useDispatch, useSelector } from "react-redux";
 import ScrollButton from "../common/goUpButton";
 
@@ -31,7 +31,13 @@ const Customers = () => {
     api.get(`/listing/customers/?page=${pageNumber}`, { params: filter })
       .then((response) => {
 
-        dispatch(addCustomers(response.data.results));
+        if (response.data.previous === null) {
+
+          dispatch(setCustomers(response.data.results));
+        } else if (response.data.next) {
+
+          dispatch(addCustomers(response.data.results));
+        }
 
         setIsFetchingMore(false)
       })

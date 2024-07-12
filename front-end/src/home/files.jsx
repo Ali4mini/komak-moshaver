@@ -1,7 +1,7 @@
 import File from "./property_card";
 import { useEffect, useState } from "react";
 import api from "../common/api";
-import { addFiles, } from "./filesSlice";
+import { addFiles, setFiles, } from "./filesSlice";
 import { useSelector, useDispatch } from "react-redux";
 import ScrollButton from "../common/goUpButton";
 import Filter from "./filter";
@@ -13,10 +13,17 @@ const Files = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const [isFetchingMore, setIsFetchingMore] = useState(false);
 
+  // BUG: infinit pagination loop
   const getFiles = (filter = { status: "ACTIVE", file_type: localStorage.getItem("agents_field") }) => {
     api.get(`/listing/?page=${pageNumber}`, { params: filter })
       .then((response) => {
-        dispatch(addFiles(response.data.results));
+        if (response.data.previous === null) {
+
+          dispatch(setFiles(response.data.results));
+        } else if (response.data.next) {
+
+          dispatch(addFiles(response.data.results));
+        }
 
         setIsFetchingMore(false)
       })
@@ -62,7 +69,7 @@ const Files = () => {
     <div className="home flex flex-col gap-3">
       <Filter />
       <div className="grid grid-cols-1">
-        {isFetchingMore && <LoadingSpinner />}
+        {/* {isFetchingMore && <LoadingSpinner />} */}
         {store.files ? (
           store.files.map((file, index) => <File key={index} file={file} />)
 
