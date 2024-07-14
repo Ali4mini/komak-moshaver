@@ -1,4 +1,5 @@
 from enum import unique
+from typing import List
 from django.db import models
 from taggit.managers import TaggableManager
 from django.urls import reverse
@@ -76,14 +77,11 @@ class Sell(models.Model):
         return self.pk
 
     def get_related_customers(self) -> BuyCustomer:
+        budget_range = (int(self.price * 0.75), int(self.price * 1.25))
 
-        budget_range = (0, 0)  # Default value, adjust as necessary
-        if self.price <= 3000:
-            budget_range = (int(self.price * 0.80), int(self.price * 1.20))
-        elif self.price > 3000 and self.price < 5000:
-            budget_range = (int(self.price * 0.85), int(self.price * 1.15))
-        elif self.price > 5000:
-            budget_range = (int(self.price * 0.90), int(self.price * 1.10))
+        # Function to remove keys with None values
+        def remove_none_values(query):
+            return {key: value for key, value in query.items() if value is not None}
 
         filter_query = {
             "status": "ACTIVE",
@@ -97,6 +95,8 @@ class Sell(models.Model):
             # 'elevator': self.elevator,
             # 'storage': self.storage,
         }
+
+        filter_query = remove_none_values(filter_query)
         all_customers = BuyCustomer.objects.filter(**filter_query)
         if self.notified_customers is not None:
             notified_customer_ids = self.notified_customers.values_list("id", flat=True)
@@ -171,29 +171,13 @@ class Rent(models.Model):
     def get_pk(self) -> int:
         return self.pk
 
-    def get_related_customers(self) -> RentCustomer:
-        if self.price_up <= 300:
-            budget_up_range = (int(self.price_up * 0.80), int(self.price_up * 1.20))
-        elif self.price_up > 300 and self.price_up < 700:
-            budget_up_range = (int(self.price_up * 0.85), int(self.price_up * 1.15))
-        elif self.price_up > 700:
-            budget_up_range = (int(self.price_up * 0.90), int(self.price_up * 1.10))
+    def get_related_customers(self) -> List[RentCustomer]:
+        budget_up_range = (int(self.price_up * 0.75), int(self.price_up * 1.25))
+        budget_rent_range = (int(self.price_rent * 0.75), int(self.price_rent * 1.25))
 
-        if self.price_rent <= 3:
-            budget_rent_range = (
-                int(self.price_rent * 0.70),
-                int(self.price_rent * 1.30),
-            )
-        elif self.price_rent > 3 and self.price_rent < 7:
-            budget_rent_range = (
-                int(self.price_rent * 0.80),
-                int(self.price_rent * 1.20),
-            )
-        elif self.price_rent > 7:
-            budget_rent_range = (
-                int(self.price_rent * 0.85),
-                int(self.price_rent * 1.15),
-            )
+        # Function to remove keys with None values
+        def remove_none_values(query):
+            return {key: value for key, value in query.items() if value is not None}
 
         filter_query = {
             "status": "ACTIVE",
@@ -209,72 +193,14 @@ class Rent(models.Model):
             # 'elevator': self.elevator,
             # 'storage': self.storage,
         }
+
+        filter_query = remove_none_values(filter_query)
+
         all_customers = RentCustomer.objects.filter(**filter_query)
         if self.notified_customers is not None:
             notified_customer_ids = self.notified_customers.values_list("id", flat=True)
             unnotified_customers = all_customers.exclude(id__in=notified_customer_ids)
             return unnotified_customers
-
-
-class SellComment(models.Model):
-    file = models.ForeignKey(
-        "Sell",
-        verbose_name=("file"),
-        on_delete=models.CASCADE,
-        related_name="sell_comments",
-    )
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        verbose_name=("user's profile"),
-        on_delete=models.CASCADE,
-        related_name="sell_comments",
-    )
-    body = models.TextField(max_length=10000)
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-    active = models.BooleanField(default=True)
-
-    class Meta:
-        verbose_name = "Comment"
-        verbose_name_plural = "Comments"
-
-    def __str__(self):
-        return f"comment by {self.user} on {self.file}"
-
-    def get_absolute_url(self):
-        return reverse("sell_comment", kwargs={"pk": self.pk})
-
-    def get_pk(self) -> int:
-        return self.pk
-
-
-class RentComment(models.Model):
-    file = models.ForeignKey(
-        "Rent", on_delete=models.CASCADE, related_name="rent_comments"
-    )
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        verbose_name=("user's profile"),
-        on_delete=models.CASCADE,
-        related_name="rent_comments",
-    )
-    body = models.TextField(max_length=10000)
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-    active = models.BooleanField(default=True)
-
-    class Meta:
-        verbose_name = "Comment"
-        verbose_name_plural = "Comments"
-
-    def __str__(self):
-        return f"comment by {self.user} on {self.file}"
-
-    def get_absolute_url(self):
-        return reverse("rent_comment", kwargs={"pk": self.pk})
-
-    def get_pk(self) -> int:
-        return self.pk
 
 
 class SellImage(models.Model):

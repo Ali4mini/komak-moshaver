@@ -57,13 +57,11 @@ class BuyCustomer(models.Model):
     def get_related_files(self):
         from file.models import Sell
 
-        budget_range = (0, 0)  # Default value, adjust as necessary
-        if self.budget <= 3000:
-            budget_range = (int(self.budget * 0.80), int(self.budget * 1.20))
-        elif self.budget > 3000 and self.budget < 5000:
-            budget_range = (int(self.budget * 0.85), int(self.budget * 1.15))
-        elif self.budget > 5000:
-            budget_range = (int(self.budget * 0.90), int(self.budget * 1.10))
+        budget_range = (int(self.budget * 0.75), int(self.budget * 1.25))
+
+        # Function to remove keys with None values
+        def remove_none_values(query):
+            return {key: value for key, value in query.items() if value is not None}
 
         filter_query = {
             "status": "ACTIVE",
@@ -72,11 +70,13 @@ class BuyCustomer(models.Model):
             "price__lte": budget_range[1],
             "m2__gte": self.m2,
             "bedroom__gte": self.bedroom,
-            # "year__lte": self.year,
+            "year__lte": self.year,
             # 'parking': self.parking,
             # 'elevator': self.elevator,
             # 'storage': self.storage,
         }
+
+        filter_query = remove_none_values(filter_query)
 
         all_files = Sell.objects.filter(**filter_query)
 
@@ -144,30 +144,13 @@ class RentCustomer(models.Model):
     def get_related_files(self):
         from file.models import Rent
 
-        budget_up_range = (0, 0)  # Default value, adjust as necessary
-        budget_rent_range = (0, 0)  # Default value, adjust as necessary
-        if self.up_budget <= 300:
-            budget_up_range = (int(self.up_budget * 0.80), int(self.up_budget * 1.20))
-        elif self.up_budget > 300 and self.up_budget < 700:
-            budget_up_range = (int(self.up_budget * 0.85), int(self.up_budget * 1.15))
-        elif self.up_budget > 700:
-            budget_up_range = (int(self.up_budget * 0.90), int(self.up_budget * 1.10))
+        budget_up_range = (int(self.up_budget * 0.75), int(self.up_budget * 1.25))
+        budget_rent_range = (int(self.rent_budget * 0.75), int(self.rent_budget * 1.25))
+        print(budget_up_range)
 
-        if self.rent_budget <= 3:
-            budget_rent_range = (
-                int(self.rent_budget * 0.70),
-                int(self.rent_budget * 1.30),
-            )
-        elif self.rent_budget > 3 and self.rent_budget < 7:
-            budget_rent_range = (
-                int(self.rent_budget * 0.80),
-                int(self.rent_budget * 1.20),
-            )
-        elif self.rent_budget > 7:
-            budget_rent_range = (
-                int(self.rent_budget * 0.85),
-                int(self.rent_budget * 1.15),
-            )
+        # Function to remove keys with None values
+        def remove_none_values(query):
+            return {key: value for key, value in query.items() if value is not None}
 
         filter_query = {
             "status": "ACTIVE",
@@ -178,11 +161,12 @@ class RentCustomer(models.Model):
             "price_rent__lte": budget_rent_range[1],
             "m2__gte": self.m2,
             "bedroom__gte": self.bedroom,
-            # "year__lte": self.year,
+            "year__lte": self.year,
             # 'parking': self.parking,
             # 'elevator': self.elevator,
             # 'storage': self.storage,
         }
+        filter_query = remove_none_values(filter_query)
 
         all_files = Rent.objects.filter(**filter_query)
 
@@ -195,58 +179,3 @@ class RentCustomer(models.Model):
                 unnotified_files.append(file)
 
         return unnotified_files
-
-
-class BuyComment(models.Model):
-    file = models.ForeignKey(
-        "BuyCustomer",
-        verbose_name=("file"),
-        on_delete=models.CASCADE,
-        related_name="buy_customer_comments",
-    )
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        verbose_name=("user's profile"),
-        on_delete=models.CASCADE,
-        related_name="buy_customer_comments",
-    )
-    body = models.TextField(max_length=10000)
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-    active = models.BooleanField(default=True)
-
-    class Meta:
-        verbose_name = "Comment"
-        verbose_name_plural = "Comments"
-
-    def __str__(self):
-        return f"comment by {self.user} on {self.file}"
-
-    def get_absolute_url(self):
-        return reverse("sell_comment", kwargs={"pk": self.pk})
-
-
-class RentComment(models.Model):
-    file = models.ForeignKey(
-        "RentCustomer", on_delete=models.CASCADE, related_name="rent_customer_comments"
-    )
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        verbose_name=("user's profile"),
-        on_delete=models.CASCADE,
-        related_name="rent_customer_comments",
-    )
-    body = models.TextField(max_length=10000)
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-    active = models.BooleanField(default=True)
-
-    class Meta:
-        verbose_name = "Comment"
-        verbose_name_plural = "Comments"
-
-    def __str__(self):
-        return f"comment by {self.user} on {self.file}"
-
-    def get_absolute_url(self):
-        return reverse("sell_comment", kwargs={"pk": self.pk})

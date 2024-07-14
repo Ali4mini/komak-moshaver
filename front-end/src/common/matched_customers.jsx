@@ -24,7 +24,7 @@ const Customer = ({ customerName, customerPhone, customerId, customerType, hasNo
   return (
     <div className="flex flex-row p-1 align-middle items-center justify-between ">
 
-      <Link key={customerId} to={`/customer/${customerType}/${customerId}/`}>
+      <Link key={customerId} to={`/customer/${customerType}/${customerId}`}>
         {hasNotified ? (
 
           <div className="flex flex-col">
