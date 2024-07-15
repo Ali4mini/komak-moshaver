@@ -6,6 +6,7 @@ const FloatLabel = ({
   type,
   setter,
   defValue,
+  value,
   dir,
   isRequired = false,
 }) => {
@@ -21,6 +22,7 @@ const FloatLabel = ({
         placeholder={label}
         required={isRequired}
         defaultValue={defValue}
+        value={value}
         onChange={(e) => setter(e.target.value)}
         dir={dir}
         ref={inputRef}

@@ -4,6 +4,7 @@ import api from "../common/api";
 import Checkbox from "../common/checkbox";
 import { useDispatch, useSelector } from "react-redux";
 import { addFiles, setLastFilter, clearLastFilter, setFiles } from "./filesSlice";
+import Files from "./files";
 
 const Filter = () => {
   const dispatch = useDispatch();
@@ -31,8 +32,8 @@ const Filter = () => {
   useEffect(() => {
     // sell filter budget range
     if (fileType === "sell") {
-      let lowerBound = Math.floor(price * 0.8);
-      let upperBound = Math.floor(price * 1.2);
+      let lowerBound = Math.floor(price * 0.75);
+      let upperBound = Math.floor(price * 1.25);
 
       if (lowerBound === 0 && upperBound === 0) {
         setBudgetRange([null, null]);
@@ -50,8 +51,8 @@ const Filter = () => {
     }
     // rent filter budget range
     else if (fileType === "rent") {
-      let lowerBound = Math.floor(priceUp * 0.8);
-      let upperBound = Math.floor(priceUp * 1.2);
+      let lowerBound = Math.floor(priceUp * 0.75);
+      let upperBound = Math.floor(priceUp * 1.25);
 
       if (lowerBound === 0 && upperBound === 0) {
         setBudgetUpRange([null, null]);
@@ -63,8 +64,8 @@ const Filter = () => {
       if (priceRent === null) {
         setBudgetRentRange([null, null]);
       } else {
-        let lowerBoundRent = Math.floor(priceRent * 0.7);
-        let upperBoundRent = Math.floor(priceRent * 1.3);
+        let lowerBoundRent = Math.floor(priceRent * 0.75);
+        let upperBoundRent = Math.floor(priceRent * 1.25);
 
         if (lowerBoundRent === 0 && upperBoundRent === 0) {
           setBudgetRentRange([null, null]);
@@ -87,7 +88,7 @@ const Filter = () => {
     price_up__gte: budgetUpRange[0],
     price_up__lte: budgetUpRange[1],
     price_rent__gte: budgetRentRange[0],
-    price_rent__lte: budgetRentRange[0],
+    price_rent__lte: budgetRentRange[1],
     m2__gte: m2,
     bedroom__gte: bedroom,
     year__gte: year,
@@ -120,14 +121,42 @@ const Filter = () => {
       .catch((error) => console.log(`error: ${error}`));
   };
   const cancelFilter = () => {
+    // Resetting the Redux state
     dispatch(clearLastFilter());
-    location.reload();
+
+    // Fetching the initial data without filters applied
+    api.get("/listing/?page=1", { params: { status: "ACTIVE", file_type: localStorage.getItem("agents_field") } })
+      .then((response) => {
+        if (response.data.previous === null) {
+          dispatch(setFiles(response.data.results));
+        } else if (response.data.next) {
+          dispatch(addFiles(response.data.results));
+        }
+      })
+      .catch((error) => console.error(error));
+
+    // Resetting local component state
+    setFileType(localStorage.getItem("agents_field"));
+    setPropertyType(null); // Assuming 'null' is an acceptable initial value for propertyType
+    setPrice(null);
+    setPriceUp(null);
+    setPriceRent(null);
+    setM2(null);
+    setBedroom(null);
+    setYear(null);
+    setParking(null);
+    setElevator(null);
+    setStorage(null);
+    setBudgetRange([null, null]); // Resetting budget ranges
+    setBudgetUpRange([null, null]);
+    setBudgetRentRange([null, null]);
   };
 
   return (
-    <div
+    <form
       id="filter"
       className="flex flex-col border-2 rounded-xl mx-4 p-3 h-auto gap-5 shadow"
+      onSubmit={(e) => e.preventDefault()}
     >
       <div className="grid grid-cols-3 h-10 max-w-xs">
         <select
@@ -168,6 +197,7 @@ const Filter = () => {
             label="قیمت"
             name="price"
             type="number"
+            value={price}
             setter={setPrice}
           />
         ) : (
@@ -176,24 +206,39 @@ const Filter = () => {
               label="ودیعه"
               name="price_up"
               type="number"
+              value={priceUp}
               setter={setPriceUp}
             />
             <FloatLabel
               label="اجاره"
               name="price_rent"
               type="number"
+              value={priceRent}
               setter={setPriceRent}
             />
           </>
         )}
-        <FloatLabel label="متراژ" name="m2" type="number" setter={setM2} />
+        <FloatLabel
+          label="متراژ"
+          name="m2"
+          type="number"
+          value={m2}
+          setter={setM2}
+        />
         <FloatLabel
           label="خواب"
           name="bedroom"
           type="number"
+          value={bedroom}
           setter={setBedroom}
         />
-        <FloatLabel label="ساخت" name="year" type="number" setter={setYear} />
+        <FloatLabel
+          label="ساخت"
+          name="year"
+          type="number"
+          value={year}
+          setter={setYear}
+        />
       </div>
       <div className="grid grid-cols-3 max-w-xs">
         <Checkbox label="پارکینگ" name="parking" setter={setParking} />
@@ -218,7 +263,7 @@ const Filter = () => {
           </button>
         }
       </div>
-    </div>
+    </form>
   );
 };
 
