@@ -6,7 +6,14 @@ from .models import Sell, Rent, SellImage, RentImage
 
 @admin.register(Sell)
 class SellAdmin(admin.ModelAdmin):
-    list_display = ["owner_name", "m2", "address", "property_type", "divar_token"]
+    list_display = [
+        "owner_name",
+        "m2",
+        "address",
+        "property_type",
+        "divar_token",
+        "date",
+    ]
     list_filter = [
         "m2",
         "price",
@@ -28,6 +35,7 @@ class RentAdmin(admin.ModelAdmin):
         "divar_token",
         "created",
         "updated",
+        "date",
     ]
     list_filter = [
         "m2",

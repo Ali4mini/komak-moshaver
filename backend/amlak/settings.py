@@ -8,6 +8,7 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/ """
+
 # pyright: reportMissingImports=false
 # pylint: disable=E265
 from datetime import timedelta
@@ -55,6 +56,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "corsheaders",
 ]
+
 SMS_API = (
     "https://console.melipayamak.com/api/send/advanced/b59dd6ca1de047aabf4416be63da2c01"
 )
@@ -143,12 +145,12 @@ DATABASES = {
 
 # Django-storages configuration
 STORAGES = {
-  "default": {
-      "BACKEND": "storages.backends.s3.S3Storage",
-  },
-  "staticfiles": {
-      "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
-  },
+    "default": {
+        "BACKEND": "storages.backends.s3.S3Storage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
 }
 
 ALLOWED_HOSTS = ["0.0.0.0", "87.107.54.39", "*"]
@@ -171,17 +173,17 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # S3 Settings
-LIARA_ENDPOINT    = os.getenv("LIARA_ENDPOINT")
+LIARA_ENDPOINT = os.getenv("LIARA_ENDPOINT")
 LIARA_BUCKET_NAME = os.getenv("LIARA_BUCKET_NAME")
-LIARA_ACCESS_KEY  = os.getenv("LIARA_ACCESS_KEY")
-LIARA_SECRET_KEY  = os.getenv("LIARA_SECRET_KEY")
+LIARA_ACCESS_KEY = os.getenv("LIARA_ACCESS_KEY")
+LIARA_SECRET_KEY = os.getenv("LIARA_SECRET_KEY")
 
 # S3 Settings Based on AWS (optional)
-AWS_ACCESS_KEY_ID       = LIARA_ACCESS_KEY
-AWS_SECRET_ACCESS_KEY   = LIARA_SECRET_KEY
+AWS_ACCESS_KEY_ID = LIARA_ACCESS_KEY
+AWS_SECRET_ACCESS_KEY = LIARA_SECRET_KEY
 AWS_STORAGE_BUCKET_NAME = LIARA_BUCKET_NAME
-AWS_S3_ENDPOINT_URL     = LIARA_ENDPOINT
-AWS_S3_REGION_NAME      = 'us-east-1'  
+AWS_S3_ENDPOINT_URL = LIARA_ENDPOINT
+AWS_S3_REGION_NAME = "us-east-1"
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/

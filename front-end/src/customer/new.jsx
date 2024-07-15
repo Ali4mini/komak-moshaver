@@ -5,6 +5,7 @@ import api from "../common/api";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setFlashMessage } from "../common/flashSlice";
+import CustomDatePicker from "../common/datePicker";
 
 const NewCustomer = () => {
   const [customerType, setcustomerType] = useState(
@@ -26,6 +27,7 @@ const NewCustomer = () => {
   const [customerPhone, setCustomerPhone] = useState(null);
   const [description, setDescription] = useState(null)
   const user = localStorage.getItem("user");
+  const [date, setDate] = useState(new Date().toISOString().split("T")[0])
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -34,6 +36,7 @@ const NewCustomer = () => {
     username: user,
     customer_type: customerType,
     property_type: propertyType,
+    date: date,
     m2: m2,
     year: year,
     bedroom: bedroom,
@@ -83,38 +86,49 @@ const NewCustomer = () => {
         onSubmit={(e) => create(customerEntery, e)}
         className="flex flex-col gap-5 text-sm md:text-base"
       >
-        <div className="grid grid-cols-3 max-w-xs h-10 gap-2">
-          <select
-            name="customer_type"
-            id="customer_type"
-            defaultValue={customerType}
-            onChange={(e) => {
-              setcustomerType(e.target.value);
-            }}
-            className="bg-gray-50 border focus:ring-blue-300 text-center focus:border-blue-300 shadow-md w-24 rounded-lg"
-          >
-            <option id="buy" value="buy">
-              خرید
-            </option>
+        <div className="flex flex-row w-full justify-between h-10 gap-2">
 
-            <option id="rent" value="rent">
-              اجاره
-            </option>
-          </select>
+          <div className="flex gap-2 h-10 right-0">
 
-          <select
-            name="property_type"
-            id="property_type"
-            onChange={(e) => {
-              setPropertyType(e.target.value);
-            }}
-            className="bg-gray-50 border focus:ring-blue-300 text-center focus:border-blue-300 shadow-md w-24 rounded-lg"
-          >
-            <option value="A">آپارتمان</option>
-            <option value="L">زمین</option>
-            <option value="S">مغازه</option>
-            <option value="H">خانه و ویلا</option>
-          </select>
+            <select
+              name="customer_type"
+              id="customer_type"
+              defaultValue={customerType}
+              onChange={(e) => {
+                setcustomerType(e.target.value);
+              }}
+              className="bg-gray-50 border focus:ring-blue-300 text-center focus:border-blue-300 shadow-md w-24 rounded-lg"
+            >
+              <option id="buy" value="buy">
+                خرید
+              </option>
+
+              <option id="rent" value="rent">
+                اجاره
+              </option>
+            </select>
+
+            <select
+              name="property_type"
+              id="property_type"
+              onChange={(e) => {
+                setPropertyType(e.target.value);
+              }}
+              className="bg-gray-50 border focus:ring-blue-300 text-center focus:border-blue-300 shadow-md w-24 rounded-lg"
+            >
+              <option value="A">آپارتمان</option>
+              <option value="L">زمین</option>
+              <option value="S">مغازه</option>
+              <option value="H">خانه و ویلا</option>
+            </select>
+          </div>
+          <div className="flex flex-row gap-3 left-0">
+
+            <p className="font-bold text-center justify-center items-center">تاریخ: </p>
+            <div className="" style={{ direction: "rtl" }}>
+              <CustomDatePicker setter={setDate} />
+            </div>
+          </div>
         </div>
         <div className="grid grid-cols-2 gap-y-4 gap-x-2  md:grid-cols-4 lg:grid-cols-7 w-full flex-wrap gap-2">
           {customerType === "buy" ? (

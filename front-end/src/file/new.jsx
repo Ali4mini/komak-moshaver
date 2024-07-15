@@ -5,6 +5,7 @@ import api from "../common/api";
 import { useNavigate } from "react-router-dom";
 import { setFlashMessage } from "../common/flashSlice";
 import { useDispatch } from "react-redux";
+import CustomDatePicker from "../common/datePicker";
 
 const NewFile = () => {
   const [fileType, setFileType] = useState(
@@ -35,6 +36,7 @@ const NewFile = () => {
   const [lobbyManName, setLobbyManName] = useState(null);
   const [lobbyManPhone, setLobbyManPhone] = useState(null);
   const [description, setDescription] = useState(null)
+  const [date, setDate] = useState(new Date().toISOString().split("T")[0])
 
   const [selectedFiles, setSelectedFiles] = useState(null);
   const user = localStorage.getItem("user");
@@ -46,6 +48,7 @@ const NewFile = () => {
     username: user,
     file_type: fileType,
     property_type: propertyType,
+    date: date,
     address: address,
     m2: m2,
     year: year,
@@ -130,38 +133,49 @@ const NewFile = () => {
         onSubmit={(e) => create(fileEntery, e)}
         className="flex flex-col gap-5 text-sm md:text-base"
       >
-        <div className="grid grid-cols-3 max-w-xs h-10 gap-2">
-          <select
-            name="file_type"
-            id="file_type"
-            onChange={(e) => {
-              setFileType(e.target.value);
-            }}
-            defaultValue={fileType}
-            className="bg-gray-50 border focus:ring-blue-300 text-center focus:border-blue-300 shadow-md w-24 rounded-lg"
-          >
-            <option id="sell" value="sell">
-              فروش
-            </option>
+        <div className="flex h-10 justify-between w-full">
+          <div className="flex gap-2 h-10 right-0">
 
-            <option id="rent" value="rent">
-              اجاره
-            </option>
-          </select>
-          <select
-            name="property_type"
-            id="property_type"
-            defaultValue={propertyType}
-            onChange={(e) => {
-              setPropertyType(e.target.value);
-            }}
-            className="bg-gray-50 border focus:ring-blue-300 text-center focus:border-blue-300 shadow-md w-24 rounded-lg"
-          >
-            <option value="A">آپارتمان</option>
-            <option value="L">زمین</option>
-            <option value="S">مغازه</option>
-            <option value="H">خانه و ویلا</option>
-          </select>
+            <select
+              name="file_type"
+              id="file_type"
+              onChange={(e) => {
+                setFileType(e.target.value);
+              }}
+              defaultValue={fileType}
+              className="bg-gray-50 border focus:ring-blue-300 text-center focus:border-blue-300 shadow-md w-24 rounded-lg"
+            >
+              <option id="sell" value="sell">
+                فروش
+              </option>
+
+              <option id="rent" value="rent">
+                اجاره
+              </option>
+            </select>
+            <select
+              name="property_type"
+              id="property_type"
+              defaultValue={propertyType}
+              onChange={(e) => {
+                setPropertyType(e.target.value);
+              }}
+              className="bg-gray-50 border focus:ring-blue-300 text-center focus:border-blue-300 shadow-md w-24 rounded-lg"
+            >
+              <option value="A">آپارتمان</option>
+              <option value="L">زمین</option>
+              <option value="S">مغازه</option>
+              <option value="H">خانه و ویلا</option>
+            </select>
+          </div>
+
+          <div className="flex flex-row gap-3 left-0">
+
+            <p className="font-bold text-center justify-center items-center">تاریخ: </p>
+            <div className="" style={{ direction: "rtl" }}>
+              <CustomDatePicker setter={setDate} />
+            </div>
+          </div>
         </div>
         <div className="grid grid-cols-1  w-full ">
           <FloatLabel

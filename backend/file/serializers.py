@@ -2,6 +2,8 @@ from rest_framework import serializers
 from .models import Sell, Rent, SellImage, RentImage
 from django.contrib.auth import get_user_model
 from agents_m.models import Profile
+from django_jalali.serializers.serializerfield import JDateField, JDateTimeField
+import jdatetime
 
 
 class SellImageSerializer(serializers.ModelSerializer):
@@ -35,6 +37,7 @@ class RentImageSerializer(serializers.ModelSerializer):
 class SellFileSerializer(serializers.ModelSerializer):
     username = serializers.CharField(max_length=100, write_only=True)
     file_type = serializers.SerializerMethodField()
+    file_date = serializers.SerializerMethodField()
 
     class Meta:
         model = Sell
@@ -42,6 +45,10 @@ class SellFileSerializer(serializers.ModelSerializer):
 
     def get_file_type(self, obj):
         return "sell"
+
+    def get_file_date(self, obj):
+        jalali_date = jdatetime.date.fromgregorian(date=obj.date)
+        return jalali_date.strftime("%Y/%m/%d")
 
     def create(self, validated_data):
         username = validated_data.pop("username")
@@ -53,6 +60,7 @@ class SellFileSerializer(serializers.ModelSerializer):
 class RentFileSerializer(serializers.ModelSerializer):
     username = serializers.CharField(max_length=100, write_only=True)
     file_type = serializers.SerializerMethodField()
+    file_date = serializers.SerializerMethodField()
 
     class Meta:
         model = Rent
@@ -60,6 +68,10 @@ class RentFileSerializer(serializers.ModelSerializer):
 
     def get_file_type(self, obj):
         return "rent"
+
+    def get_file_date(self, obj):
+        jalali_date = jdatetime.date.fromgregorian(date=obj.date)
+        return jalali_date.strftime("%Y/%m/%d")
 
     def create(self, validated_data):
         username = validated_data.pop("username")
