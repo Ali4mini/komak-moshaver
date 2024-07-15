@@ -18,6 +18,7 @@ const NewFile = () => {
   const [price, setPrice] = useState(null);
   const [upPrice, setUpPrice] = useState(null);
   const [rentPrice, setRentPrice] = useState(null);
+  const [hasTabdil, setHasTabdil] = useState("no");
   const [tabdil, setTabdil] = useState(null);
   const [floor, setFloor] = useState(null);
   const [floors, setFloors] = useState(null);
@@ -196,13 +197,31 @@ const NewFile = () => {
                 setter={setRentPrice}
                 isRequired={true}
               />
-              <FloatLabel
-                type="number"
-                name={"tabdil"}
-                label={"تبدیل"}
-                setter={setTabdil}
-                isRequired={true}
-              />
+
+              <select
+                name="hasTabdil"
+                id="hasTabdil"
+                onChange={(e) => {
+                  setHasTabdil(e.target.value);
+                }}
+                className="bg-gray-50 border my-auto focus:ring-blue-300 text-center focus:border-blue-300 shadow-md w-24 h-10 rounded-lg"
+              >
+                <option value="no">تبدیل ندارد</option>
+                <option value="yes">تبدیل دارد</option>
+              </select>
+
+              {hasTabdil === "yes" ? (
+                <div className="flex flex-row gap-2 max-w-sm">
+                  <FloatLabel
+                    type="number"
+                    name={"tabdil"}
+                    label={"تبدیل تا"}
+                    setter={setTabdil}
+                    isRequired={false}
+                  />
+                </div>
+              ) : null}
+
             </>
           )}
 
@@ -387,8 +406,8 @@ const NewFile = () => {
         >
           ثبت
         </button>
-      </form>
-    </div>
+      </form >
+    </div >
   );
 };
 
