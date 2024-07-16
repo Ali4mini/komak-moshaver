@@ -2,6 +2,7 @@ from rest_framework import serializers
 from file.models import Sell
 from .models import BuyCustomer, RentCustomer
 from agents_m.models import Profile
+from datetime import date
 import jdatetime
 
 
@@ -22,10 +23,18 @@ class BuyCustomerSerializer(serializers.ModelSerializer):
         return jalali_date.strftime("%Y/%m/%d")
 
     def create(self, validated_data):
-        print(validated_data)
         username = validated_data.pop("username")
         profile = Profile.objects.get(user__username=username)
         validated_data["added_by"] = profile.user
+
+        # changing the status based on date
+        date_field = validated_data.get("date")
+        today = date.today()
+        passed_days = today - date_field
+        if passed_days.days >= 30:
+            validated_data["status"] = "UNACTIVE"
+        else:
+            validated_data["status"] = "ACTIVE"
         return super().create(validated_data)
 
 
@@ -46,8 +55,16 @@ class RentCustomerSerializer(serializers.ModelSerializer):
         return jalali_date.strftime("%Y/%m/%d")
 
     def create(self, validated_data):
-        print(validated_data)
         username = validated_data.pop("username")
         profile = Profile.objects.get(user__username=username)
         validated_data["added_by"] = profile.user
+
+        # changing the status based on date
+        date_field = validated_data.get("date")
+        today = date.today()
+        passed_days = today - date_field
+        if passed_days.days >= 30:
+            validated_data["status"] = "UNACTIVE"
+        else:
+            validated_data["status"] = "ACTIVE"
         return super().create(validated_data)
