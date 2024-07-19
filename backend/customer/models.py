@@ -48,6 +48,7 @@ class BuyCustomer(models.Model):
     )
 
     description = models.CharField(max_length=1000, blank=True, null=True)
+    source_id = models.CharField(max_length=100, blank=True, null=True, unique=True)
 
     def __str__(self) -> str:
         return self.customer_name
@@ -136,6 +137,7 @@ class RentCustomer(models.Model):
     )
 
     description = models.CharField(max_length=1000, blank=True, null=True)
+    source_id = models.CharField(max_length=100, blank=True, null=True, unique=True)
 
     def __str__(self) -> str:
         return self.customer_name

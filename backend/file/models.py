@@ -6,7 +6,6 @@ from django.urls import reverse
 from agents_m.models import Profile
 from django.conf import settings
 from customer.models import BuyCustomer, RentCustomer
-from django.contrib.postgres.fields import ArrayField
 
 # Create your models here.
 
@@ -66,7 +65,7 @@ class Sell(models.Model):
     notified_customers = models.ManyToManyField(BuyCustomer, blank=True)
 
     tag_manager = TaggableManager(blank=True)
-    divar_token = models.CharField(max_length=8, blank=True, null=True, unique=True)
+    source_id = models.CharField(max_length=100, blank=True, null=True, unique=True)
 
     def __str__(self) -> str:
         return f"code: {self.id} owner: {self.owner_name} "
@@ -162,7 +161,7 @@ class Rent(models.Model):
     notified_customers = models.ManyToManyField(RentCustomer, blank=True)
 
     tags_manager = TaggableManager(blank=True)
-    divar_token = models.CharField(max_length=8, blank=True, null=True, unique=True)
+    source_id = models.CharField(max_length=100, blank=True, null=True, unique=True)
 
     def __str__(self) -> str:
         return f"code: {self.id} owner: {self.owner_name} "

@@ -11,7 +11,7 @@ class SellAdmin(admin.ModelAdmin):
         "m2",
         "address",
         "property_type",
-        "divar_token",
+        "source_id",
         "date",
     ]
     list_filter = [
@@ -32,7 +32,7 @@ class RentAdmin(admin.ModelAdmin):
         "m2",
         "address",
         "property_type",
-        "divar_token",
+        "source_id",
         "created",
         "updated",
         "date",
