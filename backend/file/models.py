@@ -23,7 +23,7 @@ class Sell(models.Model):
         CANCELED = "CANCELED", "برای فروش نیست"
 
     class Meta:
-        ordering = ["-created"]
+        ordering = ["-date"]
 
     owner_name = models.CharField(max_length=1000)
     owner_phone = models.CharField(max_length=12)
@@ -52,7 +52,7 @@ class Sell(models.Model):
     bazdid = models.CharField(max_length=100, null=True, blank=True)
     tabaghat = models.IntegerField(null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
+    updated = models.DateTimeField(null=True, blank=True)
     date = models.DateField()
     tenet_name = models.CharField(max_length=100, null=True, blank=True)
     tenet_phone = models.CharField(max_length=12, null=True, blank=True)
@@ -117,7 +117,7 @@ class Rent(models.Model):
         CANCELED = "CANCELED", "برای اجاره نیست"
 
     class Meta:
-        ordering = ["-created"]
+        ordering = ["-date"]
 
     owner_name = models.CharField(max_length=1000)
     owner_phone = models.CharField(max_length=12)
@@ -140,7 +140,7 @@ class Rent(models.Model):
         blank=False,
     )
     created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
+    updated = models.DateTimeField(null=True, blank=True)
     date = models.DateField()
     bedroom = models.IntegerField(blank=True, null=True)
     parking_motor = models.BooleanField(default=False)

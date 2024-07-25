@@ -17,6 +17,7 @@ import ShowMessage from "./common/flash";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import Dashboard from "./dashboard/dashboard";
+import Restore from "./home/restore";
 import NewCallLog from "./log_app/logs";
 
 function App() {
@@ -45,6 +46,7 @@ function App() {
           <Route path="/" element={<Files />} />
           <Route path="dashboard/" element={<Dashboard />} />
           <Route path="listing/" element={<Scanner />} />
+          <Route path="restore/" element={<Restore />} />
           <Route path="agents/profile" element={<Profile />} />
           <Route path="customers/" element={<Customers />} />
           <Route path="file/">

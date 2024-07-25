@@ -2,7 +2,7 @@ from rest_framework import serializers
 from file.models import Sell
 from .models import BuyCustomer, RentCustomer
 from agents_m.models import Profile
-from datetime import date
+from datetime import date, datetime
 import jdatetime
 
 
@@ -27,6 +27,11 @@ class BuyCustomerSerializer(serializers.ModelSerializer):
         profile = Profile.objects.get(user__username=username)
         validated_data["added_by"] = profile.user
 
+        today = datetime.now()
+        updated_field = validated_data.get("updated", None)
+
+        if updated_field is None:
+            validated_data["updated"] = today
         # changing the status based on date
         date_field = validated_data.get("date")
         today = date.today()
@@ -58,6 +63,12 @@ class RentCustomerSerializer(serializers.ModelSerializer):
         username = validated_data.pop("username")
         profile = Profile.objects.get(user__username=username)
         validated_data["added_by"] = profile.user
+
+        today = datetime.now()
+        updated_field = validated_data.get("updated", None)
+
+        if updated_field is None:
+            validated_data["updated"] = today
 
         # changing the status based on date
         date_field = validated_data.get("date")

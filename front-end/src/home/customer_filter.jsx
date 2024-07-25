@@ -3,7 +3,7 @@ import FloatLabel from "../common/input";
 import Checkbox from "../common/checkbox";
 import api from "../common/api";
 import { useDispatch, useSelector } from "react-redux";
-import { setCustomers, setLastFilter, clearLastFilter } from "./customersSlice";
+import { setCustomers, setLastFilter, clearLastFilter, addCustomers } from "./customersSlice";
 import { useEffect } from "react";
 
 const Filter = () => {
@@ -76,7 +76,7 @@ const Filter = () => {
   }, [customerType, budget, budgetUp, budgetRent]);
 
   // note: there is a list of allowed fields that you can filter in listing api
-  console.log(budgetRange);
+  console.log(budgetUpRange);
   const filter_entery = {
     status: "ACTIVE",
     customer_type: customerType,
@@ -113,9 +113,36 @@ const Filter = () => {
   };
 
   const cancelFilter = () => {
+    // Resetting the Redux state
     dispatch(clearLastFilter());
-    location.reload();
-  };
+
+    // Fetching the initial data without filters applied
+    api.get("/listing/customers/?page=1", { params: { status: "ACTIVE", file_type: localStorage.getItem("agents_field") } })
+      .then((response) => {
+        if (response.data.previous === null) {
+          dispatch(setCustomers(response.data.results));
+        } else if (response.data.next) {
+          dispatch(addCustomers(response.data.results));
+        }
+      })
+      .catch((error) => console.error(error));
+
+    // Resetting local component state
+    setCustomerType(localStorage.getItem("agents_field"));
+    setPropertyType(null); // Assuming 'null' is an acceptable initial value for propertyType
+    setBudget(null);
+    setUpBudget(null);
+    setRentBudget(null);
+    setM2(null);
+    setBedroom(null);
+    setYear(null);
+    setParking(null);
+    setElevator(null);
+    setStorage(null);
+    setBudgetRange([null, null]); // Resetting budget ranges
+    setBudgetUpRange([null, null]);
+    setBudgetRentRange([null, null]);
+  }
 
   return (
     <div

@@ -37,6 +37,7 @@ const NewCustomer = () => {
     customer_type: customerType,
     property_type: propertyType,
     date: date,
+    updated: date,
     m2: m2,
     year: year,
     bedroom: bedroom,

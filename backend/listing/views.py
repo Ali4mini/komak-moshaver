@@ -5,9 +5,11 @@ from rest_framework.views import APIView
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from file.serializers import SellFileSerializer, RentFileSerializer
+from django.db.models.query import Q
 from customer.serializers import BuyCustomerSerializer, RentCustomerSerializer
-from django.http import JsonResponse
 from typing import List, Dict, Any
+from datetime import date, timedelta
+import pytz
 
 # Create your views here.
 
@@ -19,6 +21,43 @@ class BasicPagination(PageNumberPagination):
     page_size_query_param = (
         "page_size"  # Query parameter to override the default page size
     )
+
+
+class RentFileRestore(APIView, BasicPagination):
+    def get(self, request, *args, **kwargs):
+
+        today = date.today()
+        queryset = Rent.objects.filter(
+            date__month=today.month, date__year__lt=today.year
+        )
+
+        # Apply pagination to the queryset
+        paginated_queryset = self.paginate_queryset(queryset, request, view=self)
+
+        # Serialize the paginated queryset
+        serializer = RentFileSerializer(paginated_queryset, many=True)
+
+        # Return the paginated response
+        return self.get_paginated_response(serializer.data)
+
+
+# TODO: add urls for this view
+class CustomerFileRestore(APIView, BasicPagination):
+    def get(self, request, *args, **kwargs):
+
+        today = date.today()
+        queryset = RentCustomer.objects.filter(
+            date__month=today.month, date__year__lt=today.year
+        )
+
+        # Apply pagination to the queryset
+        paginated_queryset = self.paginate_queryset(queryset, request, view=self)
+
+        # Serialize the paginated queryset
+        serializer = RentCustomerSerializer(paginated_queryset, many=True)
+
+        # Return the paginated response
+        return self.get_paginated_response(serializer.data)
 
 
 class FileFilter(APIView, BasicPagination):

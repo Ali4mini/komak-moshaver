@@ -18,7 +18,7 @@ class BuyCustomer(models.Model):
         CANCELED = "CANCELED", "منصرف شد"
 
     class Meta:
-        ordering = ["-created"]
+        ordering = ["-date"]
 
     customer_name = models.CharField(max_length=150)
     customer_phone = models.CharField(max_length=12)
@@ -38,7 +38,7 @@ class BuyCustomer(models.Model):
         default=1,
     )
     created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
+    updated = models.DateTimeField(null=True, blank=True)
     date = models.DateField()
     parking = models.BooleanField(blank=True)
     elevator = models.BooleanField(default=False)
@@ -106,7 +106,7 @@ class RentCustomer(models.Model):
         CANCELED = "CANCELED", "منصرف شد"
 
     class Meta:
-        ordering = ["-created"]
+        ordering = ["-date"]
 
     customer_name = models.CharField(max_length=150)
     customer_phone = models.CharField(max_length=12)
@@ -127,7 +127,7 @@ class RentCustomer(models.Model):
         default=1,
     )
     created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
+    updated = models.DateTimeField(null=True, blank=True)
     date = models.DateField()
     parking = models.BooleanField(blank=True)
     elevator = models.BooleanField(default=False)

@@ -49,6 +49,7 @@ const NewFile = () => {
     file_type: fileType,
     property_type: propertyType,
     date: date,
+    updated: date,
     address: address,
     m2: m2,
     year: year,
