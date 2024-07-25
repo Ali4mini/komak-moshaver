@@ -1,9 +1,10 @@
 from django.urls import path
 from . import views
-app_name = 'listing'
+
+app_name = "listing"
 
 urlpatterns = [
-    path('', views.FileFilter.as_view(), name='files'),
-    path('customers/', views.CustomerFilter.as_view(), name='customers'),
+    path("", views.FileFilter.as_view(), name="files"),
+    path("customers/", views.CustomerFilter.as_view(), name="customers"),
+    path("restore/", views.RentFileRestore.as_view(), name="restore files"),
 ]
-

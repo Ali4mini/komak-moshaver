@@ -59,6 +59,19 @@ const NavBar = () => {
             {scannerFilesCount}
           </span>
         </div>
+        <div className="relative inline-flex items-center">
+          <Link
+            id="restore"
+            className="inline-block border border-gray-50 rounded hover:border-gray-200 text-blue-500 hover:bg-gray-200 py-1 px-3 active:ring-2"
+            to="restore/"
+          >
+            احیا
+          </Link>
+          <span className="absolute top-0 right-0 text-xs font-bold text-red-500 w-4 h-4">
+
+            {scannerFilesCount}
+          </span>
+        </div>
         <Link
           id="new_file"
           className="inline-block border border-gray-50 rounded hover:border-gray-200 text-blue-500 hover:bg-gray-200 py-1 px-3 active:ring-2"

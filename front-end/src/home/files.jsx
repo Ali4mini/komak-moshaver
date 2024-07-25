@@ -5,7 +5,6 @@ import { addFiles, setFiles, } from "./filesSlice";
 import { useSelector, useDispatch } from "react-redux";
 import ScrollButton from "../common/goUpButton";
 import Filter from "./filter";
-import LoadingSpinner from "../common/loadingSpinner";
 
 const Files = () => {
   const store = useSelector((state) => state.files);
@@ -13,7 +12,6 @@ const Files = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const [isFetchingMore, setIsFetchingMore] = useState(false);
 
-  // BUG: infinit pagination loop
   const getFiles = (filter = { status: "ACTIVE", file_type: localStorage.getItem("agents_field") }) => {
     api.get(`/listing/?page=${pageNumber}`, { params: filter })
       .then((response) => {

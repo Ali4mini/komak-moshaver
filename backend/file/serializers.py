@@ -2,7 +2,7 @@ from rest_framework import serializers
 from .models import Sell, Rent, SellImage, RentImage
 from django.contrib.auth import get_user_model
 from agents_m.models import Profile
-from datetime import date
+from datetime import date, datetime
 import jdatetime
 
 
@@ -53,6 +53,12 @@ class SellFileSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         username = validated_data.pop("username")
         profile = Profile.objects.get(user__username=username)
+        today = datetime.now()
+        updated_field = validated_data.get("updated", None)
+
+        if updated_field is None:
+            validated_data["updated"] = today
+
         validated_data["added_by"] = profile.user
 
         # changing the status based on date

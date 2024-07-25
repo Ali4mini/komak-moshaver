@@ -29,17 +29,19 @@ const FileDetails = () => {
       .then((response) => {
         setFile(response.data);
         const today = new Date().getTime()
-        let updatedDate = new Date(response.data.updated).getTime(); // Use response.data directly
-        const differenceInDays = (today - updatedDate) / (1000 * 3600 * 24);
-        if (differenceInDays <= 30) {
+        let fileDate = new Date(response.data.date).getTime()
+        const differenceInDays = (today - fileDate) / (1000 * 3600 * 24);
+        console.log(differenceInDays)
+        if (differenceInDays >= 30) {
           setIsFileOld(true)
         }
 
         api
           .get(`file/${fileType}/${id}/images/`)
           .then(response => setImages(response.data))
+          .catch(error => console.log("error"))
       });
-  }, []);
+  }, [fileType, id]);
 
   const features = [
     { feature: "parking", image: car, text: "پارکینگ دارد" },
@@ -66,12 +68,12 @@ const FileDetails = () => {
     ,
     {
       key: "updated",
-      label: "موجود است",
-      disabled: isFileOld,
+      label: "احیا",
+      disabled: !isFileOld,
       handler: () => {
         var now = new Date();
         api
-          .patch(`file/${fileType}/${id}/`, { updated_at: now })
+          .patch(`file/${fileType}/${id}/`, { updated: now, status: "ACTIVE" })
           .then(navigate("/", { replace: true }))
           .catch((error) => console.log(error.data));
       },
