@@ -6,27 +6,26 @@ import { useMemo } from "react";
 import transition from "react-element-popper/animations/transition";
 import opacity from "react-element-popper/animations/opacity";
 
-
 const CustomDatePicker = ({ setter, defaultDate }) => {
   const handleChange = (value) => {
     let date = value.toDate();
     let ISODate = date.toISOString().split("T")[0];
+    // let persianDate = new DateObject({ calendar: persian, locale: persian_fa, value: new Date() });
 
+    // console.log(persianDate.toDate().toISOString())
     setter(ISODate);
   };
 
-
-  // Memoize the date object to avoid unnecessary re-renders
-  const date = useMemo(() => new DateObject({ calendar: persian, locale: persian_fa, value: defaultDate }), [defaultDate]);
-
-  let today = date.value
-
+  // Corrected dependency array and moved DateObject creation outside useMemo
+  const date = useMemo(() => {
+    return new DateObject({ calendar: persian, locale: persian_fa, value: defaultDate || new Date() });
+  }, [defaultDate]);
 
   return (
     <DatePicker
       calendar={persian}
       locale={persian_fa}
-      value={today}
+      value={date.value}
       onChange={(e) => handleChange(e)}
       animations={[
         opacity(),

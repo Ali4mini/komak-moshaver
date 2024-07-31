@@ -124,6 +124,9 @@ const CustomerDetail = () => {
         <div className="flex flex-row-2 gap-20 my-3 px-4">
           <p>نوع فایل: {customerType === "buy" ? "فروش" : "اجاره"}</p>
           <p>نوع ملک: {customer?.type}</p>
+
+          <p>تاریخ: {customer?.customer_date}</p>
+          <p>ثبت شده توسط: {customer?.added_by}</p>
         </div>
         <div className="flex flex-row-2 gap-20 my-3 px-4">
           <p>نام مشتری: {customer?.customer_name}</p>

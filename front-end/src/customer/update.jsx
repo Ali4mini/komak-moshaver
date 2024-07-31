@@ -71,7 +71,7 @@ const UpdateCustomer = () => {
     parking_motor: motorSpot,
     customer_name: customerName,
     customer_phone: customerPhone,
-    date: date
+    date: date,
 
   };
 
@@ -106,7 +106,6 @@ const UpdateCustomer = () => {
     return (
       <div className="block border shadow-lg rounded-xl bg-white mx-4 px-4 py-2 my-2">
         <form
-          onClick={(e) => update(updatedEntery, e)}
           className="flex flex-col gap-5 text-sm md:text-base"
         >
           <div className="flex w-full justify-between h-10 gap-2">
@@ -243,6 +242,7 @@ const UpdateCustomer = () => {
           </div>
           <button
             type="submit"
+            onClick={(e) => update(updatedEntery, e)} // Move the onClick here
             className="basis-full rounded-lg bg-blue-300 hover:bg-blue-400 py-1.5 border w-full bottom-0"
           >
             ثبت
