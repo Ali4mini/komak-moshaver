@@ -5,6 +5,7 @@ import api from "../common/api";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setFlashMessage } from "../common/flashSlice";
+import CustomDatePicker from "../common/datePicker";
 
 const UpdateFile = () => {
   const { fileType, id } = useParams();
@@ -15,7 +16,6 @@ const UpdateFile = () => {
   // Fetch the old file
   useEffect(() => {
     api.get(`file/${fileType}/${id}/`).then((response) => {
-      console.log(response.data.description);
       setOldFile(response.data);
       setIsLoading(false); // Set loading to false after fetching the data
     }).catch((error) => console.log(error.data));
@@ -42,6 +42,7 @@ const UpdateFile = () => {
       setOwnerName(oldFile.owner_name);
       setOwnerPhone(oldFile.owner_phone);
       setDescription(oldFile.description);
+      setDate(oldFile.date)
     }
   }, [oldFile, isLoading]); // Depend on isLoading to re-run this effect
 
@@ -67,6 +68,7 @@ const UpdateFile = () => {
   const [ownerName, setOwnerName] = useState("");
   const [ownerPhone, setOwnerPhone] = useState("");
   const [description, setDescription] = useState("");
+  const [date, setDate] = useState(new Date().toISOString().split("T")[0])
 
   const navigate = useNavigate();
   const [selectedFiles, setSelectedFiles] = useState(null);
@@ -95,6 +97,7 @@ const UpdateFile = () => {
     tenet_name: tenetName,
     tenet_phone: tenetPhone,
     description: description,
+    date: date
   };
 
   const update = (updatedFile, event) => {
@@ -142,12 +145,12 @@ const UpdateFile = () => {
 
   return (
     <div className="block border shadow-lg rounded-xl bg-white mx-4 px-4 py-2 my-2">
-      <div className="block border shadow-lg rounded-xl bg-white mx-4 px-4 py-2 my-2">
+      <div className="block bg-white ">
         <form
           onSubmit={(e) => update(updatedEntery, e)}
           className="flex flex-col gap-5 text-sm md:text-base"
         >
-          <div className="grid grid-cols-3 max-w-xs h-10 gap-2">
+          <div className="flex justify-between w-full h-10 gap-2">
             <select
               name="property_type"
               id="property_type"
@@ -161,6 +164,14 @@ const UpdateFile = () => {
               <option value="S">مغازه</option>
               <option value="H">خانه و ویلا</option>
             </select>
+
+            <div className="flex flex-row gap-2 left-0">
+
+              <p className="font-bold text-center justify-center items-center">تاریخ: </p>
+              <div className="" style={{ direction: "rtl" }}>
+                <CustomDatePicker setter={setDate} defaultDate={oldFile.file_date} />
+              </div>
+            </div>
           </div>
           <div className="grid grid-cols-1  w-full ">
             <FloatLabel

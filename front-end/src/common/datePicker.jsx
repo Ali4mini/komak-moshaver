@@ -2,28 +2,25 @@ import DatePicker from "react-multi-date-picker";
 import { DateObject } from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
-import { useEffect, useMemo } from "react";
-import transition from "react-element-popper/animations/transition"
-import opacity from "react-element-popper/animations/opacity"
+import { useMemo } from "react";
+import transition from "react-element-popper/animations/transition";
+import opacity from "react-element-popper/animations/opacity";
 
-const CustomDatePicker = ({ setter }) => {
+
+const CustomDatePicker = ({ setter, defaultDate }) => {
   const handleChange = (value) => {
-    let date = value.toDate()
-    let ISODate = date.toISOString().split("T")[0]
+    let date = value.toDate();
+    let ISODate = date.toISOString().split("T")[0];
 
-    console.log(ISODate);
     setter(ISODate);
   };
 
+
   // Memoize the date object to avoid unnecessary re-renders
-  const date = useMemo(() => new DateObject({ calendar: persian, locale: persian_fa }), []);
+  const date = useMemo(() => new DateObject({ calendar: persian, locale: persian_fa, value: defaultDate }), [defaultDate]);
 
-  let today = date.format();
+  let today = date.value
 
-
-  useEffect(() => {
-    // Any side effects related to the date object can go here
-  }, [date]);
 
   return (
     <DatePicker
