@@ -10,10 +10,15 @@ class BuyCustomerSerializer(serializers.ModelSerializer):
     customer_type = serializers.SerializerMethodField(read_only=True)
     username = serializers.CharField(max_length=100, write_only=True)
     customer_date = serializers.SerializerMethodField()
+    added_by = serializers.SerializerMethodField()
 
     class Meta:
         model = BuyCustomer
-        exclude = ("added_by",)  # Exclude the 'added_by' field
+        fields = "__all__"
+
+    def get_added_by(self, obj):
+        user = obj.added_by
+        return user.username
 
     def get_customer_type(self, obj):
         return "buy"
@@ -47,10 +52,15 @@ class RentCustomerSerializer(serializers.ModelSerializer):
     customer_type = serializers.SerializerMethodField()
     username = serializers.CharField(max_length=100, write_only=True)
     customer_date = serializers.SerializerMethodField()
+    added_by = serializers.SerializerMethodField()
 
     class Meta:
         model = RentCustomer
-        exclude = ("added_by",)  # Exclude the 'added_by' field
+        fields = "__all__"
+
+    def get_added_by(self, obj):
+        user = obj.added_by
+        return user.username
 
     def get_customer_type(self, obj):
         return "rent"

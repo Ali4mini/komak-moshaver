@@ -3,6 +3,7 @@ import Checkbox from "../common/checkbox";
 import { useEffect, useState } from "react";
 import api from "../common/api";
 import { useNavigate, useParams } from "react-router-dom";
+import CustomDatePicker from "../common/datePicker";
 
 const UpdateCustomer = () => {
   const { customerType, id } = useParams();
@@ -51,7 +52,7 @@ const UpdateCustomer = () => {
   const [customerPhone, setCustomerPhone] = useState(
     oldCustomer ? oldCustomer.customer_phone : ""
   );
-
+  const [date, setDate] = useState(new Date().toISOString().split("T")[0])
   const navigate = useNavigate();
 
   let updatedEntery = {
@@ -70,6 +71,8 @@ const UpdateCustomer = () => {
     parking_motor: motorSpot,
     customer_name: customerName,
     customer_phone: customerPhone,
+    date: date,
+
   };
 
   useEffect(() => {
@@ -103,10 +106,9 @@ const UpdateCustomer = () => {
     return (
       <div className="block border shadow-lg rounded-xl bg-white mx-4 px-4 py-2 my-2">
         <form
-          onClick={(e) => update(updatedEntery, e)}
           className="flex flex-col gap-5 text-sm md:text-base"
         >
-          <div className="grid grid-cols-3 max-w-xs h-10 gap-2">
+          <div className="flex w-full justify-between h-10 gap-2">
             <select
               name="property_type"
               id="property_type"
@@ -120,6 +122,14 @@ const UpdateCustomer = () => {
               <option value="S">مغازه</option>
               <option value="H">خانه و ویلا</option>
             </select>
+
+            <div className="flex flex-row gap-2 left-0">
+
+              <p className="font-bold text-center justify-center items-center">تاریخ: </p>
+              <div className="" style={{ direction: "rtl" }}>
+                <CustomDatePicker setter={setDate} defaultDate={oldCustomer.customer_date} />
+              </div>
+            </div>
           </div>
 
           <div className="grid grid-cols-2 gap-y-4 gap-x-2 md:grid-cols-4 lg:grid-cols-7 w-full flex-wrap">
@@ -232,6 +242,7 @@ const UpdateCustomer = () => {
           </div>
           <button
             type="submit"
+            onClick={(e) => update(updatedEntery, e)} // Move the onClick here
             className="basis-full rounded-lg bg-blue-300 hover:bg-blue-400 py-1.5 border w-full bottom-0"
           >
             ثبت

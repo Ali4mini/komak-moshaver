@@ -1,3 +1,4 @@
+from django.db.models import fields_all
 from rest_framework import serializers
 from .models import Sell, Rent, SellImage, RentImage
 from django.contrib.auth import get_user_model
@@ -38,6 +39,7 @@ class SellFileSerializer(serializers.ModelSerializer):
     username = serializers.CharField(max_length=100, write_only=True)
     file_type = serializers.SerializerMethodField()
     file_date = serializers.SerializerMethodField()
+    added_by = serializers.SerializerMethodField()
 
     class Meta:
         model = Sell
@@ -45,6 +47,10 @@ class SellFileSerializer(serializers.ModelSerializer):
 
     def get_file_type(self, obj):
         return "sell"
+
+    def get_added_by(self, obj):
+        user = obj.added_by
+        return user.username
 
     def get_file_date(self, obj):
         jalali_date = jdatetime.date.fromgregorian(date=obj.date)
@@ -77,13 +83,18 @@ class RentFileSerializer(serializers.ModelSerializer):
     username = serializers.CharField(max_length=100, write_only=True)
     file_type = serializers.SerializerMethodField()
     file_date = serializers.SerializerMethodField()
+    added_by = serializers.SerializerMethodField()
 
     class Meta:
         model = Rent
-        exclude = ("added_by",)
+        fields = "__all__"
 
     def get_file_type(self, obj):
         return "rent"
+
+    def get_added_by(self, obj):
+        user = obj.added_by
+        return user.username
 
     def get_file_date(self, obj):
         jalali_date = jdatetime.date.fromgregorian(date=obj.date)
