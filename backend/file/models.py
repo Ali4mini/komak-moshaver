@@ -23,7 +23,7 @@ class Sell(models.Model):
         CANCELED = "CANCELED", "برای فروش نیست"
 
     class Meta:
-        ordering = ["-date"]
+        ordering = ["-created"]
 
     owner_name = models.CharField(max_length=1000)
     owner_phone = models.CharField(max_length=12)
@@ -117,7 +117,7 @@ class Rent(models.Model):
         CANCELED = "CANCELED", "برای اجاره نیست"
 
     class Meta:
-        ordering = ["-date"]
+        ordering = ["-created"]
 
     owner_name = models.CharField(max_length=1000)
     owner_phone = models.CharField(max_length=12)

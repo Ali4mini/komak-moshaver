@@ -26,13 +26,25 @@ class BasicPagination(PageNumberPagination):
 class RentFileRestore(APIView, BasicPagination):
     def get(self, request, *args, **kwargs):
 
+        params = request.query_params.copy()
+
         today = date.today()
+        last_update_date = today - timedelta(days=30)
+
+        print(last_update_date)
+        # Filter based on the updated field
         queryset = Rent.objects.filter(
-            date__month=today.month, date__year__lt=today.year
+            date__month=today.month,
+            date__year__lt=today.year,
+            # updated__gte=last_update_date,
         )
 
         # Apply pagination to the queryset
         paginated_queryset = self.paginate_queryset(queryset, request, view=self)
+
+        if "count" in params:
+            count = queryset.count()
+            return Response({"count": count})
 
         # Serialize the paginated queryset
         serializer = RentFileSerializer(paginated_queryset, many=True)

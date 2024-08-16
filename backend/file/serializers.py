@@ -43,7 +43,7 @@ class SellFileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Sell
-        exclude = ("added_by",)  # Exclude the 'added_by' field
+        fields = "__all__"
 
     def get_file_type(self, obj):
         return "sell"
@@ -59,19 +59,13 @@ class SellFileSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         username = validated_data.pop("username")
         profile = Profile.objects.get(user__username=username)
-        today = datetime.now()
-        updated_field = validated_data.get("updated", None)
-
-        if updated_field is None:
-            validated_data["updated"] = today
-
         validated_data["added_by"] = profile.user
 
         # changing the status based on date
-        date_field = date.strptime(validated_data.pop("date"), "%Y-%m-%d")
+        date_field = validated_data.get("date")
         today = date.today()
         passed_days = today - date_field
-        if passed_days.days >= 60:
+        if passed_days.days >= 90:
             validated_data["status"] = "UNACTIVE"
         else:
             validated_data["status"] = "ACTIVE"

@@ -8,6 +8,7 @@ import LogOutConfirm from "./logout_confirm";
 const NavBar = () => {
   const dispatch = useDispatch()
   const [scannerFilesCount, setScannerFilesCount] = useState(0)
+  const [restoreFilesCount, setRestoreFilesCount] = useState(0)
   const [isLogOutConfirm, setIsLogOutConfirm] = useState(false);
 
   // count of divar bot added files
@@ -16,6 +17,12 @@ const NavBar = () => {
       .get("listing/?count", { params: { owner_name: "UNKNOWN", status: "ACTIVE", "count": null } })
       .then((response) => {
         setScannerFilesCount(response.data["count"])
+      })
+      .catch((error) => console.log(error));
+    api
+      .get("listing/restore/?count")
+      .then((response) => {
+        setRestoreFilesCount(response.data["count"])
       })
       .catch((error) => console.log(error));
   }, []);
@@ -69,7 +76,7 @@ const NavBar = () => {
           </Link>
           <span className="absolute top-0 right-0 text-xs font-bold text-red-500 w-4 h-4">
 
-            {scannerFilesCount}
+            {restoreFilesCount}
           </span>
         </div>
         <Link
