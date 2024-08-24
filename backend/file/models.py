@@ -172,9 +172,12 @@ class Rent(models.Model):
     def get_pk(self) -> int:
         return self.pk
 
-    def get_related_customers(self) -> List[RentCustomer]:
+    def get_related_customers(self):
+        from file.models import Rent
+
         budget_up_range = (int(self.price_up * 0.75), int(self.price_up * 1.25))
         budget_rent_range = (int(self.price_rent * 0.75), int(self.price_rent * 1.25))
+        print(budget_up_range)
 
         # Function to remove keys with None values
         def remove_none_values(query):
@@ -187,21 +190,26 @@ class Rent(models.Model):
             "up_budget__lte": budget_up_range[1],
             "rent_budget__gte": budget_rent_range[0],
             "rent_budget__lte": budget_rent_range[1],
-            "m2__lte": self.m2,
-            "bedroom__lte": self.bedroom,
-            # "year__lte": self.year,
+            "m2__gte": self.m2,
+            "bedroom__gte": self.bedroom,
+            "year__lte": self.year,
             # 'parking': self.parking,
             # 'elevator': self.elevator,
             # 'storage': self.storage,
         }
-
         filter_query = remove_none_values(filter_query)
 
-        all_customers = RentCustomer.objects.filter(**filter_query)
-        if self.notified_customers is not None:
-            notified_customer_ids = self.notified_customers.values_list("id", flat=True)
-            unnotified_customers = all_customers.exclude(id__in=notified_customer_ids)
-            return unnotified_customers
+        all_files = RentCustomer.objects.filter(**filter_query)
+
+        notified_files = []
+        unnotified_files = []
+        for file in all_files:
+            if self.id in file.notified_customers.values_list("id", flat=True):
+                notified_files.append(file)
+            else:
+                unnotified_files.append(file)
+
+        return unnotified_files
 
 
 class SellImage(models.Model):
