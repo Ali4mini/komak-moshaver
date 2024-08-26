@@ -129,7 +129,7 @@ const Filter = () => {
 
     // Resetting local component state
     setCustomerType(localStorage.getItem("agents_field"));
-    setPropertyType(null); // Assuming 'null' is an acceptable initial value for propertyType
+    setPropertyType("A"); // Assuming 'null' is an acceptable initial value for propertyType
     setBudget(null);
     setUpBudget(null);
     setRentBudget(null);
@@ -153,7 +153,7 @@ const Filter = () => {
         <select
           name="customer_type"
           id="customer_type"
-          defaultValue={customerType}
+          value={customerType}
           onChange={(e) => {
             setCustomerType(e.target.value);
           }}
@@ -170,6 +170,7 @@ const Filter = () => {
         <select
           name="property_type"
           id="property_type"
+          value={propertyType}
           onChange={(e) => {
             setPropertyType(e.target.value);
           }}

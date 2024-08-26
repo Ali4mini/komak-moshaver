@@ -4,7 +4,6 @@ import api from "../common/api";
 import Checkbox from "../common/checkbox";
 import { useDispatch, useSelector } from "react-redux";
 import { addFiles, setLastFilter, clearLastFilter, setFiles } from "./filesSlice";
-import Files from "./files";
 
 const Filter = () => {
   const dispatch = useDispatch();
@@ -14,7 +13,7 @@ const Filter = () => {
   const [fileType, setFileType] = useState(
     localStorage.getItem("agents_field")
   );
-  const [propertyType, setPropertyType] = useState();
+  const [propertyType, setPropertyType] = useState("A");
   const [price, setPrice] = useState(null);
   const [priceUp, setPriceUp] = useState(null);
   const [priceRent, setPriceRent] = useState(null);
@@ -32,18 +31,16 @@ const Filter = () => {
   useEffect(() => {
     // sell filter budget range
     if (fileType === "sell") {
-      let lowerBound = Math.floor(price * 0.75);
+      let lowerBound = Math.Aloor(price * 0.75);
       let upperBound = Math.floor(price * 1.25);
 
       if (lowerBound === 0 && upperBound === 0) {
         setBudgetRange([null, null]);
       } else {
         setBudgetRange([lowerBound, upperBound]);
-        console.log(budgetRange)
       }
 
 
-      console.log(budgetRange);
     }
 
     if (priceUp === null) {
@@ -137,7 +134,7 @@ const Filter = () => {
 
     // Resetting local component state
     setFileType(localStorage.getItem("agents_field"));
-    setPropertyType(null); // Assuming 'null' is an acceptable initial value for propertyType
+    setPropertyType("A"); // Assuming 'null' is an acceptable initial value for propertyType
     setPrice(null);
     setPriceUp(null);
     setPriceRent(null);
@@ -152,6 +149,9 @@ const Filter = () => {
     setBudgetRentRange([null, null]);
   };
 
+
+
+
   return (
     <form
       id="filter"
@@ -162,7 +162,7 @@ const Filter = () => {
         <select
           name="file_type"
           id="file_type"
-          defaultValue={fileType}
+          value={fileType}
           onChange={(e) => {
             setFileType(e.target.value);
             console.log(filterEntery)
@@ -180,6 +180,7 @@ const Filter = () => {
         <select
           name="property_type"
           id="property_type"
+          value={propertyType}
           onChange={(e) => {
             setPropertyType(e.target.value);
           }}
