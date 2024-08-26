@@ -31,7 +31,7 @@ const Filter = () => {
   useEffect(() => {
     // sell filter budget range
     if (fileType === "sell") {
-      let lowerBound = Math.Aloor(price * 0.75);
+      let lowerBound = Math.floor(price * 0.75);
       let upperBound = Math.floor(price * 1.25);
 
       if (lowerBound === 0 && upperBound === 0) {
