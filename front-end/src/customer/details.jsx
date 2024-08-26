@@ -121,11 +121,12 @@ const CustomerDetail = () => {
       className="flex border-2 w-auto bg-white rounded-lg mx-4 h-auto shadow-lg"
     >
       <div className="flex flex-col">
-        <div className="flex flex-row-2 gap-20 my-3 px-4">
+        <div className="grid grid-cols-3 gap-5 my-3 px-4">
           <p>نوع فایل: {customerType === "buy" ? "فروش" : "اجاره"}</p>
-          <p>نوع ملک: {customer?.type}</p>
+          <p>نوع ملک: {customer?.property_type}</p>
 
           <p>تاریخ: {customer?.customer_date}</p>
+          <p>آخرین استعلام: {customer?.persian_updated}</p>
           <p>ثبت شده توسط: {customer?.added_by}</p>
         </div>
         <div className="flex flex-row-2 gap-20 my-3 px-4">

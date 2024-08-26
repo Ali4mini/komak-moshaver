@@ -10,6 +10,8 @@ class BuyCustomerSerializer(serializers.ModelSerializer):
     customer_type = serializers.SerializerMethodField(read_only=True)
     username = serializers.CharField(max_length=100, write_only=True)
     customer_date = serializers.SerializerMethodField()
+    persian_updated = serializers.SerializerMethodField()
+    persian_created = serializers.SerializerMethodField()
     added_by = serializers.SerializerMethodField()
 
     class Meta:
@@ -22,6 +24,14 @@ class BuyCustomerSerializer(serializers.ModelSerializer):
 
     def get_customer_type(self, obj):
         return "buy"
+
+    def get_persian_created(self, obj):
+        jalali_date = jdatetime.date.fromgregorian(date=obj.created)
+        return jalali_date.strftime("%Y/%m/%d")
+
+    def get_persian_updated(self, obj):
+        jalali_date = jdatetime.date.fromgregorian(date=obj.updated)
+        return jalali_date.strftime("%Y/%m/%d")
 
     def get_customer_date(self, obj):
         jalali_date = jdatetime.date.fromgregorian(date=obj.date)
@@ -52,6 +62,8 @@ class RentCustomerSerializer(serializers.ModelSerializer):
     customer_type = serializers.SerializerMethodField()
     username = serializers.CharField(max_length=100, write_only=True)
     customer_date = serializers.SerializerMethodField()
+    persian_updated = serializers.SerializerMethodField()
+    persian_created = serializers.SerializerMethodField()
     added_by = serializers.SerializerMethodField()
 
     class Meta:
@@ -64,6 +76,14 @@ class RentCustomerSerializer(serializers.ModelSerializer):
 
     def get_customer_type(self, obj):
         return "rent"
+
+    def get_persian_created(self, obj):
+        jalali_date = jdatetime.date.fromgregorian(date=obj.created)
+        return jalali_date.strftime("%Y/%m/%d")
+
+    def get_persian_updated(self, obj):
+        jalali_date = jdatetime.date.fromgregorian(date=obj.updated)
+        return jalali_date.strftime("%Y/%m/%d")
 
     def get_customer_date(self, obj):
         jalali_date = jdatetime.date.fromgregorian(date=obj.date)

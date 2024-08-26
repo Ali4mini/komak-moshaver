@@ -150,10 +150,11 @@ const FileDetails = () => {
         <div className="flex flex-col">
 
           <div className="flex flex-col">
-            <div className="flex justify-between gap-20 my-3 px-4">
+            <div className="grid grid-cols-3 justify-between gap-5 my-3 px-4">
               <p>نوع فایل: {fileType === "sell" ? "فروش" : "اجاره"}</p>
               <p>نوع ملک: {file?.property_type}</p>
               <p>تاریخ: {file?.file_date}</p>
+              <p>آخرین استعلام: {file?.persian_updated}</p>
               <p>ثبت شده توسط: {file?.added_by}</p>
             </div>
             <div className="flex flex-row-2 gap-20 my-3 px-4">

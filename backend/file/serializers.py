@@ -39,6 +39,8 @@ class SellFileSerializer(serializers.ModelSerializer):
     username = serializers.CharField(max_length=100, write_only=True)
     file_type = serializers.SerializerMethodField()
     file_date = serializers.SerializerMethodField()
+    persian_created = serializers.SerializerMethodField()
+    persian_updated = serializers.SerializerMethodField()
     added_by = serializers.SerializerMethodField()
 
     class Meta:
@@ -51,6 +53,14 @@ class SellFileSerializer(serializers.ModelSerializer):
     def get_added_by(self, obj):
         user = obj.added_by
         return user.username
+
+    def get_persian_created(self, obj):
+        jalali_date = jdatetime.date.fromgregorian(date=obj.created)
+        return jalali_date.strftime("%Y/%m/%d")
+
+    def get_persian_updated(self, obj):
+        jalali_date = jdatetime.date.fromgregorian(date=obj.updated)
+        return jalali_date.strftime("%Y/%m/%d")
 
     def get_file_date(self, obj):
         jalali_date = jdatetime.date.fromgregorian(date=obj.date)
@@ -77,6 +87,8 @@ class RentFileSerializer(serializers.ModelSerializer):
     username = serializers.CharField(max_length=100, write_only=True)
     file_type = serializers.SerializerMethodField()
     file_date = serializers.SerializerMethodField()
+    persian_created = serializers.SerializerMethodField()
+    persian_updated = serializers.SerializerMethodField()
     added_by = serializers.SerializerMethodField()
 
     class Meta:
@@ -89,6 +101,14 @@ class RentFileSerializer(serializers.ModelSerializer):
     def get_added_by(self, obj):
         user = obj.added_by
         return user.username
+
+    def get_persian_created(self, obj):
+        jalali_date = jdatetime.date.fromgregorian(date=obj.created)
+        return jalali_date.strftime("%Y/%m/%d")
+
+    def get_persian_updated(self, obj):
+        jalali_date = jdatetime.date.fromgregorian(date=obj.updated)
+        return jalali_date.strftime("%Y/%m/%d")
 
     def get_file_date(self, obj):
         jalali_date = jdatetime.date.fromgregorian(date=obj.date)
