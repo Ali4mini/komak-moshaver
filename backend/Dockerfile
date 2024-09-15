@@ -13,7 +13,7 @@ COPY . /app/
 
 # Install any needed packages specified in requirements.txt
 RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+RUN pip install --trusted-host https://mirror-pypi.runflare.com -i https://mirror-pypi.runflare.com/simple/ -r requirements.txt
 
 # Make port 8000 available to the world outside this container
 EXPOSE 8000
@@ -21,7 +21,7 @@ EXPOSE 8000
 # Define environment variable
 ENV DEBUG ON \
   DB_NAME=amlak \
-  DB_HOST=localhost \
+  DB_HOST=database \
   DB_PASS=amlak \
   DB_USER=amlak \
   DB_PORT=5432 \
