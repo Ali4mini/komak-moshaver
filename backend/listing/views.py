@@ -91,6 +91,7 @@ class FileFilter(APIView, BasicPagination):
         return [
             "id",
             "owner_name",
+            "owner_name__icontains",
             "file_type",
             "property_type",
             "price__lte",
@@ -198,6 +199,7 @@ class CustomerFilter(APIView, BasicPagination):
         return [
             "id",
             "customer_name",
+            "customer_name__icontains",
             "customer_type",
             "property_type",
             "budget__lte",

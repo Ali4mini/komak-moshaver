@@ -1,14 +1,19 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { Transition } from "@headlessui/react";
-import Search from "../home/search";
+import SearchButtonWithModal from '../home/search.jsx'
 
 const MobileNavBar = () => {
   const [isActive, setIsActive] = useState(false);
+  const [isSearch, setIsSearch] = useState(false);
 
   return (
     <>
       <div className="flex justify-between py-2 px-5 w-full">
+
+        {
+          isSearch && <SearchButtonWithModal isOpen={isSearch} setIsOpen={setIsSearch} />
+        }
         <Link
           id="home"
           className="inline-block border border-blue-400 rounded-lg py-1 top-0 px-3 bg-blue-400 text-white hover:bg-blue-700 active:ring-2"
@@ -86,7 +91,28 @@ const MobileNavBar = () => {
           >
             خروج
           </button>
-          <Search />
+
+          <button
+            id="agents"
+            className="inline-block border border-gray-50 rounded hover:border-gray-200 text-blue-500 hover:bg-gray-200 py-1 px-3 active:ring-2"
+            onClick={() => {
+              setIsSearch(true)
+            }}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#60a5fa"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </button>
         </div>
       </Transition>
     </>

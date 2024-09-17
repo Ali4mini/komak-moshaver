@@ -1,11 +1,8 @@
 import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useLocation } from "react-router-dom";
 
 const LogOutConfirm = ({ isOpen, setIsOpen }) => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
   const location = useLocation();
   const Delete = () => {
     console.log(location.pathname);
