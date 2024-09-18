@@ -63,6 +63,11 @@ const NewCustomer = () => {
 
   const create = (customerEntery, event) => {
     event.preventDefault();
+
+    if (customerPhone.length !== 11) {
+      alert("شماره تلفن باید ۱۱ رقم باشد");
+      return; // Stop submission if validation fails
+    }
     api
       .post(`customer/${customerEntery.customer_type}/new/`, customerEntery)
       .then((response) => {
@@ -196,6 +201,7 @@ const NewCustomer = () => {
             label={"شماره مشتری"}
             setter={setCustomerPhone}
             isRequired={true}
+            maxChars={11}
           />
           <FloatLabel
             type="text"

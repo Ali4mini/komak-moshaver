@@ -84,6 +84,10 @@ const NewFile = () => {
 
   const create = (fileEntery, event) => {
     event.preventDefault();
+    if (ownerPhone.length < 11 || tenetPhone?.length < 11 || lobbyManPhone?.length < 11) {
+      alert("شماره تلفن باید ۱۱ رقم باشد");
+      return; // Stop submission if validation fails
+    }
     api
       .post(`file/${fileEntery.file_type}/new/`, fileEntery)
       .then((response) => {
@@ -348,6 +352,7 @@ const NewFile = () => {
                 label={"شماره مستاجر"}
                 setter={setTenetPhone}
                 isRequired={true}
+                maxChars={11}
               />
               <FloatLabel
                 type="text"
@@ -367,6 +372,7 @@ const NewFile = () => {
                 label={"شماره سرایدار"}
                 setter={setLobbyManPhone}
                 isRequired={true}
+                maxChars={11}
               />
               <FloatLabel
                 type="text"
@@ -385,6 +391,7 @@ const NewFile = () => {
             label={"شماره مالک"}
             setter={setOwnerPhone}
             isRequired={true}
+            maxChars={11}
           />
           <FloatLabel
             type="text"

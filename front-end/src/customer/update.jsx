@@ -96,6 +96,11 @@ const UpdateCustomer = () => {
 
   const update = (updatedFile, event) => {
     event.preventDefault();
+
+    if (customerPhone.length !== 11) {
+      alert("شماره تلفن باید ۱۱ رقم باشد");
+      return; // Stop submission if validation fails
+    }
     api
       .patch(`customer/${customerType}/${id}/`, updatedFile)
       .then(navigate(`/customer/${customerType}/${id}/`, { replace: true }))
@@ -204,6 +209,7 @@ const UpdateCustomer = () => {
               label={"شماره مالک"}
               setter={setCustomerPhone}
               isRequired={true}
+              maxChars={11}
             />
             <FloatLabel
               defValue={oldCustomer.customer_name}
