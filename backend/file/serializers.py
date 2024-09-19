@@ -59,12 +59,14 @@ class SellFileSerializer(serializers.ModelSerializer):
         return jalali_date.strftime("%Y/%m/%d")
 
     def get_persian_updated(self, obj):
-        jalali_date = jdatetime.date.fromgregorian(date=obj.updated)
-        return jalali_date.strftime("%Y/%m/%d")
+        if obj.updated:
+            jalali_date = jdatetime.date.fromgregorian(date=obj.updated)
+            return jalali_date.strftime("%Y/%m/%d")
 
     def get_file_date(self, obj):
-        jalali_date = jdatetime.date.fromgregorian(date=obj.date)
-        return jalali_date.strftime("%Y/%m/%d")
+        if obj.date:
+            jalali_date = jdatetime.date.fromgregorian(date=obj.date)
+            return jalali_date.strftime("%Y/%m/%d")
 
     def create(self, validated_data):
         username = validated_data.pop("username")
@@ -72,13 +74,14 @@ class SellFileSerializer(serializers.ModelSerializer):
         validated_data["added_by"] = profile.user
 
         # changing the status based on date
-        date_field = validated_data.get("date")
-        today = date.today()
-        passed_days = today - date_field
-        if passed_days.days >= 90:
-            validated_data["status"] = "UNACTIVE"
-        else:
-            validated_data["status"] = "ACTIVE"
+        date_field = validated_data.get("date", None)
+        if date_field:
+            today = date.today()
+            passed_days = today - date_field
+            if passed_days.days >= 90:
+                validated_data["status"] = "UNACTIVE"
+            else:
+                validated_data["status"] = "ACTIVE"
 
         return super().create(validated_data)
 
@@ -107,12 +110,14 @@ class RentFileSerializer(serializers.ModelSerializer):
         return jalali_date.strftime("%Y/%m/%d")
 
     def get_persian_updated(self, obj):
-        jalali_date = jdatetime.date.fromgregorian(date=obj.updated)
-        return jalali_date.strftime("%Y/%m/%d")
+        if obj.updated:
+            jalali_date = jdatetime.date.fromgregorian(date=obj.updated)
+            return jalali_date.strftime("%Y/%m/%d")
 
     def get_file_date(self, obj):
-        jalali_date = jdatetime.date.fromgregorian(date=obj.date)
-        return jalali_date.strftime("%Y/%m/%d")
+        if obj.date:
+            jalali_date = jdatetime.date.fromgregorian(date=obj.date)
+            return jalali_date.strftime("%Y/%m/%d")
 
     def create(self, validated_data):
         username = validated_data.pop("username")
@@ -120,12 +125,13 @@ class RentFileSerializer(serializers.ModelSerializer):
         validated_data["added_by"] = profile.user
 
         # changing the status based on date
-        date_field = validated_data.get("date")
-        today = date.today()
-        passed_days = today - date_field
-        if passed_days.days >= 30:
-            validated_data["status"] = "UNACTIVE"
-        else:
-            validated_data["status"] = "ACTIVE"
+        date_field = validated_data.get("date", None)
+        if date_field:
+            today = date.today()
+            passed_days = today - date_field
+            if passed_days.days >= 30:
+                validated_data["status"] = "UNACTIVE"
+            else:
+                validated_data["status"] = "ACTIVE"
 
         return super().create(validated_data)

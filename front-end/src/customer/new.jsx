@@ -76,7 +76,7 @@ const NewCustomer = () => {
             dispatch(
               setFlashMessage({
                 type: "SUCCESS",
-                message: "یک مشتری اضافه شد",
+                message: `یک مشتری اضافه شد  \n کد: ${response.data["id"]}  `,
               })
             );
             break;

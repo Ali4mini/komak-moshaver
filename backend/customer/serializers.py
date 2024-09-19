@@ -34,8 +34,9 @@ class BuyCustomerSerializer(serializers.ModelSerializer):
         return jalali_date.strftime("%Y/%m/%d")
 
     def get_customer_date(self, obj):
-        jalali_date = jdatetime.date.fromgregorian(date=obj.date)
-        return jalali_date.strftime("%Y/%m/%d")
+        if obj.date:
+            jalali_date = jdatetime.date.fromgregorian(date=obj.date)
+            return jalali_date.strftime("%Y/%m/%d")
 
     def create(self, validated_data):
         username = validated_data.pop("username")
@@ -48,13 +49,14 @@ class BuyCustomerSerializer(serializers.ModelSerializer):
         if updated_field is None:
             validated_data["updated"] = today
         # changing the status based on date
-        date_field = validated_data.get("date")
-        today = date.today()
-        passed_days = today - date_field
-        if passed_days.days >= 30:
-            validated_data["status"] = "UNACTIVE"
-        else:
-            validated_data["status"] = "ACTIVE"
+        date_field = validated_data.get("date", None)
+        if date_field:
+            today = date.today()
+            passed_days = today - date_field
+            if passed_days.days >= 30:
+                validated_data["status"] = "UNACTIVE"
+            else:
+                validated_data["status"] = "ACTIVE"
         return super().create(validated_data)
 
 
@@ -86,8 +88,9 @@ class RentCustomerSerializer(serializers.ModelSerializer):
         return jalali_date.strftime("%Y/%m/%d")
 
     def get_customer_date(self, obj):
-        jalali_date = jdatetime.date.fromgregorian(date=obj.date)
-        return jalali_date.strftime("%Y/%m/%d")
+        if obj.date:
+            jalali_date = jdatetime.date.fromgregorian(date=obj.date)
+            return jalali_date.strftime("%Y/%m/%d")
 
     def create(self, validated_data):
         username = validated_data.pop("username")
@@ -101,11 +104,12 @@ class RentCustomerSerializer(serializers.ModelSerializer):
             validated_data["updated"] = today
 
         # changing the status based on date
-        date_field = validated_data.get("date")
-        today = date.today()
-        passed_days = today - date_field
-        if passed_days.days >= 30:
-            validated_data["status"] = "UNACTIVE"
-        else:
-            validated_data["status"] = "ACTIVE"
+        date_field = validated_data.get("date", None)
+        if date_field:
+            today = date.today()
+            passed_days = today - date_field
+            if passed_days.days >= 30:
+                validated_data["status"] = "UNACTIVE"
+            else:
+                validated_data["status"] = "ACTIVE"
         return super().create(validated_data)

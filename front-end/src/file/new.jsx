@@ -99,7 +99,7 @@ const NewFile = () => {
             dispatch(
               setFlashMessage({
                 type: "SUCCESS",
-                message: "یک فایل اضافه شد",
+                message: `یک فایل اضافه شد \n کد: ${response.data["id"]}`,
               })
             );
             break;

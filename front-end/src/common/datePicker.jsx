@@ -7,17 +7,22 @@ import transition from "react-element-popper/animations/transition";
 import opacity from "react-element-popper/animations/opacity";
 
 const CustomDatePicker = ({ setter, defaultDate }) => {
-  const [selectedDate, setSelectedDate] = useState(
-    defaultDate ? new DateObject({ calendar: persian, locale: persian_fa, value: defaultDate }) : null
-  );
+  // Initialize selectedDate with today's date if defaultDate is not provided
+  const [selectedDate, setSelectedDate] = useState(() => {
+    return defaultDate
+      ? new DateObject({ calendar: persian, locale: persian_fa, value: defaultDate })
+      : new DateObject({ calendar: persian, locale: persian_fa, value: new Date() }); // Today's date
+  });
 
   // Update selected date when defaultDate changes
   useEffect(() => {
     if (defaultDate) {
       setSelectedDate(new DateObject({ calendar: persian, locale: persian_fa, value: defaultDate }));
     } else {
-      setSelectedDate(null);
+      setSelectedDate(new DateObject({ calendar: persian, locale: persian_fa, value: new Date() })); // Reset to today's date
     }
+
+    console.log(selectedDate);
   }, [defaultDate]);
 
   const handleChange = (value) => {
