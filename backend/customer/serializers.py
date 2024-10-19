@@ -1,8 +1,5 @@
 from rest_framework import serializers
-from file.models import Sell
 from .models import BuyCustomer, RentCustomer
-from agents_m.models import Profile
-from datetime import date, datetime
 from utils.common import set_added_by, set_updated_logic
 import jdatetime
 
