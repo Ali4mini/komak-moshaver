@@ -1,11 +1,13 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from .models import Profile
+from utils.common import set_added_by
 
 
 UserModel = get_user_model()
 
 
+@set_added_by
 class ProfileSerializer(serializers.ModelSerializer):
     user = serializers.CharField()
 
@@ -21,15 +23,18 @@ class ProfileSerializer(serializers.ModelSerializer):
             "field",
         ]
 
-    def create(self, validated_data):
-        user_data = validated_data.pop("user")
-        user = UserModel.objects.get(username=user_data)
-        validated_data["user"] = user
-        return super().create(validated_data)
-
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = UserModel
+
+        fields = (
+            "id",
+            "username",
+            "password",
+        )
 
     def create(self, validated_data):
         user = UserModel.objects.create_user(
@@ -38,12 +43,3 @@ class UserSerializer(serializers.ModelSerializer):
         )
 
         return user
-
-    class Meta:
-        model = UserModel
-        # Tuple of serialized model fields (see link [2])
-        fields = (
-            "id",
-            "username",
-            "password",
-        )

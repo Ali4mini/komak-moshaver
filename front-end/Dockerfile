@@ -18,7 +18,7 @@ COPY . .
 # Build the application for production
 RUN npm run build
 
-ENV VITE_API="http://87.248.145.191:8000"
+ENV VITE_API="http://0.0.0.0:8000"
 
 # Serve the application using serve
 # RUN npm i -g serve

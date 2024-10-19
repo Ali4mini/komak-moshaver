@@ -3,9 +3,12 @@ from file.models import Sell
 from .models import BuyCustomer, RentCustomer
 from agents_m.models import Profile
 from datetime import date, datetime
+from utils.common import set_added_by, set_updated_logic
 import jdatetime
 
 
+@set_added_by
+@set_updated_logic
 class BuyCustomerSerializer(serializers.ModelSerializer):
     customer_type = serializers.SerializerMethodField(read_only=True)
     username = serializers.CharField(max_length=100, write_only=True)
@@ -38,28 +41,9 @@ class BuyCustomerSerializer(serializers.ModelSerializer):
             jalali_date = jdatetime.date.fromgregorian(date=obj.date)
             return jalali_date.strftime("%Y/%m/%d")
 
-    def create(self, validated_data):
-        username = validated_data.pop("username")
-        profile = Profile.objects.get(user__username=username)
-        validated_data["added_by"] = profile.user
 
-        today = datetime.now()
-        updated_field = validated_data.get("updated", None)
-
-        if updated_field is None:
-            validated_data["updated"] = today
-        # changing the status based on date
-        date_field = validated_data.get("date", None)
-        if date_field:
-            today = date.today()
-            passed_days = today - date_field
-            if passed_days.days >= 30:
-                validated_data["status"] = "UNACTIVE"
-            else:
-                validated_data["status"] = "ACTIVE"
-        return super().create(validated_data)
-
-
+@set_added_by
+@set_updated_logic
 class RentCustomerSerializer(serializers.ModelSerializer):
     customer_type = serializers.SerializerMethodField()
     username = serializers.CharField(max_length=100, write_only=True)
@@ -91,25 +75,3 @@ class RentCustomerSerializer(serializers.ModelSerializer):
         if obj.date:
             jalali_date = jdatetime.date.fromgregorian(date=obj.date)
             return jalali_date.strftime("%Y/%m/%d")
-
-    def create(self, validated_data):
-        username = validated_data.pop("username")
-        profile = Profile.objects.get(user__username=username)
-        validated_data["added_by"] = profile.user
-
-        today = datetime.now()
-        updated_field = validated_data.get("updated", None)
-
-        if updated_field is None:
-            validated_data["updated"] = today
-
-        # changing the status based on date
-        date_field = validated_data.get("date", None)
-        if date_field:
-            today = date.today()
-            passed_days = today - date_field
-            if passed_days.days >= 30:
-                validated_data["status"] = "UNACTIVE"
-            else:
-                validated_data["status"] = "ACTIVE"
-        return super().create(validated_data)

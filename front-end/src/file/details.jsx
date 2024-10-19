@@ -11,6 +11,7 @@ import MatchedCustomers from "../common/matched_customers";
 import ImageSlider from "../common/slide";
 import phoneIcon from "../assets/icons8-phone-50.png"
 import NewCallLog from "../log_app/logs";
+import NewTourLog from "../log_app/tourLog";
 
 const FileDetails = () => {
   const navigate = useNavigate();
@@ -21,6 +22,7 @@ const FileDetails = () => {
   const [images, setImages] = useState(null)
   const [isFileOld, setIsFileOld] = useState(false)
   const [isCallLog, setIsCallLog] = useState(false)
+  const [isTourLog, setIsTourLog] = useState(false)
 
 
   useEffect(() => {
@@ -39,7 +41,7 @@ const FileDetails = () => {
         api
           .get(`file/${fileType}/${id}/images/`)
           .then(response => setImages(response.data))
-          .catch(error => console.log("error"))
+          .catch(error => console.log("error in file details: ", error))
       });
   }, [fileType, id]);
 
@@ -64,8 +66,32 @@ const FileDetails = () => {
         <img src={phoneIcon} alt="phone" width={20} />
 
       ),
-    }
-    ,
+    },
+    {
+      key: "tourLog",
+      label: "لاگ بازدید",
+      disabled: false,
+      handler: () => {
+        setIsTourLog(true)
+      },
+      icon: (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          width="24"
+          height="24"
+        >
+          <path d="M3 9l9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9z" />
+          <path d="M9 22V12h6v10" />
+        </svg>
+
+      ),
+    },
     {
       key: "updated",
       label: "احیا",
@@ -238,6 +264,9 @@ const FileDetails = () => {
               <NewCallLog isOpen={isCallLog} setIsOpen={setIsCallLog} />
             }
 
+            {isTourLog &&
+              <NewTourLog isOpen={isTourLog} setIsOpen={setIsTourLog} />
+            }
             <button
               id="update"
               onClick={() => {
