@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const apiUrl = import.meta.env.VITE_API;
+const apiUrl = "http://localhost:8000/"
+console.log("url:", apiUrl)
 let accessToken = localStorage.getItem("access_token");
 
 const api = axios.create({
