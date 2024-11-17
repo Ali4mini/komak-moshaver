@@ -21,11 +21,10 @@ RUN npm run build
 ENV VITE_API="http://0.0.0.0:8000"
 
 # Serve the application using serve
-# RUN npm i -g serve
+RUN npm i -g serve
 
 # Expose port 3000 to the outside world
 EXPOSE 3000
 
 # Start the application
-# CMD ["serve", "-s", "dist"]
-CMD ["npm", "run", "dev"]
+CMD ["serve", "-s", "dist"]

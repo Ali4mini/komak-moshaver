@@ -1,38 +1,19 @@
-# from django.db.models.signals import post_save
-# from django.forms.models import model_to_dict
-# from django.dispatch import receiver
-# from .tasks import welcome_message, match_customers
-# from .models import Sell, Rent
+import requests
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from .models import SellImage
 
 
-# #SECTION - Signals
-# @receiver(signal=post_save, sender=Sell)
-# def new_sell_file_signal(sender, instance, created, *args, **kwargs):
-#     data = model_to_dict(instance, exclude=['image1','image2','image3','image4','image5',])
+@receiver(post_save, sender=SellImage)
+def download_image(sender, instance, created, **kwargs):
+    if created and instance.image.url:
+        # Download the image from the provided URL
+        response = requests.get(instance.image.url)
 
-#     if instance.added_by != 'listing_bot' and created:
-#         welcome_message.delay(data=data)
-#         match_customers.delay(data=data, file_type='sell')
-       
-#     elif instance.added_by == 'listing_bot' and not created:
-#         try:
-#             welcome_message(instance=instance)
-#             match_customers(instance=instance, file_type='sell')
-#         except: 
-#             pass
-        
-# @receiver(signal=post_save, sender=Rent)
-# def new_rent_file_signal(sender, instance, created, *args, **kwargs):
-#     data = model_to_dict(instance, exclude=['image1','image2','image3','image4','image5',])
+        if response.status_code == 200:
+            # Save the image content to the model's ImageField
+            instance.image.save(
+                instance.image.name, ContentFile(response.content), save=False
+            )
+            instance.save()  # Save the instance again to update the image field
 
-#     if instance.added_by != 'listing_bot' and created:
-#         welcome_message.delay(data=data)
-#         match_customers.delay(data=data, file_type='rent')
-
-#     elif instance.added_by == 'listing_bot' and not created:
-#         try:
-#             welcome_message(instance=instance)
-#             match_customers(instance=instance, file_type='rent')
-#         except: 
-#             pass
-# #!SECTION

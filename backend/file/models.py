@@ -1,7 +1,6 @@
 from enum import unique
 from typing import List
 from django.db import models
-from taggit.managers import TaggableManager
 from django.urls import reverse
 from agents_m.models import Profile
 from django.conf import settings
@@ -64,7 +63,6 @@ class Sell(models.Model):
     description = models.CharField(max_length=1000, blank=True, null=True)
     notified_customers = models.ManyToManyField(BuyCustomer, blank=True)
 
-    tag_manager = TaggableManager(blank=True)
     source_id = models.CharField(max_length=100, blank=True, null=True, unique=True)
 
     def __str__(self) -> str:
@@ -160,7 +158,6 @@ class Rent(models.Model):
     description = models.CharField(max_length=1000, blank=True, null=True)
     notified_customers = models.ManyToManyField(RentCustomer, blank=True)
 
-    tags_manager = TaggableManager(blank=True)
     source_id = models.CharField(max_length=100, blank=True, null=True, unique=True)
 
     def __str__(self) -> str:

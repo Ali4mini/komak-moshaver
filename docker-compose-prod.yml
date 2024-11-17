@@ -1,0 +1,56 @@
+services:
+  postgres:
+    image: postgres:15.4
+    container_name: database
+    environment:
+      POSTGRES_USER: amlak
+      POSTGRES_PASSWORD: amlak
+      POSTGRES_DB: amlak
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+        - komak-moshaver
+    restart: always
+
+  backend:
+    build: ./backend/
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./backend/:/code
+    environment:
+      DEBUG: "OFF"
+      SECRET_KEY: "!88(h4((q=skn3flqv%cmdhx2-3#6l%1_$il@m#l)3t^l#g+5a"
+      DB_NAME: "amlak"
+      DB_HOST: "database"
+      DB_USER: "amlak"
+      DB_PASS: "amlak"
+      DB_PORT: "5432"
+      LIARA_ENDPOINT: "https://storage.iran.liara.space"
+      LIARA_BUCKET_NAME: "komak-moshaver-cdn"
+      LIARA_ACCESS_KEY: "iec9uco4ckoq6f54"
+      LIARA_SECRET_KEY: "ce4dd301-f94f-4b83-8096-7682ea5184c7"
+    ports:
+      - "8000:8000"  
+    depends_on:
+      - postgres
+    networks:
+        - komak-moshaver
+
+  frontend:
+    build: ./front-end/
+    ports:
+      - "3000:3000"
+    environment:
+      VITE_API: http://192.168.1.103:8000
+    depends_on:
+      - backend
+    networks:
+        - komak-moshaver
+
+networks:
+  komak-moshaver:
+volumes:
+  postgres_data:
+

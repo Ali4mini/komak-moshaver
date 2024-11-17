@@ -2,14 +2,17 @@ from rest_framework import serializers
 from .models import Sell, Rent, SellImage, RentImage
 from utils.common import set_added_by, set_updated_logic
 import jdatetime
+import requests
+from django.core.files.base import ContentFile
 
 
 class SellImageSerializer(serializers.ModelSerializer):
     image_url = serializers.SerializerMethodField()
+    image_urls = serializers.ListField(child=serializers.URLField(), write_only=True)
 
     class Meta:
         model = SellImage
-        fields = ["image_url", "file"]  # Include other fields as needed
+        fields = ["image_url", "file", "image_urls"]  # Include other fields as needed
 
     def get_image_url(self, obj):
         request = self.context.get("request")
