@@ -2,10 +2,18 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+
 @layer utilities {
   .ACTIVE {
     background-color: white;
   }
+}
+
+body {
+  font-family: "Vazirmatn", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
 }
 
 .UNACTIVE {
