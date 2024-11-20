@@ -1,6 +1,9 @@
 import axios from "axios";
 
-const apiUrl = "/api/"
+let apiUrl = import.meta.env.VITE_API;
+if (!apiUrl) {
+  apiUrl = "/api/"
+}
 console.log("url:", apiUrl)
 let accessToken = localStorage.getItem("access_token");
 

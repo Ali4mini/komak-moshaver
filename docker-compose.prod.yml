@@ -19,7 +19,7 @@ services:
       context: ./backend/
       target: prod  # Specify production target from Dockerfile
     environment:
-      DEBUG: "OFF"
+      DEBUG: "False"
       SECRET_KEY: "!88(h4((q=skn3flqv%cmdhx2-3#6l%1_$il@m#l)3t^l#g+5a"
       DB_NAME: "amlak"
       DB_HOST: "database"
@@ -43,6 +43,8 @@ services:
       target: prod  # Specify production target from Dockerfile
     ports:
       - "80:80" 
+    environment:
+      VITE_API: "/api/"
     depends_on:
       - backend 
     networks:
