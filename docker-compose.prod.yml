@@ -1,3 +1,4 @@
+
 services:
   postgres:
     image: postgres:15.4
@@ -12,13 +13,11 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - komak-moshaver
-    restart: always
 
   backend:
-    build: ./backend/
-    command: python manage.py runserver 0.0.0.0:8000
-    volumes:
-      - ./backend/:/code
+    build:
+      context: ./backend/
+      target: prod  # Specify production target from Dockerfile
     environment:
       DEBUG: "OFF"
       SECRET_KEY: "!88(h4((q=skn3flqv%cmdhx2-3#6l%1_$il@m#l)3t^l#g+5a"
@@ -34,19 +33,18 @@ services:
     ports:
       - "8000:8000"  
     depends_on:
-      - postgres
+      - postgres 
     networks:
       - komak-moshaver
 
   frontend:
     build:
       context: ./front-end/
-    env_file:
-      - ./front-end/.env
+      target: prod  # Specify production target from Dockerfile
     ports:
       - "80:80" 
     depends_on:
-      - backend
+      - backend 
     networks:
       - komak-moshaver
 

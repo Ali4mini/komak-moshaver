@@ -7,19 +7,14 @@ For more information on this file, see
 https://docs.djangoproject.com/en/4.1/topics/settings/
 
 For the full list of settings and their values, see
-https://docs.djangoproject.com/en/4.1/ref/settings/ """
+https://docs.djangoproject.com/en/4.1/ref/settings/
+"""
 
 # pyright: reportMissingImports=false
 # pylint: disable=E265
 from datetime import timedelta
 import pathlib
 import os
-
-
-# ! enviroment variables
-from dotenv import dotenv_values
-
-config = dotenv_values(".env")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = pathlib.Path(__file__).resolve(strict=True).parent.parent
@@ -28,9 +23,7 @@ BASE_DIR = pathlib.Path(__file__).resolve(strict=True).parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 SECRET_KEY = os.getenv("SECRET_KEY")
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "False") == "True"  # Default to False if not set
 
 # Application definition
 
@@ -66,14 +59,6 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [],
 }
 
-# REST_FRAMEWORK = {
-#     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
-#     "DEFAULT_AUTHENTICATION_CLASSES": (
-#         "rest_framework_simplejwt.authentication.JWTAuthentication",
-#     ),
-# }
-
-
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(days=3),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=300),
@@ -91,9 +76,9 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "django.middleware.common.CommonMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
+
 STATIC_URL = "/assets/"
 STATIC_ROOT = os.path.join(BASE_DIR, "front-end/dist/assets")
 WHITENOISE_ROOT = os.path.join(BASE_DIR, "front-end/dist")
@@ -120,23 +105,16 @@ TEMPLATES = [
     },
 ]
 
-
-MEDIA_URL = "media/"
-MEDITA_ROOT = os.path.join(BASE_DIR, "media")
-
-# COMPRESS_ROOT = os.path.join(BASE_DIR, 'front-end', 'dist', 'assets')
-
-# COMPRESS_ENABLED = True
-
-# STATICFILES_FINDERS = ('compressor.finders.CompressorFinder',)
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 WSGI_APPLICATION = "amlak.wsgi.application"
 
 APPEND_SLASH = True
 
-
+print(os.getenv("DB_PASS"))
+print(os.getenv("DB_USER"))
 # Database
-# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
@@ -148,28 +126,13 @@ DATABASES = {
     }
 }
 
-# Django-storages configuration
-STORAGES = {
-    "default": {
-        "BACKEND": "storages.backends.s3.S3Storage",
-    },
-    "staticfiles": {
-        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
-    },
-}
+ALLOWED_HOSTS = ["0.0.0.0", os.getenv("ALLOWED_HOST", "*")]
 
-ALLOWED_HOSTS = ["0.0.0.0", "87.107.54.39", "*"]
 # Password validation
-# https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
-    # {
-    #     'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    # },
-    # {
-    #     'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    # },
     {
+        # 'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        # 'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
         "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
@@ -188,31 +151,20 @@ AWS_ACCESS_KEY_ID = LIARA_ACCESS_KEY
 AWS_SECRET_ACCESS_KEY = LIARA_SECRET_KEY
 AWS_STORAGE_BUCKET_NAME = LIARA_BUCKET_NAME
 AWS_S3_ENDPOINT_URL = LIARA_ENDPOINT
-AWS_S3_REGION_NAME = "us-east-1"
+AWS_S3_REGION_NAME = os.getenv("AWS_S3_REGION_NAME", default="us-east-1")
 
 # Internationalization
-# https://docs.djangoproject.com/en/4.1/topics/i18n/
-
-LANGUAGE_CODE = "fa-IR"
-
-TIME_ZONE = "Asia/Tehran"
+LANGUAGE_CODE = os.getenv("LANGUAGE_CODE", default="fa-IR")
+TIME_ZONE = os.getenv("TIME_ZONE", default="Asia/Tehran")
 
 USE_I18N = True
-
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.1/howto/static-files/
-
-
 # Default primary key field type
-# https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-
 #! Celery Settings
-# CELERY_TIMEZONE = "Iran/Tehran"
-CELERY_BROKER_URL = "redis://localhost:6379"
-CELERY_RESULT_BACKEND = "redis://localhost:6379"
+CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL", default="redis://localhost:6379")
+CELERY_RESULT_BACKEND = os.getenv(
+    "CELERY_RESULT_BACKEND", default="redis://localhost:6379"
+)

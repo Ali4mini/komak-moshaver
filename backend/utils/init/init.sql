@@ -1,0 +1,2 @@
+CREATE ROLE amlak WITH LOGIN PASSWORD 'amlak';
+CREATE DATABASE amlak OWNER amlak;

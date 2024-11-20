@@ -1,0 +1,55 @@
+services:
+  postgres:
+    image: postgres:15.4
+    container_name: database_dev
+    environment:
+      POSTGRES_USER: "amlak"
+      POSTGRES_PASSWORD: "amlak" 
+      POSTGRES_DB: "amlak" 
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data_dev:/var/lib/postgresql/data 
+      - ./backend/utils/init:/docker-entrypoint-initdb.d  # Mount the init scripts
+    networks:
+      - komak-moshaver 
+
+  backend:
+    build:
+      context: ./backend/
+      target: dev  # Specify development target from Dockerfile 
+    volumes:
+      - ./backend/:/app/  # Mount local directory for live updates 
+    environment:
+      DEBUG: "True" 
+      SECRET_KEY: "someSecretKey$" 
+      DB_NAME: "amlak"
+      DB_HOST: database_dev
+      DB_USER: "amlak"
+      DB_PASS: "amlak"
+      DB_PORT: 5432
+    ports:
+      - "8000:8000"  
+    depends_on:
+      - postgres 
+    networks:
+      - komak-moshaver 
+
+  frontend:
+    build:
+      context: ./front-end/
+      target: dev  # Specify development target from Dockerfile 
+    volumes:
+      - ./front-end/:/app/  # Mount local directory for live updates 
+    ports:
+      - "5173:5173"  
+    depends_on:
+      - backend 
+    networks:
+      - komak-moshaver 
+
+networks:
+  komak-moshaver:
+
+volumes:
+  postgres_data_dev:
