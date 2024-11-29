@@ -1,7 +1,6 @@
 services:
   postgres:
     image: postgres:15.4
-    container_name: database_dev
     environment:
       POSTGRES_USER: "amlak"
       POSTGRES_PASSWORD: "amlak" 
@@ -21,10 +20,11 @@ services:
     volumes:
       - ./backend/:/app/  # Mount local directory for live updates 
     environment:
+      DJANGO_SETTINGS_MODULE: amlak.settings
       DEBUG: "True" 
       SECRET_KEY: "someSecretKey$" 
       DB_NAME: "amlak"
-      DB_HOST: database_dev
+      DB_HOST: postgres
       DB_USER: "amlak"
       DB_PASS: "amlak"
       DB_PORT: 5432

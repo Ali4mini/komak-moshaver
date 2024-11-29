@@ -47,6 +47,8 @@ class BuyCustomer(models.Model):
         max_length=12, choices=Status.choices, default=Status.ACTIVE
     )
 
+    # notified_customers = models.ManyToManyField(Sell, blank=True)
+    parking_motor = models.BooleanField(default=False)
     description = models.CharField(max_length=1000, blank=True, null=True)
     source_id = models.CharField(max_length=100, blank=True, null=True, unique=True)
 
@@ -136,6 +138,8 @@ class RentCustomer(models.Model):
         max_length=12, choices=Status.choices, default=Status.ACTIVE
     )
 
+    # notified_customers = models.ManyToManyField(Rent, blank=True)
+    parking_motor = models.BooleanField(default=False)
     description = models.CharField(max_length=1000, blank=True, null=True)
     source_id = models.CharField(max_length=100, blank=True, null=True, unique=True)
 
@@ -150,7 +154,6 @@ class RentCustomer(models.Model):
 
         budget_up_range = (int(self.up_budget * 0.75), int(self.up_budget * 1.25))
         budget_rent_range = (int(self.rent_budget * 0.75), int(self.rent_budget * 1.25))
-        print(budget_up_range)
 
         # Function to remove keys with None values
         def remove_none_values(query):

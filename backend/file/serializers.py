@@ -57,8 +57,9 @@ class SellFileSerializer(serializers.ModelSerializer):
         return user.username
 
     def get_persian_created(self, obj):
-        jalali_date = jdatetime.date.fromgregorian(date=obj.created)
-        return jalali_date.strftime("%Y/%m/%d")
+        if obj.created:
+            jalali_date = jdatetime.date.fromgregorian(date=obj.created)
+            return jalali_date.strftime("%Y/%m/%d")
 
     def get_persian_updated(self, obj):
         if obj.updated:
@@ -93,8 +94,9 @@ class RentFileSerializer(serializers.ModelSerializer):
         return user.username
 
     def get_persian_created(self, obj):
-        jalali_date = jdatetime.date.fromgregorian(date=obj.created)
-        return jalali_date.strftime("%Y/%m/%d")
+        if obj.created:
+            jalali_date = jdatetime.date.fromgregorian(date=obj.created)
+            return jalali_date.strftime("%Y/%m/%d")
 
     def get_persian_updated(self, obj):
         if obj.updated:

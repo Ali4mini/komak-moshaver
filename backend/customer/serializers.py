@@ -26,12 +26,14 @@ class BuyCustomerSerializer(serializers.ModelSerializer):
         return "buy"
 
     def get_persian_created(self, obj):
-        jalali_date = jdatetime.date.fromgregorian(date=obj.created)
-        return jalali_date.strftime("%Y/%m/%d")
+        if obj.created:
+            jalali_date = jdatetime.date.fromgregorian(date=obj.created)
+            return jalali_date.strftime("%Y/%m/%d")
 
     def get_persian_updated(self, obj):
-        jalali_date = jdatetime.date.fromgregorian(date=obj.updated)
-        return jalali_date.strftime("%Y/%m/%d")
+        if obj.updated:
+            jalali_date = jdatetime.date.fromgregorian(date=obj.updated)
+            return jalali_date.strftime("%Y/%m/%d")
 
     def get_customer_date(self, obj):
         if obj.date:
@@ -61,12 +63,14 @@ class RentCustomerSerializer(serializers.ModelSerializer):
         return "rent"
 
     def get_persian_created(self, obj):
-        jalali_date = jdatetime.date.fromgregorian(date=obj.created)
-        return jalali_date.strftime("%Y/%m/%d")
+        if obj.created:
+            jalali_date = jdatetime.date.fromgregorian(date=obj.created)
+            return jalali_date.strftime("%Y/%m/%d")
 
     def get_persian_updated(self, obj):
-        jalali_date = jdatetime.date.fromgregorian(date=obj.updated)
-        return jalali_date.strftime("%Y/%m/%d")
+        if obj.updated:
+            jalali_date = jdatetime.date.fromgregorian(date=obj.updated)
+            return jalali_date.strftime("%Y/%m/%d")
 
     def get_customer_date(self, obj):
         if obj.date:

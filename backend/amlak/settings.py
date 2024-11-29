@@ -80,8 +80,8 @@ MIDDLEWARE = [
 ]
 
 STATIC_URL = "/assets/"
-STATIC_ROOT = os.path.join(BASE_DIR, "front-end/dist/assets")
-WHITENOISE_ROOT = os.path.join(BASE_DIR, "front-end/dist")
+STATIC_ROOT = os.path.join(BASE_DIR, "/assets/")
+WHITENOISE_ROOT = os.path.join(BASE_DIR, "/assets/")
 
 CORS_ORIGIN_ALLOW_ALL = True
 
@@ -114,6 +114,7 @@ APPEND_SLASH = True
 
 print(os.getenv("DB_PASS"))
 print(os.getenv("DB_USER"))
+
 # Database
 DATABASES = {
     "default": {

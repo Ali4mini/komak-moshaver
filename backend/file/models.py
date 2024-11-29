@@ -1,8 +1,6 @@
-from enum import unique
 from typing import List
 from django.db import models
 from django.urls import reverse
-from agents_m.models import Profile
 from django.conf import settings
 from customer.models import BuyCustomer, RentCustomer
 
@@ -74,7 +72,7 @@ class Sell(models.Model):
     def get_pk(self) -> int:
         return self.pk
 
-    def get_related_customers(self) -> BuyCustomer:
+    def get_related_customers(self) -> List[BuyCustomer]:
         budget_range = (int(self.price * 0.75), int(self.price * 1.25))
 
         # Function to remove keys with None values
@@ -195,10 +193,13 @@ class Rent(models.Model):
         filter_query = remove_none_values(filter_query)
 
         all_customers = RentCustomer.objects.filter(**filter_query)
-        if self.notified_customers is not None:
-            notified_customer_ids = self.notified_customers.values_list("id", flat=True)
-            unnotified_customers = all_customers.exclude(id__in=notified_customer_ids)
-            return unnotified_customers
+
+        if self.notified_customers is None:
+            return all_customers
+
+        notified_customer_ids = self.notified_customers.values_list("id", flat=True)
+        unnotified_customers = all_customers.exclude(id__in=notified_customer_ids)
+        return unnotified_customers
 
 
 class SellImage(models.Model):
