@@ -29,9 +29,6 @@ class RentFileRestore(APIView, BasicPagination):
         params = request.query_params.copy()
 
         today = date.today()
-        last_update_date = today - timedelta(days=30)
-
-        print(last_update_date)
         # Filter based on the updated field
         queryset = Rent.objects.filter(
             date__month=today.month,

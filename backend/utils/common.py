@@ -5,7 +5,7 @@ from datetime import date, datetime
 
 
 def set_added_by(serializer_class):
-    """it get's the username and sets it to the correct User instance in"""
+    """it get's the username and sets it to the correct User instance"""
     original_create = serializer_class.create
 
     @wraps(original_create)
@@ -16,9 +16,11 @@ def set_added_by(serializer_class):
             User = get_user_model()
             try:
                 user = User.objects.get(username=username)
+                print("user is:\n", user)
                 validated_data["added_by"] = user
             except User.DoesNotExist:
-                raise serializers.ValidationError({"username": "User does not exist."})
+                print("failed")
+                raise serializers.ValidationError({"added_by": "User does not exist."})
 
         return original_create(self, validated_data)
 

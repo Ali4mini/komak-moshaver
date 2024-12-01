@@ -102,6 +102,7 @@ class SellFileImages(APIView):
         return Response(serializer.data)
 
     def post(self, request, file_id):
+        # BUG: this method doesnt work with files
         print("Parsed request data:", request.data)  # Parsed dictionary
         try:
             file = Sell.objects.get(pk=file_id)
