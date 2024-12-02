@@ -15,7 +15,7 @@ from .serializers import (
 )
 from customer.serializers import BuyCustomerSerializer, RentCustomerSerializer
 from django.conf import settings
-from django.core.files.base import ContentFile
+from typing import Dict
 
 # Create your views here.
 
@@ -81,13 +81,18 @@ class NewRentFile(generics.CreateAPIView):
 
 
 class SellFileImages(APIView):
-    parser_classes = (FileUploadParser, MultiPartParser, JSONParser)
+    parser_class = (FileUploadParser, MultiPartParser)
 
     def get(self, request, file_id):
         try:
             file = Sell.objects.get(id=file_id)
         except Sell.DoesNotExist:
-            raise Http404("File does not exist")
+            return Response(
+                {
+                    "detail": "the images doesnt exist",
+                    "status": status.HTTP_404_NOT_FOUND,
+                }
+            )
 
         images = SellImage.objects.filter(file=file)
         if not images:
@@ -102,54 +107,29 @@ class SellFileImages(APIView):
         return Response(serializer.data)
 
     def post(self, request, file_id):
-        # BUG: this method doesnt work with files
-        print("Parsed request data:", request.data)  # Parsed dictionary
         try:
             file = Sell.objects.get(pk=file_id)
+
         except Sell.DoesNotExist:
             return Response(
-                {"detail": "File does not exist."}, status=status.HTTP_404_NOT_FOUND
+                {"details": "the file_id DoesNotExist"},
+                status=status.HTTP_404_NOT_FOUND,
             )
 
-        # Validate incoming data using the serializer
-        serializer = SellImageSerializer(data=request.data)  # Use request.data
-        if not serializer.is_valid():
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        image_files = request.FILES.getlist("images")
+        print(image_files)
 
-        # Get uploaded files and image URLs
-        image_files = request.FILES.getlist("images")  # Get uploaded files
-        image_urls = request.data.get(
-            "image_urls", []
-        )  # Get image URLs from request.data
-
-        # Check if neither image_files nor image_urls are provided
-        if not image_files and not image_urls:
+        if not image_files:
             return Response(
-                {"detail": "No image file or URL was provided in the request."},
+                {"detail": "No file was provided in the request."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
         created_images = []
+        for image_file in image_files:
+            image = SellImage.objects.create(image=image_file, file=file)
+            created_images.append(image)
 
-        # Handle image URLs if provided
-        if image_urls:
-            for image_url in image_urls:
-                response = requests.get(image_url)
-                if response.status_code == 200:
-                    filename = f"{file_id}_{len(created_images)}.jpg"  # Unique filename for each URL
-                    image_content = ContentFile(response.content, name=filename)
-                    sell_image = SellImage.objects.create(
-                        image=image_content, file=file
-                    )
-                    created_images.append(sell_image)
-
-        # Handle uploaded files if provided
-        if image_files:
-            for image_file in image_files:
-                sell_image = SellImage.objects.create(image=image_file, file=file)
-                created_images.append(sell_image)
-
-        # Serialize created images
         serializer = SellImageSerializer(
             created_images, many=True, context={"request": request}
         )
@@ -180,7 +160,14 @@ class RentFileImages(APIView):
         return Response(serializer.data)
 
     def post(self, request, file_id):
-        file = Rent.objects.get(pk=file_id)
+        try:
+            file = Rent.objects.get(pk=file_id)
+        except Rent.DoesNotExist:
+            return Response(
+                {"details": "the file_id DoesNotExist"},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
         image_files = request.FILES.getlist("images")
 
         if not image_files:
@@ -189,13 +176,11 @@ class RentFileImages(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        # Create a new SellImage instance for each uploaded file
         created_images = []
         for image_file in image_files:
             image = RentImage.objects.create(image=image_file, file=file)
             created_images.append(image)
 
-        # Assuming you have a serializer for SellImage
         serializer = RentImageSerializer(
             created_images, many=True, context={"request": request}
         )

@@ -115,7 +115,7 @@ const NewFile = () => {
   const handleUpload = async (endpoint) => {
     const formData = new FormData();
     Array.from(selectedFiles).forEach((file) => {
-      formData.append('images', file);
+      formData.append('image_files', file);
     });
 
     const config = {

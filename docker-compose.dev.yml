@@ -18,7 +18,8 @@ services:
       context: ./backend/
       target: dev  # Specify development target from Dockerfile 
     volumes:
-      - ./backend/:/app/  # Mount local directory for live updates 
+      - ./backend/:/app/  
+      - ./media:/app/media/
     environment:
       DJANGO_SETTINGS_MODULE: amlak.settings
       DEBUG: "True" 

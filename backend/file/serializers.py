@@ -8,11 +8,10 @@ from django.core.files.base import ContentFile
 
 class SellImageSerializer(serializers.ModelSerializer):
     image_url = serializers.SerializerMethodField()
-    image_urls = serializers.ListField(child=serializers.URLField(), write_only=True)
 
     class Meta:
-        model = SellImage
-        fields = ["image_url", "file", "image_urls"]  # Include other fields as needed
+        model = RentImage
+        fields = ["image_url", "file"]
 
     def get_image_url(self, obj):
         request = self.context.get("request")
