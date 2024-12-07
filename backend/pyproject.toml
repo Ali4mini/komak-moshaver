@@ -1,3 +1,10 @@
+[tool.ruff]
+line-length = 79  # Set the maximum line length
+
+[tool.ruff.lint]
+# Add specific rules to enforce
+extend-select = ["E501"]  # Example: enforce line length rule (E501)
+
 [tool.poetry]
 name = "backend"
 version = "0.2.0"

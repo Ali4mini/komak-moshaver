@@ -172,66 +172,62 @@ const FileDetails = () => {
         id="details"
         className="flex flex-col w-full border-2 text-sm md:text-base bg-white justify-between rounded-lg h-auto shadow"
       >
-
         <div className="flex flex-col">
-
           <div className="flex flex-col">
             <div className="grid grid-cols-3 justify-between gap-5 my-3 px-4">
-              <p>نوع فایل: {fileType === "sell" ? "فروش" : "اجاره"}</p>
-              <p>نوع ملک: {file?.property_type}</p>
-              <p>تاریخ: {file?.file_date}</p>
-              <p>آخرین استعلام: {file?.persian_updated}</p>
-              <p>ثبت شده توسط: {file?.added_by}</p>
+              <p id="fileType">نوع فایل: {fileType === "sell" ? "فروش" : "اجاره"}</p>
+              <p id="propertyType">نوع ملک: {file?.property_type}</p>
+              <p id="fileDate">تاریخ: {file?.file_date}</p>
+              <p id="lastInquiry">آخرین استعلام: {file?.persian_updated}</p>
+              <p id="addedBy">ثبت شده توسط: {file?.added_by}</p>
             </div>
-            <div className="flex flex-row-2 gap-20 my-3 px-4">
-              <p>نام مالک: {file?.owner_name}</p>
-              <p>شماره مالک: {file?.owner_phone}</p>
+            <div className="flex flex-row gap-20 my-3 px-4">
+              <p id="ownerName">نام مالک: {file?.owner_name}</p>
+              <p id="ownerPhone">شماره مالک: {file?.owner_phone}</p>
             </div>
             <div className="grid grid-cols-3 md:grid-cols-3 gap-x-6 gap-y-3 my-3 px-4">
-              <p>متراژ: {file?.m2}</p>
+              <p id="area">متراژ: {file?.m2}</p>
               {fileType === "sell" ? (
-                <p>قیمت: {file?.price}</p>
+                <p id="price">قیمت: {file?.price}</p>
               ) : (
                 <>
-                  <p>ودیعه: {file?.price_up}</p>
-                  <p>اجاره: {file?.price_rent}</p>
+                  <p id="deposit">ودیعه: {file?.price_up}</p>
+                  <p id="rentPrice">اجاره: {file?.price_rent}</p>
                 </>
               )}
-
-              <p>ساخت: {file?.year}</p>
-              <p>طبقه: {file?.floor}</p>
-              <p>طبقات: {file?.tabaghat}</p>
-              <p>خواب: {file?.bedroom}</p>
-              <p>واحد: {file?.vahedha}</p>
-              <p>تبدیل: {file?.tabdil}</p>
-
-              <p>بازدید: {file?.bazdid}</p>
+              <p id="yearBuilt">ساخت: {file?.year}</p>
+              <p id="floorNumber">طبقه: {file?.floor}</p>
+              <p id="totalFloors">طبقات: {file?.tabaghat}</p>
+              <p id="bedrooms">خواب: {file?.bedroom}</p>
+              <p id="units">واحد: {file?.vahedha}</p>
+              <p id="conversion">تبدیل: {file?.tabdil}</p>
+              <p id="visits">بازدید: {file?.bazdid}</p>
             </div>
-            {file?.tenet_phone ?
-              <div className="flex flex-row gap-10 my-3 px-4">
+            {file?.tenet_phone && (
+              <div className="flex flex-row gap-10 my-3 px-4" id="tenantInfo">
                 <p>شماره مستاجر: {file?.tenet_phone}</p>
                 <p>نام مستاجر: {file?.tenet_name}</p>
-              </div> : null}
-
-            {file?.lobbyMan_phone ?
-              <div className="flex flex-row gap-10 my-3 px-4">
+              </div>
+            )}
+            {file?.lobbyMan_phone && (
+              <div className="flex flex-row gap-10 my-3 px-4" id="lobbyManInfo">
                 <p>شماره سرایدار: {file?.lobbyMan_phone}</p>
                 <p>نام سرایدار: {file?.lobbyMan_name}</p>
-              </div> : null}
-            <div className="flex flex-row gap-10 my-3 px-4">
-              <p>آدرس: </p>
+              </div>
+            )}
+            <div className="flex flex-row gap-10 my-3 px-4" id="addressInfo">
+              <p>آدرس:</p>
               <p>{file?.address}</p>
             </div>
-            <div className="flex flex-row gap-10 my-3 px-4">
-              <p>توضیحات: </p>
+            <div className="flex flex-row gap-10 my-3 px-4" id="descriptionInfo">
+              <p>توضیحات:</p>
               <p>{file?.description}</p>
-
             </div>
-            <div className="flex gap-20 my-3 px-4">
+            <div className="flex gap-20 my-3 px-4" id="featuresList">
               {features.map(
                 ({ feature, image, text }, index) =>
                   file?.[feature] && (
-                    <div key={index} className="flex flex-col">
+                    <div key={index} className="flex flex-col" id={`feature-${index}`}>
                       <img src={image} alt="" width="30px" className="mx-auto" />
                       <span>{text}</span>
                     </div>
@@ -239,9 +235,12 @@ const FileDetails = () => {
               )}
             </div>
           </div>
+
+          {/* Action Buttons Section */}
           <div className="flex flex-row justify-between my-3 px-4 z-10">
             <MenuButton buttonText={"گزینه ها"} items={optionItems} />
 
+            {/* Conditional Components */}
             {isMatchedCustomer && (
               <MatchedCustomers
                 isOpen={isMatchedCustomer}
@@ -260,15 +259,18 @@ const FileDetails = () => {
                 }
               />
             )}
-            {isCallLog &&
-              <NewCallLog isOpen={isCallLog} setIsOpen={setIsCallLog} />
-            }
 
-            {isTourLog &&
+            {isCallLog && (
+              <NewCallLog isOpen={isCallLog} setIsOpen={setIsCallLog} />
+            )}
+
+            {isTourLog && (
               <NewTourLog isOpen={isTourLog} setIsOpen={setIsTourLog} />
-            }
+            )}
+
+            {/* Update Button */}
             <button
-              id="update"
+              id="updateButton"
               onClick={() => {
                 navigate("edit/");
               }}
@@ -277,13 +279,20 @@ const FileDetails = () => {
               ویرایش
             </button>
           </div>
+
         </div>
 
-      </div >
-
-      <div id="gallery" className="flex justify-center items-center border-5 rounded p-2 md:p-4">
-        {images && images.length > 0 ? <ImageSlider images={images} /> : <img src="https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg" alt="No image found" />}
       </div>
+
+      {/* Gallery Section */}
+      <div id="gallery" className="flex justify-center items-center border-5 rounded p-2 md:p-4">
+        {images && images.length > 0 ? (
+          <ImageSlider images={images} />
+        ) : (
+          <img src="https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg" alt="No image found" />
+        )}
+      </div>
+
     </div>
   );
 };

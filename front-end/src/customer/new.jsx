@@ -149,14 +149,14 @@ const NewCustomer = () => {
             <>
               <FloatLabel
                 type="number"
-                name={"upPrice"}
+                name={"upBudget"}
                 label={"ودیعه"}
                 setter={setUpBudget}
                 isRequired={true}
               />
               <FloatLabel
                 type="number"
-                name={"rentPrice"}
+                name={"rentBudget"}
                 label={"اجاره"}
                 setter={setRentBudget}
                 isRequired={true}

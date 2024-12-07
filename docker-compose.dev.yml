@@ -19,7 +19,7 @@ services:
       target: dev  # Specify development target from Dockerfile 
     volumes:
       - ./backend/:/app/  
-      - ./media:/app/media/
+      - ./backend/media:/app/media/
     environment:
       DJANGO_SETTINGS_MODULE: amlak.settings
       DEBUG: "True" 

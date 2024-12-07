@@ -66,7 +66,7 @@ const CustomerDetail = () => {
     },
     {
       key: "matched_customers",
-      label: "مشتریان مرتبط",
+      label: "فایل های مرتبط",
       disabled: false,
       handler: () => {
         setIsMatchedFile(!isMatchedFile);
@@ -116,86 +116,89 @@ const CustomerDetail = () => {
   ];
 
   return (
-    <div
-      id="details"
-      className="flex border-2 w-auto bg-white rounded-lg mx-4 h-auto shadow-lg"
-    >
-      <div className="flex flex-col">
-        <div className="grid grid-cols-3 gap-5 my-3 px-4">
-          <p>نوع فایل: {customerType === "buy" ? "فروش" : "اجاره"}</p>
-          <p>نوع ملک: {customer?.property_type}</p>
+    (
+      <div
+        id="customer-details" // Changed to a more descriptive ID
+        className="flex border-2 w-auto bg-white rounded-lg mx-4 h-auto shadow-lg"
+      >
+        <div className="flex flex-col">
+          <div className="grid grid-cols-3 gap-5 my-3 px-4">
+            <p id="customerType">نوع فایل: {customerType === "buy" ? "فروش" : "اجاره"}</p>
+            <p id="propertyType">نوع ملک: {customer?.property_type}</p>
+            <p id="customerDate">تاریخ: {customer?.customer_date}</p>
+            <p id="lastInquiry">آخرین استعلام: {customer?.persian_updated}</p>
+            <p id="addedBy">ثبت شده توسط: {customer?.added_by}</p>
+          </div>
+          <div className="flex flex-row-2 gap-20 my-3 px-4">
+            <p id="customerName">نام مشتری: {customer?.customer_name}</p>
+            <p id="customerPhone">شماره مشتری: {customer?.customer_phone}</p>
+          </div>
+          <div className="grid grid-cols-4 flex-wrap gap-x-6 gap-y-3 my-3 px-4">
+            <p id="area">متراژ: {customer?.m2}</p>
+            {customerType === "buy" ? (
+              <p id="budget">بودچه: {customer?.budget}</p>
+            ) : (
+              <>
+                <p id="deposit">ودیعه: {customer?.up_budget}</p>
+                <p id="rent">اجاره: {customer?.rent_budget}</p>
+              </>
+            )}
+            <p id="yearBuilt">سال ساخت: {customer?.year}</p>
+            <p id="bedrooms">تعداد اتاق خواب: {customer?.bedroom}</p>
+            <p id="units">تعداد واحد: {customer?.vahedha}</p>
+          </div>
+          <div className="flex gap-20 my-3 px-4" id="featuresList">
+            {features.map(({ feature, image, text }, index) => customer?.[feature] && (
+              <div key={index} className="flex flex-col" id={`feature-${index}`}>
+                <img src={image} alt="" width="40px" className="mx-auto" />
+                <span>{text}</span>
+              </div>
+            ))}
+          </div>
+          <div className="flex flex-row gap-10 my-3 px-4" id="descriptionSection">
+            <p>توضیحات:</p>
+            <p id="description">{customer?.description}</p>
+          </div>
+          <div className="flex flex-row justify-between my-3 px-4">
 
-          <p>تاریخ: {customer?.customer_date}</p>
-          <p>آخرین استعلام: {customer?.persian_updated}</p>
-          <p>ثبت شده توسط: {customer?.added_by}</p>
-        </div>
-        <div className="flex flex-row-2 gap-20 my-3 px-4">
-          <p>نام مشتری: {customer?.customer_name}</p>
-          <p>شماره مشتری: {customer?.customer_phone}</p>
-        </div>
-        <div className="grid grid-cols-4 flex-wrap gap-x-6 gap-y-3 my-3 px-4">
-          <p>متراژ: {customer?.m2}</p>
-          {customerType === "buy" ? (
-            <p>بودچه: {customer?.budget}</p>
-          ) : (
-            <>
-              <p>ودیعه: {customer?.up_budget}</p>
-              <p>اجاره: {customer?.rent_budget}</p>
-            </>
-          )}
+            {/* MenuButton component */}
+            <MenuButton buttonText={"گزینه ها"} items={optionItems} />
 
-          <p>سال ساخت: {customer?.year}</p>
-          <p>تعداد اتاق خواب: {customer?.bedroom}</p>
-          <p>تعداد واحد: {customer?.vahedha}</p>
-        </div>
-        <div className="flex gap-20 my-3 px-4">
-          {features.map(({ feature, image, text }, index) => customer?.[feature] && (
-            <div key={index} className="flex flex-col">
-              <img src={image} alt="" width="40px" className="mx-auto" />
-              <span>{text}</span>
-            </div>
-          ))}
-        </div>
-        <div className="flex flex-row gap-10 my-3 px-4">
-          <p>توضیحات: </p>
-          <p>{customer?.description}</p>
+            {/* Conditional components */}
+            {isMatchedFile && (
+              <MatchedFiles
+                isOpen={isMatchedFile}
+                setIsOpen={setIsMatchedFile}
+              />
+            )}
 
-        </div>
-        <div className="flex flex-row justify-between my-3 px-4">
+            {isDeleteConfirm && (
+              <DeleteConfirm
+                isOpen={isDeleteConfirm}
+                setIsOpen={setIsDeleteConfirm}
+                app={'customer'}
+                model={customerType}
+                id={id}
+                title={"آیا از پاک کردن این مشتری مطمعنید؟"}
+                description={
+                  "اگر این مشتری را پاک کنید هیچ راهی برای بازگردانی آن ندارید!!"
+                }
+              />
+            )}
 
-          <MenuButton buttonText={"گزینه ها"} items={optionItems} />
-
-          {isMatchedFile && (
-            <MatchedFiles
-              isOpen={isMatchedFile}
-              setIsOpen={setIsMatchedFile}
-            // notifiedCustomers={customer.notified_customers}
-            />
-          )}
-          {isDeleteConfirm && (
-            <DeleteConfirm
-              isOpen={isDeleteConfirm}
-              setIsOpen={setIsDeleteConfirm}
-              app={'customer'}
-              model={customerType}
-              id={id}
-              title={"آیا از پاک کردن این مشتری مطمعنید؟"}
-              description={
-                "اگر این مشتری را پاک کنید هیچ راهی برای بازگردانی آن ندارید!!"
-              }
-            />
-          )}
-
-          <button
-            id="update"
-            onClick={() => { navigate('edit/') }}
-            className="text-white max-w-md bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-          >
-            ویرایش
-          </button>
+            {/* Update button */}
+            <button
+              id="updateButton" // Changed to a more descriptive ID
+              onClick={() => { navigate('edit/') }}
+              className="text-white max-w-md bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+            >
+              ویرایش
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    )
+
   );
 };
 

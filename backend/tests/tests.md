@@ -1,5 +1,6 @@
-# Backend Tests
+# Unit Tests
 
+## Back-end
 - [x] new file entry
 - [x] new customer entry
 - [x] related files
@@ -16,3 +17,32 @@
 - [ ] dashboard
 - [ ] tabdil
 - [ ] unauthorized access
+
+## Front-end
+- [x] login ✅ 2024-12-03
+	- [x] login success
+	- [x] login failed
+	- [x] redirect to login page for unauthenticated users ✅ 2024-12-03
+- [x] new file ✅ 2024-12-03
+- [x] new customer ✅ 2024-12-03
+- [x] setup fixtures (making a mock file and testing on it) ✅ 2024-12-04
+- [x] file details ✅ 2024-12-04
+- [x] customer details ✅ 2024-12-04
+- [ ] file edit
+- [ ] customer edit
+- [ ] call logs
+- [ ] tour logs
+- [ ] related customers
+- [ ] related files
+- [ ] delete files
+- [ ] delete customers
+- [ ] search
+- [ ] file card
+- [ ] customer card
+- [ ] updating file and customer last updated
+
+
+# E2E tests
+- i'll write [[E2E tests]] with [[playwright]] 
+
+

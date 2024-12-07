@@ -168,8 +168,14 @@ class Rent(models.Model):
         return self.pk
 
     def get_related_customers(self) -> List[RentCustomer]:
-        budget_up_range = (int(self.price_up * 0.75), int(self.price_up * 1.25))
-        budget_rent_range = (int(self.price_rent * 0.75), int(self.price_rent * 1.25))
+        budget_up_range = (
+            int(self.price_up * 0.75),
+            int(self.price_up * 1.25),
+        )
+        budget_rent_range = (
+            int(self.price_rent * 0.75),
+            int(self.price_rent * 1.25),
+        )
 
         # Function to remove keys with None values
         def remove_none_values(query):
