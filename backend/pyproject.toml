@@ -1,10 +1,3 @@
-[tool.ruff]
-line-length = 79  # Set the maximum line length
-
-[tool.ruff.lint]
-# Add specific rules to enforce
-extend-select = ["E501"]  # Example: enforce line length rule (E501)
-
 [tool.poetry]
 name = "backend"
 version = "0.2.0"
@@ -17,7 +10,7 @@ python = "^3.12"
 Django = "5"
 djangorestframework = "^3.15.2"
 psycopg2-binary = "^2.9.10"
-celery = "^5.4.0"
+celery = {extras = ["redis"], version = "^5.4.0"}
 django-taggit = "^6.1.0"
 django-extensions = "^3.2.3"
 django-compressor = "^4.5.1"
@@ -31,6 +24,7 @@ whitenoise = "^6.8.2"
 gunicorn = "^23.0.0"
 pytest = "^8.3.3"
 pytest-django = "^4.9.0"
+redis = "^5.2.1"
 
 
 [build-system]

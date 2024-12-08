@@ -1,11 +1,10 @@
 from .models import RentImage, Sell, Rent, SellImage
-from rest_framework.parsers import JSONParser, MultiPartParser
+from rest_framework.parsers import MultiPartParser
 from rest_framework.parsers import FileUploadParser
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-import requests
 from rest_framework import generics
 from .serializers import (
     SellFileSerializer,
@@ -14,8 +13,7 @@ from .serializers import (
     RentImageSerializer,
 )
 from customer.serializers import BuyCustomerSerializer, RentCustomerSerializer
-from django.conf import settings
-from typing import Dict
+from .tasks import send_sell_message, send_rent_message
 
 # Create your views here.
 
@@ -191,39 +189,16 @@ class RentFileImages(APIView):
 class SellSendInfo(APIView):
     def post(self, request, pk):
         phone_numbers = request.data.get("phone_numbers")
-        file = Sell.objects.get(pk=pk)
 
-        if file.elevator:
-            elevator = "دارد"
-        else:
-            elevator = "ندارد"
-        if file.storage:
-            storage = "دارد"
-        else:
-            storage = "ندارد"
-        if file.parking:
-            parking = "دارد"
-        else:
-            parking = "ندارد"
+        send_sell_message.delay(phone_numbers, pk)
 
-        sell_template = f"""
-        آدرس : {file.address}
-        متراژ: {file.m2}
-        قیمت: {file.price}
-        طبقه: {file.floor}
-        آسانسور: {elevator}
-        پارکینگ: {parking}
-        انباری: {storage}
-        """
-
-        data = {
-            "from": "50004001845778",
-            "to": phone_numbers,
-            "text": sell_template,
-            "udh": "",
-        }
-        response = requests.post(settings.SMS_API, json=data)
-        return Response(response)
+        return Response("Task has been queued.")
 
 
-# TODO: RentSendInfo
+class RentSendInfo(APIView):
+    def post(self, request, pk):
+        phone_numbers = request.data.get("phone_numbers")
+
+        send_rent_message.delay(phone_numbers, pk)
+
+        return Response("Task has been queued.")

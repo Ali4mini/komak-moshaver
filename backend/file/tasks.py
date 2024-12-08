@@ -1,70 +1,81 @@
 from celery import shared_task
 from .models import Sell, Rent
-from customer.models import BuyCustomer, RentCustomer
-from requests import Response
 import requests
 
 
-#SECTION - Tasks
 @shared_task
-def welcome_message(data):
+def send_sell_message(phone_numbers, pk):
+    file = Sell.objects.get(pk=pk)
 
-    template = f'''مشتری عزیز شما با موفقیت به سامانه املاک ولیعصر اضافه شدید'''
-    
-    message_data = {'from':'50004001845778', 'to':[data['owner_phone']], 'text':template, 'udh':''}
-    response = requests.post('https://console.melipayamak.com/api/send/advanced/b59dd6ca1de047aabf4416be63da2c01',
-                             json=message_data)
-    return response.status_code
+    elevator = "دارد" if file.elevator else "ندارد"
+    storage = "دارد" if file.storage else "ندارد"
+    parking = "دارد" if file.parking else "ندارد"
+
+    sell_template = f"""
+    آدرس : {file.address}
+    متراژ: {file.m2}
+    قیمت: {file.price}
+    طبقه: {file.floor}
+    آسانسور: {elevator}
+    پارکینگ: {parking}
+    انباری: {storage}
+    """
+
+    url = "http://192.168.1.109:8080/message"
+    data = {
+        "message": sell_template,
+        "phoneNumbers": [phone_numbers],
+        "simNumber": 1,
+    }
+
+    response = requests.post(
+        url,
+        json=data,
+        auth=requests.auth.HTTPBasicAuth("sms", "ggQ7iEXY"),
+        headers={"Content-Type": "application/json"},
+    )
+    return (
+        response.status_code == 202
+    )  # Return True if successful, False otherwise   return response.status_code == 202  # Return True if successful, False otherwise
+
 
 @shared_task
-def match_customers(data, file_type):
-    if data['parking'] == True:
-        data['parking'] = 'دارد'
-    else: 
-        data['parking'] = 'ندارد'
-    if data['elevator'] == True:
-        data['elevator'] = 'دارد'
-    else: 
-        data['elevator'] = 'ندارد'
-    if data['storage'] == True:
-        data['storage'] = 'دارد'
-    else: 
-        data['storage'] = 'ندارد'
+def send_rent_message(phone_numbers, pk):
+    file = Rent.objects.get(pk=pk)
 
-    if file_type == 'sell':
-        sell_template = f'''مشتری عزیز یک فایل جدید برای شما پیدا شد
-        قیمت:{data['price']}
-        متراژ:{data['m2']}
-        آدرس:{data['address']}
-        طبقه:{data['floor']}
-        پارکینگ:{data['parking']}
-        آسانسور:{data['elevator']}
-        انباری:{data['storage']}'''
-        customers = BuyCustomer.objects.filter(budget__gte=data['price'],
-                                               m2__lte=data['m2'],).all()
-        customers = [customer.customer_phone for customer in customers]
-        message_data = {'from':'50004001845778', 'to':customers, 'text':sell_template, 'udh':''}
-        response = requests.post('https://console.melipayamak.com/api/send/advanced/b59dd6ca1de047aabf4416be63da2c01', 
-                                 json=message_data)
+    elevator = "دارد" if file.elevator else "ندارد"
+    storage = "دارد" if file.storage else "ندارد"
+    parking = "دارد" if file.parking else "ندارد"
 
-    elif file_type == 'rent':
-        
-        rent_template = f'''مشتری عزیز یک فایل جدید برای شما پیدا شد
-        ودیعه:{data['price_up']}
-        اجاره:{data['price_rent']}
-        متراژ:{data['m2']}
-        آدرس:{data['address']}
-        طبقه:{data['floor']}
-        پارکینگ:{data['parking']}
-        آسانسور:{data['elevator']}
-        انباری:{data['storage']}'''
-        customers = RentCustomer.objects.filter(up_budget__gte=data['price_up'],
-                                                rent_budget__gte=data['price_rent'],
-                                                m2__lte=data['m2'])
-        customers = [customer.customer_phone for customer in customers]
-        message_data = {'from':'50004001845778', 'to':customers, 'text':rent_template, 'udh':''}
-        response = requests.post('https://console.melipayamak.com/api/send/advanced/b59dd6ca1de047aabf4416be63da2c01', 
-                                 json=message_data)
+    price_up = (
+        f"میلیون{file.price_up}"
+        if file.price_up < 1000
+        else f"میلیارد{int(file.price_up / 1000)}"
+    )
 
-    return response.status_code
-#!SECTION
+    rent_template = f"""
+    آدرس : {file.address}
+    متراژ: {file.m2}
+    ودیعه: {price_up}
+    اجاره: میلیون {int(file.price_rent)}
+    طبقه: {file.floor}
+    آسانسور: {elevator}
+    پارکینگ: {parking}
+    انباری: {storage}
+    """
+
+    url = "http://192.168.1.109:8080/message"
+    data = {
+        "message": rent_template,
+        "phoneNumbers": [phone_numbers],
+        "simNumber": 1,
+    }
+
+    response = requests.post(
+        url,
+        json=data,
+        auth=requests.auth.HTTPBasicAuth("sms", "ggQ7iEXY"),
+        headers={"Content-Type": "application/json"},
+    )
+
+    return response.status_code == 202

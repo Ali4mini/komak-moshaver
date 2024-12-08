@@ -11,7 +11,7 @@ urlpatterns = [
     path("sell/<int:pk>/", views.SellFileDetails.as_view(), name="sell_file_detail"),
     path("rent/<int:pk>/", views.RentFileDetails.as_view(), name="rent_file_detail"),
     path("sell/<int:pk>/send/", views.SellSendInfo.as_view(), name="sell_send_info"),
-    path("rent/<int:pk>/send/", views.SellSendInfo.as_view(), name="rent_send_info"),
+    path("rent/<int:pk>/send/", views.RentSendInfo.as_view(), name="rent_send_info"),
     path(
         "sell/<int:file_id>/images/",
         views.SellFileImages.as_view(),

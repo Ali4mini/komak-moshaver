@@ -50,9 +50,7 @@ INSTALLED_APPS = [
     "corsheaders",
 ]
 
-SMS_API = (
-    "https://console.melipayamak.com/api/send/advanced/b59dd6ca1de047aabf4416be63da2c01"
-)
+SMS_API = "http://192.168.1.104:8080/message"
 
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [],
@@ -112,8 +110,6 @@ WSGI_APPLICATION = "amlak.wsgi.application"
 
 APPEND_SLASH = True
 
-print(os.getenv("DB_PASS"))
-print(os.getenv("DB_USER"))
 
 # Database
 DATABASES = {
@@ -164,8 +160,8 @@ USE_TZ = True
 # Default primary key field type
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-#! Celery Settings
-CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL", default="redis://localhost:6379")
-CELERY_RESULT_BACKEND = os.getenv(
-    "CELERY_RESULT_BACKEND", default="redis://localhost:6379"
-)
+# celery settings
+CELERY_BROKER_URL = "redis://redis:6379/0"
+CELERY_RESULT_BACKEND = "redis://redis:6379/0"
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"

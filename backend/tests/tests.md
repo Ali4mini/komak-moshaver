@@ -28,7 +28,7 @@
 - [x] setup fixtures (making a mock file and testing on it) ✅ 2024-12-04
 - [x] file details ✅ 2024-12-04
 - [x] customer details ✅ 2024-12-04
-- [ ] file edit
+- [/] file edit
 - [ ] customer edit
 - [ ] call logs
 - [ ] tour logs

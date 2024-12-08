@@ -26,6 +26,7 @@ const NewTourLog = ({ isOpen, setIsOpen }) => {
     tour_type: subject
   }
 
+
   const handleSubmit = (event, entry) => {
     event.preventDefault();
     console.log(callLogEntry)
