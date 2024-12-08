@@ -12,17 +12,16 @@ test.describe('NewFile Component', () => {
     await page.goto('http://localhost:5173/');
     await page.locator('#file_id').first().click();
     await page.click('#updateButton');
-    await page.waitForSelector("#file_type")
   })
 
   test('should submit the form with valid data', async ({ page }) => {
 
 
     // Fill in the form fields with valid data
-    await page.selectOption('#file_type', 'sell'); // Select file type
     await page.selectOption('#property_type', 'A'); // Select property type
     await page.fill('#address', '123 Main St'); // Changed to ID selector
-    await page.fill('#price', '250000'); // For sell type; changed to ID selector
+    await page.fill('#upPrice', '250000'); // For sell type; changed to ID selector
+    await page.fill('#rentPrice', '10'); // For sell type; changed to ID selector
     await page.fill('#m2', '100'); // Changed to ID selector
     await page.fill('#bedroom', '3'); // Changed to ID selector
     await page.fill('#year', '2020'); // Changed to ID selector
@@ -46,7 +45,6 @@ test.describe('NewFile Component', () => {
   test('should show an error when submitting invalid phone numbers', async ({ page }) => {
 
     // Fill in the form fields with valid data for rent type
-    await page.selectOption('#file_type', 'rent'); // Select file type
     await page.selectOption('#property_type', 'A'); // Select property type
     await page.fill('#address', '123 Main St'); // Changed to ID selector
     await page.fill('#upPrice', '250'); // For rent type; changed to ID selector

@@ -10,7 +10,7 @@ import MenuButton from "../common/dropdown_button";
 import MatchedCustomers from "../common/matched_customers";
 import ImageSlider from "../common/slide";
 import phoneIcon from "../assets/icons8-phone-50.png"
-import NewCallLog from "../log_app/logs";
+import NewCallLog from "../log_app/callLog";
 import NewTourLog from "../log_app/tourLog";
 import AddressSMS from "../common/sendAddressSMS";
 

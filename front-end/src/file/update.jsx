@@ -13,13 +13,19 @@ const UpdateFile = () => {
   const [isLoading, setIsLoading] = useState(true); // Add loading state
   const dispatch = useDispatch();
 
-  // Fetch the old file
   useEffect(() => {
-    api.get(`file/${fileType}/${id}/`).then((response) => {
-      setOldFile(response.data);
-      setIsLoading(false); // Set loading to false after fetching the data
-    }).catch((error) => console.log(error.data));
-  }, []);
+    const fetchData = async () => {
+      try {
+        const response = await api.get(`file/${fileType}/${id}/`);
+        setOldFile(response.data);
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        // Optionally set an error state here
+      }
+    };
+    fetchData();
+  }, [fileType, id]);
 
   // Initialize state based on oldFile only if it's not loading
   useEffect(() => {
@@ -102,6 +108,10 @@ const UpdateFile = () => {
 
   const update = (updatedFile, event) => {
     event.preventDefault();
+    if (ownerPhone.length < 11 || tenetPhone?.length < 11) {
+      alert("شماره تلفن باید ۱۱ رقم باشد");
+      return; // Stop submission if validation fails
+    }
     api.patch(`file/${fileType}/${id}/`, updatedFile).then((response) => {
       switch (response.status) {
         case 200:

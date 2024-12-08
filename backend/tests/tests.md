@@ -17,6 +17,7 @@
 - [ ] dashboard
 - [ ] tabdil
 - [ ] unauthorized access
+- [ ] sms tasks
 
 ## Front-end
 - [x] login ✅ 2024-12-03
@@ -28,8 +29,8 @@
 - [x] setup fixtures (making a mock file and testing on it) ✅ 2024-12-04
 - [x] file details ✅ 2024-12-04
 - [x] customer details ✅ 2024-12-04
-- [/] file edit
-- [ ] customer edit
+- [x] file edit ✅ 2024-12-08
+- [x] customer edit ✅ 2024-12-08
 - [ ] call logs
 - [ ] tour logs
 - [ ] related customers

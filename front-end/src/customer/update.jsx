@@ -10,13 +10,17 @@ const UpdateCustomer = () => {
   const [oldCustomer, setOldCustomer] = useState(null);
 
   useEffect(() => {
-    api
-      .get(`customer/${customerType}/${id}/`)
-      .then((response) => {
+    const fetchData = async () => {
+      try {
+        const response = await api.get(`customer/${customerType}/${id}/`);
         setOldCustomer(response.data);
-      })
-      .catch((error) => console.log(error.data));
-  }, []);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        // Optionally set an error state here
+      }
+    };
+    fetchData();
+  }, [customerType, id]);
 
   const [propertyType, setPropertyType] = useState(
     oldCustomer ? oldCustomer.property_type : ""
@@ -160,7 +164,7 @@ const UpdateCustomer = () => {
                 <FloatLabel
                   defValue={oldCustomer.rent_budget}
                   type="number"
-                  name={"rentbudget"}
+                  name={"rentBudget"}
                   label={"اجاره"}
                   setter={setRentBudget}
                   isRequired={true}
