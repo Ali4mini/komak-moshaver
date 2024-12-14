@@ -92,3 +92,14 @@ class SellTour(models.Model):
 
     def __str__(self):
         return f"customer {self.customer} on file {self.file}"
+
+
+class SMSLog(models.Model):
+    task_id = models.CharField(max_length=255, unique=True)
+    status = models.BooleanField()
+    message = models.TextField()
+    phone_number = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Task {self.task_id}: {self.status}"

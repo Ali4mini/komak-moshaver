@@ -1,10 +1,11 @@
 from celery import shared_task
 from .models import Sell, Rent
+from logs.models import SMSLog
 import requests
 
 
 @shared_task
-def send_sell_message(phone_numbers, pk):
+def send_sell_message(phone_numbers, pk) -> bool:
     file = Sell.objects.get(pk=pk)
 
     elevator = "دارد" if file.elevator else "ندارد"
@@ -21,22 +22,35 @@ def send_sell_message(phone_numbers, pk):
     انباری: {storage}
     """
 
-    url = "http://192.168.1.109:8080/message"
+    url = "http://192.168.1.102:8080/message"
     data = {
         "message": sell_template,
         "phoneNumbers": [phone_numbers],
         "simNumber": 1,
     }
 
-    response = requests.post(
-        url,
-        json=data,
-        auth=requests.auth.HTTPBasicAuth("sms", "ggQ7iEXY"),
-        headers={"Content-Type": "application/json"},
+    try:
+
+        response = requests.post(
+            url,
+            json=data,
+            auth=requests.auth.HTTPBasicAuth("sms", "ggQ7iEXY"),
+            headers={"Content-Type": "application/json"},
+        )
+
+        success: bool = response.status_code == 202
+    except:
+        success: bool = False
+
+    # creating new record on SMSLog table
+    SMSLog.objects.create(
+        task_id=send_sell_message.request.id,
+        status=success,
+        message=data["message"],
+        phone_number=phone_numbers,
     )
-    return (
-        response.status_code == 202
-    )  # Return True if successful, False otherwise   return response.status_code == 202  # Return True if successful, False otherwise
+
+    return success
 
 
 @shared_task
@@ -64,18 +78,31 @@ def send_rent_message(phone_numbers, pk):
     انباری: {storage}
     """
 
-    url = "http://192.168.1.109:8080/message"
+    url = "http://192.168.1.102:8080/message"
     data = {
         "message": rent_template,
         "phoneNumbers": [phone_numbers],
         "simNumber": 1,
     }
 
-    response = requests.post(
-        url,
-        json=data,
-        auth=requests.auth.HTTPBasicAuth("sms", "ggQ7iEXY"),
-        headers={"Content-Type": "application/json"},
+    try:
+        response = requests.post(
+            url,
+            json=data,
+            auth=requests.auth.HTTPBasicAuth("sms", "ggQ7iEXY"),
+            headers={"Content-Type": "application/json"},
+        )
+
+        success: bool = response.status_code == 202
+    except:
+        success: bool = False
+
+    # creating new record on SMSLog table
+    SMSLog.objects.create(
+        task_id=send_rent_message.request.id,
+        status=success,
+        message=data["message"],
+        phone_number=phone_numbers,
     )
 
-    return response.status_code == 202
+    return success

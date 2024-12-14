@@ -45,5 +45,4 @@
 
 # E2E tests
 - i'll write [[E2E tests]] with [[playwright]] 
-
-
+- there are some front-end components which don't have any logic that worth testing. and if i only test the api is enough.

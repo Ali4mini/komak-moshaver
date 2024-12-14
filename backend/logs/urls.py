@@ -8,4 +8,5 @@ urlpatterns = [
     path("rent-call/", views.RentCallView.as_view(), name="rent-call-view"),
     path("sell-tour/", views.SellTourView.as_view(), name="sell-tour-view"),
     path("rent-tour/", views.RentTourView.as_view(), name="rent-tour-view"),
+    path("smsLogs/", views.SMSLogView.as_view(), name="smsLogView"),
 ]

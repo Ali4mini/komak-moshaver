@@ -1,6 +1,12 @@
 from rest_framework import serializers
-from .models import SellCall, RentCall, SellTour, RentTour
+from .models import SellCall, RentCall, SellTour, RentTour, SMSLog
 from utils.common import set_added_by
+
+
+class SMSLogSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SMSLog
+        fields = "__all__"
 
 
 @set_added_by

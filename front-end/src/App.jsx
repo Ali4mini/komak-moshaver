@@ -18,7 +18,7 @@ import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import Dashboard from "./dashboard/dashboard";
 import Restore from "./home/restore";
-import NewCallLog from "./log_app/logs";
+import SmsLogsListPage from "./log_app/smsLogsList";
 
 function App() {
   const navigate = useNavigate();
@@ -47,6 +47,7 @@ function App() {
           <Route path="dashboard/" element={<Dashboard />} />
           <Route path="listing/" element={<Scanner />} />
           <Route path="restore/" element={<Restore />} />
+          <Route path="smsLogs/" element={<SmsLogsListPage />} />
           <Route path="agents/profile" element={<Profile />} />
           <Route path="customers/" element={<Customers />} />
           <Route path="file/">

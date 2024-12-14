@@ -1,13 +1,22 @@
 from rest_framework import generics
-from .models import SellCall, RentCall, SellTour, RentTour
+from .models import SellCall, RentCall, SellTour, RentTour, SMSLog
 from .serializers import (
     RentTourSerializer,
     SellCallSerializer,
     RentCallSerializer,
     SellTourSerializer,
+    SMSLogSerializer,
 )
 
 # Create your views here.
+
+
+class SMSLogView(generics.ListCreateAPIView):
+    queryset = SMSLog.objects.all()
+    serializer_class = SMSLogSerializer
+
+    def get_queryset(self):
+        return self.queryset.order_by("-id")
 
 
 class SellCallView(generics.ListCreateAPIView):
