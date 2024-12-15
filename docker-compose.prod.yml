@@ -50,6 +50,35 @@ services:
     networks:
       - komak-moshaver
 
+  redis:
+    image: redis:latest  # Use the latest Redis image
+    ports:
+      - "6379:6379"  # Expose Redis port
+    networks:
+      - komak-moshaver 
+
+  celery:
+    build:
+      context: ./backend/
+      target: prod
+    command: celery -A amlak worker -l info
+    volumes:
+      - ./backend/:/app
+    depends_on:
+      - backend
+      - redis
+    networks:
+        - komak-moshaver
+    environment:
+      DJANGO_SETTINGS_MODULE: amlak.settings
+      DEBUG: "False" 
+      SECRET_KEY: "someSecretKey$" 
+      DB_NAME: "amlak"
+      DB_HOST: postgres
+      DB_USER: "amlak"
+      DB_PASS: "amlak"
+      DB_PORT: 5432
+      CELERY_BROKER_URL: "redis://redis:6379/0"  # Set Redis as the broker
 networks:
   komak-moshaver:
 

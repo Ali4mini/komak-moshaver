@@ -10,14 +10,16 @@ class SellImageSerializer(serializers.ModelSerializer):
     image_url = serializers.SerializerMethodField()
 
     class Meta:
-        model = RentImage
-        fields = ["image_url", "file"]
+        model = SellImage
+        fields = ["image_url", "file"]  # Include other fields as needed
 
     def get_image_url(self, obj):
         request = self.context.get("request")
         if request is not None:
+            print("\nobj.image: ", obj.image)
             return request.build_absolute_uri(obj.image.url)
-        return obj.image.url
+
+        return None
 
 
 class RentImageSerializer(serializers.ModelSerializer):
@@ -31,7 +33,8 @@ class RentImageSerializer(serializers.ModelSerializer):
         request = self.context.get("request")
         if request is not None:
             return request.build_absolute_uri(obj.image.url)
-        return obj.image.url
+
+        return None
 
 
 @set_added_by

@@ -61,6 +61,8 @@ class Sell(models.Model):
     description = models.CharField(max_length=1000, blank=True, null=True)
     notified_customers = models.ManyToManyField(BuyCustomer, blank=True)
 
+    location = models.JSONField(null=True)
+
     source_id = models.CharField(max_length=100, blank=True, null=True, unique=True)
 
     def __str__(self) -> str:
@@ -155,6 +157,8 @@ class Rent(models.Model):
     )
     description = models.CharField(max_length=1000, blank=True, null=True)
     notified_customers = models.ManyToManyField(RentCustomer, blank=True)
+    # TODO: give structured data type for the location (custom model field or a unified json)
+    location = models.JSONField(null=True)
 
     source_id = models.CharField(max_length=100, blank=True, null=True, unique=True)
 

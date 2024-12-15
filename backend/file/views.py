@@ -107,7 +107,6 @@ class SellFileImages(APIView):
     def post(self, request, file_id):
         try:
             file = Sell.objects.get(pk=file_id)
-
         except Sell.DoesNotExist:
             return Response(
                 {"details": "the file_id DoesNotExist"},
@@ -115,7 +114,6 @@ class SellFileImages(APIView):
             )
 
         image_files = request.FILES.getlist("images")
-        print(image_files)
 
         if not image_files:
             return Response(
