@@ -13,7 +13,10 @@ from .serializers import (
     RentImageSerializer,
 )
 from customer.serializers import BuyCustomerSerializer, RentCustomerSerializer
-from .tasks import send_sell_message, send_rent_message
+from .tasks import (
+    send_sell_message,
+    send_rent_message,
+)
 
 # Create your views here.
 
@@ -24,7 +27,6 @@ class SellFileDetails(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = SellFileSerializer
 
     def destroy(self, request, pk=None):
-        print("in delete")
         file = self.get_object()
         file.status = "UNACTIVE"
         file.save()
@@ -36,7 +38,6 @@ class RentFileDetails(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = RentFileSerializer
 
     def destroy(self, request, pk=None):
-        print("in delete")
         file = self.get_object()
         file.status = "UNACTIVE"
         file.save()

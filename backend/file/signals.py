@@ -1,19 +1,10 @@
-# import requests
 # from django.db.models.signals import post_save
 # from django.dispatch import receiver
-# from .models import SellImage
+# from file.tasks import send_sell_related_customers_message
+# from .models import Rent, Sell
 #
 #
-# @receiver(post_save, sender=SellImage)
-# def download_image(sender, instance, created, **kwargs):
-#     if created and instance.image.url:
-#         # Download the image from the provided URL
-#         response = requests.get(instance.image.url)
-#
-#         if response.status_code == 200:
-#             # Save the image content to the model's ImageField
-#             instance.image.save(
-#                 instance.image.name, ContentFile(response.content), save=False
-#             )
-#             instance.save()  # Save the instance again to update the image field
-#
+# @receiver(post_save, sender=[Sell, Rent])
+# def send_sell_related_customers_signal(sender, instance, created, **kwargs):
+#     send_sell_related_customers_message.delay(instance)
+#     print("signal finished")

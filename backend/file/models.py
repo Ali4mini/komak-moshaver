@@ -101,6 +101,25 @@ class Sell(models.Model):
             unnotified_customers = all_customers.exclude(id__in=notified_customer_ids)
             return unnotified_customers
 
+    def save(
+        self, force_insert=False, force_update=False, using=None, update_fields=None
+    ):
+        from .tasks import send_sell_message
+
+        print("in save method")
+        super().save(force_insert, force_update, using, update_fields)
+        related_customers: List[BuyCustomer] = self.get_related_customers()
+
+        if related_customers:
+            for customer in related_customers:
+                send_sell_message.delay(customer.customer_phone, self.id)
+                print(f"send message for {customer.customer_phone}")
+
+        else:
+            print("related_customers in None")
+
+        return
+
 
 class Rent(models.Model):
     class Types(models.TextChoices):
@@ -210,6 +229,25 @@ class Rent(models.Model):
         notified_customer_ids = self.notified_customers.values_list("id", flat=True)
         unnotified_customers = all_customers.exclude(id__in=notified_customer_ids)
         return unnotified_customers
+
+    def save(
+        self, force_insert=False, force_update=False, using=None, update_fields=None
+    ):
+        from .tasks import send_rent_message
+
+        print("in save method")
+        super().save(force_insert, force_update, using, update_fields)
+        related_customers: List[RentCustomer] = self.get_related_customers()
+
+        if related_customers:
+            for customer in related_customers:
+                send_rent_message.delay(customer.customer_phone, self.id)
+                print(f"send message for {customer.customer_phone}")
+
+        else:
+            print("related_customers in None")
+
+        return
 
 
 class SellImage(models.Model):
