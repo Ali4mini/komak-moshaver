@@ -8,7 +8,7 @@ import storage from "../assets/storage.png";
 import motor from "../assets/storage.png";
 import MenuButton from "../common/dropdown_button";
 import MatchedCustomers from "../common/matched_customers";
-import ImageSlider from "../common/slide";
+import ImageSlider from "../common/imageSlider";
 import phoneIcon from "../assets/icons8-phone-50.png"
 import NewCallLog from "../log_app/callLog";
 import NewTourLog from "../log_app/tourLog";
@@ -314,13 +314,11 @@ const FileDetails = () => {
       </div>
 
       {/* Gallery Section */}
-      <div id="gallery" className="flex justify-center items-center border-5 rounded p-2 md:p-4">
-        {images && images.length > 0 ? (
-          <ImageSlider images={images} />
-        ) : (
-          <img src="https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg" alt="No image found" />
-        )}
-      </div>
+      {images && images.length > 0 ? (
+        <ImageSlider images={images} />
+      ) : (
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg" alt="No image found" />
+      )}
 
     </div>
   );

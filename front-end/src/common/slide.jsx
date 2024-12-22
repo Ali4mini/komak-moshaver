@@ -47,7 +47,7 @@ const CustomNextArrow = ({ currentSlide, slideCount, ...props }) => {
   );
 };
 
-const ImageSlider = ({ images }) => {
+const ImageSliderOld = ({ images }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -108,4 +108,4 @@ const ImageSlider = ({ images }) => {
   );
 };
 
-export default ImageSlider;
+export default ImageSliderOld;
