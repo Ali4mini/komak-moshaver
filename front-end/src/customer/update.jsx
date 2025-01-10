@@ -1,7 +1,7 @@
 import FloatLabel from "../common/input";
 import Checkbox from "../common/checkbox";
 import { useEffect, useState } from "react";
-import api from "../common/api";
+import { api } from "../common/api";
 import { useNavigate, useParams } from "react-router-dom";
 import CustomDatePicker from "../common/datePicker";
 

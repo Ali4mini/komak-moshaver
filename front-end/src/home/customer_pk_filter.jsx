@@ -1,6 +1,6 @@
 import { useState } from "react";
 import FloatLabel from "../common/input";
-import api from "../common/api";
+import { api } from "../common/api";
 import { useDispatch } from "react-redux";
 import { setCustomers } from "./customersSlice";
 

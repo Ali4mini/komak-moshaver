@@ -1,16 +1,24 @@
-from .models import RentImage, Sell, Rent, SellImage
+from .models import (
+    RentImage,
+    Sell,
+    Rent,
+    SellImage,
+    SellStaticLocation,
+    RentStaticLocation,
+)
 from rest_framework.parsers import MultiPartParser
 from rest_framework.parsers import FileUploadParser
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
-from rest_framework import generics
+from rest_framework import status, generics, viewsets
 from .serializers import (
     SellFileSerializer,
     RentFileSerializer,
     SellImageSerializer,
     RentImageSerializer,
+    SellStaticLocationSerializer,
+    RentStaticLocationSerializer,
 )
 from customer.serializers import BuyCustomerSerializer, RentCustomerSerializer
 from .tasks import (
@@ -201,3 +209,123 @@ class RentSendInfo(APIView):
         send_rent_message.delay(phone_numbers, pk)
 
         return Response("Task has been queued.")
+
+
+class RentStaticLocationView(APIView):
+    """
+    API view for handling RentStaticLocation instances.
+    """
+
+    def post(self, request, file_id, *args, **kwargs):
+        # Validate that the Rent instance exists
+        try:
+            file = Rent.objects.get(id=file_id)
+        except Rent.DoesNotExist:
+            return Response(
+                {
+                    "detail": "The specified file does not exist.",
+                    "status": status.HTTP_404_NOT_FOUND,
+                },
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        # Handle the creation of a new instance
+        serializer = RentStaticLocationSerializer(data=request.data)
+
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(file=file)  # Associate with the existing Rent instance
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        # If validation fails, return errors
+        return Response(
+            {
+                "detail": "Invalid data provided.",
+                "errors": serializer.errors,
+            },
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    def get(self, request, file_id):
+        try:
+            file = Rent.objects.get(id=file_id)
+        except Rent.DoesNotExist:
+            return Response(
+                {
+                    "detail": "the file doesnt exist",
+                    "status": status.HTTP_404_NOT_FOUND,
+                }
+            )
+
+        try:
+            images = RentStaticLocation.objects.get(file=file)
+        except RentStaticLocation.DoesNotExist:
+            return Response(
+                {"detail": "No static map found for this file."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        serializer = RentStaticLocationSerializer(
+            images, many=False, context={"request": request}
+        )
+
+        return Response(serializer.data)
+
+
+class SellStaticLocationView(APIView):
+    """
+    API view for handling SellStaticLocation instances.
+    """
+
+    def post(self, request, file_id, *args, **kwargs):
+        # Validate that the Sell instance exists
+        try:
+            file = Sell.objects.get(id=file_id)
+        except Sell.DoesNotExist:
+            return Response(
+                {
+                    "detail": "The specified file does not exist.",
+                    "status": status.HTTP_404_NOT_FOUND,
+                },
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        # Handle the creation of a new instance
+        serializer = SellStaticLocationSerializer(data=request.data)
+
+        if serializer.is_valid(raise_exception=False):
+            serializer.save(file=file)  # Associate with the existing Sell instance
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        # If validation fails, return errors
+        return Response(
+            {
+                "detail": "Invalid data provided.",
+                "errors": serializer.errors,
+            },
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    def get(self, request, file_id):
+        try:
+            file = Sell.objects.get(id=file_id)
+        except Sell.DoesNotExist:
+            return Response(
+                {
+                    "detail": "the file doesnt exist",
+                    "status": status.HTTP_404_NOT_FOUND,
+                }
+            )
+
+        try:
+            images = SellStaticLocation.objects.get(file=file)
+        except SellStaticLocation.DoesNotExist:
+            return Response(
+                {"detail": "No static map found for this file."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        serializer = SellStaticLocationSerializer(
+            images, many=False, context={"request": request}
+        )
+
+        return Response(serializer.data)

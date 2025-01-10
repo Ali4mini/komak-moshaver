@@ -1,7 +1,60 @@
 from celery import shared_task
-from .models import Sell, Rent
-from logs.models import SMSLog
+from .models import Sell, Rent, SellStaticLocation, RentStaticLocation
 import requests
+from django.core.files.base import ContentFile
+from django.shortcuts import get_object_or_404
+from logs.models import SMSLog
+from typing import Dict
+import json
+import os
+
+
+@shared_task
+def geocoding(
+    address: str, prefix="تهران منطقه ۱۴ خیابان خاوران"
+) -> Dict[str, str] | None:
+    """it returns the x and y points of an address"""
+    API_KEY = os.getenv("NESHAN_SERVICES_API")
+    final_address = prefix + address
+    headers = {
+        "Api-Key": API_KEY,
+    }
+    res = requests.get(
+        f"https://api.neshan.org/v6/geocoding?address={final_address}", headers=headers
+    )
+
+    print(res)
+    parsed_data = json.loads(res.text)
+
+    return parsed_data["location"]
+
+
+@shared_task
+def download_static_location(
+    lat: float,
+    lon: float,
+    width: int = 620,
+    height: int = 400,
+    zoom: int = 16,
+    markerToken: str | None = "31018.16ET1D5zF",
+) -> bytes | None:
+    """Downloads the static location of a point from the Neshan API and adds the image to the instance."""
+
+    API_KEY = os.getenv("NESHAN_STATIC_MAP_API")
+
+    api_url = f"https://api.neshan.org/v4/static?key={API_KEY}&type=neshan&width={width}&height={height}&zoom={zoom}&center={lon},{lat}&markerToken={markerToken}"
+
+    result = requests.get(api_url)
+
+    if result.status_code == 200:
+        # location_file = ContentFile(result.content, name=image_name)
+
+        return result.content
+    else:
+        print("Error!\nThe status code was:", result.status_code)
+        print("Error content:", result.content)
+
+        return
 
 
 @shared_task

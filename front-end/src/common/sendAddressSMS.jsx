@@ -2,7 +2,7 @@ import { useState, Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import FloatLabel from './input';
 import { useParams } from "react-router-dom"
-import api from "../common/api";
+import { api } from "../common/api";
 import { useDispatch } from 'react-redux';
 import { setFlashMessage } from "../common/flashSlice";
 

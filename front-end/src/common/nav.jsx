@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import SearchButtonWithModal from "../home/search.jsx"
 import { useEffect, useState } from "react";
-import api from "./api";
+import { api } from "./api";
 import LogOutConfirm from "./logout_confirm";
 
 const NavBar = () => {

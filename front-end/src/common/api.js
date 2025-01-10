@@ -1,14 +1,22 @@
 import axios from "axios";
 
-let apiUrl = import.meta.env.VITE_API;
-if (!apiUrl) {
-  apiUrl = "/api/"
-}
+const apiUrl = import.meta.env.VITE_API ?? "/api/";
+const mediaUrl = import.meta.env.VITE_MEDIA ?? "/media/";
+
+
 console.log("url:", apiUrl)
 let accessToken = localStorage.getItem("access_token");
 
 const api = axios.create({
   baseURL: apiUrl,
+  headers: {
+    "Authorization": `Bearer ${accessToken}`,
+    "Content-type": "application/json",
+  },
+});
+
+const media = axios.create({
+  baseURL: mediaUrl,
   headers: {
     "Authorization": `Bearer ${accessToken}`,
     "Content-type": "application/json",
@@ -91,4 +99,4 @@ api.interceptors.response.use(
   }
 );
 
-export default api;
+export { api, media };

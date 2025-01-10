@@ -1,4 +1,4 @@
-import api from "../common/api";
+import { api } from "../common/api";
 import { useState, useEffect } from "react";
 import { Doughnut } from 'react-chartjs-2';
 

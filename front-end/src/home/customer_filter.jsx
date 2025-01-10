@@ -1,7 +1,7 @@
 import { useState } from "react";
 import FloatLabel from "../common/input";
 import Checkbox from "../common/checkbox";
-import api from "../common/api";
+import { api } from "../common/api";
 import { useDispatch, useSelector } from "react-redux";
 import { setCustomers, setLastFilter, clearLastFilter, addCustomers } from "./customersSlice";
 import { useEffect } from "react";

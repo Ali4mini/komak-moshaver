@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import api from "../common/api";
+import { api } from "../common/api";
 
 const SmsLogsListPage = () => {
   const [smsLogs, setSmsLogs] = useState([]);

@@ -1,7 +1,7 @@
 import Filter from "./filter";
 import File from "./property_card";
 import { useEffect, useState } from "react"; // Import useState
-import api from "../common/api";
+import { api } from "../common/api";
 import { setRestoreFiles, addRestoreFiles } from "./filesSlice";
 import { useSelector, useDispatch } from "react-redux";
 import ScrollButton from "../common/goUpButton";

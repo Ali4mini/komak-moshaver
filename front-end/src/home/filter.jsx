@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import FloatLabel from "../common/input";
-import api from "../common/api";
+import { api } from "../common/api";
 import Checkbox from "../common/checkbox";
 import { useDispatch, useSelector } from "react-redux";
 import { addFiles, setLastFilter, clearLastFilter, setFiles } from "./filesSlice";

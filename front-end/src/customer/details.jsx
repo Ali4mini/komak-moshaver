@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import api from "../common/api";
+import { api } from "../common/api";
 import DeleteConfirm from "../common/delete_confim";
 import car from "../assets/car.png";
 import elevator from "../assets/elevator.png";

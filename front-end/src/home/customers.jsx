@@ -1,7 +1,7 @@
 import Filter from "./customer_filter";
 import PkFilter from "./customer_pk_filter";
 import { useEffect, useState } from "react";
-import api from "../common/api";
+import { api } from "../common/api";
 import Customer from "./customer_card";
 import { addCustomers, setCustomers } from "./customersSlice";
 import { useDispatch, useSelector } from "react-redux";

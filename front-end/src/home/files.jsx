@@ -1,6 +1,6 @@
 import File from "./property_card";
 import { useEffect, useState } from "react";
-import api from "../common/api";
+import { api } from "../common/api";
 import { addFiles, setFiles, } from "./filesSlice";
 import { useSelector, useDispatch } from "react-redux";
 import ScrollButton from "../common/goUpButton";

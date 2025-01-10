@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import api from "../common/api";
+import { api, media } from "../common/api";
 import DeleteConfirm from "../common/delete_confim";
 import car from "../assets/car.png";
 import elevator from "../assets/elevator.png";
@@ -25,6 +25,7 @@ const FileDetails = () => {
   const [isCallLog, setIsCallLog] = useState(false)
   const [isTourLog, setIsTourLog] = useState(false)
   const [isAddressSMS, setIsAddressSMS] = useState(false)
+  const [location, setLocation] = useState(null)
 
 
   useEffect(() => {
@@ -39,6 +40,13 @@ const FileDetails = () => {
           setIsFileOld(true)
         }
 
+        // downloading file location
+        api
+          .get(`file/${fileType}/${id}/location/`)
+          .then(response => setLocation(response.data))
+          .catch(error => console.log("error in file details: ", error))
+
+        // downloading file images
         api
           .get(`file/${fileType}/${id}/images/`)
           .then(response => setImages(response.data))
@@ -317,9 +325,18 @@ const FileDetails = () => {
       {images && images.length > 0 ? (
         <ImageSlider images={images} />
       ) : (
-        <img src="https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg" alt="No image found" />
+        <div className="flex justify-center">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg" alt="No image found" />
+        </div>
       )}
 
+
+
+
+      {location ?
+        <div className="min-w-screen max-h-screen h-screen">
+          <img src={location.image} alt="location" />
+        </div> : null}
     </div>
   );
 };

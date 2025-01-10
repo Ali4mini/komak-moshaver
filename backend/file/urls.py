@@ -21,6 +21,16 @@ urlpatterns = [
         name="rent_file_images",
     ),
     path(
+        "sell/<int:file_id>/location/",
+        views.SellStaticLocationView.as_view(),
+        name="sell_static_location",
+    ),
+    path(
+        "rent/<int:file_id>/location/",
+        views.RentStaticLocationView.as_view(),
+        name="rent_static_location",
+    ),
+    path(
         "sell/<int:pk>/related_customers/",
         views.SellRelatedCustomers.as_view(),
         name="sell_related_customer",

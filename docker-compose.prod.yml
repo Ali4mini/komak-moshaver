@@ -19,7 +19,7 @@ services:
       context: ./backend/
       target: prod  # Specify production target from Dockerfile
     environment:
-      DEBUG: "False"
+      DEBUG: "True"
       SECRET_KEY: "!88(h4((q=skn3flqv%cmdhx2-3#6l%1_$il@m#l)3t^l#g+5a"
       DB_NAME: "amlak"
       DB_HOST: "database"
@@ -30,14 +30,19 @@ services:
       LIARA_BUCKET_NAME: "komak-moshaver-cdn"
       LIARA_ACCESS_KEY: "iec9uco4ckoq6f54"
       LIARA_SECRET_KEY: "ce4dd301-f94f-4b83-8096-7682ea5184c7"
+      NESHAN_STATIC_MAP_API: "service.db7794d6a5ee46579d1a433d0115958e"
+      NESHAN_SERVICES_API: "service.c5332c5dc61c41d083e7b5bc438889ee"
+      LOCATIONS_MEDIA_DIR: "/usr/share/nginx/html/media/"
     ports:
       - "8000:8000"  
     depends_on:
       - postgres 
+    volumes:
+      - media_data:/usr/share/nginx/html/media/
     networks:
       - komak-moshaver
 
-  frontend:
+  nginx:
     build:
       context: ./front-end/
       target: prod  # Specify production target from Dockerfile
@@ -47,6 +52,9 @@ services:
       VITE_API: "/api/"
     depends_on:
       - backend 
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - media_data:/usr/share/nginx/html/media/  # Ensure Nginx can access media files
     networks:
       - komak-moshaver
 
@@ -78,9 +86,13 @@ services:
       DB_USER: "amlak"
       DB_PASS: "amlak"
       DB_PORT: 5432
+      NESHAN_STATIC_MAP_API: "service.db7794d6a5ee46579d1a433d0115958e"
+      NESHAN_SERVICES_API: "service.c5332c5dc61c41d083e7b5bc438889ee"
       CELERY_BROKER_URL: "redis://redis:6379/0"  # Set Redis as the broker
 networks:
   komak-moshaver:
 
 volumes:
   postgres_data:
+  media_data:
+

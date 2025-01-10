@@ -1,7 +1,7 @@
 import FloatLabel from "../common/input";
 import Checkbox from "../common/checkbox";
 import { useState } from "react";
-import api from "../common/api";
+import { api } from "../common/api";
 import { useNavigate } from "react-router-dom";
 import { setFlashMessage } from "../common/flashSlice";
 import { useDispatch } from "react-redux";
@@ -38,6 +38,7 @@ const NewFile = () => {
   const [description, setDescription] = useState(null)
   const [date, setDate] = useState(new Date().toISOString().split("T")[0])
 
+  const [location, setLocation] = useState(null)
   const [selectedFiles, setSelectedFiles] = useState(null);
   const user = localStorage.getItem("user");
 
@@ -82,6 +83,17 @@ const NewFile = () => {
     delete fileEntery.price;
   }
 
+
+  const handleLocation = async (fileType, fileId, location) => {
+
+    const data = {
+      location: location,
+      file: fileId,
+    }
+
+    return await api.post(`file/${fileType}/${fileId}/location/`, data)
+  }
+
   const create = (fileEntery, event) => {
     event.preventDefault();
     if (ownerPhone.length < 11 || tenetPhone?.length < 11 || lobbyManPhone?.length < 11) {
@@ -95,6 +107,7 @@ const NewFile = () => {
           case 201:
             console.log(response.data)
             handleUpload(`file/${response.data["file_type"]}/${response.data["id"]}/images/`)
+            handleLocation(response.data["file_type"], response.data["id"])
 
             dispatch(
               setFlashMessage({

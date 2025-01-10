@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import { Bar } from "react-chartjs-2";
-import api from "../common/api";
+import { api } from "../common/api";
 
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";

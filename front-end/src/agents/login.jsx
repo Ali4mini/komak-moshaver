@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import FloatLabel from "../common/input";
-import api from "../common/api";
+import { api } from "../common/api";
 import { setFlashMessage } from "../common/flashSlice";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";

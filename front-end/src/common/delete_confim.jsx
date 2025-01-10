@@ -1,6 +1,6 @@
 import { useState, Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import api from "./api";
+import { api } from "./api";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setFlashMessage } from "./flashSlice";

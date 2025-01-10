@@ -1,8 +1,10 @@
 from typing import List
+from django.core.files.base import ContentFile
 from django.db import models
 from django.urls import reverse
 from django.conf import settings
 from customer.models import BuyCustomer, RentCustomer
+from celery.result import AsyncResult
 
 # Create your models here.
 
@@ -61,8 +63,6 @@ class Sell(models.Model):
     description = models.CharField(max_length=1000, blank=True, null=True)
     notified_customers = models.ManyToManyField(BuyCustomer, blank=True)
 
-    location = models.JSONField(null=True)
-
     source_id = models.CharField(max_length=100, blank=True, null=True, unique=True)
 
     def __str__(self) -> str:
@@ -106,15 +106,14 @@ class Sell(models.Model):
     ):
         from .tasks import send_sell_message
 
-        print("in save method")
         super().save(force_insert, force_update, using, update_fields)
         related_customers: List[BuyCustomer] = self.get_related_customers()
 
+        # sending sms for related_customers
         if related_customers:
             for customer in related_customers:
                 send_sell_message.delay(customer.customer_phone, self.id)
                 print(f"send message for {customer.customer_phone}")
-
         else:
             print("related_customers in None")
 
@@ -176,8 +175,6 @@ class Rent(models.Model):
     )
     description = models.CharField(max_length=1000, blank=True, null=True)
     notified_customers = models.ManyToManyField(RentCustomer, blank=True)
-    # TODO: give structured data type for the location (custom model field or a unified json)
-    location = models.JSONField(null=True)
 
     source_id = models.CharField(max_length=100, blank=True, null=True, unique=True)
 
@@ -235,19 +232,16 @@ class Rent(models.Model):
     ):
         from .tasks import send_rent_message
 
-        print("in save method")
         super().save(force_insert, force_update, using, update_fields)
-        related_customers: List[RentCustomer] = self.get_related_customers()
 
+        # sending message to related_customers
+        related_customers: List[RentCustomer] = self.get_related_customers()
         if related_customers:
             for customer in related_customers:
                 send_rent_message.delay(customer.customer_phone, self.id)
                 print(f"send message for {customer.customer_phone}")
-
         else:
             print("related_customers in None")
-
-        return
 
 
 class SellImage(models.Model):
@@ -257,4 +251,81 @@ class SellImage(models.Model):
 
 class RentImage(models.Model):
     file = models.ForeignKey(Rent, on_delete=models.CASCADE, related_name="images")
-    image = models.ImageField(upload_to="files")
+    image = models.ImageField(upload_to="files", null=True)
+
+
+class SellStaticLocation(models.Model):
+    file = models.OneToOneField(Sell, on_delete=models.CASCADE, related_name="location")
+    # TODO: give structured data type for the location (custom model field or a unified json)
+    location = models.JSONField(null=True)
+    image = models.ImageField(upload_to="location-sell", null=True)
+
+    def save(self, *args, **kwargs):
+        from .tasks import download_static_location, geocoding
+
+        location_file_name = f"sell/{self.file}.png"
+
+        lat: float = 0
+        lon: float = 0
+
+        # Check if location data is provided
+        if (
+            self.location
+            and self.location.get("latitude")
+            and self.location.get("longitude")
+        ):
+            lat = self.location["latitude"]
+            lon = self.location["longitude"]
+        else:
+            task_id = geocoding.delay(self.file.address)
+            # NOTE: this part should move to the download_static_location task to be non-blocking
+            location = AsyncResult.get(task_id)
+            lat = location.get("x")
+            lon = location.get("y")
+            self.location = {"latitude": lat, "longitude": lon}
+
+        task_id = download_static_location.delay(lat, lon)
+
+        static_location_buffer = AsyncResult.get(task_id)
+        static_location_image = ContentFile(static_location_buffer, location_file_name)
+        self.image = static_location_image
+
+        super().save(*args, **kwargs)
+
+
+class RentStaticLocation(models.Model):
+    file = models.OneToOneField(Rent, on_delete=models.CASCADE, related_name="location")
+    location = models.JSONField(null=True)
+    image = models.ImageField(upload_to="locations-rent", null=True)
+
+    def save(self, *args, **kwargs):
+        from .tasks import download_static_location, geocoding
+
+        location_file_name = f"rent/{self.file}.png"
+
+        lat: float = 0
+        lon: float = 0
+
+        # Check if location data is provided
+        if (
+            self.location
+            and self.location.get("latitude")
+            and self.location.get("longitude")
+        ):
+            lat = self.location["latitude"]
+            lon = self.location["longitude"]
+        else:
+            task_id = geocoding.delay(self.file.address)
+            # NOTE: this part should move to the download_static_location task to be non-blocking
+            location = AsyncResult.get(task_id)
+            lat = location.get("x")
+            lon = location.get("y")
+            self.location = {"latitude": lat, "longitude": lon}
+
+        task_id = download_static_location.delay(lat, lon)
+
+        static_location_buffer = AsyncResult.get(task_id)
+        static_location_image = ContentFile(static_location_buffer, location_file_name)
+        self.image = static_location_image
+
+        super().save(*args, **kwargs)

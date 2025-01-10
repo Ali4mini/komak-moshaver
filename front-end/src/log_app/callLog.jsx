@@ -1,6 +1,6 @@
 import { useState, useEffect, Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import api from "../common/api";
+import { api } from "../common/api";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import Select from 'react-select';

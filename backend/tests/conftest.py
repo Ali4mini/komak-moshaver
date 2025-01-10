@@ -2,7 +2,7 @@
 import pytest
 from rest_framework.test import APIClient
 from django.contrib.auth.models import User
-from file.models import Sell, Rent
+from file.models import RentStaticLocation, Sell, Rent, SellStaticLocation
 from customer.models import BuyCustomer, RentCustomer
 
 
@@ -197,3 +197,31 @@ def sample_rent_file(db, sample_user):
     )
 
     return rent1
+
+
+@pytest.fixture
+def sample_sell_location(db, sample_sell_file):
+    sample_location = {
+        "latitude": 51.480237999596184,
+        "longitude": 35.67718207057902,
+    }
+    # Create a sample SellStaticLocation instance
+    sell_static_location = SellStaticLocation.objects.create(
+        file=sample_sell_file, location=sample_location
+    )
+
+    return sell_static_location
+
+
+@pytest.fixture
+def sample_rent_location(db, sample_rent_file):
+    sample_location = {
+        "latitude": 51.480237999596184,
+        "longitude": 35.67718207057902,
+    }
+    # Create a sample SellStaticLocation instance
+    sell_static_location = RentStaticLocation.objects.create(
+        file=sample_rent_file, location=sample_location
+    )
+
+    return sell_static_location

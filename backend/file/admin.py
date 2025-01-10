@@ -1,5 +1,12 @@
 from django.contrib import admin
-from .models import Sell, Rent, SellImage, RentImage
+from .models import (
+    Sell,
+    Rent,
+    SellImage,
+    RentImage,
+    SellStaticLocation,
+    RentStaticLocation,
+)
 
 # Register your models here.
 
@@ -45,10 +52,20 @@ class RentAdmin(admin.ModelAdmin):
 
 
 @admin.register(SellImage)
-class SellImage(admin.ModelAdmin):
+class SellImageAdmin(admin.ModelAdmin):
     list_display = ["file", "image"]
 
 
 @admin.register(RentImage)
-class RentImage(admin.ModelAdmin):
+class RentImageAdmin(admin.ModelAdmin):
     list_display = ["file", "image"]
+
+
+@admin.register(RentStaticLocation)
+class RentStaticLocationAdmin(admin.ModelAdmin):
+    list_display = ["file", "location"]
+
+
+@admin.register(SellStaticLocation)
+class SellStaticLocationAdmin(admin.ModelAdmin):
+    list_display = ["file", "location"]

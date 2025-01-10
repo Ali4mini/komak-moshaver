@@ -1,9 +1,30 @@
 from rest_framework import serializers
-from .models import Sell, Rent, SellImage, RentImage
+from .models import (
+    Sell,
+    Rent,
+    SellImage,
+    RentImage,
+    SellStaticLocation,
+    RentStaticLocation,
+)
 from utils.common import set_added_by, set_updated_logic
 import jdatetime
-import requests
-from django.core.files.base import ContentFile
+
+
+class SellStaticLocationSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = SellStaticLocation
+        fields = ["location", "image"]
+        # read_only_fields = ["image"]
+
+
+class RentStaticLocationSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = RentStaticLocation
+        fields = ["location", "image"]
+        # read_only_fields = ["image"]
 
 
 class SellImageSerializer(serializers.ModelSerializer):

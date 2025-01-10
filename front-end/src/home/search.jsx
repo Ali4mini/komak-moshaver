@@ -1,6 +1,6 @@
 import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import api from "../common/api";
+import { api } from "../common/api";
 import { Link } from "react-router-dom";
 import PropTypes from 'prop-types';
 
