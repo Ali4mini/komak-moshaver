@@ -74,6 +74,9 @@ class Sell(models.Model):
     def get_pk(self) -> int:
         return self.pk
 
+    def get_file_type(self) -> str:
+        return "sell"
+
     def get_related_customers(self) -> List[BuyCustomer]:
         budget_range = (int(self.price * 0.75), int(self.price * 1.25))
 
@@ -104,7 +107,7 @@ class Sell(models.Model):
     def save(
         self, force_insert=False, force_update=False, using=None, update_fields=None
     ):
-        from .tasks import send_sell_message
+        from .tasks import send_message
 
         super().save(force_insert, force_update, using, update_fields)
         related_customers: List[BuyCustomer] = self.get_related_customers()
@@ -112,7 +115,7 @@ class Sell(models.Model):
         # sending sms for related_customers
         if related_customers:
             for customer in related_customers:
-                send_sell_message.delay(customer.customer_phone, self.id)
+                send_message.delay(customer.customer_phone, self)
                 print(f"send message for {customer.customer_phone}")
         else:
             print("related_customers in None")
@@ -184,6 +187,9 @@ class Rent(models.Model):
     def get_absolute_url(self):
         return reverse("file:rent_file_detail", args=[self.id])
 
+    def get_file_type(self) -> str:
+        return "rent"
+
     def get_pk(self) -> int:
         return self.pk
 
@@ -230,7 +236,7 @@ class Rent(models.Model):
     def save(
         self, force_insert=False, force_update=False, using=None, update_fields=None
     ):
-        from .tasks import send_rent_message
+        from .tasks import send_message
 
         super().save(force_insert, force_update, using, update_fields)
 
@@ -238,7 +244,7 @@ class Rent(models.Model):
         related_customers: List[RentCustomer] = self.get_related_customers()
         if related_customers:
             for customer in related_customers:
-                send_rent_message.delay(customer.customer_phone, self.id)
+                send_message.delay(customer.customer_phone, self)
                 print(f"send message for {customer.customer_phone}")
         else:
             print("related_customers in None")

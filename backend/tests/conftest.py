@@ -4,6 +4,7 @@ from rest_framework.test import APIClient
 from django.contrib.auth.models import User
 from file.models import RentStaticLocation, Sell, Rent, SellStaticLocation
 from customer.models import BuyCustomer, RentCustomer
+from logs.models import SMSLog
 
 
 @pytest.fixture

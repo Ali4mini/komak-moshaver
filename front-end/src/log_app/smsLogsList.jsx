@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { api } from "../common/api";
+import SMSLog from "./smsLog.jsx"
 
 const SmsLogsListPage = () => {
   const [smsLogs, setSmsLogs] = useState([]);
@@ -30,9 +31,7 @@ const SmsLogsListPage = () => {
       <ol className="list-decimal pl-5 space-y-2">
         {smsLogs.length > 0 ? (
           smsLogs.map((log, index) => (
-            <li key={index} className={`${log.status ? "bg-green-300" : "bg-red-300"} flex justify-between shadow-md rounded-lg p-4`}>
-              <p className="text-sm font-semibold">شماره تلفن: {log.phone_number}</p>
-            </li>
+            <SMSLog smsLog={log} key={index} />
           ))
         ) : (
           <li className="text-gray-500">No SMS logs available.</li>

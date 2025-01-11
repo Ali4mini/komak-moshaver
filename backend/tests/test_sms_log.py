@@ -2,6 +2,20 @@ import pytest
 from rest_framework import status
 from logs.models import SMSLog
 
+# TODO: resend_message test
+
+
+@pytest.fixture
+def sample_sms_log(db):
+    sms_log = SMSLog.objects.create(
+        task_id="12345",
+        status=True,
+        message="Test message",
+        phone_number="+1234567890",
+    )
+
+    return sms_log
+
 
 @pytest.mark.django_db
 def test_sms_log_creation(db):
@@ -36,6 +50,7 @@ def test_create_sms_log(api_client, db):
     assert SMSLog.objects.get().task_id == "67890"
 
 
+@pytest.mark.django
 def test_list_sms_logs(api_client, db):
     SMSLog.objects.create(
         task_id="11111",
@@ -56,6 +71,7 @@ def test_list_sms_logs(api_client, db):
     assert len(response.data) == 2
 
 
+@pytest.mark.django
 def test_ordering_of_sms_logs(api_client, db):
     SMSLog.objects.create(
         task_id="33333",
@@ -75,3 +91,12 @@ def test_ordering_of_sms_logs(api_client, db):
     assert response.status_code == 200
     # Check if the logs are ordered by id (descending)
     assert response.data[0]["task_id"] == "44444"
+
+
+@pytest.mark.django
+def test_resend_sms(api_client, sample_sms_log):
+    url = f"http://localhost:8000/api/logs/smsLogs/{sample_sms_log.id}/resend/"
+
+    res = api_client.post(url)
+
+    assert res.status_code == 200

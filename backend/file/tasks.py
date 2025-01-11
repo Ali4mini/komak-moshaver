@@ -1,10 +1,8 @@
 from celery import shared_task
-from .models import Sell, Rent, SellStaticLocation, RentStaticLocation
+from .models import Sell, Rent
 import requests
-from django.core.files.base import ContentFile
-from django.shortcuts import get_object_or_404
 from logs.models import SMSLog
-from typing import Dict
+from typing import Dict, List
 import json
 import os
 
@@ -58,26 +56,41 @@ def download_static_location(
 
 
 @shared_task
-def send_sell_message(phone_numbers, pk) -> bool:
-    file = Sell.objects.get(pk=pk)
+def send_message(phone_numbers: List[str], file: Sell | Rent) -> bool:
 
-    elevator = "دارد" if file.elevator else "ندارد"
-    storage = "دارد" if file.storage else "ندارد"
-    parking = "دارد" if file.parking else "ندارد"
+    def get_message(file: Sell | Rent) -> str:
+        elevator = "دارد" if file.elevator else "ندارد"
+        storage = "دارد" if file.storage else "ندارد"
+        parking = "دارد" if file.parking else "ندارد"
 
-    sell_template = f"""
-    آدرس : {file.address}
-    متراژ: {file.m2}
-    قیمت: {file.price}
-    طبقه: {file.floor}
-    آسانسور: {elevator}
-    پارکینگ: {parking}
-    انباری: {storage}
-    """
+        if file.get_file_type == "sell":
+            template = f"""
+            آدرس : {file.address}
+            متراژ: {file.m2}
+            قیمت: {file.price}
+            طبقه: {file.floor}
+            آسانسور: {elevator}
+            پارکینگ: {parking}
+            انباری: {storage}
+            """
+        else:
+            template = f"""
+            آدرس : {file.address}
+            متراژ: {file.m2}
+            ودیعه: {file.price_up}
+            اجاره: میلیون {int(file.price_rent)}
+            طبقه: {file.floor}
+            آسانسور: {elevator}
+            پارکینگ: {parking}
+            انباری: {storage}
+            """
 
+        return template
+
+    message = get_message(file)
     url = "http://192.168.1.102:8080/message"
     data = {
-        "message": sell_template,
+        "message": message,
         "phoneNumbers": [phone_numbers],
         "simNumber": 1,
     }
@@ -97,7 +110,7 @@ def send_sell_message(phone_numbers, pk) -> bool:
 
     # creating new record on SMSLog table
     SMSLog.objects.create(
-        task_id=send_sell_message.request.id,
+        task_id=send_message.request.id,
         status=success,
         message=data["message"],
         phone_number=phone_numbers,
@@ -107,38 +120,17 @@ def send_sell_message(phone_numbers, pk) -> bool:
 
 
 @shared_task
-def send_rent_message(phone_numbers, pk):
-    file = Rent.objects.get(pk=pk)
-
-    elevator = "دارد" if file.elevator else "ندارد"
-    storage = "دارد" if file.storage else "ندارد"
-    parking = "دارد" if file.parking else "ندارد"
-
-    price_up = (
-        f"میلیون{file.price_up}"
-        if file.price_up < 1000
-        else f"میلیارد{int(file.price_up / 1000)}"
-    )
-
-    rent_template = f"""
-    آدرس : {file.address}
-    متراژ: {file.m2}
-    ودیعه: {price_up}
-    اجاره: میلیون {int(file.price_rent)}
-    طبقه: {file.floor}
-    آسانسور: {elevator}
-    پارکینگ: {parking}
-    انباری: {storage}
-    """
+def resend_message(phone_number: str, message: str) -> bool:
 
     url = "http://192.168.1.102:8080/message"
     data = {
-        "message": rent_template,
-        "phoneNumbers": [phone_numbers],
+        "message": message,
+        "phoneNumbers": [phone_number],
         "simNumber": 1,
     }
 
     try:
+
         response = requests.post(
             url,
             json=data,
@@ -150,12 +142,13 @@ def send_rent_message(phone_numbers, pk):
     except:
         success: bool = False
 
+    print("request id: \n", resend_message.request.id)
     # creating new record on SMSLog table
     SMSLog.objects.create(
-        task_id=send_rent_message.request.id,
+        task_id=resend_message.request.id,
         status=success,
         message=data["message"],
-        phone_number=phone_numbers,
+        phone_number=phone_number,
     )
 
     return success

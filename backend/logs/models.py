@@ -103,3 +103,8 @@ class SMSLog(models.Model):
 
     def __str__(self):
         return f"Task {self.task_id}: {self.status}"
+
+    def resend_sms(self):
+        from file.tasks import resend_message
+
+        resend_message.delay(self.phone_number, self.message)

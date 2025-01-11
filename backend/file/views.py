@@ -22,8 +22,7 @@ from .serializers import (
 )
 from customer.serializers import BuyCustomerSerializer, RentCustomerSerializer
 from .tasks import (
-    send_sell_message,
-    send_rent_message,
+    send_message,
 )
 
 # Create your views here.
@@ -197,7 +196,8 @@ class SellSendInfo(APIView):
     def post(self, request, pk):
         phone_numbers = request.data.get("phone_numbers")
 
-        send_sell_message.delay(phone_numbers, pk)
+        file = Sell.objects.get(pk)
+        send_message.delay(phone_numbers, file)
 
         return Response("Task has been queued.")
 
@@ -206,7 +206,8 @@ class RentSendInfo(APIView):
     def post(self, request, pk):
         phone_numbers = request.data.get("phone_numbers")
 
-        send_rent_message.delay(phone_numbers, pk)
+        file = Rent.objects.get(pk)
+        send_message.delay(phone_numbers, file)
 
         return Response("Task has been queued.")
 
