@@ -23,7 +23,7 @@ services:
     environment:
       DJANGO_SETTINGS_MODULE: amlak.settings
       DEBUG: "True" 
-      SECRET_KEY: "someSecretKey$" 
+      SECRET_KEY: "someSecretKey$$" 
       DB_NAME: "amlak"
       DB_HOST: postgres
       DB_USER: "amlak"
@@ -78,7 +78,7 @@ services:
     environment:
       DJANGO_SETTINGS_MODULE: amlak.settings
       DEBUG: "True" 
-      SECRET_KEY: "someSecretKey$" 
+      SECRET_KEY: "someSecretKey$$" 
       DB_NAME: "amlak"
       DB_HOST: postgres
       DB_USER: "amlak"
