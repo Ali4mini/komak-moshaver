@@ -1,4 +1,3 @@
-
 services:
   postgres:
     image: postgres:15.4
@@ -80,7 +79,7 @@ services:
     environment:
       DJANGO_SETTINGS_MODULE: amlak.settings
       DEBUG: "False" 
-      SECRET_KEY: "someSecretKey$" 
+      SECRET_KEY: "someSecretKey$$"  # Escaped the $ character by doubling it
       DB_NAME: "amlak"
       DB_HOST: postgres
       DB_USER: "amlak"
@@ -95,4 +94,3 @@ networks:
 volumes:
   postgres_data:
   media_data:
-
