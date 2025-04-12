@@ -10,11 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+import os
+import pathlib
+
 # pyright: reportMissingImports=false
 # pylint: disable=E265
 from datetime import timedelta
-import pathlib
-import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = pathlib.Path(__file__).resolve(strict=True).parent.parent
@@ -43,7 +44,6 @@ INSTALLED_APPS = [
     "django.contrib.sites",
     "django.contrib.staticfiles",
     #! third party apps
-    "taggit",
     "django_extensions",
     "compressor",
     "rest_framework",

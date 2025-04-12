@@ -1,3 +1,4 @@
+
 services:
   postgres:
     image: postgres:15.4
@@ -79,7 +80,7 @@ services:
     environment:
       DJANGO_SETTINGS_MODULE: amlak.settings
       DEBUG: "False" 
-      SECRET_KEY: "someSecretKey$$"  # Escaped the $ character by doubling it
+      SECRET_KEY: "someSecretKey$" 
       DB_NAME: "amlak"
       DB_HOST: postgres
       DB_USER: "amlak"

@@ -1,5 +1,5 @@
 # Use the official Python image
-FROM python:3.12 AS base
+FROM docker.arvancloud.ir/python:3.12 AS base
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1 \

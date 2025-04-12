@@ -5,6 +5,7 @@ import { api } from "../common/api";
 import { useNavigate } from "react-router-dom";
 import { setFlashMessage } from "../common/flashSlice";
 import { useDispatch } from "react-redux";
+import NewLocation from "../common/newLocation.jsx"
 import CustomDatePicker from "../common/datePicker";
 
 const NewFile = () => {
@@ -429,6 +430,7 @@ const NewFile = () => {
 
           <label htmlFor="customFileInput" className="flex cursor-pointer w-32 bg-blue-200 text-black items-center justify-center align-middle font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-blue-400 transition duration-150 ease-in-out">انتحاب عکس</label>
         </div>
+        <NewLocation />
         <div className="grid grid-cols-3 md:grid-cols-4 max-w-sm gap-y-1">
           <Checkbox label="پارکینگ" name="parking" setter={setParking} />
           <Checkbox label="آسانسور" name="elevator" setter={setElevator} />
