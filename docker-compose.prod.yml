@@ -1,7 +1,7 @@
 
 services:
   postgres:
-    image: postgres:15.4
+    image: docker.arvancloud.ir/postgres:15.4
     container_name: database
     environment:
       POSTGRES_USER: amlak
@@ -59,7 +59,7 @@ services:
       - komak-moshaver
 
   redis:
-    image: redis:latest  # Use the latest Redis image
+    image: docker.arvancloud.ir/redis:latest  # Use the latest Redis image
     ports:
       - "6379:6379"  # Expose Redis port
     networks:
