@@ -1,119 +1,120 @@
 import time
+import librosa
+import noisereduce as nr
+import soundfile as sf
 from dataclasses import dataclass
 from faster_whisper import WhisperModel
-from typing import Optional, Tuple, List
+from typing import Optional, List, Tuple
+
+
+@dataclass
+class AudioPreprocessor:
+    """Handles preprocessing for Persian phone call recordings."""
+    target_sr: int = 16000  # Whisper's native sample rate
+    reduction_strength: float = 0.8  # Aggressive noise reduction for phone calls
+    norm_db: float = -3.0  # Target volume for normalization
+
+    def preprocess(self, input_path: str, output_path: str) -> None:
+        """
+        Applies preprocessing pipeline:
+        1. Load audio (resample if needed)
+        2. Noise reduction
+        3. Volume normalization
+        4. Save processed audio
+        """
+        # Load with librosa (auto-resamples to target_sr)
+        y, sr = librosa.load(input_path, sr=self.target_sr)
+        
+        # Noise reduction (critical for phone calls)
+        y_clean = nr.reduce_noise(
+            y=y, 
+            sr=sr,
+            stationary=True,  # Phone noise is usually non-stationary
+            prop_decrease=self.reduction_strength
+        )
+        
+        # Peak normalization (helps with varying call volumes)
+        y_norm = librosa.util.normalize(y_clean) * 10**(self.norm_db / 20)
+        
+        # Save processed audio
+        sf.write(output_path, y_norm, sr, subtype='PCM_16')
 
 
 @dataclass
 class TranscriptionConfig:
-    """Configuration for audio transcription."""
-    model_size: str = "large-v3"  # Options: "tiny", "base", "small", "medium", "large-v3"
-    language: Optional[str] = "fa"  # "fa" for Persian/Farsi, None for auto-detection
-    device: str = "cuda"  # "cpu" or "cuda" (GPU)
-    compute_type: str = "float16"  # "float16" for GPU, "int8" for CPU
-    # model_dir: str = "./models/"
-    beam_size: int = 5  # Better accuracy but slower TODO: mess around with this
-    vad_filter: bool = True  # Remove silence (better for calls)
-    word_timestamps: bool = True  # Get word-level timestamps
+    """Configuration for Persian real estate calls."""
+    model_size: str = "large-v3"
+    language: str = "fa"  # Force Persian mode
+    device: str = "cuda" 
+    compute_type: str = "float16"
+    beam_size: int = 5  # Balanced accuracy/speed
+    vad_filter: bool = True  # Critical for call recordings
+    word_timestamps: bool = False  # Disable for faster processing
+    initial_prompt: str = "مکالمه بین مشاور املاک و مشتری درباره خرید ملک"  # Real estate prompt
 
 
-
-class AudioTranscriber:
-    """Handles audio transcription using Faster Whisper."""
-    
+class PersianCallTranscriber:
     def __init__(self, config: TranscriptionConfig):
         self.config = config
+        self.preprocessor = AudioPreprocessor()
         self.model = None
-    
-    def load_model(self) -> None:
-        """Load the Whisper model."""
-        print("Loading model...")
+
+    def load_model(self):
+        """Load Whisper model with Persian optimization."""
         self.model = WhisperModel(
             self.config.model_size,
             device=self.config.device,
-            compute_type=self.config.compute_type,
-            # download_root=self.config.model_dir
+            compute_type=self.config.compute_type
         )
-    
-    def transcribe(self, audio_file: str, init_prompt: str|None="این یک مکالمه بین یک مشارو املاک و یک مشتری است.") -> Tuple[List[dict], dict]:
-        """
-        Transcribe the given audio file.
+
+    def transcribe(self, audio_path: str) -> Tuple[List[dict], dict]:
+        """Full pipeline: Preprocess → Transcribe → Postprocess"""
+        # 1. Preprocessing
+        processed_path = "temp_processed.wav"
+        self.preprocessor.preprocess(audio_path, processed_path)
         
-        Args:
-            audio_file: Path to the audio file to transcribe
-            
-        Returns:
-            Tuple containing (segments, transcription_info)
-        """
+        # 2. Load model if needed
         if not self.model:
             self.load_model()
-        
-        print("Transcribing...")
-        start_time = time.time()
-        
+
+        # 3. Transcribe with Persian-specific settings
         segments, info = self.model.transcribe(
-            audio_file,
+            processed_path,
             language=self.config.language,
             beam_size=self.config.beam_size,
             vad_filter=self.config.vad_filter,
-            word_timestamps=self.config.word_timestamps
+            initial_prompt=self.config.initial_prompt  # Boosts real estate terms
         )
-        
-        # Convert generator to list and segments to dictionaries for easier handling
-        segments_list = [
+
+        # Convert to structured output
+        return (
+            [{"start": s.start, "end": s.end, "text": s.text} for s in segments],
             {
-                "start": segment.start,
-                "end": segment.end,
-                "text": segment.text,
-                "words": [{"word": word.word, "start": word.start, "end": word.end} 
-                          for word in segment.words] if segment.words else None
+                "language": info.language,
+                "duration": info.duration,
+                "original_path": audio_path
             }
-            for segment in segments
-        ]
-        
-        transcription_info = {
-            "language": info.language,
-            "language_probability": info.language_probability,
-            "duration": info.duration,
-            "processing_time": time.time() - start_time
-        }
-        
-        return segments_list, transcription_info
-    
-    @staticmethod
-    def save_transcription(segments: List[dict], output_file: str) -> None:
-        """
-        Save transcription to a text file.
-        
-        Args:
-            segments: List of transcription segments
-            output_file: Path to the output file
-        """
-        with open(output_file, "w", encoding="utf-8") as f:
-            for segment in segments:
-                f.write(f"{segment['text']}\n")
+        )
 
 
 def main():
-    # Configuration
+    # Configuration for Persian real estate calls
     config = TranscriptionConfig()
+    transcriber = PersianCallTranscriber(config)
     
-    # Path to your audio file
-    audio_file = "./phone_20250418-175326_09129565629.m4a"  # Supports MP3, WAV, FLAC, etc.
-    output_file = "transcription.txt"
+    # Path to your phone recording
+    audio_file = "./phone_20250418-175636_09121204808.m4a"
     
-    # Initialize and run transcription
-    transcriber = AudioTranscriber(config)
+    # Run pipeline
     segments, info = transcriber.transcribe(audio_file)
     
-    # Print and save results
-    print(f"Detected language: {info['language']}, probability: {info['language_probability']:.2f}")
+    # Save results
+    with open("transcription.txt", "w", encoding="utf-8") as f:
+        f.write("\n".join([s["text"] for s in segments]))
     
-    for segment in segments:
-        print(f"[{segment['start']:.2f}s -> {segment['end']:.2f}s] {segment['text']}")
-    
-    transcriber.save_transcription(segments, output_file)
-    print(f"Done in {info['processing_time']:.2f} seconds")
+    print(f"Transcribed Persian call ({info['duration']:.2f}s):")
+    for seg in segments:
+        print(f"[{seg['start']:.1f}-{seg['end']:.1f}s]: {seg['text']}")
 
 
 if __name__ == "__main__":
