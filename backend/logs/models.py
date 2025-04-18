@@ -1,5 +1,5 @@
 from django.db import models
-from file.models import Owner, Sell, Rent
+from file.models import Sell, Rent
 from customer.models import BuyCustomer, RentCustomer
 
 from django.conf import settings
@@ -11,7 +11,7 @@ class SellCall(models.Model):
         PEYGIRI = "P", "پیگیری"
         MOAREFI = "M", "معرفی"
 
-    owner = models.ForeignKey(Owner, on_delete=models.DO_NOTHING)
+    file = models.ForeignKey(Sell, on_delete=models.DO_NOTHING)
     customer = models.ForeignKey(BuyCustomer, on_delete=models.DO_NOTHING)
     subject = models.CharField(max_length=2, choices=Subjects.choices)
     created = models.DateTimeField(auto_now_add=True)
@@ -33,7 +33,7 @@ class RentCall(models.Model):
         PEYGIRI = "P", "پیگیری"
         MOAREFI = "M", "معرفی"
 
-    owner = models.ForeignKey(Owner, on_delete=models.DO_NOTHING)
+    file = models.ForeignKey(Rent, on_delete=models.DO_NOTHING)
     customer = models.ForeignKey(RentCustomer, on_delete=models.DO_NOTHING)
     subject = models.CharField(max_length=2, choices=Subjects.choices)
     created = models.DateTimeField(auto_now_add=True)

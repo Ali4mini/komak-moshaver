@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     "django.contrib.sites",
     "django.contrib.staticfiles",
     #! third party apps
-    "taggit",
     "django_extensions",
     "compressor",
     "rest_framework",

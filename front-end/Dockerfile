@@ -16,7 +16,7 @@ COPY . .
 RUN npm run build
 
 # Development Stage
-FROM docker.arvancloud.ir/node:18-alpine AS dev
+FROM node:18-alpine AS dev
 WORKDIR /app
 COPY --from=build /app ./
 EXPOSE 5173
