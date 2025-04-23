@@ -1,7 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.urls import reverse
-
+from utils.models import Person
 # Create your models here.
 
 
@@ -20,8 +20,15 @@ class BuyCustomer(models.Model):
     class Meta:
         ordering = ["-date"]
 
-    customer_name = models.CharField(max_length=150)
-    customer_phone = models.CharField(max_length=12)
+
+    # New ForeignKey
+    customer = models.ForeignKey(
+        Person,
+        on_delete=models.DO_NOTHING,
+        null=True,  # Allow null during migration
+        blank=True,
+        verbose_name="Customer Person"
+    )
     property_type = models.CharField(
         choices=Types.choices, max_length=1, default=Types.APARTEMANT
     )
@@ -110,8 +117,15 @@ class RentCustomer(models.Model):
     class Meta:
         ordering = ["-date"]
 
-    customer_name = models.CharField(max_length=150)
-    customer_phone = models.CharField(max_length=12)
+
+    # New ForeignKey
+    customer = models.ForeignKey(
+        Person,
+        on_delete=models.DO_NOTHING,
+        null=True,  # Allow null during migration
+        blank=True,
+        verbose_name="Customer Person"
+    )
     property_type = models.CharField(
         choices=Types.choices, max_length=1, default=Types.APARTEMANT
     )

@@ -33,6 +33,7 @@ urlpatterns = [
     path("api/agents/", include("agents_m.urls", namespace="agents")),
     path("api/dashboard/", include("dashboard.urls", namespace="dashboard")),
     path("api/logs/", include("logs.urls", namespace="logs")),
+    path("api/common/", include("utils.urls", namespace="utils")),
 ]
 
 # Serve static and media files in development

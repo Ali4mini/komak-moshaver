@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     "agents_m.apps.AgentsMConfig",
     "file.apps.FileConfig",
     "logs.apps.LogsConfig",
+    "utils.apps.UtilsConfig",
     #! default apps
     "django.contrib.admin",
     "django.contrib.auth",
@@ -44,6 +45,7 @@ INSTALLED_APPS = [
     "django.contrib.sites",
     "django.contrib.staticfiles",
     #! third party apps
+    "taggit",
     "django_extensions",
     "compressor",
     "rest_framework",
@@ -111,6 +113,7 @@ WSGI_APPLICATION = "amlak.wsgi.application"
 APPEND_SLASH = True
 
 
+print(os.getenv("DB_HOST"))
 # Database
 DATABASES = {
     "default": {

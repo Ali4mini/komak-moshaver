@@ -14,7 +14,7 @@ from .models import (
 @admin.register(Sell)
 class SellAdmin(admin.ModelAdmin):
     list_display = [
-        "owner_name",
+            "owner",
         "m2",
         "address",
         "property_type",
@@ -35,7 +35,7 @@ class SellAdmin(admin.ModelAdmin):
 @admin.register(Rent)
 class RentAdmin(admin.ModelAdmin):
     list_display = [
-        "owner_name",
+        "owner",
         "m2",
         "address",
         "property_type",

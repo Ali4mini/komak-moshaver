@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('taggit', '0005_auto_20220424_2025'),
+        ('taggit', '0001_initial'),  # Add this dependency
     ]
 
     operations = [
@@ -28,7 +28,12 @@ class Migration(migrations.Migration):
                 ('storage', models.BooleanField(default=True)),
                 ('parking', models.BooleanField()),
                 ('type', models.CharField(choices=[('A', 'آپارتمان'), ('L', 'زمین'), ('S', 'مغازه')], default='A', max_length=1)),
-                ('tags', taggit.managers.TaggableManager(help_text='A comma-separated list of tags.', through='taggit.TaggedItem', to='taggit.Tag', verbose_name='Tags')),
+                ('tags', taggit.managers.TaggableManager(
+                    help_text='A comma-separated list of tags.',
+                    through='taggit.TaggedItem',  # Keep as string or change to actual model reference
+                    to='taggit.Tag',
+                    verbose_name='Tags'
+                )),
             ],
         ),
         migrations.CreateModel(
@@ -47,7 +52,12 @@ class Migration(migrations.Migration):
                 ('storage', models.BooleanField(default=True)),
                 ('parking', models.BooleanField()),
                 ('type', models.CharField(choices=[('A', 'آپارتمان'), ('L', 'زمین'), ('S', 'مغازه')], default='A', max_length=1)),
-                ('tags', taggit.managers.TaggableManager(help_text='A comma-separated list of tags.', through='taggit.TaggedItem', to='taggit.Tag', verbose_name='Tags')),
+                ('tags', taggit.managers.TaggableManager(
+                    help_text='A comma-separated list of tags.',
+                    through='taggit.TaggedItem',  # Keep as string or change to actual model reference
+                    to='taggit.Tag',
+                    verbose_name='Tags'
+                )),
             ],
         ),
     ]

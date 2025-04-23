@@ -81,6 +81,7 @@ class NewSellFile(generics.CreateAPIView):
     serializer_class = SellFileSerializer
 
 
+
 class NewRentFile(generics.CreateAPIView):
     queryset = Rent.objects.all()
     serializer_class = RentFileSerializer

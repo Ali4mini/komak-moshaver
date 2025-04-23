@@ -1,7 +1,6 @@
 from django.db import models
 from file.models import Sell, Rent
 from customer.models import BuyCustomer, RentCustomer
-
 from django.conf import settings
 
 

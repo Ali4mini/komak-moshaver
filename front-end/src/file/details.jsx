@@ -25,6 +25,7 @@ const FileDetails = () => {
   const [isCallLog, setIsCallLog] = useState(false)
   const [isTourLog, setIsTourLog] = useState(false)
   const [isAddressSMS, setIsAddressSMS] = useState(false)
+  const [person, setPerson] = useState(null)
   const [location, setLocation] = useState(null)
 
 
@@ -39,6 +40,17 @@ const FileDetails = () => {
         if (differenceInDays >= 30) {
           setIsFileOld(true)
         }
+	
+	// get the owner info
+	api
+	  .get(`common/persons/${response.data.owner}`)
+	  .then((response) => {
+	    if (response.status == 200){
+
+		setPerson(response.data)
+	    }
+	  }
+	  )
 
         // downloading file location
         api
@@ -216,8 +228,8 @@ const FileDetails = () => {
               <p id="addedBy">ثبت شده توسط: {file?.added_by}</p>
             </div>
             <div className="flex flex-row gap-20 my-3 px-4">
-              <p id="ownerName">نام مالک: {file?.owner_name}</p>
-              <p id="ownerPhone">شماره مالک: {file?.owner_phone}</p>
+              <p id="ownerName">نام مالک: {person?.last_name}</p>
+              <p id="ownerPhone">شماره مالک: {person?.phone_number}</p>
             </div>
             <div className="grid grid-cols-3 md:grid-cols-3 gap-x-6 gap-y-3 my-3 px-4">
               <p id="area">متراژ: {file?.m2}</p>

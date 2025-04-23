@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: postgres:15.4
+    image: docker.arvancloud.ir/postgres:15.4
     environment:
       POSTGRES_USER: "amlak"
       POSTGRES_PASSWORD: "amlak" 
@@ -40,6 +40,7 @@ services:
       - redis  # Ensure backend starts after Redis
     networks:
       - komak-moshaver 
+    command: poetry run python manage.py runserver 0.0.0.0:8000
 
   frontend:
     build:
@@ -57,7 +58,7 @@ services:
       - komak-moshaver 
 
   redis:
-    image: redis:latest  # Use the latest Redis image
+    image: docker.arvancloud.ir/redis:latest  # Use the latest Redis image
     ports:
       - "6379:6379"  # Expose Redis port
     networks:

@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import BuyCustomer, RentCustomer
 from utils.common import set_added_by, set_updated_logic
 import jdatetime
+from utils.models import Person
 
 
 @set_added_by
@@ -13,6 +14,35 @@ class BuyCustomerSerializer(serializers.ModelSerializer):
     persian_updated = serializers.SerializerMethodField()
     persian_created = serializers.SerializerMethodField()
     added_by = serializers.SerializerMethodField()
+    customer_name = serializers.CharField(write_only=True, required=False)
+    customer_phone = serializers.CharField(write_only=True, required=False)
+
+
+    def create(self, validated_data):
+        customer_name = validated_data.pop('customer_name', None)
+        customer_phone = validated_data.pop('customer_phone', None)
+        
+        customer = None
+        
+        if customer_phone:
+            try:
+                customer = Person.objects.get(phone_number=customer_phone)
+                if customer_name and customer.last_name != customer_name:
+                    raise serializers.ValidationError({
+                        'customer_phone': f'A person with this phone already exists with name "{customer.name}"'
+                    })
+            except Person.DoesNotExist:
+                if customer_name:
+                    print("person created")
+                    customer = Person.objects.create(
+                        last_name=customer_name,
+                        phone_number=customer_phone
+                    )
+        
+        if customer:
+            validated_data['customer'] = customer
+        
+        return super().create(validated_data)
 
     class Meta:
         model = BuyCustomer
@@ -50,6 +80,35 @@ class RentCustomerSerializer(serializers.ModelSerializer):
     persian_updated = serializers.SerializerMethodField()
     persian_created = serializers.SerializerMethodField()
     added_by = serializers.SerializerMethodField()
+    customer_name = serializers.CharField(write_only=True, required=False)
+    customer_phone = serializers.CharField(write_only=True, required=False)
+
+
+    def create(self, validated_data):
+        customer_name = validated_data.pop('customer_name', None)
+        customer_phone = validated_data.pop('customer_phone', None)
+        
+        customer = None
+        
+        if customer_phone:
+            try:
+                customer = Person.objects.get(phone_number=customer_phone)
+                if customer_name and customer.last_name != customer_name:
+                    raise serializers.ValidationError({
+                        'customer_phone': f'A person with this phone already exists with name "{customer.name}"'
+                    })
+            except Person.DoesNotExist:
+                if customer_name:
+                    print("person created")
+                    customer = Person.objects.create(
+                        last_name=customer_name,
+                        phone_number=customer_phone
+                    )
+        
+        if customer:
+            validated_data['customer'] = customer
+        
+        return super().create(validated_data)
 
     class Meta:
         model = RentCustomer

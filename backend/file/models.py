@@ -5,6 +5,7 @@ from django.urls import reverse
 from django.conf import settings
 from customer.models import BuyCustomer, RentCustomer
 from celery.result import AsyncResult
+from utils.models import Person
 
 # Create your models here.
 
@@ -24,8 +25,15 @@ class Sell(models.Model):
     class Meta:
         ordering = ["-created"]
 
-    owner_name = models.CharField(max_length=1000)
-    owner_phone = models.CharField(max_length=12)
+    # New ForeignKey
+    owner = models.ForeignKey(
+        Person,
+        on_delete=models.DO_NOTHING,
+        null=True,  
+        blank=True,
+        verbose_name="Owner Person",
+        related_name="owned_properties"  
+    )
     address = models.TextField()
     m2 = models.IntegerField(null=True, blank=True)
     price = models.IntegerField()
@@ -53,10 +61,22 @@ class Sell(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(null=True, blank=True)
     date = models.DateField(null=True, blank=True)
-    tenet_name = models.CharField(max_length=100, null=True, blank=True)
-    tenet_phone = models.CharField(max_length=12, null=True, blank=True)
-    lobbyMan_name = models.CharField(max_length=100, null=True, blank=True)
-    lobbyMan_phone = models.CharField(max_length=12, null=True, blank=True)
+    tenant = models.ForeignKey(
+        Person,
+        on_delete=models.DO_NOTHING,
+        null=True,  
+        blank=True,
+        verbose_name="tenat Person",
+        related_name="tenet_for"  
+    )
+    lobbyMan = models.ForeignKey(
+        Person,
+        on_delete=models.DO_NOTHING,
+        null=True, 
+        blank=True,
+        verbose_name="lobbyMan  Person",
+        related_name="lobbyMan_for"  
+    )
     status = models.CharField(
         max_length=12, choices=Status.choices, default=Status.ACTIVE
     )
@@ -66,7 +86,7 @@ class Sell(models.Model):
     source_id = models.CharField(max_length=100, blank=True, null=True, unique=True)
 
     def __str__(self) -> str:
-        return f"code: {self.id} owner: {self.owner_name} "
+        return f"code: {self.id} owner: {self.owner} "
 
     def get_absolute_url(self):
         return reverse("file:sell_file_detail", args=[self.id])
@@ -115,8 +135,8 @@ class Sell(models.Model):
         # sending sms for related_customers
         if related_customers:
             for customer in related_customers:
-                send_message.delay(customer.customer_phone, self)
-                print(f"send message for {customer.customer_phone}")
+                send_message.delay(customer.phone_number, self)
+                print(f"send message for {customer.phone_number}")
         else:
             print("related_customers in None")
 
@@ -138,8 +158,15 @@ class Rent(models.Model):
     class Meta:
         ordering = ["-created"]
 
-    owner_name = models.CharField(max_length=1000)
-    owner_phone = models.CharField(max_length=12)
+    # New ForeignKey
+    owner = models.ForeignKey(
+        Person,
+        on_delete=models.DO_NOTHING,
+        null=True,  # Allow null during migration
+        blank=True,
+        verbose_name="owner Person",
+        related_name="rents_as_owner"
+    )
     address = models.TextField()
     m2 = models.IntegerField(null=True, blank=True)
     price_up = models.IntegerField()
@@ -169,10 +196,22 @@ class Rent(models.Model):
     bazdid = models.CharField(max_length=100, null=True, blank=True)
     tabdil = models.IntegerField(default=None, null=True, blank=True)
     tabaghat = models.IntegerField(null=True, blank=True)
-    tenet_name = models.CharField(max_length=100, null=True, blank=True)
-    tenet_phone = models.CharField(max_length=12, null=True, blank=True)
-    lobbyMan_name = models.CharField(max_length=100, null=True, blank=True)
-    lobbyMan_phone = models.CharField(max_length=12, null=True, blank=True)
+    tenant = models.ForeignKey(
+        Person,
+        on_delete=models.DO_NOTHING,
+        null=True,  
+        blank=True,
+        verbose_name="tenant Person",
+        related_name="rent_tenet_for"  
+    )
+    lobbyMan = models.ForeignKey(
+        Person,
+        on_delete=models.DO_NOTHING,
+        null=True, 
+        blank=True,
+        verbose_name="lobby man Person",
+        related_name="rent_lobbyMan_for"  
+    )
     status = models.CharField(
         max_length=12, choices=Status.choices, default=Status.ACTIVE
     )
@@ -182,7 +221,7 @@ class Rent(models.Model):
     source_id = models.CharField(max_length=100, blank=True, null=True, unique=True)
 
     def __str__(self) -> str:
-        return f"code: {self.id} owner: {self.owner_name} "
+        return f"code: {self.id} owner: {self.owner} "
 
     def get_absolute_url(self):
         return reverse("file:rent_file_detail", args=[self.id])

@@ -2,7 +2,7 @@
 services:
   postgres:
     image: docker.arvancloud.ir/postgres:15.4
-    container_name: database
+    container_name: postgres
     environment:
       POSTGRES_USER: amlak
       POSTGRES_PASSWORD: amlak
@@ -22,7 +22,7 @@ services:
       DEBUG: "True"
       SECRET_KEY: "!88(h4((q=skn3flqv%cmdhx2-3#6l%1_$il@m#l)3t^l#g+5a"
       DB_NAME: "amlak"
-      DB_HOST: "database"
+      DB_HOST: postgres
       DB_USER: "amlak"
       DB_PASS: "amlak"
       DB_PORT: "5432"

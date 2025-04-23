@@ -10,6 +10,7 @@ from .models import (
 from utils.common import set_added_by, set_updated_logic
 import jdatetime
 
+from utils.models import Person
 
 class SellStaticLocationSerializer(serializers.ModelSerializer):
 
@@ -67,10 +68,38 @@ class SellFileSerializer(serializers.ModelSerializer):
     persian_created = serializers.SerializerMethodField()
     persian_updated = serializers.SerializerMethodField()
     added_by = serializers.SerializerMethodField()
+    owner_name = serializers.CharField(write_only=True, required=False)
+    owner_phone = serializers.CharField(write_only=True, required=False)
 
     class Meta:
         model = Sell
         fields = "__all__"
+
+    def create(self, validated_data):
+        owner_name = validated_data.pop('owner_name', None)
+        owner_phone = validated_data.pop('owner_phone', None)
+        
+        owner = None
+        
+        if owner_phone:
+            try:
+                owner = Person.objects.get(phone_number=owner_phone)
+                if owner_name and owner.last_name != owner_name:
+                    raise serializers.ValidationError({
+                        'owner_phone': f'A person with this phone already exists with name "{owner.name}"'
+                    })
+            except Person.DoesNotExist:
+                if owner_name:
+                    print("person created")
+                    owner = Person.objects.create(
+                        last_name=owner_name,
+                        phone_number=owner_phone
+                    )
+        
+        if owner:
+            validated_data['owner'] = owner
+        
+        return super().create(validated_data)
 
     def get_file_type(self, obj):
         return "sell"
@@ -104,10 +133,38 @@ class RentFileSerializer(serializers.ModelSerializer):
     persian_created = serializers.SerializerMethodField()
     persian_updated = serializers.SerializerMethodField()
     added_by = serializers.SerializerMethodField()
+    owner_name = serializers.CharField(write_only=True, required=False)
+    owner_phone = serializers.CharField(write_only=True, required=False)
 
     class Meta:
-        model = Rent
+        model = Sell
         fields = "__all__"
+
+    def create(self, validated_data):
+        owner_name = validated_data.pop('owner_name', None)
+        owner_phone = validated_data.pop('owner_phone', None)
+        
+        owner = None
+        
+        if owner_phone:
+            try:
+                owner = Person.objects.get(phone_number=owner_phone)
+                if owner_name and owner.last_name != owner_name:
+                    raise serializers.ValidationError({
+                        'owner_phone': f'A person with this phone already exists with name "{owner.name}"'
+                    })
+            except Person.DoesNotExist:
+                if owner_name:
+                    print("person created")
+                    owner = Person.objects.create(
+                        last_name=owner_name,
+                        phone_number=owner_phone
+                    )
+        
+        if owner:
+            validated_data['owner'] = owner
+        
+        return super().create(validated_data)
 
     def get_file_type(self, obj):
         return "rent"
