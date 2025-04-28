@@ -103,6 +103,13 @@ const NavBar = () => {
           مشتری ها
         </Link>
         <Link
+          id="persons"
+          className="inline-block border border-gray-50 rounded hover:border-gray-200 text-blue-500 hover:bg-gray-200 py-1 px-3 active:ring-2"
+          to="persons/"
+        >
+          اشخاص
+        </Link>
+        <Link
           id="smsLogs"
           className="inline-block border border-gray-50 rounded hover:border-gray-200 text-blue-500 hover:bg-gray-200 py-1 px-3 active:ring-2"
           to="smsLogs/"

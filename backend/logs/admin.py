@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import SellCall, RentCall
+from .models import SellCall, RentCall, Call
 
 # Register your models here.
 
@@ -10,3 +10,7 @@ class SellAdmin(admin.ModelAdmin):
     list_filter = [
         "added_by", "file", "customer"
     ]
+
+@admin.register(Call)
+class CallAdmin(admin.ModelAdmin):
+    list_display = ["phone_number", "call_type", "recording_url", "agent", "start_time"]

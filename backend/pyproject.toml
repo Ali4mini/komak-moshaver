@@ -25,6 +25,7 @@ gunicorn = "^23.0.0"
 pytest = "^8.3.3"
 pytest-django = "^4.9.0"
 redis = "^5.2.1"
+django-filter = "^25.1"
 
 
 [build-system]
