@@ -23,3 +23,4 @@ front-end/liara.json
 backend/liara.json
 backend/media/
 .aider*
+./AI/ASR/models/

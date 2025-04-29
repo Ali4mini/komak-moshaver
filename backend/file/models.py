@@ -181,20 +181,20 @@ class Rent(models.Model):
     )
     added_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        verbose_name=("added to site by "),
+        verbose_name=("added to site by"),
         on_delete=models.DO_NOTHING,
         blank=False,
     )
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(null=True, blank=True)
     date = models.DateField(null=True, blank=True)
-    bedroom = models.IntegerField(blank=True, null=True)
+    bedroom = models.IntegerField(null=True, blank=True)
     parking_motor = models.BooleanField(default=False)
     takhlie = models.CharField(max_length=100, null=True, blank=True)
     vahedha = models.IntegerField(blank=True, null=True)
     komod_divari = models.BooleanField(default=False)
     bazdid = models.CharField(max_length=100, null=True, blank=True)
-    tabdil = models.IntegerField(default=None, null=True, blank=True)
+    tabdil = models.IntegerField(null=True, blank=True)
     tabaghat = models.IntegerField(null=True, blank=True)
     tenant = models.ForeignKey(
         Person,
@@ -213,7 +213,9 @@ class Rent(models.Model):
         related_name="rent_lobbyMan_for"  
     )
     status = models.CharField(
-        max_length=12, choices=Status.choices, default=Status.ACTIVE
+        max_length=12,
+        choices=Status.choices,
+        default=Status.ACTIVE
     )
     description = models.CharField(max_length=1000, blank=True, null=True)
     notified_customers = models.ManyToManyField(RentCustomer, blank=True)
@@ -253,12 +255,6 @@ class Rent(models.Model):
             "up_budget__lte": budget_up_range[1],
             "rent_budget__gte": budget_rent_range[0],
             "rent_budget__lte": budget_rent_range[1],
-            # "m2__lte": self.m2,
-            # "bedroom__lte": self.bedroom,
-            # "year__lte": self.year,
-            # 'parking': self.parking,
-            # 'elevator': self.elevator,
-            # 'storage': self.storage,
         }
 
         filter_query = remove_none_values(filter_query)
@@ -286,7 +282,9 @@ class Rent(models.Model):
                 send_message.delay(customer.customer_phone, self)
                 print(f"send message for {customer.customer_phone}")
         else:
-            print("related_customers in None")
+            print("related_customers is None")
+
+
 
 
 class SellImage(models.Model):
@@ -301,7 +299,6 @@ class RentImage(models.Model):
 
 class SellStaticLocation(models.Model):
     file = models.OneToOneField(Sell, on_delete=models.CASCADE, related_name="location")
-    # TODO: give structured data type for the location (custom model field or a unified json)
     location = models.JSONField(null=True)
     image = models.ImageField(upload_to="location-sell", null=True)
 
@@ -361,7 +358,7 @@ class RentStaticLocation(models.Model):
             lon = self.location["longitude"]
         else:
             task_id = geocoding.delay(self.file.address)
-            # NOTE: this part should move to the download_static_location task to be non-blocking
+            # NOTE: this part should be non-blocking
             location = AsyncResult.get(task_id)
             lat = location.get("x")
             lon = location.get("y")
