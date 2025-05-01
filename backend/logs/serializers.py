@@ -26,6 +26,7 @@ class CallSerializer(serializers.ModelSerializer):
             'duration_formatted',
             'location',
             'recording_file',
+            'recording_transcription',
             'created_at',
             'updated_at'
         ]

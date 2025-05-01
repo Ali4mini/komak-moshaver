@@ -1,4 +1,5 @@
 import React from 'react';
+import AudioPlayerWithTranscript from "./audioPlayerTranscript.jsx";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { api } from "../common/api";
 
@@ -6,29 +7,83 @@ const PersonDetail = ({ person }) => {
   const [callLogs, setCallLogs] = React.useState([]);
   const [loadingLogs, setLoadingLogs] = React.useState(false);
   const [errorLogs, setErrorLogs] = React.useState(null);
+  const [selectedLog, setSelectedLog] = React.useState(null);
+  const [processedTranscript, setProcessedTranscript] = React.useState(null);
+
+  const handleShowPlayer = (log) => {
+      try {
+	// Parse the transcript string if it exists
+	const { segments, metadata } = parseTranscriptString(log.recording_transcription);
+	
+	setSelectedLog({
+	  ...log,
+	  formattedTranscript: segments.map(s => s.text).join('\n\n'),
+	  metadata: metadata
+	});
+      } catch (error) {
+	console.error('Error processing transcript:', error);
+	setSelectedLog({
+	  ...log,
+	  formattedTranscript: "Error loading transcript",
+	  metadata: {}
+	});
+      }
+    };
+
+    function parseTranscriptString(transcriptString) {
+      try {
+	// 1. First, clean the string by handling common issues
+	let cleanedString = transcriptString
+	  // Remove surrounding parentheses if they exist
+	  .replace(/^\(|\)$/g, '')
+	  // Replace single quotes with double quotes for JSON compatibility
+	  .replace(/'/g, '"')
+	  // Fix any trailing commas that might break parsing
+	  .replace(/,\s*]/g, ']')
+	  .replace(/,\s*}/g, '}');
+
+	// 2. Split into segments and metadata parts
+	const lastBracketIndex = cleanedString.lastIndexOf(']');
+	const segmentsPart = cleanedString.substring(0, lastBracketIndex + 1);
+	const metadataPart = cleanedString.substring(lastBracketIndex + 2); // Skip comma and space
+
+	// 3. Parse each part separately
+	const segments = JSON.parse(segmentsPart);
+	const metadata = metadataPart.trim() ? JSON.parse(metadataPart) : {};
+
+	return { segments, metadata };
+      } catch (error) {
+	console.error('Failed to parse transcript:', error);
+	// Return a fallback object if parsing fails
+	return {
+	  segments: [{ text: "Error: Could not parse transcript" }],
+	  metadata: {}
+	};
+      }
+    }
 
   React.useEffect(() => {
     if (person?.id) {
-	api.get(`logs/call-recordings/?person_id=${person.id}`)
-	    .then(response => {
-	      setLoadingLogs(true);
-	      setErrorLogs(null);
-	      setCallLogs(response.data); 
-	    })
-	    .catch(error => {
-	      setErrorLogs('Failed to load call logs');
-	      console.log(error)
-	    })
-	    .finally(() => {
-		setLoadingLogs(false)
-	    })
+      api.get(`logs/call-recordings/?person_id=${person.id}`)
+        .then(response => {
+          setLoadingLogs(true);
+          setErrorLogs(null);
+          setCallLogs(response.data); 
+        })
+        .catch(error => {
+          setErrorLogs('Failed to load call logs');
+          console.log(error)
+        })
+        .finally(() => {
+          setLoadingLogs(false)
+        })
     }
   }, [person?.id]);
 
 
-  if (!person) {
-    return <div className="p-4 text-gray-500">No person data available</div>;
-  }
+  const handleClosePlayer = () => {
+    setSelectedLog(null);
+  };
 
   // Format date of birth for display
   const formatDate = (dateString) => {
@@ -54,6 +109,10 @@ const PersonDetail = ({ person }) => {
   const getCallTypeDisplay = (type) => {
     return type === 'inbound' ? 'ورودی' : 'خروجی';
   };
+
+  if (!person) {
+    return <div className="p-4 text-gray-500">No person data available</div>;
+  }
 
   return (
     <div className="bg-white rounded-lg shadow p-6 max-w-4xl mx-auto">
@@ -148,10 +207,27 @@ const PersonDetail = ({ person }) => {
                       {log.notes || '-'}
                     </td>
                     <td className="px-4 py-3 text-sm text-gray-900">
-                      <a href={log.recording_file}>go</a>
+                      {log.recording_file ? (
+                        <a 
+                          href={log.recording_file} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="text-blue-600 hover:text-blue-800"
+                        >
+                          دانلود
+                        </a>
+                      ) : (
+                        '-'
+                      )}
                     </td>
                     <td className="px-4 py-3 text-sm text-gray-900">
-                      <a href={log.recording_transcription}>go</a>
+                      <button 
+                        onClick={() => handleShowPlayer(log)}
+                        className="text-blue-600 hover:text-blue-800"
+                        disabled={!log.recording_file}
+                      >
+                        نمایش
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -165,6 +241,16 @@ const PersonDetail = ({ person }) => {
         <p>تاریخ ایجاد: {new Date(person.created_at).toLocaleString('fa-IR')}</p>
         <p>آخرین بروزرسانی: {new Date(person.updated_at).toLocaleString('fa-IR')}</p>
       </div>
+
+      {/* Audio Player Dialog */}
+      {selectedLog && (
+        <AudioPlayerWithTranscript
+          audioUrl={selectedLog.recording_file}
+          transcript={selectedLog.formattedTranscript}
+          isOpen={!!selectedLog}
+          onClose={handleClosePlayer}
+        />
+      )}
     </div>
   );
 };

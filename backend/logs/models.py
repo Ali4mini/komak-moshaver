@@ -7,6 +7,7 @@ from utils.models import Person
 from typing import Optional, Tuple, Dict
 from django.core.files import File
 from pathlib import Path
+from AI.ASR.core import transcriber
 import os
 import re
 import json
@@ -86,10 +87,6 @@ class Call(models.Model):
     def __str__(self):
         return f"Call with {self.phone_number} at {self.start_time}"
 
-    ## TODO: use the ASR model for this function
-    @staticmethod
-    def get_recording_transcription(recording_file_path: str) -> str:
-        pass
 
     @staticmethod
     def parse_recording_filename(filename: str) -> Optional[Tuple[str, datetime]]:
@@ -242,6 +239,18 @@ class Call(models.Model):
                 
         return persons_created, recordings_created, skipped_files
 
+    def get_recording_transcription(self, recording_file):
+        """Get transcription for the recording file."""
+        # Get the full path to the file
+        file_path = os.path.join(settings.MEDIA_ROOT, recording_file.name)
+        
+        # Check if file exists
+        if not os.path.exists(file_path):
+            return ""
+            
+        # Use the transcriber to get the text
+        return transcriber.transcribe(file_path)
+    
     def save(self, *args, **kwargs):
         """Ensure required fields are populated before saving."""
         if not self.phone_number:
@@ -254,6 +263,10 @@ class Call(models.Model):
         
         if self.start_time and self.end_time and not self.duration:
             self.duration = (self.end_time - self.start_time).seconds
+
+        # Only transcribe if we have a recording file and no existing transcription
+        if self.recording_file and not self.recording_transcription:
+            self.recording_transcription = self.get_recording_transcription(self.recording_file) 
             
         super().save(*args, **kwargs)
 
