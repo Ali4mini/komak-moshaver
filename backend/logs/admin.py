@@ -13,4 +13,4 @@ class SellAdmin(admin.ModelAdmin):
 
 @admin.register(Call)
 class CallAdmin(admin.ModelAdmin):
-    list_display = ["phone_number", "call_type", "recording_url", "agent", "start_time"]
+    list_display = ["phone_number", "call_type", "recording_url", "agent", "start_time", "duration"]

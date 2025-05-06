@@ -112,8 +112,9 @@ WSGI_APPLICATION = "amlak.wsgi.application"
 
 APPEND_SLASH = True
 
+# Call recordings directory
+CALL_RECORDINGS_DIR = os.path.join(BASE_DIR, '/home/alireza/amlak/call recordings/Alireza/All/')  # Adjust as needed
 
-print(os.getenv("DB_HOST"))
 # Database
 DATABASES = {
     "default": {
@@ -168,3 +169,9 @@ CELERY_BROKER_URL = "redis://redis:6379/0"
 CELERY_RESULT_BACKEND = "redis://redis:6379/0"
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
+# CELERY_BEAT_SCHEDULE = {
+#     'sync-call-recordings-every-5-minutes': {
+#         'task': 'logs.tasks.sync_call_recordings',
+#         'schedule': 300.0,  # 300 seconds = 5 minutes
+#     },
+# }

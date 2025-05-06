@@ -10,6 +10,27 @@ const PersonDetail = ({ person }) => {
   const [selectedLog, setSelectedLog] = React.useState(null);
   const [processedTranscript, setProcessedTranscript] = React.useState(null);
 
+
+  
+    // In your parent component
+    const handleNewTranscript = (updatedTranscript) => {
+	const updatedTranscriptString = JSON.stringify(updatedTranscript)
+      // Update your state or make API call
+      api.patch(`/logs/call-recordings/${selectedLog.id}/`, {
+	recording_transcription: updatedTranscriptString
+      }).then(response => {
+	
+	const { segments, metadata } = parseTranscriptString(selectedLog.recording_transcription);
+	
+	setSelectedLog({
+	  ...selectedLog,
+	  transcriptSegments: segments,
+	  metadata: metadata
+	});
+      }).catch(error => console.log(`error: ${error}`));
+    };
+
+
   const handleShowPlayer = (log) => {
       try {
 	// Parse the transcript string if it exists
@@ -17,7 +38,7 @@ const PersonDetail = ({ person }) => {
 	
 	setSelectedLog({
 	  ...log,
-	  formattedTranscript: segments.map(s => s.text).join('\n\n'),
+	  transcriptSegments: segments,
 	  metadata: metadata
 	});
       } catch (error) {
@@ -49,9 +70,9 @@ const PersonDetail = ({ person }) => {
 
 	// 3. Parse each part separately
 	const segments = JSON.parse(segmentsPart);
-	const metadata = metadataPart.trim() ? JSON.parse(metadataPart) : {};
+	// const metadata = JSON.parse(metadataPart);
 
-	return { segments, metadata };
+	return { segments, metadataPart };
       } catch (error) {
 	console.error('Failed to parse transcript:', error);
 	// Return a fallback object if parsing fails
@@ -246,9 +267,12 @@ const PersonDetail = ({ person }) => {
       {selectedLog && (
         <AudioPlayerWithTranscript
           audioUrl={selectedLog.recording_file}
-          transcript={selectedLog.formattedTranscript}
+          segments={selectedLog.transcriptSegments}
           isOpen={!!selectedLog}
           onClose={handleClosePlayer}
+	  onSave={handleNewTranscript}
+	  recordingID={selectedLog.id}
+	  initialStatus={selectedLog.is_transcript_correct_show}
         />
       )}
     </div>

@@ -68,7 +68,7 @@ services:
     build:
       context: ./backend/
       target: dev
-    command: celery -A amlak worker -l info
+    command: celery -A amlak worker --loglevel=info && celery -A amlak beat --loglevel=info
     volumes:
       - ./backend/:/app
     depends_on:

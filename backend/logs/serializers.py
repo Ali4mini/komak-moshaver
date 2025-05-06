@@ -8,6 +8,7 @@ from .models import Call
 class CallSerializer(serializers.ModelSerializer):
     person_name = serializers.CharField(source='person.get_full_name', read_only=True)
     phone_number = serializers.CharField(read_only=True)  # Ensure it's not writable
+    is_transcript_correct_show = serializers.SerializerMethodField()
     duration_formatted = serializers.SerializerMethodField()
     location = serializers.JSONField(required=False)
     
@@ -26,6 +27,8 @@ class CallSerializer(serializers.ModelSerializer):
             'duration_formatted',
             'location',
             'recording_file',
+            'is_transcript_correct',
+            'is_transcript_correct_show',
             'recording_transcription',
             'created_at',
             'updated_at'
@@ -35,6 +38,12 @@ class CallSerializer(serializers.ModelSerializer):
             'recording_file': {'required': False}
         }
     
+    def get_is_transcript_correct_show(self, obj):
+        """Return duration in MM:SS format"""
+        if obj.is_transcript_correct:
+            return "correct"
+        return "incorrect"
+
     def get_duration_formatted(self, obj):
         """Return duration in MM:SS format"""
         if obj.duration:
