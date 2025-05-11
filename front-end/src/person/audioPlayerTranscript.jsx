@@ -16,16 +16,16 @@ const AudioPlayerWithTranscript = ({
   const [editingSegment, setEditingSegment] = useState(null);
   const [editedText, setEditedText] = useState('');
   const [transcriptStatus, setTranscriptStatus] = useState(initialStatus);
-  const [localSegments, setLocalSegments] = useState(initialSegments);
+  const [segments, setSegments] = useState(initialSegments);
   const audioRef = useRef(null);
 
   // Sync local segments when prop changes
   useEffect(() => {
-    setLocalSegments(initialSegments);
-    console.log(localSegments)
-  }, [initialSegments]);
+    setSegments(initialSegments);
+      console.log("init segments")
+      console.log(segments[0])
+  }, [segments]);
 
-  // Audio player setup
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -101,11 +101,11 @@ const AudioPlayerWithTranscript = ({
   const handleSaveEdit = () => {
     if (!editingSegment) return;
     
-    const updatedSegments = localSegments.map(seg => 
+    const updatedSegments = segments.map(seg => 
       seg === editingSegment ? { ...seg, text: editedText } : seg
     );
     
-    setLocalSegments(updatedSegments);
+    setSegments(updatedSegments);
     
     if (onSave) {
       onSave(updatedSegments);
@@ -152,13 +152,13 @@ const AudioPlayerWithTranscript = ({
   };
 
   const renderSegments = () => {
-    if (!localSegments || localSegments.length === 0) {
+    if (!segments || segments.length === 0) {
       return <div className="text-gray-500">متنی برای نمایش وجود ندارد</div>;
     }
 
     return (
       <div className="space-y-2" dir="rtl">
-        {localSegments.map((segment, i) => (
+        {segments.map((segment, i) => (
           <div 
             key={i}
             className={`p-2 rounded cursor-pointer transition-colors ${
@@ -319,3 +319,4 @@ const AudioPlayerWithTranscript = ({
 };
 
 export default AudioPlayerWithTranscript;
+

@@ -14,20 +14,12 @@ const PersonDetail = ({ person }) => {
   
     // In your parent component
     const handleNewTranscript = (updatedTranscript) => {
+	console.log(updatedTranscript)
 	const updatedTranscriptString = JSON.stringify(updatedTranscript)
       // Update your state or make API call
       api.patch(`/logs/call-recordings/${selectedLog.id}/`, {
 	recording_transcription: updatedTranscriptString
-      }).then(response => {
-	
-	const { segments, metadata } = parseTranscriptString(selectedLog.recording_transcription);
-	
-	setSelectedLog({
-	  ...selectedLog,
-	  transcriptSegments: segments,
-	  metadata: metadata
-	});
-      }).catch(error => console.log(`error: ${error}`));
+      });
     };
 
 
@@ -69,10 +61,12 @@ const PersonDetail = ({ person }) => {
 	const metadataPart = cleanedString.substring(lastBracketIndex + 2); // Skip comma and space
 
 	// 3. Parse each part separately
-	const segments = JSON.parse(segmentsPart);
-	// const metadata = JSON.parse(metadataPart);
+	const data = JSON.parse(segmentsPart);
+	const segments = data[0]
+	const metadata = data[1]
 
-	return { segments, metadataPart };
+
+	return { segments, metadata };
       } catch (error) {
 	console.error('Failed to parse transcript:', error);
 	// Return a fallback object if parsing fails

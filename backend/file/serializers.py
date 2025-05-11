@@ -86,7 +86,7 @@ class SellFileSerializer(serializers.ModelSerializer):
                 owner = Person.objects.get(phone_number=owner_phone)
                 if owner_name and owner.last_name != owner_name:
                     raise serializers.ValidationError({
-                        'owner_phone': f'A person with this phone already exists with name "{owner.name}"'
+                        'owner_phone': f'A person with this phone already exists with name "{owner.last_name}"'
                     })
             except Person.DoesNotExist:
                 if owner_name:
@@ -137,7 +137,7 @@ class RentFileSerializer(serializers.ModelSerializer):
     owner_phone = serializers.CharField(write_only=True, required=False)
 
     class Meta:
-        model = Sell
+        model = Rent
         fields = "__all__"
 
     def create(self, validated_data):
