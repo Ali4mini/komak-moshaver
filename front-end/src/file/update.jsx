@@ -10,22 +10,44 @@ import CustomDatePicker from "../common/datePicker";
 const UpdateFile = () => {
   const { fileType, id } = useParams();
   const [oldFile, setOldFile] = useState(null);
+  const [oldOwner, setOldOwner] = useState(null);
   const [isLoading, setIsLoading] = useState(true); // Add loading state
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await api.get(`file/${fileType}/${id}/`);
-        setOldFile(response.data);
-        setIsLoading(false);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        // Optionally set an error state here
-      }
-    };
-    fetchData();
-  }, [fileType, id]);
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const response = await api.get(`file/${fileType}/${id}/`);
+      setOldFile(response.data);
+      setIsLoading(false);
+      return response.data; // Return the data for the next step
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      // Optionally set an error state here
+      return null;
+    }
+  };
+
+  const fetchOwnerData = async (ownerId) => {
+    try {
+      const response = await api.get(`common/persons/${ownerId}`);
+      setOldOwner(response.data);
+      console.log("owner:", response.data);
+    } catch (error) {
+      console.error("Error fetching owner data:", error);
+      // Optionally set an error state here
+    }
+  };
+
+  const fetchAllData = async () => {
+    const fileData = await fetchData();
+    if (fileData && fileData.owner) {
+      await fetchOwnerData(fileData.owner);
+    }
+  };
+
+  fetchAllData();
+}, [fileType, id]);
 
   // Initialize state based on oldFile only if it's not loading
   useEffect(() => {
@@ -45,12 +67,12 @@ const UpdateFile = () => {
       setElevator(oldFile.elevator);
       setStorage(oldFile.storage);
       setMotorSpot(oldFile.parking_motor);
-      setOwnerName(oldFile.owner_name);
-      setOwnerPhone(oldFile.owner_phone);
+      setOwnerName(oldOwner?.last_name);
+      setOwnerPhone(oldOwner?.phone_number);
       setDescription(oldFile.description);
       setDate(oldFile.date)
     }
-  }, [oldFile, isLoading]); // Depend on isLoading to re-run this effect
+  }, [oldFile,oldOwner, isLoading]); // Depend on isLoading to re-run this effect
 
   const [propertyType, setPropertyType] = useState("");
   const [address, setAddress] = useState("");
@@ -179,7 +201,7 @@ const UpdateFile = () => {
 
               <p className="font-bold text-center justify-center items-center">تاریخ: </p>
               <div className="" style={{ direction: "rtl" }}>
-                <CustomDatePicker setter={setDate} defaultDate={oldFile.file_date} />
+                <CustomDatePicker setter={setDate} defaultDate={oldFile?.file_date} />
               </div>
             </div>
           </div>
@@ -315,7 +337,7 @@ const UpdateFile = () => {
                 <FloatLabel
                   defValue={oldFile.tenetName}
                   type="text"
-                  name={"ownerPhone"}
+                  name={"tenantPhone"}
                   label={"شماره مستاجر"}
                   setter={setTenetPhone}
                   isRequired={false}
@@ -323,7 +345,7 @@ const UpdateFile = () => {
                 <FloatLabel
                   defValue={oldFile.tenetPhone}
                   type="text"
-                  name={"ownerName"}
+                  name={"tenantName"}
                   label={"نام مستاجر"}
                   setter={setTenetName}
                   isRequired={false}
@@ -332,23 +354,31 @@ const UpdateFile = () => {
             ) : null}
           </div>
           <div className="grid grid-cols-2 max-w-sm gap-2">
-            <FloatLabel
-              defValue={oldFile.owner_phone}
-              type="text"
-              name={"ownerPhone"}
-              label={"شماره مالک"}
-              setter={setOwnerPhone}
-              isRequired={true}
-            />
-            <FloatLabel
-              defValue={oldFile.owner_name}
-              type="text"
-              name={"ownerName"}
-              label={"نام مالک"}
-              setter={setOwnerName}
-              isRequired={true}
-            />
-          </div>
+	    {oldOwner ? (
+	      <>
+		<FloatLabel
+		  defValue={oldOwner?.phone_number}
+		  type="text"
+		  name={"ownerPhone"}
+		  label={"شماره مالک"}
+		  setter={setOwnerPhone}
+		  isRequired={false}
+		  isDisabled={true}
+		/>
+		<FloatLabel
+		  defValue={oldOwner?.last_name}
+		  type="text"
+		  name={"ownerName"}
+		  label={"نام مالک"}
+		  setter={setOwnerName}
+		  isRequired={false}
+		  isDisabled={true}
+		/>
+	      </>
+	    ) : (
+	      <p>در حال بارگذاری اطلاعات مالک...</p> // Loading state
+	    )}
+	    </div>
           <div className="grid grid-cols-2 h-12 gap-2">
             <FloatLabel
               defValue={oldFile.description}

@@ -7,36 +7,42 @@ import transition from "react-element-popper/animations/transition";
 import opacity from "react-element-popper/animations/opacity";
 
 const CustomDatePicker = ({ setter, defaultDate }) => {
-  // Initialize selectedDate with today's date if defaultDate is not provided
-  const [selectedDate, setSelectedDate] = useState(() => {
-    return defaultDate
-      ? new DateObject({ calendar: persian, locale: persian_fa, value: defaultDate })
-      : new DateObject({ calendar: persian, locale: persian_fa, value: new Date() }); // Today's date
-  });
+  // Initialize selectedDate as null
+  const [selectedDate, setSelectedDate] = useState(null);
 
-  // Update selected date when defaultDate changes
+  // Initialize or update selectedDate when defaultDate changes
   useEffect(() => {
     if (defaultDate) {
-      setSelectedDate(new DateObject({ calendar: persian, locale: persian_fa, value: defaultDate }));
+      try {
+        const dateObj = new DateObject({
+          date: defaultDate,
+          calendar: persian,
+          locale: persian_fa
+        });
+        setSelectedDate(dateObj);
+      } catch (error) {
+        console.error("Error creating DateObject:", error);
+        setSelectedDate(new DateObject({ calendar: persian, locale: persian_fa }));
+      }
     } else {
-      setSelectedDate(new DateObject({ calendar: persian, locale: persian_fa, value: new Date() })); // Reset to today's date
+      setSelectedDate(null);
     }
-
-    console.log(selectedDate);
   }, [defaultDate]);
 
   const handleChange = (value) => {
     if (value instanceof DateObject) {
-      let ISODate = value.toDate().toISOString().split("T")[0]; // Convert to ISO string
-      setSelectedDate(value); // Update local state with the selected value
-      setter(ISODate); // Notify parent component
+      const ISODate = value.toDate().toISOString().split("T")[0];
+      setSelectedDate(value);
+      setter(ISODate);
+    } else if (value === null) {
+      setSelectedDate(null);
+      setter(null);
     }
   };
 
-  // Function to handle the unknown date click
   const handleUnknownDateClick = () => {
-    setSelectedDate(null); // Update local state to null
-    setter(null); // Notify parent component
+    setSelectedDate(null);
+    setter(null);
   };
 
   return (
@@ -44,8 +50,8 @@ const CustomDatePicker = ({ setter, defaultDate }) => {
       <DatePicker
         calendar={persian}
         locale={persian_fa}
-        value={selectedDate} // Use selected date directly
-        onChange={handleChange} // Handle date change
+        value={selectedDate}
+        onChange={handleChange}
         animations={[
           opacity(),
           transition({
@@ -55,7 +61,7 @@ const CustomDatePicker = ({ setter, defaultDate }) => {
         ]}
         render={(value, openCalendar) => (
           <div className="text-lg cursor-pointer" onClick={openCalendar}>
-            {selectedDate ? selectedDate.format("YYYY/MM/DD") : 'تاریخ انتخاب نشده است'} {/* Display formatted date or message */}
+            {selectedDate ? selectedDate.format("YYYY/MM/DD") : 'تاریخ انتخاب نشده است'}
           </div>
         )}
         calendarPosition="bottom-left"

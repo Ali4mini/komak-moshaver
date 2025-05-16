@@ -47,7 +47,7 @@ def set_updated_logic(serializer_class):
         if date_field:
             today = date.today()
             passed_days = today - date_field
-            if passed_days.days >= 30:
+            if passed_days.days >= 365:
                 validated_data["status"] = "UNACTIVE"
             else:
                 validated_data["status"] = "ACTIVE"

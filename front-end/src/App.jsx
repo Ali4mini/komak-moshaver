@@ -21,7 +21,7 @@ import Dashboard from "./dashboard/dashboard";
 import Restore from "./home/restore";
 import SmsLogsListPage from "./log_app/smsLogsList";
 import PersonList from "./person/persons.jsx";
-import PersonDetailsPage from "./person/personsDetails.jsx";
+import PersonDetails from "./person/personsDetails.jsx";
 
 function App() {
   const navigate = useNavigate();
@@ -69,7 +69,7 @@ function App() {
               <Route path="agents/profile" element={<Profile />} />
               <Route path="customers/" element={<Customers />} />
               <Route path="persons/" element={<PersonList />} />
-              <Route path="persons/:id" element={<PersonDetailsPage />} />
+              <Route path="persons/:id" element={<PersonDetails />} />
               <Route path="file/">
                 <Route path="new/" element={<NewFile />} />
                 <Route path=":fileType/:id" element={<FileDetails />} />

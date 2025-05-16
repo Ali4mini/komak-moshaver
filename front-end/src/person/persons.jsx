@@ -25,8 +25,8 @@ const PeopleList = () => {
     fetchPeople();
   }, []);
 
-  const handlePersonClick = (person) => {
-    navigate(`/persons/${person.id}`, { state: { person } });
+  const handlePersonClick = () => {
+    navigate(`/persons/${person.id}`);
   };
 
   if (loading) {

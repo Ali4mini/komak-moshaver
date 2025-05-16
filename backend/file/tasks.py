@@ -57,6 +57,7 @@ def download_static_location(
 
 @shared_task
 def send_message(phone_numbers: List[str], file: Sell | Rent) -> bool:
+    print("in send message")
 
     def get_message(file: Sell | Rent) -> str:
         elevator = "دارد" if file.elevator else "ندارد"
@@ -74,6 +75,7 @@ def send_message(phone_numbers: List[str], file: Sell | Rent) -> bool:
             انباری: {storage}
             """
         else:
+            print(file.get_file_type)
             template = f"""
             آدرس : {file.address}
             متراژ: {file.m2}
@@ -88,7 +90,7 @@ def send_message(phone_numbers: List[str], file: Sell | Rent) -> bool:
         return template
 
     message = get_message(file)
-    url = "http://192.168.1.102:8080/message"
+    url = "http://192.168.1.101:8080/message"
     data = {
         "message": message,
         "phoneNumbers": [phone_numbers],
@@ -122,7 +124,7 @@ def send_message(phone_numbers: List[str], file: Sell | Rent) -> bool:
 @shared_task
 def resend_message(phone_number: str, message: str) -> bool:
 
-    url = "http://192.168.1.102:8080/message"
+    url = "http://192.168.1.101:8080/message"
     data = {
         "message": message,
         "phoneNumbers": [phone_number],

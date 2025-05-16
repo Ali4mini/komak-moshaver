@@ -52,7 +52,7 @@ INSTALLED_APPS = [
     "corsheaders",
 ]
 
-SMS_API = "http://192.168.1.104:8080/message"
+SMS_API = "http://192.168.1.101:8080/message"
 
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [],

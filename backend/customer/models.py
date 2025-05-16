@@ -60,7 +60,7 @@ class BuyCustomer(models.Model):
     source_id = models.CharField(max_length=100, blank=True, null=True, unique=True)
 
     def __str__(self) -> str:
-        return self.customer_name
+        return str(self.customer)
 
     def get_absolute_url(self):
         return reverse("customer:buy_customer_detail", args=[self.id])
@@ -158,7 +158,7 @@ class RentCustomer(models.Model):
     source_id = models.CharField(max_length=100, blank=True, null=True, unique=True)
 
     def __str__(self) -> str:
-        return self.customer_name
+        return str(self.customer)
 
     def get_absolute_url(self):
         return reverse("customer:rent_customer_detail", args=[self.id])

@@ -19,6 +19,7 @@ class Sell(models.Model):
 
     class Status(models.TextChoices):
         ACTIVE = "ACTIVE", "برای فروش"
+        OLD = "OLD", "قدیمی"
         UNACTIVE = "UNACTIVE", "فروخته شد"
         CANCELED = "CANCELED", "برای فروش نیست"
 
@@ -152,6 +153,7 @@ class Rent(models.Model):
 
     class Status(models.TextChoices):
         ACTIVE = "ACTIVE", "برای اجاره"
+        OLD = "OLD", "قدیمی"
         UNACTIVE = "UNACTIVE", "اجاره داده شد"
         CANCELED = "CANCELED", "برای اجاره نیست"
 
@@ -167,6 +169,7 @@ class Rent(models.Model):
         verbose_name="owner Person",
         related_name="rents_as_owner"
     )
+
     address = models.TextField()
     m2 = models.IntegerField(null=True, blank=True)
     price_up = models.IntegerField()

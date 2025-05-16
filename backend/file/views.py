@@ -195,9 +195,12 @@ class RentFileImages(APIView):
 
 class SellSendInfo(APIView):
     def post(self, request, pk):
+        print(f"pk: {pk}")
         phone_numbers = request.data.get("phone_numbers")
 
-        file = Sell.objects.get(pk)
+        print(f"phone number: {phone_numbers}")
+        file = Sell.objects.filter(pk=pk)
+        print(f"file: {file}")
         send_message.delay(phone_numbers, file)
 
         return Response("Task has been queued.")

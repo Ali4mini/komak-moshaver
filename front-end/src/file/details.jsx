@@ -228,8 +228,8 @@ const FileDetails = () => {
               <p id="addedBy">ثبت شده توسط: {file?.added_by}</p>
             </div>
             <div className="flex flex-row gap-20 my-3 px-4">
-              <p id="ownerName">نام مالک: {person?.last_name}</p>
-              <p id="ownerPhone">شماره مالک: {person?.phone_number}</p>
+              <p onClick={() => navigate(`/persons/${person?.id}`)} className="cursor-pointer hover:text-blue-700" id="ownerName">نام مالک: {person?.last_name}</p>
+              <p onClick={() => navigate(`/persons/${person?.id}`)} className="cursor-pointer hover:text-blue-700" id="ownerPhone">شماره مالک: {person?.phone_number}</p>
             </div>
             <div className="grid grid-cols-3 md:grid-cols-3 gap-x-6 gap-y-3 my-3 px-4">
               <p id="area">متراژ: {file?.m2}</p>
