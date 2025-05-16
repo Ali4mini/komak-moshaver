@@ -143,8 +143,8 @@ const CustomerDetail = () => {
             <p id="addedBy">ثبت شده توسط: {customer?.added_by}</p>
           </div>
           <div className="flex flex-row-2 gap-20 my-3 px-4">
-            <p id="customerName">نام مشتری: {person?.last_name}</p>
-            <p id="customerPhone">شماره مشتری: {person?.phone_number}</p>
+              <p onClick={() => navigate(`/persons/${person?.id}`)} className="cursor-pointer hover:text-blue-700" id="ownerName">نام مشتری: {person?.last_name}</p>
+              <p onClick={() => navigate(`/persons/${person?.id}`)} className="cursor-pointer hover:text-blue-700" id="ownerPhone">شماره مشتری: {person?.phone_number}</p>
           </div>
           <div className="grid grid-cols-4 flex-wrap gap-x-6 gap-y-3 my-3 px-4">
             <p id="area">متراژ: {customer?.m2}</p>

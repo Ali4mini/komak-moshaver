@@ -8,19 +8,42 @@ import CustomDatePicker from "../common/datePicker";
 const UpdateCustomer = () => {
   const { customerType, id } = useParams();
   const [oldCustomer, setOldCustomer] = useState(null);
+  const [oldCustomerPerson, setOldCustomerPerson] = useState(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await api.get(`customer/${customerType}/${id}/`);
-        setOldCustomer(response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        // Optionally set an error state here
-      }
-    };
-    fetchData();
-  }, [customerType, id]);
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const response = await api.get(`customer/${customerType}/${id}/`);
+      setOldCustomer(response.data);
+      return response.data; // Return the data for the next step
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      // Optionally set an error state here
+      return null;
+    }
+  };
+
+  const fetchPersonData = async (customerId) => {
+      console.log("fetching owner data")
+    try {
+      const response = await api.get(`common/persons/${customerId}`);
+      setOldCustomerPerson(response.data);
+      console.log("customer:", response.data);
+    } catch (error) {
+      console.error("Error fetching customer data:", error);
+      // Optionally set an error state here
+    }
+  };
+
+  const fetchAllData = async () => {
+    const customerData = await fetchData();
+    if (customerData && customerData.customer) {
+      await fetchPersonData(customerData.customer);
+    }
+  };
+
+  fetchAllData();
+}, [customerType, id]);
 
   const [propertyType, setPropertyType] = useState(
     oldCustomer ? oldCustomer.property_type : ""
@@ -206,24 +229,31 @@ const UpdateCustomer = () => {
             />
           </div>
           <div className="grid grid-cols-2 max-w-sm gap-2">
-            <FloatLabel
-              defValue={oldCustomer.customer_phone}
-              type="text"
-              name={"customerPhone"}
-              label={"شماره مالک"}
-              setter={setCustomerPhone}
-              isRequired={true}
-              maxChars={11}
-            />
-            <FloatLabel
-              defValue={oldCustomer.customer_name}
-              type="text"
-              name={"customerName"}
-              label={"نام مالک"}
-              setter={setCustomerName}
-              isRequired={true}
-            />
-          </div>
+	    {oldCustomerPerson ? (
+	      <>
+		<FloatLabel
+		  defValue={oldCustomerPerson?.phone_number}
+		  type="text"
+		  name={"customerPhone"}
+		  label={"شماره مالک"}
+		  setter={setCustomerPhone}
+		  isRequired={false}
+		  isDisabled={true}
+		/>
+		<FloatLabel
+		  defValue={oldCustomerPerson?.last_name}
+		  type="text"
+		  name={"customerName"}
+		  label={"نام مشتری"}
+		  setter={setCustomerName}
+		  isRequired={false}
+		  isDisabled={true}
+		/>
+	      </>
+	    ) : (
+	      <p>در حال بارگذاری اطلاعات مشتری...</p> // Loading state
+	    )}
+	</div>
           <div className="grid grid-cols-3 md:grid-cols-4 max-w-sm gap-y-1">
             <Checkbox
               label="پارکینگ"
