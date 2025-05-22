@@ -8,6 +8,14 @@ from file.models import Sell, Rent
 from customer.models import BuyCustomer
 from datetime import datetime
 from django.db import connection
+from rest_framework import viewsets, status, permissions
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from django.utils import timezone
+from django.db.models import Q
+
+from .models import Task
+from .serializers import TaskSerializer # Make sure your serializer includes 'user', 'due_date', 'is_archived'
 
 def find_last_update_date():
     with connection.cursor() as cursor:
@@ -216,3 +224,87 @@ class FilesCounts(APIView):
             }
         })
 
+
+
+
+
+class TaskViewSet(viewsets.ModelViewSet):
+    serializer_class = TaskSerializer
+    # Still require authentication to access the API in general
+    # permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        """
+        Returns a queryset of tasks.
+        Filtering for "today's tasks" vs other views is handled by specific actions or query params.
+        """
+        # Base queryset no longer filters by user directly at this model level
+        base_queryset = Task.objects.all()
+
+        if self.action == 'list':
+            today = timezone.now().date()
+            return base_queryset.filter(
+                (Q(due_date=today) | Q(due_date__isnull=True)),
+                is_archived=False
+            ).order_by('completed', '-created_at')
+
+        # For other actions, use the model's default ordering or specify one
+        return base_queryset.order_by('is_archived', 'due_date', 'completed', '-created_at')
+
+    def perform_create(self, serializer):
+        """
+        User is no longer directly associated with the task model here.
+        If you needed to log who created it, you might do it in a separate audit log
+        or associate tasks with a user through a different related model (e.g., Project).
+        """
+        # serializer.save(user=self.request.user) # REMOVED
+        serializer.save()
+
+
+    @action(detail=True, methods=['post'], url_path='toggle-complete')
+    def toggle_complete(self, request, pk=None):
+        task = self.get_object() # get_object will fetch any task by ID now
+        task.completed = not task.completed
+        task.save()
+        serializer = self.get_serializer(task)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['post'], url_path='archive')
+    def archive_task(self, request, pk=None):
+        task = self.get_object()
+        task.is_archived = True
+        task.save()
+        return Response({'status': 'task archived'}, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['post'], url_path='unarchive')
+    def unarchive_task(self, request, pk=None):
+        task = self.get_object()
+        task.is_archived = False
+        task.save()
+        return Response({'status': 'task unarchived'}, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['get'], url_path='archived')
+    def list_archived_tasks(self, request):
+        # Lists all archived tasks, not user-specific at this model level
+        archived_tasks = Task.objects.filter(is_archived=True).order_by('-updated_at')
+        
+        page = self.paginate_queryset(archived_tasks)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(archived_tasks, many=True)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=['get'], url_path='all')
+    def list_all_tasks(self, request): # Renamed for clarity
+        # Lists all tasks, not user-specific at this model level
+        all_tasks = Task.objects.all().order_by('is_archived', 'due_date', 'completed', '-created_at')
+        
+        page = self.paginate_queryset(all_tasks)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(all_tasks, many=True)
+        return Response(serializer.data)

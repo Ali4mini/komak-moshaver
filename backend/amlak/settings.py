@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     "file.apps.FileConfig",
     "logs.apps.LogsConfig",
     "utils.apps.UtilsConfig",
+    "dashboard.apps.DashboardConfig",
     #! default apps
     "django.contrib.admin",
     "django.contrib.auth",

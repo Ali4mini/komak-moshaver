@@ -1,32 +1,21 @@
-import { Chart as ChartJS, registerables } from "chart.js";
-import CustomerPerDay from "./customerPerDay";
-import FilePerDay from "./filePerDay";
-import PropertyDiversity from "./propertyTypeDiversity";
-import FilePriceDiversity from "./filePriceDiversity";
-import CustomerBudgetDiversity from "./customerBudgetDiversity";
+import React from 'react';
+import TodayTasks from './TodayTasks.jsx'; // Adjust path if needed
 
-ChartJS.register(...registerables)
-
-const Dashboard = () => {
+function Dashboard() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
-      <div className="bg-white shadow-md rounded-lg overflow-hidden">
-        <PropertyDiversity />
-      </div>
-      <div className="bg-white shadow-md rounded-lg overflow-hidden">
-        <FilePriceDiversity />
-      </div>
-      <div className="bg-white shadow-md rounded-lg overflow-hidden">
-        <CustomerBudgetDiversity />
-      </div>
-      <div className="bg-white shadow-md rounded-lg overflow-hidden">
-        <CustomerPerDay startDate={"2023-01-01"} />
-      </div>
-      <div className="bg-white shadow-md rounded-lg overflow-hidden">
-        <FilePerDay startDate={"2023-01-01"} />
-      </div>
+    <div className="min-h-screen bg-slate-100 text-gray-800 p-4 md:p-6 lg:p-8" dir="rtl">
+
+      <main className="container mx-auto">
+        <div className="grid grid-cols-1  gap-6 md:gap-8">
+          <div className="lg:col-span-1">
+            <TodayTasks />
+          </div>
+          {/* Future components will be added to this grid */}
+        </div>
+      </main>
+
     </div>
   );
-};
+}
 
 export default Dashboard;
