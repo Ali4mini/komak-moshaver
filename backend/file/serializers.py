@@ -70,6 +70,9 @@ class SellFileSerializer(serializers.ModelSerializer):
     added_by = serializers.SerializerMethodField()
     owner_name = serializers.CharField(write_only=True, required=False)
     owner_phone = serializers.CharField(write_only=True, required=False)
+    property_type_display = serializers.SerializerMethodField()
+    status_display = serializers.SerializerMethodField()
+
 
     class Meta:
         model = Sell
@@ -103,6 +106,12 @@ class SellFileSerializer(serializers.ModelSerializer):
     def get_file_type(self, obj):
         return "sell"
 
+    def get_property_type_display(self, obj):
+        return obj.get_property_type_display()
+
+    def get_status_display(self, obj):
+        return obj.get_status_display()
+
     def get_added_by(self, obj):
         user = obj.added_by
         return user.username
@@ -134,6 +143,8 @@ class RentFileSerializer(serializers.ModelSerializer):
     added_by = serializers.SerializerMethodField()
     owner_name = serializers.CharField(write_only=True, required=False)
     owner_phone = serializers.CharField(write_only=True, required=False)
+    property_type_display = serializers.SerializerMethodField()
+    status_display = serializers.SerializerMethodField()
 
     class Meta:
         model = Rent
@@ -166,6 +177,12 @@ class RentFileSerializer(serializers.ModelSerializer):
 
     def get_file_type(self, obj):
         return "rent"
+
+    def get_property_type_display(self, obj):
+        return obj.get_property_type_display()
+
+    def get_status_display(self, obj):
+        return obj.get_status_display()
 
     def get_added_by(self, obj):
         user = obj.added_by

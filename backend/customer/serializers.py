@@ -16,7 +16,12 @@ class BuyCustomerSerializer(serializers.ModelSerializer):
     added_by = serializers.SerializerMethodField()
     customer_name = serializers.CharField(write_only=True, required=False)
     customer_phone = serializers.CharField(write_only=True, required=False)
+    property_type_display = serializers.SerializerMethodField()
+    status_display = serializers.SerializerMethodField()
 
+    class Meta:
+        model = BuyCustomer
+        fields = "__all__"
 
     def create(self, validated_data):
         customer_name = validated_data.pop('customer_name', None)
@@ -29,7 +34,7 @@ class BuyCustomerSerializer(serializers.ModelSerializer):
                 customer = Person.objects.get(phone_number=customer_phone)
                 if customer_name and customer.last_name != customer_name:
                     raise serializers.ValidationError({
-                        'customer_phone': f'A person with this phone already exists with name "{customer.name}"'
+                        'customer_phone': f'A person with this phone already exists with name "{customer.last_name}"'
                     })
             except Person.DoesNotExist:
                 if customer_name:
@@ -44,13 +49,16 @@ class BuyCustomerSerializer(serializers.ModelSerializer):
         
         return super().create(validated_data)
 
-    class Meta:
-        model = BuyCustomer
-        fields = "__all__"
 
     def get_added_by(self, obj):
         user = obj.added_by
         return user.username
+
+    def get_property_type_display(self, obj):
+        return obj.get_property_type_display()
+
+    def get_status_display(self, obj):
+        return obj.get_status_display()
 
     def get_customer_type(self, obj):
         return "buy"
@@ -82,6 +90,8 @@ class RentCustomerSerializer(serializers.ModelSerializer):
     added_by = serializers.SerializerMethodField()
     customer_name = serializers.CharField(write_only=True, required=False)
     customer_phone = serializers.CharField(write_only=True, required=False)
+    property_type_display = serializers.SerializerMethodField()
+    status_display = serializers.SerializerMethodField()
 
 
     def create(self, validated_data):
@@ -95,7 +105,7 @@ class RentCustomerSerializer(serializers.ModelSerializer):
                 customer = Person.objects.get(phone_number=customer_phone)
                 if customer_name and customer.last_name != customer_name:
                     raise serializers.ValidationError({
-                        'customer_phone': f'A person with this phone already exists with name "{customer.name}"'
+                        'customer_phone': f'A person with this phone already exists with name "{customer.last_name}"'
                     })
             except Person.DoesNotExist:
                 if customer_name:
@@ -117,6 +127,12 @@ class RentCustomerSerializer(serializers.ModelSerializer):
     def get_added_by(self, obj):
         user = obj.added_by
         return user.username
+
+    def get_property_type_display(self, obj):
+        return obj.get_property_type_display()
+
+    def get_status_display(self, obj):
+        return obj.get_status_display()
 
     def get_customer_type(self, obj):
         return "rent"

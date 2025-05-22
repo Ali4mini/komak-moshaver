@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     #! third party apps
     "taggit",
     "django_extensions",
+    "django_filters",
     "compressor",
     "rest_framework",
     "corsheaders",

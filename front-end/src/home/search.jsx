@@ -1,185 +1,295 @@
-import { Fragment, useState } from "react";
+// Search.jsx
+import { Fragment, useState, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { api } from "../common/api";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import PropTypes from 'prop-types';
+import { MagnifyingGlassIcon, XMarkIcon, DocumentTextIcon, UserIcon, UsersIcon, CheckCircleIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
 
-const SearchItem = ({ name, address, id, type, hasNotified, fileOrCustomerType }) => {
+// TODO: fix customer only search with last_name and phone_number
+// --- SearchItem Component ---
+const SearchItem = ({ name, secondaryText, id, itemType, typeSpecific, hasNotified, onClick }) => {
+  let IconComponent;
+  switch (itemType) {
+    case 'file': IconComponent = DocumentTextIcon; break;
+    case 'customer_preference': IconComponent = UserIcon; break;
+    case 'person': IconComponent = UsersIcon; break;
+    case 'person_with_files_context': IconComponent = UsersIcon; break;
+    case 'person_with_customer_preference_context': IconComponent = UsersIcon; break;
+    default: IconComponent = DocumentTextIcon;
+  }
+
   return (
-    <div className="flex flex-row p-2 align-middle items-center justify-between border-b border-gray-200 hover:bg-gray-100 transition duration-150 ease-in-out">
-      <Link to={`/${type}/${fileOrCustomerType}/${id}`}>
-        <div className={`flex flex-col ${hasNotified ? 'text-gray-400 line-through' : 'text-black'}`}>
-          <h3 className="text-base sm:text-lg font-semibold">{name}</h3>
-          {address && <p className="text-xs sm:text-sm text-gray-500">{address}</p>}
+    <div
+      className={`group flex items-center justify-between p-3 rounded-md transition-all duration-150 ease-in-out cursor-pointer ${hasNotified ? 'bg-gray-100 dark:bg-gray-750' : 'hover:bg-indigo-50 dark:hover:bg-gray-700'}`}
+      onClick={() => !hasNotified && onClick()}
+      role="button" tabIndex={0}
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') !hasNotified && onClick() }}
+    >
+      <div className="flex items-center space-x-3 rtl:space-x-reverse min-w-0">
+        <IconComponent className={`w-6 h-6 flex-shrink-0 ${hasNotified ? 'text-gray-400 dark:text-gray-500' : 'text-indigo-500 dark:text-indigo-400'}`} />
+        <div className={`flex-1 min-w-0 ${hasNotified ? 'text-gray-400 dark:text-gray-500 line-through' : 'text-gray-800 dark:text-gray-200'}`}>
+          <h3 className="text-sm font-semibold truncate">{name || 'نامشخص'}</h3>
+          {secondaryText && <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{secondaryText}</p>}
         </div>
-      </Link>
-      <input
-        type="checkbox"
-        className="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded"
-        defaultChecked={hasNotified}
-      />
+      </div>
+      {hasNotified && (
+        <CheckCircleIcon className="w-5 h-5 text-green-500 dark:text-green-400 flex-shrink-0" title="اطلاع داده شده" />
+      )}
     </div>
   );
 };
 
 SearchItem.propTypes = {
-  name: PropTypes.string.isRequired,
-  address: PropTypes.string,
-  id: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
-  hasNotified: PropTypes.bool.isRequired,
-  fileOrCustomerType: PropTypes.string.isRequired,
+  name: PropTypes.string,
+  secondaryText: PropTypes.string,
+  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  itemType: PropTypes.oneOf(['file', 'customer_preference', 'person', 'person_with_files_context', 'person_with_customer_preference_context']).isRequired,
+  typeSpecific: PropTypes.string,
+  hasNotified: PropTypes.bool,
+  onClick: PropTypes.func.isRequired,
 };
+SearchItem.defaultProps = { hasNotified: false, typeSpecific: '' };
 
+
+// --- Main Search Component ---
 const Search = ({ isOpen, setIsOpen }) => {
   const [searchParams, setSearchParams] = useState({
-    subject: "owner",
+    subject: "file",
     field: "id",
     key: "",
   });
-  const [result, setResult] = useState([]);
+  const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [hasSearched, setHasSearched] = useState(false);
+  const navigate = useNavigate();
 
-  const handleSearchChange = (e) => {
+  useEffect(() => {
+    let defaultField = "id";
+    if (searchParams.subject === "person") {
+      defaultField = "name";
+    } else if (searchParams.subject === "file") {
+      defaultField = "id";
+    } else if (searchParams.subject === "customer_preference") {
+      defaultField = "id";
+    }
+
+    setSearchParams(prev => ({
+      ...prev,
+      field: defaultField,
+      key: ""
+    }));
+    setResults([]);
+    setHasSearched(false);
+  }, [searchParams.subject]);
+
+  useEffect(() => {
+    setResults([]);
+    setHasSearched(false);
+  }, [searchParams.field]);
+
+
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
     setSearchParams((prev) => ({ ...prev, [name]: value }));
-
-    if (name === "subject") {
-      setSearchParams((prev) => ({ ...prev, field: value === "owner" ? "id" : "customer_name", key: "" }));
-    }
   };
 
-  const filterResults = async (e) => {
-    e.preventDefault();
-    const endpoint = searchParams.subject === "owner" ? "/listing/" : "/listing/customers";
+  const performSearch = async (e) => {
+    if (e) e.preventDefault();
+    const trimmedKey = searchParams.key.trim();
+    if (!trimmedKey) {
+      setResults([]); setHasSearched(true); return;
+    }
+    setLoading(true); setHasSearched(true); setResults([]);
 
-    setLoading(true); // Start loading
+    let endpoint = "";
+    let apiParams = {};
+    let currentItemTypeForResults = searchParams.subject;
+
+    if (searchParams.subject === "file") {
+      if (searchParams.field === "id") {
+        endpoint = "/listing/";
+        apiParams = { id: trimmedKey }; // Assumes 'id' is filterable for exact match
+        currentItemTypeForResults = 'file';
+      } else if (searchParams.field === "name") { // Search "Files" by "Owner Name"
+        endpoint = "common/persons/";
+        apiParams = { last_name: trimmedKey }; // Uses DRF SearchFilter on Person model
+        currentItemTypeForResults = 'person_with_files_context';
+      } else {
+        endpoint = "/listing/";
+        apiParams = { [searchParams.field]: trimmedKey };
+        currentItemTypeForResults = 'file';
+      }
+    } else if (searchParams.subject === "customer_preference") {
+      endpoint = "/listing/customers/";
+      if (searchParams.field === "id") {
+        apiParams = { id: trimmedKey }; // Assumes 'id' is filterable for exact match
+      } else if (searchParams.field === "name") {
+        apiParams = { customer_name__icontains: trimmedKey }; // Direct search on preference name
+      } else {
+         apiParams = { [searchParams.field]: trimmedKey };
+      }
+      currentItemTypeForResults = 'customer_preference';
+    } else if (searchParams.subject === "person") {
+      endpoint = "common/persons/";
+      if (searchParams.field === "id") {
+        apiParams = { id: trimmedKey }; // Uses DjangoFilterBackend for exact 'id' match
+      } else if (searchParams.field === "name") {
+        apiParams = { last_name__contains: trimmedKey }; // Uses DRF SearchFilter for general name search
+      } else if (searchParams.field === "phone_number") {
+        apiParams = { phone_number__contains: trimmedKey }; // Uses DjangoFilterBackend for exact 'phone_number' match
+      }
+      currentItemTypeForResults = 'person';
+    } else {
+      setLoading(false); return;
+    }
 
     try {
-      const response = await api.get(endpoint, {
-        params: { [searchParams.field]: searchParams.key },
-      });
-      setResult(response.data);
+      const response = await api.get(endpoint, { params: apiParams });
+      let processedData = [];
+      if (response.data && Array.isArray(response.data.results)) {
+        processedData = response.data.results;
+      } else if (Array.isArray(response.data)) {
+        processedData = response.data;
+      }
+      
+      const resultsWithContext = processedData.map(item => ({ ...item, _searchResultItemType: currentItemTypeForResults }));
+      setResults(resultsWithContext);
+
     } catch (error) {
-      console.error(error);
+      console.error("Search API error:", error.response?.data || error.message);
+      setResults([]);
     } finally {
-      setLoading(false); // End loading
+      setLoading(false);
     }
   };
 
-  return (
-    <Transition
-      show={isOpen}
-      enter="transition duration-100 ease-out"
-      enterFrom="transform scale-95 opacity-0"
-      enterTo="transform scale-100 opacity-100"
-      leave="transition duration-75 ease-out"
-      leaveFrom="transform scale-100 opacity-100"
-      leaveTo="transform scale-95 opacity-0"
-      as={Fragment}
-    >
-      <Dialog open={isOpen} onClose={() => setIsOpen(false)} className="relative z-50 max-h-[80vh]">
-        <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
-        <div className="fixed inset-0 flex items-center justify-center">
-          <Dialog.Panel className="flex flex-col gap-4 mx-auto w-full max-w-md px-6 py-4 rounded-lg bg-white shadow-lg">
-            <Dialog.Title className="text-xl font-bold">جستجو</Dialog.Title>
-            <form onSubmit={filterResults} className="flex flex-col gap-2">
-              {/* Select Boxes */}
-              <div className="flex flex-col sm:flex-row gap-2">
-                <label htmlFor="subject" className="text-sm text-gray-600 font-bold text-center flex items-center">جستجو در:</label>
-                <select
-                  name="subject"
-                  id="subject"
-                  value={searchParams.subject}
-                  onChange={handleSearchChange}
-                  className="bg-white px-3 py-2 text-sm border border-gray-300 rounded focus:ring-blue-300 focus:border-blue-300 transition duration-150 ease-in-out w-full sm:w-auto mb-2"
-                >
-                  <option value="owner">فایل ها</option>
-                  <option value="customer">مشتریان</option>
-                </select>
-                <label htmlFor="field" className="text-sm text-gray-600 font-bold text-center flex items-center">پارامتر:</label>
-                <select
-                  name="field"
-                  id="field"
-                  value={searchParams.field}
-                  onChange={handleSearchChange}
-                  className="bg-white px-3 py-2 text-sm border border-gray-300 rounded focus:ring-blue-300 focus:border-blue-300 transition duration-150 ease-in-out w-full sm:w-auto mb-2"
-                >
-                  {searchParams.subject === "owner" ? (
-                    <>
-                      <option value="id">کد</option>
-                      <option value="owner_name__icontains">نام فایل</option>
-                    </>
-                  ) : (
-                    <>
-                      <option value="id">کد</option>
-                      <option value="customer_name__icontains">نام مشتری</option>
-                    </>
-                  )}
-                </select>
-              </div>
+  const handleItemClick = (item) => {
+    const itemType = item._searchResultItemType;
+    const id = String(item.id);
+    let path = "";
 
-              {/* Input Field and Button */}
-              <div className="flex flex-col sm:flex-row gap-2">
-                <input
-                  type={searchParams.field === "id" ? "number" : "text"}
-                  name="key"
-                  id="key"
-                  value={searchParams.key}
-                  onChange={handleSearchChange}
-                  className="border w-full sm:w-auto border-gray-400 rounded px-3 py-2 focus:ring-blue-300 focus:border-blue-300 transition duration-150 ease-in-out mb-2"
-                />
-                <button
-                  type="submit"
-                  className="h-full rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-[10px] transition duration-150 ease-in-out w-full sm:w-auto"
-                >
-                  جستجو
+    switch (itemType) {
+      case 'file':
+        path = `/file/${item.file_type}/${id}`;
+        break;
+      case 'customer_preference':
+        path = `/customer/${item.customer_type}/${id}`;
+        break;
+      case 'person':
+        path = `/persons/${id}`;
+        break;
+      case 'person_with_files_context':
+        path = `/persons/${id}?context=files`;
+        break;
+      case 'person_with_customer_preference_context':
+        path = `/persons/${id}?context=customer_preferences`;
+        break;
+      default:
+        setIsOpen(false); return;
+    }
+    navigate(path);
+    setIsOpen(false);
+  };
+
+  const commonSelectClasses = "w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-200 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block p-2.5 shadow-sm";
+  const commonInputClasses = "w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-200 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block p-2.5 shadow-sm";
+
+  return (
+    <Transition show={isOpen} as={Fragment}>
+      <Dialog onClose={() => setIsOpen(false)} className="relative z-50">
+        <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0">
+          <div className="fixed inset-0 bg-black/50 dark:bg-black/70" aria-hidden="true" />
+        </Transition.Child>
+        <div className="fixed inset-0 flex items-center justify-center p-4">
+          <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0 scale-95" enterTo="opacity-100 scale-100" leave="ease-in duration-200" leaveFrom="opacity-100 scale-100" leaveTo="opacity-0 scale-95">
+            <Dialog.Panel className="flex flex-col w-full max-w-lg bg-white dark:bg-gray-800 rounded-xl shadow-2xl overflow-hidden">
+              <div className="flex items-center justify-between p-4 sm:p-5 border-b border-gray-200 dark:border-gray-700">
+                <Dialog.Title className="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
+                  <MagnifyingGlassIcon className="w-6 h-6 me-2 rtl:ms-2 text-indigo-600 dark:text-indigo-400" />
+                  جستجوی پیشرفته
+                </Dialog.Title>
+                <button onClick={() => setIsOpen(false)} className="p-1 rounded-full text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500" aria-label="بستن جستجو">
+                  <XMarkIcon className="w-6 h-6" />
                 </button>
               </div>
-
-              {/* Loader */}
-              {loading && (
-                <div className="flex justify-center items-center py-4">
-                  {/* Tailwind CSS Spinner */}
-                  <svg
-                    role="status"
-                    className="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
-                    viewBox="0 0 100 101"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      d="M50.5 1C22.7 1 1.5 22.2 1.5 50S22.7 99 50.5 99c27.8 0 49.5 -21.2 49.5 -49S78.3 1 50.5 1zM50.5 93c -23.4 0 -42.5 -19.1 -42.5 -43S27.1 7 50.5 7c23.4 0 42.5 19.1 42.5 43S73.9 93 50.5 93z"
-                      fill="#3498db" />
-                    <path
-                      d="M93.9 50c0 -24 -19.4 -43 -43 -43v6c20.4 0 37 16.6 37 37s -16.6 37 -37 37v6c23.6 .1 43 -18.9 43 -43z"
-                      fill="#3498db" />
-                  </svg>
+              <form onSubmit={performSearch} className="p-4 sm:p-5 space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label htmlFor="subject" className="block mb-1.5 text-sm font-medium text-gray-700 dark:text-gray-300">جستجو در:</label>
+                    <select name="subject" id="subject" value={searchParams.subject} onChange={handleInputChange} className={commonSelectClasses}>
+                      <option value="file">فایل‌ها</option>
+                      <option value="customer_preference">متقاضیان (جستجوها)</option>
+                      <option value="person">اشخاص (کلی)</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label htmlFor="field" className="block mb-1.5 text-sm font-medium text-gray-700 dark:text-gray-300">بر اساس:</label>
+                    <select name="field" id="field" value={searchParams.field} onChange={handleInputChange} className={commonSelectClasses}>
+                      <option value="id">کد</option>
+                      {searchParams.subject === "person" ? (
+                        <>
+                          <option value="name">نام شخص</option>
+                          <option value="phone_number">شماره تلفن</option>
+                        </>
+                      ) : searchParams.subject === "file" ? (
+                        <option value="name">نام مالک</option>
+                      ) : ( // customer_preference
+                        <option value="name">نام متقاضی</option>
+                      )}
+                    </select>
+                  </div>
                 </div>
-              )}
-            </form>
+                <div className="flex flex-col sm:flex-row items-end gap-3">
+                  <div className="flex-grow">
+                    <label htmlFor="key" className="block mb-1.5 text-sm font-medium text-gray-700 dark:text-gray-300">عبارت جستجو:</label>
+                    <input
+                      type={
+                        searchParams.field === "id" ? "number" :
+                        (searchParams.subject === "person" && searchParams.field === "phone_number") ? "tel" :
+                        "text"
+                      }
+                      name="key" id="key" value={searchParams.key} onChange={handleInputChange} className={commonInputClasses}
+                      placeholder={
+                        searchParams.field === "id" ? "کد..." :
+                        (searchParams.subject === "person" && searchParams.field === "phone_number") ? "شماره دقیق تلفن..." : "نام..."
+                      }
+                      required
+                    />
+                  </div>
+                  <button type="submit" disabled={loading} className="w-full sm:w-auto flex items-center justify-center px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-colors duration-150 ease-in-out disabled:opacity-70 disabled:cursor-not-allowed">
+                    {loading ? <ArrowPathIcon className="w-5 h-5 animate-spin me-2 rtl:ms-2" /> : <MagnifyingGlassIcon className="w-5 h-5 me-2 rtl:ms-2" />}
+                    {loading ? "در حال جستجو..." : "جستجو"}
+                  </button>
+                </div>
+              </form>
+              <div className={`px-1 sm:px-2 pb-1 sm:pb-2 ${loading || results.length > 0 || hasSearched ? 'border-t border-gray-200 dark:border-gray-700' : ''}`}>
+                <div id="results-container" className="h-[250px] sm:h-[300px] overflow-y-auto custom-scrollbar p-2 space-y-1">
+                  {loading ? ( <div className="flex flex-col items-center justify-center h-full text-gray-500 dark:text-gray-400"><ArrowPathIcon className="w-8 h-8 animate-spin mb-2" /><p>در حال بارگذاری نتایج...</p></div>)
+                  : results.length > 0 ? (
+                    results.map(item => {
+                      let itemProps = {};
+                      const resultItemType = item._searchResultItemType;
 
-            {/* Updated results container */}
-            <div id="results" className={`flex flex-col p-[10px] h-[300px] max-h-[400px] overflow-y-auto border gap-y-px ${loading ? 'opacity-50' : ''}`}>
-              {result.length > 0 ? (
-                result.map(item => (
-                  <SearchItem
-                    key={`${item.file_type}_${item.id}`}
-                    name={item.owner_name || item.customer_name}
-                    address={item.address || item.customer_phone}
-                    id={item.id}
-                    type={item.file_type ? 'file' : 'customer'}
-                    fileOrCustomerType={item.file_type || item.customer_type}
-                    hasNotified={false} // Adjust this based on your logic
-                  />
-                ))
-              ) : !loading ? (
-                <p className="text-center text-gray-500">نتیجه‌ای یافت نشد.</p> // No results message
-              ) : null}
-            </div>
-          </Dialog.Panel>
+                      if (resultItemType === 'file') {
+                        itemProps = { itemType: 'file', name: item.owner_name || `فایل ${item.id}`, secondaryText: item.address || `کد فایل: ${item.id}`, typeSpecific: item.file_type, };
+                      } else if (resultItemType === 'customer_preference') {
+                        itemProps = { itemType: 'customer_preference', name: item.customer_name || `متقاضی ${item.id}`, secondaryText: item.customer_phone || `کد متقاضی: ${item.id}`, typeSpecific: item.customer_type, };
+                      } else if (resultItemType === 'person' || resultItemType === 'person_with_files_context' || resultItemType === 'person_with_customer_preference_context') {
+                        itemProps = { itemType: resultItemType, name: item.full_name || `${item.first_name || ''} ${item.last_name || ''}`.trim() || `شخص ${item.id}`, secondaryText: item.phone_number || `کد شخص: ${item.id}`, typeSpecific: resultItemType === 'person_with_files_context' ? 'فایل‌های این شخص' : (resultItemType === 'person_with_customer_preference_context' ? 'تقاضاهای این شخص' : (item.id || 'شخص')), };
+                      }
+                      return ( <SearchItem key={`${resultItemType}_${item.id}`} id={String(item.id)} {...itemProps} onClick={() => handleItemClick(item)} /> );
+                    })
+                  ) : hasSearched ? ( <div className="flex flex-col items-center justify-center h-full text-gray-500 dark:text-gray-400"><MagnifyingGlassIcon className="w-12 h-12 mb-3 opacity-50" /><p className="text-center">نتیجه‌ای یافت نشد.</p><p className="text-xs text-center mt-1">معیارهای جستجو را تغییر دهید.</p></div>)
+                  : ( <div className="flex flex-col items-center justify-center h-full text-gray-400 dark:text-gray-500"><MagnifyingGlassIcon className="w-12 h-12 mb-3 opacity-30" /><p className="text-center">برای مشاهده نتایج، جستجو کنید.</p></div> )}
+                </div>
+              </div>
+            </Dialog.Panel>
+          </Transition.Child>
         </div>
       </Dialog>
-    </Transition >
+    </Transition>
   );
 };
-
+Search.propTypes = { isOpen: PropTypes.bool.isRequired, setIsOpen: PropTypes.func.isRequired };
 export default Search;

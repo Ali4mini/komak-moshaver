@@ -1,314 +1,279 @@
+import { useState, useEffect, useCallback } from "react";
+import { useDispatch } from "react-redux";
+import { api } from "../common/api";
+import { setFlashMessage } from "../common/flashSlice";
 import FloatLabel from "../common/input";
 import Checkbox from "../common/checkbox";
-import { useState, useEffect } from "react"; // Added useEffect
-import { api } from "../common/api";
-// import { useNavigate } from "react-router-dom"; // No longer needed for navigation on submit
-import { useDispatch } from "react-redux";
-import { setFlashMessage } from "../common/flashSlice";
 import CustomDatePicker from "../common/datePicker";
 
+const CUSTOMER_TYPES = [
+  { value: "buy", label: "متقاضی خرید" },
+  { value: "rent", label: "متقاضی اجاره" },
+];
+
+const PROPERTY_TYPES = [
+  { value: "A", label: "آپارتمان" },
+  { value: "L", label: "زمین" },
+  { value: "S", label: "مغازه" },
+  { value: "H", label: "خانه و ویلا" },
+];
+
+const getInitialCustomerType = () => {
+  return (localStorage.getItem("agents_field") || "sell").toLowerCase() === "sell" ? "buy" : "rent";
+};
+
+const initialFormData = {
+  customerType: getInitialCustomerType(),
+  propertyType: "A",
+  m2: "", year: "", bedroom: "", budget: "", upBudget: "", rentBudget: "", units: "",
+  parking: false, elevator: false, storage: false, motorSpot: false,
+  customerName: "", customerPhone: "", description: "",
+  date: new Date().toISOString().split("T")[0],
+};
+
+const selectBaseClasses = "block w-full px-3 py-2.5 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm";
+
 const NewCustomer = () => {
-  const getInitialCustomerType = () => {
-    return (localStorage.getItem("agents_field") || "sell").toLowerCase() === "sell" ? "buy" : "rent";
-  };
-  const initialDate = new Date().toISOString().split("T")[0];
-
-  const [customerType, setCustomerType] = useState(getInitialCustomerType());
-  const [propertyType, setPropertyType] = useState("A");
-  const [m2, setM2] = useState(""); // Initialized to empty string
-  const [year, setYear] = useState(""); // Initialized to empty string
-  const [bedroom, setBedroom] = useState(""); // Initialized to empty string
-  const [budget, setBudget] = useState(""); // Initialized to empty string
-  const [upBudget, setUpBudget] = useState(""); // Initialized to empty string
-  const [rentBudget, setRentBudget] = useState(""); // Initialized to empty string
-  const [units, setUnits] = useState(""); // Initialized to empty string (if applicable based on property type)
-  const [parking, setParking] = useState(false);
-  const [elevator, setElevator] = useState(false);
-  const [storage, setStorage] = useState(false);
-  const [motorSpot, setMotorSpot] = useState(false);
-  const [customerName, setCustomerName] = useState(""); // Initialized to empty string
-  const [customerPhone, setCustomerPhone] = useState(""); // Initialized to empty string
-  const [description, setDescription] = useState(""); // Initialized to empty string
-  const [date, setDate] = useState(initialDate);
-
+  const [formData, setFormData] = useState(initialFormData);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const user = localStorage.getItem("user");
-  // const navigate = useNavigate(); // No longer needed
   const dispatch = useDispatch();
 
-  const resetForm = () => {
-    setCustomerType(getInitialCustomerType());
-    setPropertyType("A");
-    setM2("");
-    setYear("");
-    setBedroom("");
-    setBudget("");
-    setUpBudget("");
-    setRentBudget("");
-    setUnits("");
-    setParking(false);
-    setElevator(false);
-    setStorage(false);
-    setMotorSpot(false);
-    setCustomerName("");
-    setCustomerPhone("");
-    setDescription("");
-    setDate(new Date().toISOString().split("T")[0]);
-  };
+  // ADD THIS STATE FOR THE KEY
+  const [formInstanceKey, setFormInstanceKey] = useState(Date.now());
 
-  // Effect to clear irrelevant budget fields when customerType changes
+  const resetForm = useCallback(() => {
+    setFormData({
+      ...initialFormData,
+      customerType: getInitialCustomerType(),
+      date: new Date().toISOString().split("T")[0],
+    });
+    // UPDATE THE KEY TO FORCE RE-MOUNT OF CHECKBOXES
+    setFormInstanceKey(Date.now());
+  }, []);
+
+  const handleChange = useCallback((e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  }, []);
+
+  // This function is called by FloatLabel, CustomDatePicker, and indirectly by Checkbox
+  const handleCustomComponentChange = useCallback((name, value) => {
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  }, []);
+
   useEffect(() => {
-    if (customerType === "buy") {
-      setUpBudget("");
-      setRentBudget("");
-    } else if (customerType === "rent") {
-      setBudget("");
+    if (formData.customerType === "buy") {
+      setFormData(prev => ({ ...prev, upBudget: "", rentBudget: "" }));
+    } else if (formData.customerType === "rent") {
+      setFormData(prev => ({ ...prev, budget: "" }));
     }
-  }, [customerType]);
+  }, [formData.customerType]);
 
-  const create = async (event) => { // Made async
+  useEffect(() => {
+    let updates = {};
+    let changed = false;
+    if (formData.propertyType === "L") {
+        updates = { ...updates, year: "", bedroom: "", units: "", elevator: false };
+        changed = true;
+    } else if (formData.propertyType === "S") {
+        updates = { ...updates, bedroom: "", units: "" };
+        changed = true;
+    }
+    if (changed) {
+        setFormData(prev => ({ ...prev, ...updates }));
+    }
+  }, [formData.propertyType]);
+
+
+  const handleSubmit = useCallback(async (event) => {
     event.preventDefault();
+    setIsSubmitting(true);
 
-    // Construct customerEnteryData inside the submit handler
-    let customerEnteryData = {
-      username: user,
-      customer_type: customerType,
-      property_type: propertyType,
-      date: date,
-      updated: date, // Assuming 'updated' should also be the current submission date
-      m2: m2 ? Number(m2) : null,
-      year: year ? Number(year) : null,
-      bedroom: bedroom ? Number(bedroom) : null,
-      budget: budget ? Number(budget) : null,
-      up_budget: upBudget ? Number(upBudget) : null,
-      rent_budget: rentBudget ? Number(rentBudget) : null,
-      vahedha: units ? Number(units) : null,
-      parking: parking,
-      elevator: elevator,
-      storage: storage,
-      parking_motor: motorSpot,
-      customer_name: customerName,
-      customer_phone: customerPhone,
-      description: description || null,
+    if (!formData.customerPhone || formData.customerPhone.length !== 11) {
+      alert("شماره تلفن مشتری الزامی و باید ۱۱ رقم باشد.");
+      setIsSubmitting(false); return;
+    }
+    if (!formData.customerName) {
+      alert("نام مشتری الزامی است.");
+      setIsSubmitting(false); return;
+    }
+    if (formData.customerType === "buy" && !formData.budget) {
+      alert("بودجه برای مشتری خرید الزامی است.");
+      setIsSubmitting(false); return;
+    }
+    if (formData.customerType === "rent" && (!formData.upBudget || !formData.rentBudget)) {
+      alert("ودیعه و اجاره برای مشتری رهن/اجاره الزامی است.");
+      setIsSubmitting(false); return;
+    }
+
+    let customerEntryData = {
+      username: user, customer_type: formData.customerType, property_type: formData.propertyType,
+      date: formData.date, updated: formData.date,
+      m2: formData.m2 ? Number(formData.m2) : null,
+      year: formData.year ? Number(formData.year) : null,
+      bedroom: formData.bedroom ? Number(formData.bedroom) : null,
+      budget: formData.budget ? Number(formData.budget) : null,
+      up_budget: formData.upBudget ? Number(formData.upBudget) : null,
+      rent_budget: formData.rentBudget ? Number(formData.rentBudget) : null,
+      vahedha: formData.units ? Number(formData.units) : null,
+      parking: Boolean(formData.parking),
+      elevator: Boolean(formData.elevator),
+      storage: Boolean(formData.storage),
+      parking_motor: Boolean(formData.motorSpot),
+      customer_name: formData.customerName, customer_phone: formData.customerPhone,
+      description: formData.description || null,
     };
 
-    if (customerType === "buy") {
-      delete customerEnteryData.up_budget;
-      delete customerEnteryData.rent_budget;
-      if (!customerEnteryData.budget) {
-        alert("بودجه برای مشتری خرید الزامی است.");
-        return;
-      }
-    } else if (customerType === "rent") {
-      delete customerEnteryData.budget;
-      if (!customerEnteryData.up_budget || !customerEnteryData.rent_budget) {
-        alert("ودیعه و اجاره برای مشتری رهن/اجاره الزامی است.");
-        return;
-      }
+    if (formData.customerType === "buy") {
+      delete customerEntryData.up_budget; delete customerEntryData.rent_budget;
+    } else if (formData.customerType === "rent") {
+      delete customerEntryData.budget;
     }
 
-    // Validation
-    if (!customerPhone || customerPhone.length !== 11) {
-      alert("شماره تلفن مشتری الزامی و باید ۱۱ رقم باشد.");
-      return;
-    }
-    if (!customerName) {
-      alert("نام مشتری الزامی است.");
-      return;
+    if (formData.propertyType === "L") {
+        delete customerEntryData.year; delete customerEntryData.bedroom; delete customerEntryData.vahedha; delete customerEntryData.elevator;
+    } else if (formData.propertyType === "S") {
+        delete customerEntryData.bedroom; delete customerEntryData.vahedha;
     }
 
     try {
-      const response = await api.post(`customer/${customerEnteryData.customer_type}/new/`, customerEnteryData);
+      const response = await api.post(`customer/${customerEntryData.customer_type}/new/`, customerEntryData);
       if (response.status === 201) {
-        dispatch(
-          setFlashMessage({
-            type: "SUCCESS",
-            message: `یک مشتری با موفقیت اضافه شد \n کد: ${response.data["id"]}`,
-          })
-        );
-        resetForm(); // Reset form on success
+        dispatch(setFlashMessage({ type: "SUCCESS", message: `مشتری با کد ${response.data["id"]} با موفقیت اضافه شد.` }));
+        resetForm();
       } else {
-        // Handle other non-201 success statuses if necessary
-        console.warn("Customer creation returned status:", response.status, response.data);
-        dispatch(
-          setFlashMessage({
-            type: "WARNING",
-            message: `مشتری ثبت شد اما با وضعیت غیرمنتظره: ${response.status}`,
-          })
-        );
-        resetForm(); // Optionally reset
+        dispatch(setFlashMessage({ type: "WARNING", message: `مشتری ثبت شد اما با وضعیت: ${response.status}` }));
+        resetForm();
       }
     } catch (error) {
-      console.error("Customer creation error:", error.response ? error.response.data : error.message);
-      const errorMessage = error.response?.data?.detail ||
-                           (error.response?.data && typeof error.response.data === 'object' ? JSON.stringify(error.response.data) : null) ||
-                           error.message ||
-                           'خطا در ثبت مشتری. لطفا دوباره تلاش کنید.';
-      dispatch(
-        setFlashMessage({
-          type: "ERROR",
-          message: errorMessage,
-        })
-      );
-      // Do not reset form on error
+      const errorMessage = error.response?.data?.detail || (error.response?.data && typeof error.response.data === 'object' ? JSON.stringify(error.response.data) : null) || error.message || 'خطا در ثبت مشتری. لطفا دوباره تلاش کنید.';
+      dispatch(setFlashMessage({ type: "ERROR", message: errorMessage }));
+    } finally {
+      setIsSubmitting(false);
     }
-    // navigate("/customers/", { replace: true }); // REMOVED
-  };
+  }, [user, formData, dispatch, resetForm]);
+
+  const renderSelect = (name, value, onChange, options, labelText) => (
+    <div>
+      <label htmlFor={name} className="block text-sm font-medium text-gray-700 mb-1">{labelText}</label>
+      <select name={name} id={name} value={value} onChange={onChange} className={selectBaseClasses}>
+        {options.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
+      </select>
+    </div>
+  );
 
   return (
-    <div className="block border shadow-lg rounded-xl bg-white mx-4 px-4 py-2 my-2">
-      <form
-        onSubmit={create} // Pass function reference
-        className="flex flex-col gap-5 text-sm md:text-base"
-      >
-        <div className="flex flex-row w-full justify-between h-10 items-center gap-2"> {/* Added items-center */}
-          <div className="flex gap-2 h-10 right-0">
-            <select
-              name="customer_type"
-              id="customer_type"
-              value={customerType} // Controlled component
-              onChange={(e) => {
-                setCustomerType(e.target.value);
-              }}
-              className="bg-gray-50 border focus:ring-blue-300 text-center focus:border-blue-300 shadow-md w-24 rounded-lg"
-            >
-              <option value="buy">خرید</option>
-              <option value="rent">اجاره</option>
-            </select>
+    <div className="max-w-5xl mx-auto p-6 sm:p-8 bg-white shadow-xl rounded-2xl my-8 ">
+      <h1 className="text-3xl font-bold text-gray-800 mb-10 text-center">ثبت مشتری جدید</h1>
+      <form onSubmit={handleSubmit} className="space-y-10">
 
-            <select
-              name="property_type"
-              id="property_type"
-              value={propertyType} // Controlled component
-              onChange={(e) => {
-                setPropertyType(e.target.value);
-              }}
-              className="bg-gray-50 border focus:ring-blue-300 text-center focus:border-blue-300 shadow-md w-24 rounded-lg"
-            >
-              <option value="A">آپارتمان</option>
-              <option value="L">زمین</option>
-              <option value="S">مغازه</option>
-              <option value="H">خانه و ویلا</option>
-            </select>
-          </div>
-          <div className="flex flex-row gap-3 left-0 items-center"> {/* Added items-center */}
-            <p className="font-bold text-center">تاریخ: </p> {/* Simplified */}
-            <div style={{ direction: "rtl" }}>
-              <CustomDatePicker date={date} setter={setDate} /> {/* Pass date prop */}
+        <fieldset className="p-6 border border-gray-300 rounded-lg">
+          <legend className="text-lg font-medium text-indigo-600 px-2">اطلاعات پایه مشتری</legend>
+          <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-8 items-end">
+            {renderSelect("customerType", formData.customerType, handleChange, CUSTOMER_TYPES, "نوع درخواست مشتری")}
+            {renderSelect("propertyType", formData.propertyType, handleChange, PROPERTY_TYPES, "نوع ملک مورد نظر")}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">تاریخ ثبت</label>
+              <CustomDatePicker date={formData.date} setter={(d) => handleCustomComponentChange('date', d)} inputClassName={selectBaseClasses} />
             </div>
           </div>
-        </div>
-        <div className="grid grid-cols-2 gap-y-4 gap-x-2 md:grid-cols-4 lg:grid-cols-7 w-full flex-wrap"> {/* Removed gap-2 */}
-          {customerType === "buy" ? (
-            <FloatLabel
-              type="number"
-              name={"budget"}
-              label={"بودچه"}
-              value={budget} // Controlled
-              setter={setBudget}
-              isRequired={true}
-            />
-          ) : (
-            <>
-              <FloatLabel
-                type="number"
-                name={"upBudget"}
-                label={"ودیعه"}
-                value={upBudget} // Controlled
-                setter={setUpBudget}
-                isRequired={true}
-              />
-              <FloatLabel
-                type="number"
-                name={"rentBudget"}
-                label={"اجاره"}
-                value={rentBudget} // Controlled
-                setter={setRentBudget}
-                isRequired={true}
-              />
-            </>
-          )}
+        </fieldset>
 
-          <FloatLabel
-            type="number"
-            name={"m2"}
-            label={"متراژ (حداقل)"}
-            value={m2} // Controlled
-            setter={setM2}
-            isRequired={false}
-          />
-          {/* Fields like year, bedroom, units might be less relevant for L (زمین) or S (مغازه)
-              Consider conditional rendering based on propertyType if needed */}
-          {propertyType !== "L" && ( // Example: Don't show year for 'زمین'
-            <FloatLabel
-              type="number"
-              name={"year"}
-              label={"سال ساخت (حداکثر)"}
-              value={year} // Controlled
-              setter={setYear}
-              isRequired={false}
-            />
-          )}
-          {(propertyType === "A" || propertyType === "H") && ( // Only for آپارتمان or خانه
-            <FloatLabel
-              type="number"
-              name={"bedroom"}
-              label={"اتاق خواب (حداقل)"}
-              value={bedroom} // Controlled
-              setter={setBedroom}
-              isRequired={false}
-            />
-          )}
-          {propertyType === "A" && ( // Only for آپارتمان
-            <FloatLabel
-              type="number"
-              name={"units"}
-              label={"واحد (حداکثر)"}
-              value={units} // Controlled
-              setter={setUnits}
-              isRequired={false}
-            />
-          )}
-        </div>
-        <div className="grid grid-cols-2 max-w-sm gap-2">
-          <FloatLabel
-            type="tel" // Use tel for phone numbers
-            name={"customerPhone"}
-            label={"شماره مشتری"}
-            value={customerPhone} // Controlled
-            setter={setCustomerPhone}
-            isRequired={true}
-            maxChars={11}
-          />
-          <FloatLabel
-            type="text"
-            name={"customerName"}
-            label={"نام مشتری"}
-            value={customerName} // Controlled
-            setter={setCustomerName}
-            isRequired={true}
-          />
-        </div>
-        <div className="grid grid-cols-1 h-12 gap-2"> {/* Changed to grid-cols-1 for full width */}
-          <FloatLabel
-            type="text"
-            name={"description"}
-            label={"توضیحات"}
-            value={description} // Controlled
-            setter={setDescription}
-            isRequired={false}
-          />
-        </div>
-        <div className="grid grid-cols-2 sm:grid-cols-4 max-w-md gap-y-1 gap-x-2"> {/* Adjusted grid */}
-          <Checkbox label="پارکینگ" name="parking" checked={parking} setter={setParking} />
-          <Checkbox label="آسانسور" name="elevator" checked={elevator} setter={setElevator} />
-          <Checkbox label="انباری" name="storage" checked={storage} setter={setStorage} />
-          <Checkbox label="پارک موتور" name="motorSpot" checked={motorSpot} setter={setMotorSpot} />
-        </div>
+        <fieldset className="p-6 border border-gray-300 rounded-lg">
+          <legend className="text-lg font-medium text-indigo-600 px-2">مشخصات ملک مورد نظر</legend>
+          <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-8">
+            {formData.customerType === "buy" ? (
+              <FloatLabel type="number" name="budget" label="بودجه کل (تومان)" value={formData.budget} setter={(val) => handleCustomComponentChange('budget', val)} isRequired />
+            ) : (
+              <>
+                <FloatLabel type="number" name="upBudget" label="ودیعه مدنظر (تومان)" value={formData.upBudget} setter={(val) => handleCustomComponentChange('upBudget', val)} isRequired />
+                <FloatLabel type="number" name="rentBudget" label="اجاره مدنظر (تومان)" value={formData.rentBudget} setter={(val) => handleCustomComponentChange('rentBudget', val)} isRequired />
+              </>
+            )}
+            <FloatLabel type="number" name="m2" label="متراژ (حداقل متر مربع)" value={formData.m2} setter={(val) => handleCustomComponentChange('m2', val)} />
+
+            {formData.propertyType !== "L" && (
+              <FloatLabel type="number" name="year" label="سال ساخت (حداکثر)" value={formData.year} setter={(val) => handleCustomComponentChange('year', val)} />
+            )}
+            {(formData.propertyType === "A" || formData.propertyType === "H") && (
+              <FloatLabel type="number" name="bedroom" label="تعداد اتاق خواب (حداقل)" value={formData.bedroom} setter={(val) => handleCustomComponentChange('bedroom', val)} />
+            )}
+            {formData.propertyType === "A" && (
+              <FloatLabel type="number" name="units" label="واحد در طبقه (حداکثر)" value={formData.units} setter={(val) => handleCustomComponentChange('units', val)} />
+            )}
+          </div>
+        </fieldset>
+
+        <fieldset className="p-6 border border-gray-300 rounded-lg">
+          <legend className="text-lg font-medium text-indigo-600 px-2">اطلاعات تماس مشتری</legend>
+          <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-8">
+            <FloatLabel type="tel" name="customerPhone" label="شماره تماس مشتری" value={formData.customerPhone} setter={(val) => handleCustomComponentChange('customerPhone', val)} isRequired maxChars={11} inputMode="numeric" pattern="[0-9]*" />
+            <FloatLabel type="text" name="customerName" label="نام مشتری" value={formData.customerName} setter={(val) => handleCustomComponentChange('customerName', val)} isRequired />
+          </div>
+        </fieldset>
+
+        <fieldset className="p-6 border border-gray-300 rounded-lg">
+            <legend className="text-lg font-medium text-indigo-600 px-2">ترجیحات و توضیحات</legend>
+            <div className="mt-4 space-y-8">
+                {formData.propertyType !== "L" && (
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-3">امکانات مورد نظر</label>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-4 gap-y-3">
+                            <Checkbox
+                              key={`parking-${formInstanceKey}`}
+                              label="پارکینگ"
+                              name="parking"
+                              isChecked={formData.parking}
+                              setter={(updaterFn) => handleCustomComponentChange('parking', updaterFn(formData.parking))}
+                            />
+                            <Checkbox
+                              key={`elevator-${formInstanceKey}`}
+                              label="آسانسور"
+                              name="elevator"
+                              isChecked={formData.elevator}
+                              setter={(updaterFn) => handleCustomComponentChange('elevator', updaterFn(formData.elevator))}
+                            />
+                            <Checkbox
+                              key={`storage-${formInstanceKey}`}
+                              label="انباری"
+                              name="storage"
+                              isChecked={formData.storage}
+                              setter={(updaterFn) => handleCustomComponentChange('storage', updaterFn(formData.storage))}
+                            />
+                            <Checkbox
+                              key={`motorSpot-${formInstanceKey}`}
+                              label="پارکینگ موتور"
+                              name="motorSpot"
+                              isChecked={formData.motorSpot}
+                              setter={(updaterFn) => handleCustomComponentChange('motorSpot', updaterFn(formData.motorSpot))}
+                            />
+                        </div>
+                    </div>
+                )}
+                <div>
+                    <FloatLabel type="textarea" name="description" label="توضیحات و سایر ترجیحات مشتری (اختیاری)" value={formData.description} setter={(val) => handleCustomComponentChange('description', val)} />
+                </div>
+            </div>
+        </fieldset>
+
         <button
           type="submit"
-          className="basis-full rounded-lg bg-blue-300 hover:bg-blue-400 py-1.5 border w-full" // Removed bottom-0
+          disabled={isSubmitting}
+          className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-75 text-lg disabled:opacity-60 disabled:cursor-not-allowed"
         >
-          ثبت
+          {isSubmitting ? (
+            <div className="flex items-center justify-center">
+              <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              در حال ثبت...
+            </div>
+          ) : "ثبت مشتری"}
         </button>
       </form>
     </div>

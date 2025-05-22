@@ -156,7 +156,7 @@ const NavBar = () => {
       <nav
         id="NavBar"
         className={`fixed top-0 right-0 h-screen bg-white border-l border-gray-200 shadow-xl
-                   flex flex-col z-40 transition-all duration-300 ease-in-out 
+                   flex flex-col z-50 transition-all duration-300 ease-in-out 
                    ${isExpanded ? "w-60 p-4 space-y-1.5" : "w-[4.25rem] p-3 space-y-1"}`}
       >
         {/* Header: Logo (when expanded) and Toggle Button */}
