@@ -14,5 +14,7 @@ urlpatterns = [
     path("file-price-diversity/", views.FilePriceDiversity.as_view(), name="file-price-diversity"),
     path("customer-budget-diversity/", views.CustomerBudgetDiversity.as_view(), name="customer-budget-diversity"),
     path('tasks/', include(router.urls)),
+    path('calls/', views.CallCountView.as_view()),
+    path('tours/', views.TourCountView.as_view()),
 
 ]

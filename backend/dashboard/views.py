@@ -1,3 +1,4 @@
+from os import wait
 from django.db.models import Count 
 from django.db.models.functions import TruncDate, TruncYear, TruncMonth
 from django.utils.dateparse import parse_date
@@ -14,7 +15,10 @@ from rest_framework.response import Response
 from django.utils import timezone
 from django.db.models import Q
 
+from logs.models import Call
+from .filters import CallFilter
 from .models import Task
+from logs.models import RentTour, SellTour
 from .serializers import TaskSerializer # Make sure your serializer includes 'user', 'due_date', 'is_archived'
 
 def find_last_update_date():
@@ -308,3 +312,108 @@ class TaskViewSet(viewsets.ModelViewSet):
 
         serializer = self.get_serializer(all_tasks, many=True)
         return Response(serializer.data)
+
+
+
+# your_app/views.py
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated # Or your preferred permission
+from django_filters.rest_framework import DjangoFilterBackend # Not directly used in APIView but good to know
+
+
+class CallCountView(APIView):
+    """
+    Provides a count of Call instances based on provided filters.
+    
+    Query Parameters:
+    - agent (str): Username of the agent.
+    - start_date (YYYY-MM-DD): Calls on or after this date.
+    - end_date (YYYY-MM-DD): Calls on or before this date.
+    - location_city (str): Filter by city in the location JSON.
+    - location_country (str): Filter by country in the location JSON.
+    - call_type (str): 'IN', 'OUT', or 'MISS'.
+    - call_status (str): 'COMP', 'FAIL', 'NOANS', 'BUSY'.
+    - phone_number (str): Exact phone number.
+    - phone_number__icontains (str): Phone number containing text.
+    - is_transcript_correct (bool): 'true' or 'false'.
+    - person_id (int): ID of the associated person.
+    """
+    # permission_classes = [IsAuthenticated] # Adjust as needed
+
+    def get(self, request, *args, **kwargs):
+        # Apply filters
+        filterset = CallFilter(request.GET, queryset=Call.objects.all())
+
+        # It's good practice to check if the filterset is valid,
+        # though for GET requests it usually doesn't raise validation errors
+        # unless you have custom validation in your filter.
+        if not filterset.is_valid():
+            return Response(filterset.errors, status=400)
+
+        filtered_queryset = filterset.qs
+        count = filtered_queryset.count()
+
+        return Response({'count': count})
+
+
+class TourCountView(APIView):
+    """
+    Provides counts for RentTour and SellTour instances.
+    Supports filtering by:
+    - `start_date` (YYYY-MM-DD): Filters for tours created on or after this date.
+    - `end_date` (YYYY-MM-DD): Filters for tours created on or before this date (inclusive).
+    - `tour_type` (P or H): Filters by the tour type.
+    """
+
+    def get(self, request, *args, **kwargs):
+        params = request.query_params
+        filter_kwargs = {}
+
+        # Date filtering for 'created' field
+        start_date_str = params.get('start_date')
+        end_date_str = params.get('end_date')
+
+        if start_date_str:
+            try:
+                start_date_obj = datetime.strptime(start_date_str, '%Y-%m-%d').date()
+                # Use __date lookup for DateTimeField to compare against the date part
+                filter_kwargs['created__date__gte'] = start_date_obj
+            except ValueError:
+                return Response(
+                    {"error": "Invalid start_date format. Use YYYY-MM-DD."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+        if end_date_str:
+            try:
+                end_date_obj = datetime.strptime(end_date_str, '%Y-%m-%d').date()
+                # Use __date lookup for DateTimeField to compare against the date part
+                # This makes the end_date inclusive for the entire day.
+                filter_kwargs['created__date__lte'] = end_date_obj
+            except ValueError:
+                return Response(
+                    {"error": "Invalid end_date format. Use YYYY-MM-DD."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+        # Tour type filtering
+        tour_type_filter = params.get('tour_type')
+        if tour_type_filter:
+            valid_tour_types = RentTour.Type.values
+            if tour_type_filter.upper() not in valid_tour_types:
+                return Response(
+                    {"error": f"Invalid tour_type. Must be one of {', '.join(valid_tour_types)}."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            filter_kwargs['tour_type'] = tour_type_filter.upper()
+
+        rent_tour_count = RentTour.objects.filter(**filter_kwargs).count()
+        sell_tour_count = SellTour.objects.filter(**filter_kwargs).count()
+
+        return Response({
+            "rent_tour_count": rent_tour_count,
+            "sell_tour_count": sell_tour_count,
+            "total_tour_count": rent_tour_count + sell_tour_count,
+            "filters_applied": {k: str(v) for k, v in filter_kwargs.items()} # Make dates strings for JSON
+        }, status=status.HTTP_200_OK)
