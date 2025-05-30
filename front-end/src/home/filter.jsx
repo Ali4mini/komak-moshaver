@@ -173,11 +173,11 @@ const Filter = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-8">
           {fileType === "sell" ? (
-            <FloatLabel label="قیمت مدنظر (تومان)" name="price_filter" type="number" value={price || ""} setter={setPrice} />
+            <FloatLabel label="قیمت مدنظر (تومان)" name="price_filter" type="number" setter={setPrice} />
           ) : (
             <>
-              <FloatLabel label="ودیعه مدنظر (تومان)" name="price_up_filter" type="number" value={priceUp || ""} setter={setPriceUp} />
-              <FloatLabel label="اجاره مدنظر (تومان)" name="price_rent_filter" type="number" value={priceRent || ""} setter={setPriceRent} />
+              <FloatLabel label="ودیعه مدنظر (تومان)" name="price_up_filter" type="number" setter={setPriceUp} />
+              <FloatLabel label="اجاره مدنظر (تومان)" name="price_rent_filter" type="number" setter={setPriceRent} />
             </>
           )}
           <FloatLabel label="متراژ (حداقل متر مربع)" name="m2_filter" type="number" value={m2 || ""} setter={setM2} />
