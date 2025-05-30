@@ -27,7 +27,7 @@ const QuickAccess = () => {
       id: 1,
       text: 'ثبت ملک جدید', // Add New Property
       icon: '🏠',
-      href: '/properties/new', // Example route
+      href: '/file/new', // Example route
       bgColor: 'bg-green-500',
       hoverBgColor: 'hover:bg-green-600',
     },
@@ -35,15 +35,15 @@ const QuickAccess = () => {
       id: 2,
       text: 'افزودن مشتری جدید', // Add New Client/Lead
       icon: '👤', // Single user icon
-      href: '/clients/new', // Example route
+      href: '/customer/new', // Example route
       bgColor: 'bg-sky-500',
       hoverBgColor: 'hover:bg-sky-600',
     },
     {
       id: 3,
-      text: 'جستجوی پیشرفته املاک', // Advanced Property Search
+      text: 'فایل ها', // Advanced Property Search
       icon: '🔍',
-      href: '/search/properties', // Example route
+      href: '/', // Example route
       bgColor: 'bg-indigo-500',
       hoverBgColor: 'hover:bg-indigo-600',
     },
@@ -67,8 +67,7 @@ const QuickAccess = () => {
   ];
 
   return (
-    <WidgetCard title="دسترسی سریع">
-      <div className="grid grid-cols-2 sm:grid-cols-2 gap-4 md:gap-5">
+      <div className="grid grid-cols-4 gap-4 md:gap-6 mb-6 md:mb-8">
         {quickLinks.map(link => (
           <ActionButton
             key={link.id}
@@ -81,7 +80,6 @@ const QuickAccess = () => {
           />
         ))}
       </div>
-    </WidgetCard>
   );
 };
 

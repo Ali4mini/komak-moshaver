@@ -39,9 +39,7 @@ def find_last_update_date():
 
 class FilePriceDiversity(APIView):
     def get(self, request):
-        sell_file_counts = Sell.objects.count()
-        rent_file_counts = Rent.objects.count()
-        
+        # Get counts directly without percentage calculation
         sell_lte_2000 = Sell.objects.filter(price__lte=2000).count()
         sell_2000_3000 = Sell.objects.filter(price__gte=2000, price__lte=3000).count()
         sell_3000_5000 = Sell.objects.filter(price__gte=3000, price__lte=5000).count()
@@ -49,20 +47,18 @@ class FilePriceDiversity(APIView):
         sell_gte_8000 = Sell.objects.filter(price__gte=8000).count()
 
         sell_price_diversity = {
-            "below_2000": round(sell_lte_2000 / (sell_file_counts / 100), 2), 
-            "2000_3000": round(sell_2000_3000 / (sell_file_counts / 100), 2),
-            "3000_5000": round(sell_3000_5000 / (sell_file_counts / 100), 2),
-            "5000_8000": round(sell_5000_8000 / (sell_file_counts / 100), 2),
-            "higher_8000": round(sell_gte_8000 / (sell_file_counts / 100), 2), 
+            "below_2000": sell_lte_2000, 
+            "2000_3000": sell_2000_3000,
+            "3000_5000": sell_3000_5000,
+            "5000_8000": sell_5000_8000,
+            "higher_8000": sell_gte_8000, 
         }
 
-        
         return Response(sell_price_diversity)
         
 class CustomerBudgetDiversity(APIView):
     def get(self, request):
-        sell_file_counts = BuyCustomer.objects.count()
-        
+        # Get counts directly without percentage calculation
         sell_lte_2000 = BuyCustomer.objects.filter(budget__lte=2000).count()
         sell_2000_3000 = BuyCustomer.objects.filter(budget__gte=2000, budget__lte=3000).count()
         sell_3000_5000 = BuyCustomer.objects.filter(budget__gte=3000, budget__lte=5000).count()
@@ -70,16 +66,14 @@ class CustomerBudgetDiversity(APIView):
         sell_gte_8000 = BuyCustomer.objects.filter(budget__gte=8000).count()
 
         sell_budget_diversity = {
-            "below_2000": round(sell_lte_2000 / (sell_file_counts / 100), 2), 
-            "2000_3000": round(sell_2000_3000 / (sell_file_counts / 100), 2),
-            "3000_5000": round(sell_3000_5000 / (sell_file_counts / 100), 2),
-            "5000_8000": round(sell_5000_8000 / (sell_file_counts / 100), 2),
-            "higher_8000": round(sell_gte_8000 / (sell_file_counts / 100), 2), 
+            "below_2000": sell_lte_2000, 
+            "2000_3000": sell_2000_3000,
+            "3000_5000": sell_3000_5000,
+            "5000_8000": sell_5000_8000,
+            "higher_8000": sell_gte_8000, 
         }
 
-        
         return Response(sell_budget_diversity)
-
 class FileTypeDiversity(APIView):
     def get(self, request, format=None):
         # Count the occurrences of each property type
@@ -136,6 +130,7 @@ class CustomerTypeDiversity(APIView):
             })
         
         return property_type_percentages
+
 class CustomersCounts(APIView):
     def get(self, request, format=None):
         # Get the start date from the request query parameters

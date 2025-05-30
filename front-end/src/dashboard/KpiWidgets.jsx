@@ -175,10 +175,19 @@ const KpiSection = () => {
       period: 'هفته قبل',
       mainColor: 'text-purple-600', // Changed color for distinction
     },
+    {
+      id: 5,
+      title: 'آگهی های فعال',
+      value: "NaN",
+      icon: '📁', // Changed icon for files
+      ...calculateChange(filesData.current, filesData.previous, LOADING_STATE, ERROR_STATE),
+      period: 'هفته قبل',
+      mainColor: 'text-red-600', // Changed color for distinction
+    },
   ];
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-6 md:mb-8">
+    <div className="grid grid-cols-6 gap-4 md:gap-6 mb-6 md:mb-8">
       {kpiData.map((kpi) => (
         <KpiCard
           key={kpi.id}
