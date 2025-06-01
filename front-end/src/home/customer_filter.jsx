@@ -7,8 +7,8 @@ import { useDispatch, useSelector } from "react-redux";
 // Make sure these actions are correct for your customersSlice
 import { setCustomers, setLastFilter, clearLastFilter, addCustomers } from "./customersSlice";
 
-// Select styling from the reference component
-const selectClasses = "block w-full px-3 py-2.5 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500";
+// Select styling from the reference component - REMOVED DARK CLASSES
+const selectClasses = "block w-full px-3 py-2.5 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm";
 
 const Filter = () => {
   const dispatch = useDispatch();
@@ -111,7 +111,7 @@ const Filter = () => {
         elevator: elevator,
         storage: storage,
     };
-    
+
     // This object is for the API call
     let apiPayload = {
       status: "ACTIVE", // As per your original customer filter
@@ -137,7 +137,7 @@ const Filter = () => {
       if (rentGte !== null) apiPayload.rent_budget__gte = rentGte;
       if (rentLte !== null) apiPayload.rent_budget__lte = rentLte;
     }
-    
+
     // Clean up undefined or null values from API payload before sending
     Object.keys(apiPayload).forEach(key => {
         if (apiPayload[key] === null || apiPayload[key] === undefined) {
@@ -158,14 +158,14 @@ const Filter = () => {
     dispatch(clearLastFilter()); // This will trigger the useEffect to reset form fields
 
     // Fetch initial data for customers
-    api.get("/listing/customers/?page=1", { 
-        params: { 
-            status: "ACTIVE", 
+    api.get("/listing/customers/?page=1", {
+        params: {
+            status: "ACTIVE",
             // file_type from localStorage is for the overall agent's view,
             // customer_type for filter should align with initialGlobalCustomerType or be dynamic
             // For consistency, let's use the default derived from localStorage:
-            customer_type: initialGlobalCustomerType 
-        } 
+            customer_type: initialGlobalCustomerType
+        }
     })
       .then((response) => {
         // Assuming setCustomers replaces, and addCustomers appends
@@ -194,8 +194,8 @@ const Filter = () => {
 
 
   return (
-    // --- UI structure from the reference component ---
-    <div className="bg-gray-50 dark:bg-gray-800 p-4 sm:p-6 rounded-xl shadow-lg my-6 mx-auto max-w-5xl">
+    // Removed dark:bg-gray-800
+    <div className="bg-gray-50 p-4 sm:p-6 rounded-xl shadow-lg my-6 mx-auto max-w-5xl">
       <form
         id="customer-filter-form" // Unique ID
         onSubmit={(e) => { e.preventDefault(); handleFilterSubmit(); }}
@@ -204,7 +204,8 @@ const Filter = () => {
         {/* Row 1: Customer Type & Property Type */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-6 items-end">
           <div>
-            <label htmlFor="customer_type_filter" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">نوع متقاضی</label>
+            {/* Removed dark:text-gray-300 */}
+            <label htmlFor="customer_type_filter" className="block text-sm font-medium text-gray-700 mb-1">نوع متقاضی</label>
             <select
               name="customer_type_filter"
               id="customer_type_filter"
@@ -217,7 +218,8 @@ const Filter = () => {
             </select>
           </div>
           <div>
-            <label htmlFor="customer_property_type_filter" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">نوع ملک مدنظر</label>
+            {/* Removed dark:text-gray-300 */}
+            <label htmlFor="customer_property_type_filter" className="block text-sm font-medium text-gray-700 mb-1">نوع ملک مدنظر</label>
             <select
               name="customer_property_type_filter"
               id="customer_property_type_filter"
@@ -237,63 +239,63 @@ const Filter = () => {
         {/* Row 2: Budget Inputs */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-8">
           {customerType === "buy" ? (
-            <FloatLabel 
-              label="بودجه مدنظر (تومان)" 
-              name="customer_budget_filter" 
-              type="number" 
-              value={budget || ""} 
-              setter={(val) => floatInputSetter(setBudget, val)} 
+            <FloatLabel
+              label="بودجه مدنظر (تومان)"
+              name="customer_budget_filter"
+              type="number"
+              value={budget || ""}
+              setter={(val) => floatInputSetter(setBudget, val)}
             />
           ) : (
             <>
-              <FloatLabel 
-                label="ودیعه مدنظر (تومان)" 
-                name="customer_budget_up_filter" 
-                type="number" 
-                value={budgetUp || ""} 
-                setter={(val) => floatInputSetter(setBudgetUp, val)} 
+              <FloatLabel
+                label="ودیعه مدنظر (تومان)"
+                name="customer_budget_up_filter"
+                type="number"
+                value={budgetUp || ""}
+                setter={(val) => floatInputSetter(setBudgetUp, val)}
               />
-              <FloatLabel 
-                label="اجاره مدنظر (تومان)" 
-                name="customer_budget_rent_filter" 
-                type="number" 
-                value={budgetRent || ""} 
-                setter={(val) => floatInputSetter(setBudgetRent, val)} 
+              <FloatLabel
+                label="اجاره مدنظر (تومان)"
+                name="customer_budget_rent_filter"
+                type="number"
+                value={budgetRent || ""}
+                setter={(val) => floatInputSetter(setBudgetRent, val)}
               />
             </>
           )}
           {/* Common fields, adjust grid col-span if budgets take more space */}
-          <FloatLabel 
-            label="متراژ (حداکثر متر مربع)" 
-            name="customer_m2_filter" 
-            type="number" 
-            value={m2 || ""} 
-            setter={(val) => floatInputSetter(setM2, val)} 
+          <FloatLabel
+            label="متراژ (حداکثر متر مربع)"
+            name="customer_m2_filter"
+            type="number"
+            value={m2 || ""}
+            setter={(val) => floatInputSetter(setM2, val)}
             placeholder="مثال: 150"
           />
         </div>
-        
+
         {/* Row 3: More Specifications - Conditionally shown */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-8">
           {/* Year and Bedroom are not typically relevant for 'زمین' (Land) */}
           {propertyType !== "L" && (
-            <FloatLabel 
-              label="سال ساخت (حداکثر)" 
-              name="customer_year_filter" 
-              type="number" 
-              value={year || ""} 
-              setter={(val) => floatInputSetter(setYear, val)} 
+            <FloatLabel
+              label="سال ساخت (حداکثر)"
+              name="customer_year_filter"
+              type="number"
+              value={year || ""}
+              setter={(val) => floatInputSetter(setYear, val)}
               placeholder="مثال: 1395"
             />
           )}
           {/* Bedrooms only for property types that have them */}
           {(propertyType === "A" || propertyType === "H") && (
-            <FloatLabel 
-              label="تعداد اتاق خواب (حداکثر)" 
-              name="customer_bedroom_filter" 
-              type="number" 
-              value={bedroom || ""} 
-              setter={(val) => floatInputSetter(setBedroom, val)} 
+            <FloatLabel
+              label="تعداد اتاق خواب (حداکثر)"
+              name="customer_bedroom_filter"
+              type="number"
+              value={bedroom || ""}
+              setter={(val) => floatInputSetter(setBedroom, val)}
               placeholder="مثال: 3"
             />
           )}
@@ -303,7 +305,8 @@ const Filter = () => {
         {/* Row 4: Amenities - Conditionally shown */}
         {propertyType !== "L" && ( // Amenities not for "زمین"
           <div>
-            <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">امکانات مدنظر:</p>
+            {/* Removed dark:text-gray-300 */}
+            <p className="text-sm font-medium text-gray-700 mb-2">امکانات مدنظر:</p>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-1">
               <Checkbox
                 key={`customer-parking-filter-${checkboxKeyPrefix}`}
@@ -332,20 +335,23 @@ const Filter = () => {
         )}
 
         {/* Row 5: Action Buttons */}
-        <div className="flex flex-col sm:flex-row sm:justify-end gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
+        {/* Removed dark:border-gray-700 */}
+        <div className="flex flex-col sm:flex-row sm:justify-end gap-3 pt-4 border-t border-gray-200">
           {/* Show cancel button if a filter is potentially active (lastFilterFromStore exists) */}
           {lastFilterFromStore && Object.keys(lastFilterFromStore).length > 0 && (
             <button
               type="button"
               onClick={handleCancelFilter}
-              className="w-full sm:w-auto px-6 py-2.5 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-lg text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
+              // Removed dark:border-gray-600, dark:text-gray-300, dark:bg-gray-700, dark:hover:bg-gray-600
+              className="w-full sm:w-auto px-6 py-2.5 border border-gray-300 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
             >
               حذف فیلتر
             </button>
           )}
           <button
             type="submit"
-            className="w-full sm:w-auto px-6 py-2.5 bg-indigo-600 text-sm font-medium rounded-lg text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors dark:bg-indigo-500 dark:hover:bg-indigo-600"
+            // Removed dark:bg-indigo-500, dark:hover:bg-indigo-600
+            className="w-full sm:w-auto px-6 py-2.5 bg-indigo-600 text-sm font-medium rounded-lg text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
           >
             اعمال فیلتر متقاضی
           </button>
