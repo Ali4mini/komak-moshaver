@@ -61,16 +61,6 @@ class BaseCustomerRequest(models.Model):
         return {key: value for key, value in query_dict.items() if value is not None}
 
     # --- Abstract methods or methods to be overridden by concrete classes ---
-    def get_absolute_url(self):
-        raise NotImplementedError("Subclasses must implement get_absolute_url.")
-
-    def _get_target_file_model(self):
-        """Returns the class of the target file model (Sell or Rent)."""
-        raise NotImplementedError("Subclasses must implement _get_target_file_model.")
-
-    def _get_budget_filters_for_files(self) -> dict:
-        """Returns a dictionary of budget-specific filters for querying files."""
-        raise NotImplementedError("Subclasses must implement _get_budget_filters_for_files.")
         
     def get_customer_person(self):
         """Helper to access the customer Person instance, as the FK field name might vary."""

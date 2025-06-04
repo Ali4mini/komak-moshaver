@@ -94,14 +94,6 @@ class PropertyBase(models.Model):
     def get_pk(self) -> int:
         return self.pk
 
-    def get_file_type(self) -> str:
-        raise NotImplementedError("Subclasses must implement this method")
-
-    def get_related_customers(self):
-        raise NotImplementedError("Subclasses must implement this method")
-
-    def save(self, *args, **kwargs):
-        raise NotImplementedError("Subclasses must implement this method")
 
 
 class Sell(PropertyBase):
@@ -231,8 +223,7 @@ class PropertyStaticLocationBase(models.Model):
         file_name = f"{folder_name}/{self.file}.png"
         return ContentFile(static_location_buffer, file_name)
 
-    def save(self, *args, **kwargs):
-        raise NotImplementedError("Subclasses must implement this method")
+        #TODO: do Static Locations
 
 
 class SellStaticLocation(PropertyStaticLocationBase):

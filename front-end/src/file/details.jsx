@@ -45,6 +45,7 @@ const FileDetails = () => {
   const { fileType, id } = useParams();
   const [file, setFile] = useState(null);
   const [person, setPerson] = useState(null);
+  const [tenant, setTenant] = useState(null);
   const [location, setLocation] = useState(null);
   const [images, setImages] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -86,6 +87,13 @@ const FileDetails = () => {
             })
           : Promise.resolve({ data: null, status: 'not_requested' });
 
+        const tenantPromise = fileResponse.data.tenant
+          ? api.get(`common/persons/${fileResponse.data.tenant}`).then(res => res).catch(err => {
+              console.warn(`Failed to fetch tenant ${fileResponse.data.tenant}:`, err.response?.status, err.message);
+              return { data: null, status: err.response?.status || 'error' };
+            })
+          : Promise.resolve({ data: null, status: 'not_requested' });
+
         const locationPromise = api.get(`file/${fileType}/${id}/location/`).then(res => res).catch(err => {
             if (err.response && err.response.status === 404) return { data: null, status: 404 };
             console.error("Error fetching location (non-404):", err.response?.status, err.message);
@@ -98,13 +106,15 @@ const FileDetails = () => {
             return { data: [], status: err.response?.status || 'error' };
           });
 
-        const [ownerRes, locationRes, imagesRes] = await Promise.all([
+        const [ownerRes, tenantRes, locationRes, imagesRes] = await Promise.all([
           ownerPromise,
+	  tenantPromise,
           locationPromise,
           imagesPromise,
         ]);
 
         if (ownerRes?.status === 200) setPerson(ownerRes.data);
+        if (tenantRes?.status === 200) setTenant(tenantRes.data);
         if (locationRes?.status === 200) setLocation(locationRes.data); else setLocation(null);
         if (imagesRes?.status === 200) setImages(imagesRes.data); else setImages([]);
 
@@ -338,21 +348,27 @@ const FileDetails = () => {
             </div>
           </SectionCard>
 
-          {(file.tenet_phone || file.lobbyMan_phone) && (
+          {(file.tenant) && (
             <SectionCard title="اطلاعات تماس اضافی" icon={<PhoneIcon className="w-7 h-7"/>}>
               <div className="space-y-4">
-                {file.tenet_phone && (
+                {tenant.phone_number && (
                   <div className="p-3 bg-gray-50 rounded-lg border border-gray-200">
                     <p className="font-semibold text-gray-700 mb-1.5 text-sm">اطلاعات مستاجر:</p>
-                    <InfoItem label="نام" value={file.tenet_name} />
-                    <InfoItem label="شماره تماس" value={file.tenet_phone} icon={<PhoneIcon className="w-4 h-4"/>} />
-                  </div>
-                )}
-                {file.lobbyMan_phone && (
-                  <div className="p-3 bg-gray-50 rounded-lg border border-gray-200">
-                    <p className="font-semibold text-gray-700 mb-1.5 text-sm">اطلاعات سرایدار:</p>
-                    <InfoItem label="نام" value={file.lobbyMan_name} />
-                    <InfoItem label="شماره تماس" value={file.lobbyMan_phone} icon={<PhoneIcon className="w-4 h-4"/>}/>
+		    <InfoItem
+		      label="نام مستاجر"
+		      value={`${tenant.first_name || ""} ${tenant.last_name || ""}`.trim() || "نامشخص"}
+		      icon={<UserCircleIcon className="w-5 h-5"/>}
+		      valueClassName="cursor-pointer text-blue-600 hover:underline"
+		      onClick={() => person.id && navigate(`/persons/${person.id}`)}
+		    />
+		    <InfoItem
+		      label="شماره مستاجر"
+		      value={tenant.phone_number}
+		      icon={<PhoneIcon className="w-5 h-5"/>}
+		      valueClassName="cursor-pointer text-blue-600 hover:underline"
+		      onClick={() => tenant.phone_number && (window.location.href = `tel:${tenant.phone_number}`)}
+		    />
+                  
                   </div>
                 )}
               </div>

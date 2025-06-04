@@ -32,8 +32,8 @@ const NewFile = () => {
   const [ownerName, setOwnerName] = useState("");
   const [ownerPhone, setOwnerPhone] = useState("");
   const [bazdid, setBazdid] = useState("هماهنگی");
-  const [tenetPhone, setTenetPhone] = useState("");
-  const [tenetName, setTenetName] = useState("");
+  const [tenantPhone, setTenetPhone] = useState("");
+  const [tenantName, setTenetName] = useState("");
   const [lobbyManName, setLobbyManName] = useState("");
   const [lobbyManPhone, setLobbyManPhone] = useState("");
   const [description, setDescription] = useState("");
@@ -103,7 +103,7 @@ const NewFile = () => {
       storage: Boolean(storage),
       parking_motor: Boolean(motorSpot),
       owner_name: ownerName, owner_phone: ownerPhone, bazdid: bazdid,
-      tenet_name: tenetName || null, tenet_phone: tenetPhone || null,
+      tenant_name: tenantName || null, tenant_phone: tenantPhone || null,
       lobbyMan_name: lobbyManName || null, lobbyMan_phone: lobbyManPhone || null,
       description: description || null,
     };
@@ -118,7 +118,7 @@ const NewFile = () => {
     if (!ownerName) { alert("نام مالک الزامی است."); return; }
     if (!address) { alert("آدرس الزامی است."); return; }
     if (!m2) { alert("متراژ الزامی است."); return; }
-    if (tenetPhone && tenetPhone.length !== 11) { alert("شماره تلفن مستاجر در صورت ورود باید ۱۱ رقم باشد."); return; }
+    if (tenantPhone && tenantPhone.length !== 11) { alert("شماره تلفن مستاجر در صورت ورود باید ۱۱ رقم باشد."); return; }
     if (lobbyManPhone && lobbyManPhone.length !== 11) { alert("شماره تلفن سرایدار در صورت ورود باید ۱۱ رقم باشد."); return; }
 
     try {
@@ -260,8 +260,8 @@ const NewFile = () => {
 
             {bazdid === "مستاجر" && (
               <>
-                <FloatLabel type="tel" name="tenetPhone" label="شماره مستاجر" value={tenetPhone} setter={setTenetPhone} isRequired={true} maxChars={11} inputMode="numeric" pattern="[0-9]*" />
-                <FloatLabel type="text" name="tenetName" label="نام مستاجر" value={tenetName} setter={setTenetName} isRequired={true} />
+                <FloatLabel type="tel" name="tenantPhone" label="شماره مستاجر" value={tenantPhone} setter={setTenetPhone} isRequired={true} maxChars={11} inputMode="numeric" pattern="[0-9]*" />
+                <FloatLabel type="text" name="tenantName" label="نام مستاجر" value={tenantName} setter={setTenetName} isRequired={true} />
               </>
             )}
             {bazdid === "سرایدار" && (

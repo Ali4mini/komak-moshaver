@@ -33,7 +33,6 @@ function AnalyticsDashboardSection() {
 	<FilePriceDiversity />
 	<PropertyTypeDiversity />
 	<CustomerBudgetDiversity />
-        <FilePerDay />
       </div>
       {/* You can add more rows or widgets here as needed */}
     </section>
