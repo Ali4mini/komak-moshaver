@@ -60,30 +60,29 @@ class RentImageSerializer(serializers.ModelSerializer):
 
 
 
+
+
 @set_added_by
 @set_updated_logic
 class SellFileSerializer(serializers.ModelSerializer):
-    username = serializers.CharField(max_length=100, write_only=True) # Assuming this is for added_by user
+    username = serializers.CharField(max_length=100, write_only=True)
     file_type = serializers.SerializerMethodField()
     file_date = serializers.SerializerMethodField()
     persian_created = serializers.SerializerMethodField()
     persian_updated = serializers.SerializerMethodField()
-    added_by = serializers.SerializerMethodField() # This will show username of added_by
+    added_by = serializers.SerializerMethodField()
     owner_name = serializers.CharField(write_only=True, required=False, allow_blank=True)
     owner_phone = serializers.CharField(write_only=True, required=False, allow_blank=True)
-    tenant_name = serializers.CharField(write_only=True, required=False, allow_blank=True)
-    tenant_phone = serializers.CharField(write_only=True, required=False, allow_blank=True)
+    # Updated tenant fields to include allow_null=True
+    tenant_name = serializers.CharField(write_only=True, required=False, allow_blank=True, allow_null=True)
+    tenant_phone = serializers.CharField(write_only=True, required=False, allow_blank=True, allow_null=True)
     property_type_display = serializers.SerializerMethodField()
     status_display = serializers.SerializerMethodField()
-
 
     class Meta:
         model = Sell
         fields = "__all__"
-        # If 'added_by' is a ForeignKey in your model and set by a decorator,
-        # you might want it to be read_only in the serializer if the decorator handles it.
-        # Or, if 'username' is meant to find the user for 'added_by':
-        # read_only_fields = ('added_by',) # if decorator sets it
+        # read_only_fields = ('added_by',) # if decorator sets 'added_by'
 
     def _get_or_create_person(self, phone_number, name):
         """Helper to get or create a Person."""
@@ -114,8 +113,7 @@ class SellFileSerializer(serializers.ModelSerializer):
         return person
 
     def create(self, validated_data):
-        # Pop write_only fields that are not part of the model
-        validated_data.pop('username', None) # Assuming 'username' is for the 'added_by' user handled by decorator
+        validated_data.pop('username', None)
 
         owner_name = validated_data.pop('owner_name', None)
         owner_phone = validated_data.pop('owner_phone', None)
@@ -130,18 +128,6 @@ class SellFileSerializer(serializers.ModelSerializer):
         if tenant:
             validated_data['tenant'] = tenant
         
-        # The @set_added_by decorator should handle setting the 'added_by' field
-        # If not, you'd handle it here, e.g., by getting user from 'username' or request
-        # Example if 'username' is used to find the 'added_by' user:
-        # username = validated_data.pop('username', None)
-        # if username:
-        #     try:
-        #         user = User.objects.get(username=username) # Assuming User model
-        #         validated_data['added_by'] = user
-        #     except User.DoesNotExist:
-        #         raise serializers.ValidationError({"username": "User not found."})
-
-
         return super().create(validated_data)
 
     def get_file_type(self, obj):
@@ -154,7 +140,6 @@ class SellFileSerializer(serializers.ModelSerializer):
         return obj.get_status_display()
 
     def get_added_by(self, obj):
-        # Assumes obj.added_by is a User object
         if obj.added_by:
             return obj.added_by.username
         return None
@@ -164,8 +149,8 @@ class SellFileSerializer(serializers.ModelSerializer):
             try:
                 jalali_date = jdatetime.date.fromgregorian(date=obj.created)
                 return jalali_date.strftime("%Y/%m/%d")
-            except ValueError: # Handle cases where date might be out of jdatetime's range
-                return obj.created.strftime("%Y-%m-%d") # Fallback to Gregorian
+            except ValueError:
+                return obj.created.strftime("%Y-%m-%d")
         return None
 
     def get_persian_updated(self, obj):
@@ -190,27 +175,25 @@ class SellFileSerializer(serializers.ModelSerializer):
 @set_added_by
 @set_updated_logic
 class RentFileSerializer(serializers.ModelSerializer):
-    username = serializers.CharField(max_length=100, write_only=True) # Assuming this is for added_by user
+    username = serializers.CharField(max_length=100, write_only=True)
     file_type = serializers.SerializerMethodField()
     file_date = serializers.SerializerMethodField()
     persian_created = serializers.SerializerMethodField()
     persian_updated = serializers.SerializerMethodField()
-    added_by = serializers.SerializerMethodField() # This will show username of added_by
+    added_by = serializers.SerializerMethodField()
     owner_name = serializers.CharField(write_only=True, required=False, allow_blank=True)
     owner_phone = serializers.CharField(write_only=True, required=False, allow_blank=True)
-    # Add tenant fields
-    tenant_name = serializers.CharField(write_only=True, required=False, allow_blank=True)
-    tenant_phone = serializers.CharField(write_only=True, required=False, allow_blank=True)
+    # Updated tenant fields to include allow_null=True
+    tenant_name = serializers.CharField(write_only=True, required=False, allow_blank=True, allow_null=True)
+    tenant_phone = serializers.CharField(write_only=True, required=False, allow_blank=True, allow_null=True)
     property_type_display = serializers.SerializerMethodField()
     status_display = serializers.SerializerMethodField()
 
     class Meta:
         model = Rent
         fields = "__all__"
-        # read_only_fields = ('added_by',) # if decorator sets it
+        # read_only_fields = ('added_by',) # if decorator sets 'added_by'
 
-    # You can reuse the helper method from SellFileSerializer if you put it in a common place
-    # or define it here again. For DRY principle, a common utility function or a base class method is better.
     def _get_or_create_person(self, phone_number, name):
         """Helper to get or create a Person."""
         person = None
@@ -242,7 +225,6 @@ class RentFileSerializer(serializers.ModelSerializer):
 
         owner_name = validated_data.pop('owner_name', None)
         owner_phone = validated_data.pop('owner_phone', None)
-        # Pop tenant fields
         tenant_name = validated_data.pop('tenant_name', None)
         tenant_phone = validated_data.pop('tenant_phone', None)
         
@@ -250,7 +232,6 @@ class RentFileSerializer(serializers.ModelSerializer):
         if owner:
             validated_data['owner'] = owner
         
-        # Add tenant logic
         tenant = self._get_or_create_person(tenant_phone, tenant_name)
         if tenant:
             validated_data['tenant'] = tenant
@@ -284,7 +265,7 @@ class RentFileSerializer(serializers.ModelSerializer):
         if obj.updated:
             try:
                 jalali_date = jdatetime.date.fromgregorian(date=obj.updated)
-                return jalali_date.strftime("%Y-%m-%d")
+                return jalali_date.strftime("%Y/%m/%d")
             except ValueError:
                 return obj.updated.strftime("%Y-%m-%d")
         return None
