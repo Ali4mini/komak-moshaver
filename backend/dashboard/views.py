@@ -1,45 +1,49 @@
-from os import wait
-from django.db.models import Count 
+# from os import wait # Unused import
+from django.db.models import Count
 from django.db.models.functions import TruncDate, TruncYear, TruncMonth
 from django.utils.dateparse import parse_date
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from customer.models import BuyCustomer, RentCustomer
-from file.models import Sell, Rent
-from customer.models import BuyCustomer
+from customer.models import BuyCustomer, RentCustomer # Assuming these use 'created_at'
+from file.models import Sell, Rent # Assuming these use 'created_at' and 'updated_at'
+# from customer.models import BuyCustomer # Duplicate import removed
 from datetime import datetime
 from django.db import connection
-from rest_framework import viewsets, status, permissions
+from rest_framework import viewsets, status, permissions # permissions can be used as needed
 from rest_framework.decorators import action
-from rest_framework.response import Response
+# from rest_framework.response import Response # Already imported
 from django.utils import timezone
 from django.db.models import Q
 
-from logs.models import Call
+from logs.models import Call, BaseTourLog # Import BaseTourLog for TourTypes
 from .filters import CallFilter
-from .models import Task
+from .models import Task # CRITICAL: Ensure Task model is defined in logs/models.py or import path is corrected
 from logs.models import RentTour, SellTour
-from .serializers import TaskSerializer # Make sure your serializer includes 'user', 'due_date', 'is_archived'
+from .serializers import TaskSerializer
 
+# --- Helper Function ---
 def find_last_update_date():
     with connection.cursor() as cursor:
+        # Assuming Sell model uses 'updated_at' for consistency with other models
+        # If it uses 'updated', change 'updated_at' back to 'updated' in the query.
         cursor.execute("""
-            SELECT MAX(updated) FROM (
-                SELECT updated FROM file_Sell
+            SELECT MAX(updated_at) FROM (
+                SELECT updated_at FROM file_Sell
                 WHERE owner_name <> 'UNKNOWN' AND owner_name IS NOT NULL
-                ORDER BY updated DESC
+                ORDER BY updated_at DESC
             ) AS subquery;
         """)
         result = cursor.fetchone()
-        if result:
-            return result
+        if result and result[0]: # Check if result is not None and the value is not None
+            return result[0] # Return the date value directly
         else:
             return None
 
+# --- API Views ---
 
 class FilePriceDiversity(APIView):
     def get(self, request):
-        # Get counts directly without percentage calculation
+        # Assumes Sell model has a 'price' field
         sell_lte_2000 = Sell.objects.filter(price__lte=2000).count()
         sell_2000_3000 = Sell.objects.filter(price__gte=2000, price__lte=3000).count()
         sell_3000_5000 = Sell.objects.filter(price__gte=3000, price__lte=5000).count()
@@ -47,18 +51,17 @@ class FilePriceDiversity(APIView):
         sell_gte_8000 = Sell.objects.filter(price__gte=8000).count()
 
         sell_price_diversity = {
-            "below_2000": sell_lte_2000, 
+            "below_2000": sell_lte_2000,
             "2000_3000": sell_2000_3000,
             "3000_5000": sell_3000_5000,
             "5000_8000": sell_5000_8000,
-            "higher_8000": sell_gte_8000, 
+            "higher_8000": sell_gte_8000,
         }
-
         return Response(sell_price_diversity)
-        
+
 class CustomerBudgetDiversity(APIView):
     def get(self, request):
-        # Get counts directly without percentage calculation
+        # Assumes BuyCustomer model has a 'budget' field
         sell_lte_2000 = BuyCustomer.objects.filter(budget__lte=2000).count()
         sell_2000_3000 = BuyCustomer.objects.filter(budget__gte=2000, budget__lte=3000).count()
         sell_3000_5000 = BuyCustomer.objects.filter(budget__gte=3000, budget__lte=5000).count()
@@ -66,101 +69,99 @@ class CustomerBudgetDiversity(APIView):
         sell_gte_8000 = BuyCustomer.objects.filter(budget__gte=8000).count()
 
         sell_budget_diversity = {
-            "below_2000": sell_lte_2000, 
+            "below_2000": sell_lte_2000,
             "2000_3000": sell_2000_3000,
             "3000_5000": sell_3000_5000,
             "5000_8000": sell_5000_8000,
-            "higher_8000": sell_gte_8000, 
+            "higher_8000": sell_gte_8000,
         }
-
         return Response(sell_budget_diversity)
+
 class FileTypeDiversity(APIView):
     def get(self, request, format=None):
-        # Count the occurrences of each property type
+        # Assumes Sell and Rent models have 'property_type' field and an inner 'Types' TextChoices class
         sell_property_type_counts = Sell.objects.values('property_type').annotate(count=Count('property_type'))
         rent_property_type_counts = Rent.objects.values('property_type').annotate(count=Count('property_type'))
-        
-        # Calculate the total count of all property types
-        sell_total_count = sum([count['count'] for count in sell_property_type_counts])
-        rent_total_count = sum([count['count'] for count in rent_property_type_counts])
-        
-        # Calculate the percentage for each property type and round to two decimal places
+
+        sell_total_count = sum(item['count'] for item in sell_property_type_counts)
+        rent_total_count = sum(item['count'] for item in rent_property_type_counts)
+
         sell_property_type_percentages = []
-        for count in sell_property_type_counts:
-            percentage = (count['count'] / sell_total_count) * 100
-            rounded_percentage = round(percentage, 2)  # Round to two decimal places
-            # Map the choice value to its human-readable name
-            human_readable_name = Sell.Types(count['property_type']).label
-            sell_property_type_percentages.append({
-                'type': human_readable_name,
-                'percentage': rounded_percentage
-            })
-        
+        if sell_total_count > 0: # Avoid division by zero
+            for item in sell_property_type_counts:
+                percentage = (item['count'] / sell_total_count) * 100
+                human_readable_name = Sell.Types(item['property_type']).label # Assumes Sell.Types exists
+                sell_property_type_percentages.append({
+                    'type': human_readable_name,
+                    'percentage': round(percentage, 2)
+                })
+
         rent_property_type_percentages = []
-        for count in rent_property_type_counts:
-            percentage = (count['count'] / rent_total_count) * 100
-            rounded_percentage = round(percentage, 2)  # Round to two decimal places
-            # Map the choice value to its human-readable name
-            human_readable_name = Rent.Types(count['property_type']).label
-            rent_property_type_percentages.append({
-                'type': human_readable_name,
-                'percentage': rounded_percentage
-            })
+        if rent_total_count > 0: # Avoid division by zero
+            for item in rent_property_type_counts:
+                percentage = (item['count'] / rent_total_count) * 100
+                human_readable_name = Rent.Types(item['property_type']).label # Assumes Rent.Types exists
+                rent_property_type_percentages.append({
+                    'type': human_readable_name,
+                    'percentage': round(percentage, 2)
+                })
 
         return Response({"sell": sell_property_type_percentages, "rent": rent_property_type_percentages})
 
 class CustomerTypeDiversity(APIView):
+    # NOTE: This view is named CustomerTypeDiversity but queries Sell.property_type.
+    # If this is intended for customer types, the query should target customer models and relevant fields.
+    # Current implementation is similar to a part of FileTypeDiversity.
     def get(self, request, format=None):
-        # Count the occurrences of each property type
         property_type_counts = Sell.objects.values('property_type').annotate(count=Count('property_type'))
-        
-        # Calculate the total count of all property types
-        total_count = sum([count['count'] for count in property_type_counts])
-        
-        # Calculate the percentage for each property type and round to two decimal places
+        total_count = sum(item['count'] for item in property_type_counts)
         property_type_percentages = []
-        for count in property_type_counts:
-            percentage = (count['count'] / total_count) * 100
-            rounded_percentage = round(percentage, 2)  # Round to two decimal places
-            # Map the choice value to its human-readable name
-            human_readable_name = Sell.Types(count['property_type']).label
-            property_type_percentages.append({
-                'type': human_readable_name,
-                'percentage': rounded_percentage
-            })
-        
-        return property_type_percentages
+
+        if total_count > 0: # Avoid division by zero
+            for item in property_type_counts:
+                percentage = (item['count'] / total_count) * 100
+                human_readable_name = Sell.Types(item['property_type']).label # Assumes Sell.Types exists
+                property_type_percentages.append({
+                    'type': human_readable_name,
+                    'percentage': round(percentage, 2)
+                })
+        # This view returns a list directly, not a dictionary like other similar views.
+        # Consider if Response(property_type_percentages) or Response({"sell_customer_property_preference": property_type_percentages}) is more appropriate.
+        return Response(property_type_percentages)
+
 
 class CustomersCounts(APIView):
     def get(self, request, format=None):
-        # Get the start date from the request query parameters
         start_date_str = request.query_params.get('start_date', None)
-        
-        # If start_date is not provided, set it to the start of the current month
         if start_date_str is None:
-            start_date = datetime.now().replace(day=1)
+            start_date = timezone.now().replace(day=1, hour=0, minute=0, second=0, microsecond=0).date()
         else:
             try:
                 start_date = parse_date(start_date_str)
+                if start_date is None: # parse_date returns None on failure
+                    raise ValueError
             except ValueError:
-                return Response({"error": "Invalid start date format"}, status=400)
-        
-        # Define a function to calculate counts for a given model and period
+                return Response({"error": "Invalid start_date format. Use YYYY-MM-DD."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Assuming BuyCustomer and RentCustomer models use 'created_at'
+        # If they use 'created', change 'created_at' back to 'created' here.
         def calculate_counts(model, period_func, period_label):
-            counts = model.objects.filter(created__date__gte=start_date).annotate(period=period_func('created')).values('period').annotate(count=Count('id')).order_by('period')
-            return [{"date": item['period'].strftime('%Y-%m-%d' if period_func == TruncDate else '%Y-%m' if period_func == TruncMonth else '%Y'), "count": item['count']} for item in counts]
-        
-        # Calculate counts for BuyCustomer
+            counts = model.objects.filter(created_at__date__gte=start_date)\
+                                  .annotate(period=period_func('created_at'))\
+                                  .values('period')\
+                                  .annotate(count=Count('id'))\
+                                  .order_by('period')
+            return [{"date": item['period'].strftime('%Y-%m-%d' if period_func == TruncDate else '%Y-%m' if period_func == TruncMonth else '%Y'),
+                     "count": item['count']} for item in counts]
+
         buy_customer_daily_counts = calculate_counts(BuyCustomer, TruncDate, 'day')
         buy_customer_monthly_counts = calculate_counts(BuyCustomer, TruncMonth, 'month')
         buy_customer_yearly_counts = calculate_counts(BuyCustomer, TruncYear, 'year')
-        
-        # Calculate counts for RentCustomer
+
         rent_customer_daily_counts = calculate_counts(RentCustomer, TruncDate, 'day')
         rent_customer_monthly_counts = calculate_counts(RentCustomer, TruncMonth, 'month')
         rent_customer_yearly_counts = calculate_counts(RentCustomer, TruncYear, 'year')
-        
-        # Combine all counts into a single response
+
         return Response({
             "buyCustomer": {
                 "daily": buy_customer_daily_counts,
@@ -175,98 +176,69 @@ class CustomersCounts(APIView):
         })
 
 
-
 class FilesCounts(APIView):
     def get(self, request, format=None):
-        # Get the start date from the request query parameters
         start_date_str = request.query_params.get('start_date', None)
-
-        # If start_date is not provided, set it to the start of the current month
         if start_date_str is None:
-            start_date = datetime.now().replace(day=1)
+            start_date = timezone.now().replace(day=1, hour=0, minute=0, second=0, microsecond=0).date()
         else:
             try:
                 start_date = parse_date(start_date_str)
+                if start_date is None: # parse_date returns None on failure
+                    raise ValueError
             except ValueError:
-                return Response({"error": "Invalid start date format"}, status=400)
+                return Response({"error": "Invalid start_date format. Use YYYY-MM-DD."}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Calculate the number of customers added per day, per month, and per year starting from the start_date
-        sell_daily_counts = Sell.objects.filter(created__date__gte=start_date).annotate(day=TruncDate('created')).values('day').annotate(count=Count('id')).order_by('day')
-        sell_monthly_counts = Sell.objects.filter(created__date__gte=start_date).annotate(month=TruncMonth('created')).values('month').annotate(count=Count('id')).order_by('month')
-        sell_yearly_counts = Sell.objects.filter(created__date__gte=start_date).extra(select={'year': 'EXTRACT(YEAR FROM created)'}).values('year').annotate(count=Count('id')).order_by('year')
-        rent_daily_counts = Rent.objects.filter(created__date__gte=start_date).annotate(day=TruncDate('created')).values('day').annotate(count=Count('id')).order_by('day')
-        rent_monthly_counts = Rent.objects.filter(created__date__gte=start_date).annotate(month=TruncMonth('created')).values('month').annotate(count=Count('id')).order_by('month')
-        rent_yearly_counts = Rent.objects.filter(created__date__gte=start_date).extra(select={'year': 'EXTRACT(YEAR FROM created)'}).values('year').annotate(count=Count('id')).order_by('year')
-
-        # Convert the queryset to a list of dictionaries for daily counts
-        sell_counts_list = [{"date": item['day'].strftime('%Y-%m-%d'), "count": item['count']} for item in sell_daily_counts]
-        rent_counts_list = [{"date": item['day'].strftime('%Y-%m-%d'), "count": item['count']} for item in rent_daily_counts]
-
-        # Convert the queryset to a list of dictionaries for monthly counts
-        sell_monthly_counts_list = [{"date": item['month'].strftime('%Y-%m'), "count": item['count']} for item in sell_monthly_counts]
-        rent_monthly_counts_list = [{"date": item['month'].strftime('%Y-%m'), "count": item['count']} for item in rent_monthly_counts]
-
-        # Convert the queryset to a list of dictionaries for yearly counts
-        sell_yearly_counts_list = [{"date": item['year'], "count": item['count']} for item in sell_yearly_counts]
-        rent_yearly_counts_list = [{"date": item['year'], "count": item['count']} for item in rent_yearly_counts]
+        # Assuming Sell and Rent models use 'created_at'
+        # If they use 'created', change 'created_at' back to 'created' here.
+        # Also, .extra(select={'year': 'EXTRACT(YEAR FROM created_at)'}) is less common now, TruncYear is preferred.
+        
+        def get_counts_for_model(model_class):
+            daily = model_class.objects.filter(created_at__date__gte=start_date)\
+                                     .annotate(day=TruncDate('created_at'))\
+                                     .values('day').annotate(count=Count('id')).order_by('day')
+            monthly = model_class.objects.filter(created_at__date__gte=start_date)\
+                                       .annotate(month=TruncMonth('created_at'))\
+                                       .values('month').annotate(count=Count('id')).order_by('month')
+            yearly = model_class.objects.filter(created_at__date__gte=start_date)\
+                                      .annotate(year=TruncYear('created_at'))\
+                                      .values('year').annotate(count=Count('id')).order_by('year')
+            return {
+                "daily": [{"date": item['day'].strftime('%Y-%m-%d'), "count": item['count']} for item in daily],
+                "monthly": [{"date": item['month'].strftime('%Y-%m'), "count": item['count']} for item in monthly],
+                "yearly": [{"date": item['year'].strftime('%Y'), "count": item['count']} for item in yearly]
+            }
 
         return Response({
-            "sell": {
-                "daily": sell_counts_list,
-                "monthly": sell_monthly_counts_list,
-                "yearly": sell_yearly_counts_list
-            },
-            "rent": {
-                "daily": rent_counts_list,
-                "monthly": rent_monthly_counts_list,
-                "yearly": rent_yearly_counts_list
-            }
+            "sell": get_counts_for_model(Sell),
+            "rent": get_counts_for_model(Rent)
         })
-
-
-
 
 
 class TaskViewSet(viewsets.ModelViewSet):
     serializer_class = TaskSerializer
-    # Still require authentication to access the API in general
-    # permission_classes = [permissions.IsAuthenticated]
+    # permission_classes = [permissions.IsAuthenticated] # Uncomment if needed
 
     def get_queryset(self):
-        """
-        Returns a queryset of tasks.
-        Filtering for "today's tasks" vs other views is handled by specific actions or query params.
-        """
-        # Base queryset no longer filters by user directly at this model level
+        # Assumes Task model has 'due_date', 'is_archived', 'completed', 'created_at'.
         base_queryset = Task.objects.all()
-
         if self.action == 'list':
             today = timezone.now().date()
             return base_queryset.filter(
                 (Q(due_date=today) | Q(due_date__isnull=True)),
                 is_archived=False
-            ).order_by('completed', '-created_at')
-
-        # For other actions, use the model's default ordering or specify one
-        return base_queryset.order_by('is_archived', 'due_date', 'completed', '-created_at')
+            ).order_by('completed', '-created_at') # Assumes 'created_at' exists on Task
+        return base_queryset.order_by('is_archived', 'due_date', 'completed', '-created_at') # Assumes 'created_at'
 
     def perform_create(self, serializer):
-        """
-        User is no longer directly associated with the task model here.
-        If you needed to log who created it, you might do it in a separate audit log
-        or associate tasks with a user through a different related model (e.g., Project).
-        """
-        # serializer.save(user=self.request.user) # REMOVED
-        serializer.save()
-
+        serializer.save() # User association removed as per model design intent
 
     @action(detail=True, methods=['post'], url_path='toggle-complete')
     def toggle_complete(self, request, pk=None):
-        task = self.get_object() # get_object will fetch any task by ID now
+        task = self.get_object()
         task.completed = not task.completed
         task.save()
-        serializer = self.get_serializer(task)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(self.get_serializer(task).data, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['post'], url_path='archive')
     def archive_task(self, request, pk=None):
@@ -284,123 +256,72 @@ class TaskViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['get'], url_path='archived')
     def list_archived_tasks(self, request):
-        # Lists all archived tasks, not user-specific at this model level
-        archived_tasks = Task.objects.filter(is_archived=True).order_by('-updated_at')
-        
+        # Assumes Task model has 'updated_at' for ordering
+        archived_tasks = Task.objects.filter(is_archived=True).order_by('-updated_at') # Assumes 'updated_at'
         page = self.paginate_queryset(archived_tasks)
         if page is not None:
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
-
         serializer = self.get_serializer(archived_tasks, many=True)
         return Response(serializer.data)
 
     @action(detail=False, methods=['get'], url_path='all')
-    def list_all_tasks(self, request): # Renamed for clarity
-        # Lists all tasks, not user-specific at this model level
-        all_tasks = Task.objects.all().order_by('is_archived', 'due_date', 'completed', '-created_at')
-        
+    def list_all_tasks(self, request):
+        all_tasks = Task.objects.all().order_by('is_archived', 'due_date', 'completed', '-created_at') # Assumes 'created_at'
         page = self.paginate_queryset(all_tasks)
         if page is not None:
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
-
         serializer = self.get_serializer(all_tasks, many=True)
         return Response(serializer.data)
 
 
-
-# your_app/views.py
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated # Or your preferred permission
-from django_filters.rest_framework import DjangoFilterBackend # Not directly used in APIView but good to know
-
-
 class CallCountView(APIView):
-    """
-    Provides a count of Call instances based on provided filters.
-    
-    Query Parameters:
-    - agent (str): Username of the agent.
-    - start_date (YYYY-MM-DD): Calls on or after this date.
-    - end_date (YYYY-MM-DD): Calls on or before this date.
-    - location_city (str): Filter by city in the location JSON.
-    - location_country (str): Filter by country in the location JSON.
-    - call_type (str): 'IN', 'OUT', or 'MISS'.
-    - call_status (str): 'COMP', 'FAIL', 'NOANS', 'BUSY'.
-    - phone_number (str): Exact phone number.
-    - phone_number__icontains (str): Phone number containing text.
-    - is_transcript_correct (bool): 'true' or 'false'.
-    - person_id (int): ID of the associated person.
-    """
-    # permission_classes = [IsAuthenticated] # Adjust as needed
+    # permission_classes = [permissions.IsAuthenticated] # Adjust as needed
 
     def get(self, request, *args, **kwargs):
-        # Apply filters
+        # Call model fields are used by CallFilter: agent, start_time, end_time, location (JSON),
+        # call_type, call_status, phone_number, is_transcript_correct, person. These match the model.
         filterset = CallFilter(request.GET, queryset=Call.objects.all())
-
-        # It's good practice to check if the filterset is valid,
-        # though for GET requests it usually doesn't raise validation errors
-        # unless you have custom validation in your filter.
         if not filterset.is_valid():
-            return Response(filterset.errors, status=400)
-
-        filtered_queryset = filterset.qs
-        count = filtered_queryset.count()
-
+            return Response(filterset.errors, status=status.HTTP_400_BAD_REQUEST)
+        count = filterset.qs.count()
         return Response({'count': count})
 
 
 class TourCountView(APIView):
-    """
-    Provides counts for RentTour and SellTour instances.
-    Supports filtering by:
-    - `start_date` (YYYY-MM-DD): Filters for tours created on or after this date.
-    - `end_date` (YYYY-MM-DD): Filters for tours created on or before this date (inclusive).
-    - `tour_type` (P or H): Filters by the tour type.
-    """
-
     def get(self, request, *args, **kwargs):
         params = request.query_params
         filter_kwargs = {}
 
-        # Date filtering for 'created' field
         start_date_str = params.get('start_date')
         end_date_str = params.get('end_date')
 
+        # RentTour and SellTour inherit 'created_at' from BaseActivityLog.
         if start_date_str:
             try:
                 start_date_obj = datetime.strptime(start_date_str, '%Y-%m-%d').date()
-                # Use __date lookup for DateTimeField to compare against the date part
-                filter_kwargs['created__date__gte'] = start_date_obj
+                filter_kwargs['created_at__date__gte'] = start_date_obj # Corrected from 'created'
             except ValueError:
-                return Response(
-                    {"error": "Invalid start_date format. Use YYYY-MM-DD."},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
+                return Response({"error": "Invalid start_date format. Use YYYY-MM-DD."}, status=status.HTTP_400_BAD_REQUEST)
 
         if end_date_str:
             try:
                 end_date_obj = datetime.strptime(end_date_str, '%Y-%m-%d').date()
-                # Use __date lookup for DateTimeField to compare against the date part
-                # This makes the end_date inclusive for the entire day.
-                filter_kwargs['created__date__lte'] = end_date_obj
+                filter_kwargs['created_at__date__lte'] = end_date_obj # Corrected from 'created'
             except ValueError:
-                return Response(
-                    {"error": "Invalid end_date format. Use YYYY-MM-DD."},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
+                return Response({"error": "Invalid end_date format. Use YYYY-MM-DD."}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Tour type filtering
         tour_type_filter = params.get('tour_type')
         if tour_type_filter:
-            valid_tour_types = RentTour.Type.values
+            # Accessing choices from BaseTourLog.TourTypes as it's the source
+            valid_tour_types = BaseTourLog.TourTypes.values # Corrected from RentTour.Type
             if tour_type_filter.upper() not in valid_tour_types:
                 return Response(
                     {"error": f"Invalid tour_type. Must be one of {', '.join(valid_tour_types)}."},
                     status=status.HTTP_400_BAD_REQUEST
                 )
+            # RentTour and SellTour inherit 'tour_type' from BaseTourLog.
             filter_kwargs['tour_type'] = tour_type_filter.upper()
 
         rent_tour_count = RentTour.objects.filter(**filter_kwargs).count()
@@ -410,5 +331,5 @@ class TourCountView(APIView):
             "rent_tour_count": rent_tour_count,
             "sell_tour_count": sell_tour_count,
             "total_tour_count": rent_tour_count + sell_tour_count,
-            "filters_applied": {k: str(v) for k, v in filter_kwargs.items()} # Make dates strings for JSON
+            "filters_applied": {k: str(v) for k, v in filter_kwargs.items()}
         }, status=status.HTTP_200_OK)

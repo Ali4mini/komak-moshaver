@@ -9,13 +9,13 @@ function Dashboard() {
   return (
     <div className="grid grid-cols-1 min-h-screen bg-slate-100 text-gray-800 p-4 md:p-6 lg:p-8" dir="rtl">
       <main className="flex flex-col w-full">
-          <div className="flex flex-row justify-center mt-4">
+          <div className="flex flex-row justify-between mt-4">
 	    <KpiSection />
 	    <QuickAccess />
           </div>
 
 
-	  <div className="flex flex-row ">
+	  <div className="flex flex-row justify-between">
 
 	    <AnalyticsDashboardSection />
 	    <AgentToolsDashboardSection />
