@@ -29,10 +29,10 @@ class PersonViewSet(viewsets.ModelViewSet):
         person = self.get_object()
 
         # Get related Sell instances and extract their IDs
-        sell_ids = person.owned_properties.values_list('id', flat=True) # returns a list of IDs
+        sell_ids = person.sell_owned_properties.values_list('id', flat=True) # returns a list of IDs
 
         # Get related Rent instances and extract their IDs
-        rent_ids = person.rents_as_owner.values_list('id', flat=True) # returns a list of IDs
+        rent_ids = person.rent_owned_properties.values_list('id', flat=True) # returns a list of IDs
 
         return Response({
             'sell_ids': list(sell_ids), # Convert QuerySet to list for JSON serialization
