@@ -79,34 +79,50 @@ class CustomerBudgetDiversity(APIView):
 
 class FileTypeDiversity(APIView):
     def get(self, request, format=None):
-        # Assumes Sell and Rent models have 'property_type' field and an inner 'Types' TextChoices class
-        sell_property_type_counts = Sell.objects.values('property_type').annotate(count=Count('property_type'))
-        rent_property_type_counts = Rent.objects.values('property_type').annotate(count=Count('property_type'))
+        # Ensure Sell.Types and Rent.Types are accessible (e.g., defined in the models)
+        # Example:
+        # class Sell(models.Model):
+        #     class Types(models.TextChoices):
+        #         APARTMENT = "A", "آپارتمان"
+        #         LAND = "L", "زمین و کلنگی"
+        #         STORE = "S", "مغازه و غرفه"
+        #         VILLA = "H", "خانه و ویلا"
+        #     property_type = models.CharField(max_length=1, choices=Types.choices, default=Types.APARTMENT)
+        #     # ... other fields ...
 
-        sell_total_count = sum(item['count'] for item in sell_property_type_counts)
-        rent_total_count = sum(item['count'] for item in rent_property_type_counts)
+        sell_property_type_counts = Sell.objects.values('property_type').annotate(count=Count('property_type')).order_by('property_type')
+        rent_property_type_counts = Rent.objects.values('property_type').annotate(count=Count('property_type')).order_by('property_type')
 
-        sell_property_type_percentages = []
-        if sell_total_count > 0: # Avoid division by zero
-            for item in sell_property_type_counts:
-                percentage = (item['count'] / sell_total_count) * 100
-                human_readable_name = Sell.Types(item['property_type']).label # Assumes Sell.Types exists
-                sell_property_type_percentages.append({
-                    'type': human_readable_name,
-                    'percentage': round(percentage, 2)
-                })
+        sell_data = []
+        for item in sell_property_type_counts:
+            # item['property_type'] here is the key, e.g., 'A', 'L'
+            type_key = item['property_type']
+            type_label = Sell.Types(type_key).label # Get the human-readable label
+            count = item['count']
+            
+            sell_data.append({
+                'key': type_key,        # e.g., 'A'
+                'type': type_label,     # e.g., 'آپارتمان' (this will be used as chart label)
+                'count': count,         # The actual count
+            })
 
-        rent_property_type_percentages = []
-        if rent_total_count > 0: # Avoid division by zero
-            for item in rent_property_type_counts:
-                percentage = (item['count'] / rent_total_count) * 100
-                human_readable_name = Rent.Types(item['property_type']).label # Assumes Rent.Types exists
-                rent_property_type_percentages.append({
-                    'type': human_readable_name,
-                    'percentage': round(percentage, 2)
-                })
+        rent_data = []
+        for item in rent_property_type_counts:
+            type_key = item['property_type']
+            type_label = Rent.Types(type_key).label
+            count = item['count']
 
-        return Response({"sell": sell_property_type_percentages, "rent": rent_property_type_percentages})
+            rent_data.append({
+                'key': type_key,
+                'type': type_label,
+                'count': count,
+            })
+
+        # No need to calculate percentages here if the chart will do it or if counts are preferred
+        return Response({
+            "sell": sell_data, 
+            "rent": rent_data
+        })
 
 class CustomerTypeDiversity(APIView):
     # NOTE: This view is named CustomerTypeDiversity but queries Sell.property_type.
