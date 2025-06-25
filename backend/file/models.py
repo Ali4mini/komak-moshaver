@@ -5,9 +5,14 @@ from django.urls import reverse
 from django.conf import settings
 from customer.models import BuyCustomer, RentCustomer
 from celery.result import AsyncResult
+from django.dispatch import receiver
 from utils.models import Person
+from dashboard.models import Task
+from django.db.models.signals import post_save
+from django.utils import timezone
 
 # Create your models here.
+
 
 class PropertyBase(models.Model):
     class Types(models.TextChoices):
@@ -33,7 +38,7 @@ class PropertyBase(models.Model):
         null=True,
         blank=True,
         verbose_name="Owner Person",
-        related_name="%(class)s_owned_properties"
+        related_name="%(class)s_owned_properties",
     )
     address = models.TextField()
     m2 = models.IntegerField(null=True, blank=True)
@@ -67,7 +72,7 @@ class PropertyBase(models.Model):
         null=True,
         blank=True,
         verbose_name="tenant Person",
-        related_name="%(class)s_tenant_for"
+        related_name="%(class)s_tenant_for",
     )
     lobbyMan = models.ForeignKey(
         Person,
@@ -75,12 +80,10 @@ class PropertyBase(models.Model):
         null=True,
         blank=True,
         verbose_name="lobby man Person",
-        related_name="%(class)s_lobbyMan_for"
+        related_name="%(class)s_lobbyMan_for",
     )
     status = models.CharField(
-        max_length=12,
-        choices=Status.choices,
-        default=Status.ACTIVE
+        max_length=12, choices=Status.choices, default=Status.ACTIVE
     )
     description = models.CharField(max_length=1000, blank=True, null=True)
     source_id = models.CharField(max_length=100, blank=True, null=True, unique=True)
@@ -93,7 +96,6 @@ class PropertyBase(models.Model):
 
     def get_pk(self) -> int:
         return self.pk
-
 
 
 class Sell(PropertyBase):
@@ -119,20 +121,21 @@ class Sell(PropertyBase):
         # Remove None values
         filter_query = {k: v for k, v in filter_query.items() if v is not None}
         all_customers = BuyCustomer.objects.filter(**filter_query)
-        
+
         if self.notified_customers.exists():
             notified_ids = self.notified_customers.values_list("id", flat=True)
             return all_customers.exclude(id__in=notified_ids)
         return all_customers
 
-    def save(self, *args, **kwargs):
-        from .tasks import send_message
-        super().save(*args, **kwargs)
-        customers = self.get_related_customers()
-        if customers:
-            for customer in customers:
-                send_message.delay(customer.phone_number, self)
-                print(f"Sent message to {customer.phone_number}")
+    # def save(self, *args, **kwargs):
+    #     from .tasks import send_message
+    #
+    #     super().save(*args, **kwargs)
+    #     customers = self.get_related_customers()
+    #     if customers:
+    #         for customer in customers:
+    #             send_message.delay(customer.phone_number, self)
+    #             print(f"Sent message to {customer.phone_number}")
 
 
 class Rent(PropertyBase):
@@ -164,25 +167,26 @@ class Rent(PropertyBase):
         # Remove None values
         filter_query = {k: v for k, v in filter_query.items() if v is not None}
         all_customers = RentCustomer.objects.filter(**filter_query)
-        
+
         if self.notified_customers.exists():
             notified_ids = self.notified_customers.values_list("id", flat=True)
             return all_customers.exclude(id__in=notified_ids)
         return all_customers
 
-    def save(self, *args, **kwargs):
-        from .tasks import send_message
-        super().save(*args, **kwargs)
-        customers = self.get_related_customers()
-        if customers:
-            for customer in customers:
-                send_message.delay(customer.customer_phone, self)
-                print(f"Sent message to {customer.customer_phone}")
+    # def save(self, *args, **kwargs):
+    #     from .tasks import send_message
+    #
+    #     super().save(*args, **kwargs)
+    #     customers = self.get_related_customers()
+    #     if customers:
+    #         for customer in customers:
+    #             send_message.delay(customer.customer_phone, self)
+    #             print(f"Sent message to {customer.customer_phone}")
 
 
 class PropertyImageBase(models.Model):
     image = models.ImageField(upload_to="files", null=True)
-    
+
     class Meta:
         abstract = True
 
@@ -201,14 +205,18 @@ class RentImage(PropertyImageBase):
 class PropertyStaticLocationBase(models.Model):
     location = models.JSONField(null=True)
     image = models.ImageField(upload_to=None, null=True)  # To be defined in subclasses
-    
+
     class Meta:
         abstract = True
 
     def _process_location(self, address: str, folder_name: str):
         from .tasks import download_static_location, geocoding
-        
-        if self.location and self.location.get("latitude") and self.location.get("longitude"):
+
+        if (
+            self.location
+            and self.location.get("latitude")
+            and self.location.get("longitude")
+        ):
             lat = self.location["latitude"]
             lon = self.location["longitude"]
         else:
@@ -217,13 +225,13 @@ class PropertyStaticLocationBase(models.Model):
             lat = location.get("x")
             lon = location.get("y")
             self.location = {"latitude": lat, "longitude": lon}
-        
+
         task_id = download_static_location.delay(lat, lon)
         static_location_buffer = AsyncResult.get(task_id)
         file_name = f"{folder_name}/{self.file}.png"
         return ContentFile(static_location_buffer, file_name)
 
-        #TODO: do Static Locations
+        # TODO: do Static Locations
 
 
 class SellStaticLocation(PropertyStaticLocationBase):
@@ -244,3 +252,32 @@ class RentStaticLocation(PropertyStaticLocationBase):
         if not self.image or not self.location:
             self.image = self._process_location(self.file.address, "rent")
         super().save(*args, **kwargs)
+
+
+## the task creation signals for event based tasks
+# @receiver(
+#     post_save, sender=PropertyBase
+# )  # This won't work directly since PropertyBase is abstract
+# def create_new_file_followup_task(sender, instance, created, **kwargs):
+#     """
+#     Since PropertyBase is abstract, we need to connect this signal to each concrete child class.
+#     This handler will work for both Sell and Rent models.
+#     """
+#     if created:
+#         print(f"in created for {instance.__class__.__name__}")
+#         try:
+#             Task.objects.create(
+#                 text=f"معرفی فایل {instance.id} به مشتری‌های مرتبط",  # Fixed Persian text
+#                 due_date=timezone.now().date(),
+#             )
+#             # TODO: send message to related customer automatically
+#         except Exception as e:
+#             print(
+#                 f"there was an error in new file signals for {instance.__class__.__name__}:",
+#                 e,
+#             )
+#
+#
+# # Connect the signal to both concrete models
+# post_save.connect(create_new_file_followup_task, sender=Sell)
+# post_save.connect(create_new_file_followup_task, sender=Rent)

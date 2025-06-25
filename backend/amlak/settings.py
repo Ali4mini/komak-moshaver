@@ -115,7 +115,9 @@ WSGI_APPLICATION = "amlak.wsgi.application"
 APPEND_SLASH = True
 
 # Call recordings directory
-CALL_RECORDINGS_DIR = os.path.join(BASE_DIR, '/home/alireza/amlak/call recordings/Alireza/All/')  # Adjust as needed
+CALL_RECORDINGS_DIR = os.path.join(
+    BASE_DIR, "/home/alireza/amlak/call recordings/Alireza/All/"
+)  # Adjust as needed
 
 # Database
 DATABASES = {

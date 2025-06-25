@@ -2,6 +2,7 @@
 from django.db import models
 from django.utils import timezone
 
+
 class Task(models.Model):
     # user = models.ForeignKey(...) # REMOVED
     text = models.CharField(max_length=255)
@@ -16,4 +17,4 @@ class Task(models.Model):
 
     class Meta:
         # Adjust ordering as needed now that 'user' is gone
-        ordering = ['is_archived', 'due_date', 'completed', '-created_at']
+        ordering = ["is_archived", "due_date", "completed", "-created_at"]
