@@ -9,7 +9,7 @@ from django.db.models.query import Q
 from customer.serializers import BuyCustomerSerializer, RentCustomerSerializer
 from typing import List, Dict, Any
 from datetime import date, timedelta
-from datetime import datetime # Import datetime
+from datetime import datetime  # Import datetime
 from itertools import chain
 from typing import List, Dict, Any
 from rest_framework.views import APIView
@@ -74,7 +74,6 @@ class CustomerFileRestore(APIView, BasicPagination):
         return self.get_paginated_response(serializer.data)
 
 
-
 class FileFilter(APIView, BasicPagination):
     def get(self, request, *args, **kwargs) -> Response:
         params = request.query_params.copy()
@@ -83,7 +82,9 @@ class FileFilter(APIView, BasicPagination):
         # _populate_filter_entries now handles the __date lookup internally
         filter_entry = self._populate_filter_entries(params, filter_fields)
 
-        file_type = filter_entry.pop("file_type", None) # file_type is removed from filter_entry if present
+        file_type = filter_entry.pop(
+            "file_type", None
+        )  # file_type is removed from filter_entry if present
         if file_type == "sell":
             return self._process_sell_filters(request, filter_entry, params)
         elif file_type == "rent":
@@ -96,11 +97,11 @@ class FileFilter(APIView, BasicPagination):
             "id",
             "owner_name",
             "owner_name__icontains",
-            "file_type", # Used for routing, not direct model filtering unless model has it
+            "file_type",  # Used for routing, not direct model filtering unless model has it
             "property_type",
             "price__lte",
             "price__gte",
-            "price_up__lte", # Assuming these are specific fields in your models
+            "price_up__lte",  # Assuming these are specific fields in your models
             "price_up__gte",
             "price_rent__lte",
             "price_rent__gte",
@@ -111,19 +112,25 @@ class FileFilter(APIView, BasicPagination):
             "elevator",
             "storage",
             "status",
-            "created__gte", # Added for filtering
-            "created__lte", # Added for filtering
+            "created__date__gte",  # Added for filtering
+            "created__date__lte",  # Added for filtering
+            "created__date__gt",  # Added for filtering
+            "created__date__lt",  # Added for filtering
         ]
 
     def _populate_filter_entries(
         self, params: Dict[str, str], filter_fields: List[str]
     ) -> Dict[str, Any]:
         filter_entry = {}
-        for field_lookup_key in filter_fields: # Renamed 'field' to 'field_lookup_key' for clarity
+        for (
+            field_lookup_key
+        ) in filter_fields:  # Renamed 'field' to 'field_lookup_key' for clarity
             param_value = params.get(field_lookup_key)
             if param_value:
-                processed_value = param_value # Store the potentially processed value
-                actual_filter_key = field_lookup_key # This might change for date fields
+                processed_value = param_value  # Store the potentially processed value
+                actual_filter_key = (
+                    field_lookup_key  # This might change for date fields
+                )
 
                 # Handle numeric fields
                 if field_lookup_key in [
@@ -140,8 +147,10 @@ class FileFilter(APIView, BasicPagination):
                     try:
                         processed_value = float(param_value)
                     except ValueError:
-                        print(f"Warning: Invalid float value for {field_lookup_key}: {param_value}")
-                        continue # Skip this filter
+                        print(
+                            f"Warning: Invalid float value for {field_lookup_key}: {param_value}"
+                        )
+                        continue  # Skip this filter
                 # Handle boolean fields
                 elif field_lookup_key in ["parking", "elevator", "storage"]:
                     if param_value.lower() in ("true", "1", "yes"):
@@ -149,8 +158,10 @@ class FileFilter(APIView, BasicPagination):
                     elif param_value.lower() in ("false", "0", "no"):
                         processed_value = False
                     else:
-                        print(f"Warning: Invalid boolean value for {field_lookup_key}: {param_value}")
-                        continue # Skip this filter
+                        print(
+                            f"Warning: Invalid boolean value for {field_lookup_key}: {param_value}"
+                        )
+                        continue  # Skip this filter
                 # Handle date fields (assuming 'created_date' on models is DateTimeField)
                 elif field_lookup_key in ["created__gte", "created__lte"]:
                     try:
@@ -162,15 +173,17 @@ class FileFilter(APIView, BasicPagination):
                         elif field_lookup_key == "created__lte":
                             actual_filter_key = "created__date__lte"
                     except ValueError:
-                        print(f"Warning: Invalid date value for {field_lookup_key}: {param_value}. Expected YYYY-MM-DD.")
-                        continue # Skip this filter
+                        print(
+                            f"Warning: Invalid date value for {field_lookup_key}: {param_value}. Expected YYYY-MM-DD."
+                        )
+                        continue  # Skip this filter
 
                 filter_entry[actual_filter_key] = processed_value
         return filter_entry
 
     def _process_sell_filters(
         self,
-        request: Any, # request is actually rest_framework.request.Request
+        request: Any,  # request is actually rest_framework.request.Request
         filter_entry: Dict[str, Any],
         params: Dict[str, str],
     ) -> Response:
@@ -185,7 +198,7 @@ class FileFilter(APIView, BasicPagination):
 
     def _process_rent_filters(
         self,
-        request: Any, # request is actually rest_framework.request.Request
+        request: Any,  # request is actually rest_framework.request.Request
         filter_entry: Dict[str, Any],
         params: Dict[str, str],
     ) -> Response:
@@ -200,7 +213,7 @@ class FileFilter(APIView, BasicPagination):
 
     def _handle_other_file_types(
         self,
-        request: Any, # request is actually rest_framework.request.Request
+        request: Any,  # request is actually rest_framework.request.Request
         filter_entry: Dict[str, Any],
         params: Dict[str, str],
     ) -> Response:
@@ -220,9 +233,6 @@ class FileFilter(APIView, BasicPagination):
 
         combined_data = list(chain(sell_serializer.data, rent_serializer.data))
         return Response(combined_data)
-
-
-
 
 
 class CustomerFilter(APIView, BasicPagination):
@@ -251,8 +261,8 @@ class CustomerFilter(APIView, BasicPagination):
             "budget__gte",
             "up_budget__lte",  # Note: Mismatch with _populate_filter_entries (budget_up vs up_budget)
             "up_budget__gte",  # I'll assume it should be "up_budget" based on this list
-            "rent_budget__lte",# Note: Mismatch (budget_rent vs rent_budget)
-            "rent_budget__gte",# I'll assume it should be "rent_budget"
+            "rent_budget__lte",  # Note: Mismatch (budget_rent vs rent_budget)
+            "rent_budget__gte",  # I'll assume it should be "rent_budget"
             "m2__lte",
             "bedroom__lte",
             "year__lte",
@@ -260,8 +270,10 @@ class CustomerFilter(APIView, BasicPagination):
             "elevator",
             "storage",
             "status",
-            "created__gte", # Added
-            "created__lte", # Added
+            "created__date__gte",  # Added for filtering
+            "created__date__lte",  # Added for filtering
+            "created__date__gt",  # Added for filtering
+            "created__date__lt",  # Added for filtering
         ]
 
     def _populate_filter_entries(
@@ -269,16 +281,18 @@ class CustomerFilter(APIView, BasicPagination):
     ) -> Dict[str, Any]:
         filter_entry = {}
         for field in filter_fields:
-            param_value = params.get(field) # Renamed from param to param_value to avoid confusion
+            param_value = params.get(
+                field
+            )  # Renamed from param to param_value to avoid confusion
             if param_value:
                 # Handle numeric fields
                 if field in [
                     "budget__lte",
                     "budget__gte",
-                    "up_budget__lte", # Corrected to match _define_filter_fields
-                    "up_budget__gte", # Corrected
-                    "rent_budget__lte",# Corrected
-                    "rent_budget__gte",# Corrected
+                    "up_budget__lte",  # Corrected to match _define_filter_fields
+                    "up_budget__gte",  # Corrected
+                    "rent_budget__lte",  # Corrected
+                    "rent_budget__gte",  # Corrected
                     "m2__lte",
                     "bedroom__lte",
                     "year__lte",
@@ -287,8 +301,10 @@ class CustomerFilter(APIView, BasicPagination):
                         param_value = float(param_value)
                     except ValueError:
                         # Handle or log error if param_value is not a valid float
-                        print(f"Warning: Invalid float value for {field}: {param_value}")
-                        continue # Skip this filter
+                        print(
+                            f"Warning: Invalid float value for {field}: {param_value}"
+                        )
+                        continue  # Skip this filter
                 # Handle boolean fields
                 elif field in ["parking", "elevator", "storage"]:
                     # A more robust way to handle boolean strings
@@ -298,8 +314,10 @@ class CustomerFilter(APIView, BasicPagination):
                         param_value = False
                     else:
                         # Handle or log error if param_value is not a valid boolean string
-                        print(f"Warning: Invalid boolean value for {field}: {param_value}")
-                        continue # Skip this filter
+                        print(
+                            f"Warning: Invalid boolean value for {field}: {param_value}"
+                        )
+                        continue  # Skip this filter
                 # Handle date fields
                 elif field in ["created__gte", "created__lte"]:
                     try:
@@ -309,15 +327,17 @@ class CustomerFilter(APIView, BasicPagination):
                         param_value = datetime.strptime(param_value, "%Y-%m-%d").date()
                     except ValueError:
                         # Handle or log error if param_value is not a valid date string
-                        print(f"Warning: Invalid date value for {field}: {param_value}. Expected YYYY-MM-DD.")
-                        continue # Skip this filter
+                        print(
+                            f"Warning: Invalid date value for {field}: {param_value}. Expected YYYY-MM-DD."
+                        )
+                        continue  # Skip this filter
 
                 filter_entry[field] = param_value
         return filter_entry
 
     def _process_buy_filters(
         self,
-        request: Any, # request is actually rest_framework.request.Request
+        request: Any,  # request is actually rest_framework.request.Request
         filter_entry: Dict[str, Any],
         params: Dict[str, str],
     ) -> Response:
@@ -332,7 +352,7 @@ class CustomerFilter(APIView, BasicPagination):
 
     def _process_rent_filters(
         self,
-        request: Any, # request is actually rest_framework.request.Request
+        request: Any,  # request is actually rest_framework.request.Request
         filter_entry: Dict[str, Any],
         params: Dict[str, str],
     ) -> Response:
@@ -347,7 +367,7 @@ class CustomerFilter(APIView, BasicPagination):
 
     def _handle_other_customer_types(
         self,
-        request: Any, # request is actually rest_framework.request.Request
+        request: Any,  # request is actually rest_framework.request.Request
         filter_entry: Dict[str, Any],
         params: Dict[str, str],
     ) -> Response:

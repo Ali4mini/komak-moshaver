@@ -1,5 +1,6 @@
 // src/components/QuickAccess.js
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 // Reusable WidgetCard (can be moved to a shared components file if not already)
 const WidgetCard = ({ title, children, className = "" }) => (
@@ -10,24 +11,26 @@ const WidgetCard = ({ title, children, className = "" }) => (
 );
 
 // Individual Quick Action Button
-const ActionButton = ({ text, icon, href = "#", bgColor = "bg-blue-500", hoverBgColor = "bg-blue-600", onClick }) => (
-  <a
-    href={href}
-    onClick={onClick} // Allow onClick for actions that don't navigate (e.g., open a modal)
-    className={`flex flex-col items-center justify-center text-center p-4 rounded-lg ${bgColor} ${hoverBgColor} text-white transition-colors duration-150 shadow hover:shadow-md h-full`}
+const ActionButton = ({ text, icon, bgColor = "bg-blue-500", hoverBgColor = "bg-blue-600", onClick, disabled=false }) => (
+  <button
+    onClick={onClick}
+    disabled={disabled}
+    className={`flex flex-col items-center justify-center text-center p-4 rounded-lg ${bgColor} ${hoverBgColor} text-white transition-colors duration-150 shadow hover:shadow-md h-full w-full ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'} `}
   >
     {icon && <span className="text-3xl mb-2">{icon}</span>}
     <span className="text-sm font-medium">{text}</span>
-  </a>
+  </button>
 );
 
 const QuickAccess = () => {
+  const navigate = useNavigate();
+
   const quickLinks = [
     {
       id: 1,
       text: 'ثبت ملک جدید', // Add New Property
       icon: '🏠',
-      href: '/file/new', // Example route
+      path: '/file/new', // Example route
       bgColor: 'bg-green-500',
       hoverBgColor: 'hover:bg-green-600',
     },
@@ -35,7 +38,7 @@ const QuickAccess = () => {
       id: 2,
       text: 'افزودن مشتری جدید', // Add New Client/Lead
       icon: '👤', // Single user icon
-      href: '/customer/new', // Example route
+      path: '/customer/new', // Example route
       bgColor: 'bg-sky-500',
       hoverBgColor: 'hover:bg-sky-600',
     },
@@ -43,7 +46,7 @@ const QuickAccess = () => {
       id: 3,
       text: 'فایل ها', // Advanced Property Search
       icon: '🔍',
-      href: '/', // Example route
+      path: '/', // Example route
       bgColor: 'bg-indigo-500',
       hoverBgColor: 'hover:bg-indigo-600',
     },
@@ -51,35 +54,40 @@ const QuickAccess = () => {
       id: 4,
       text: 'گزارشات من', // My Reports
       icon: '📊',
-      href: '/reports', // Example route
+      path: '/reports', // Example route
       bgColor: 'bg-amber-500',
       hoverBgColor: 'hover:bg-amber-600',
+      disabled: true,
     },
     // Add more links as needed
     // {
     //   id: 5,
     //   text: 'تقویم من', // My Calendar
     //   icon: '📅',
-    //   href: '/calendar',
+    //   path: '/calendar',
     //   bgColor: 'bg-rose-500',
     //   hoverBgColor: 'hover:bg-rose-600',
     // },
   ];
 
+  const handleNavigation = (path) => {
+    navigate(path);
+  };
+
   return (
-      <div className="grid grid-cols-4 gap-4 md:gap-6 mb-6 md:mb-8">
-        {quickLinks.map(link => (
-          <ActionButton
-            key={link.id}
-            text={link.text}
-            icon={link.icon}
-            href={link.href}
-            bgColor={link.bgColor}
-            hoverBgColor={link.hoverBgColor}
-            // onClick={link.onClickAction} // If you have non-navigation actions
-          />
-        ))}
-      </div>
+    <div className="grid grid-cols-4 gap-4 md:gap-6 mb-6 md:mb-8">
+      {quickLinks.map(link => (
+        <ActionButton
+          key={link.id}
+          text={link.text}
+          icon={link.icon}
+          bgColor={link.bgColor}
+          hoverBgColor={link.hoverBgColor}
+          onClick={() => handleNavigation(link.path)}
+          disabled={link.disabled}
+        />
+      ))}
+    </div>
   );
 };
 

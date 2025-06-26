@@ -3,6 +3,7 @@ import React from 'react';
 import TodayTasks from './TodayTasks';
 import UpcomingAppointments from './UpcomingAppoinments.jsx';
 import QuickAccess from './QuickActions.jsx';
+import NewFilesAndCustomers from "./NewFilesAndCustomers.jsx"
 
 function AgentToolsDashboardSection() {
   return (
@@ -15,7 +16,7 @@ function AgentToolsDashboardSection() {
 
         {/* Column 2: Upcoming Appointments */}
         <div className="lg:col-span-1">
-          <UpcomingAppointments />
+          <NewFilesAndCustomers />
         </div>
 
       </div>
