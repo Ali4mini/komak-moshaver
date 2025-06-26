@@ -216,18 +216,18 @@ const NewCallLog = ({ isOpen, setIsOpen }) => {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-xl bg-white dark:bg-slate-800 p-6 text-left align-middle shadow-2xl transition-all">
+              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-xl bg-white  p-6 text-left align-middle shadow-2xl transition-all">
                 <div className="flex justify-between items-center">
                   <Dialog.Title
                     as="h3"
-                    className="text-xl font-semibold leading-6 text-gray-900 dark:text-white"
+                    className="text-xl font-semibold leading-6 text-gray-900 "
                   >
                     ثبت لاگ تماس جدید
                   </Dialog.Title>
                   <button
                     type="button"
                     onClick={() => !isSubmitting && setIsOpen(false)}
-                    className="p-1 rounded-full text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-slate-800"
+                    className="p-1 rounded-full text-gray-400 hover:text-gray-600  focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 "
                     disabled={isSubmitting}
                   >
                     <XMarkIcon className="h-6 w-6" />
@@ -237,7 +237,7 @@ const NewCallLog = ({ isOpen, setIsOpen }) => {
                 <div className="mt-6">
                   <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
-                      <label htmlFor="customer-call-select" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      <label htmlFor="customer-call-select" className="block text-sm font-medium text-gray-700  mb-1">
                         مشتری <span className="text-red-500">*</span>
                       </label>
                       <Select
@@ -255,11 +255,11 @@ const NewCallLog = ({ isOpen, setIsOpen }) => {
                         // Consistent message for no options
                         noOptionsMessage={() => isLoadingCustomers ? "در حال بارگذاری..." : (fetchError || (customersOptions.length === 0 && !isLoadingCustomers ? "مشتری مرتبطی برای این فایل یافت نشد." : "مشتری‌ای یافت نشد"))}
                       />
-                       {fetchError && !isLoadingCustomers && <p className="mt-1 text-xs text-red-600 dark:text-red-400">{fetchError}</p>}
+                       {fetchError && !isLoadingCustomers && <p className="mt-1 text-xs text-red-600 ">{fetchError}</p>}
                     </div>
 
                     <div>
-                      <label htmlFor="call-subject-select" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      <label htmlFor="call-subject-select" className="block text-sm font-medium text-gray-700  mb-1">
                         موضوع تماس <span className="text-red-500">*</span>
                       </label>
                       <Select
@@ -289,7 +289,7 @@ const NewCallLog = ({ isOpen, setIsOpen }) => {
                       <button
                         type="submit"
                         disabled={isSubmitting || isLoadingCustomers || !selectedCustomer || !selectedSubject}
-                        className="w-full flex justify-center items-center py-2.5 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-gray-400 disabled:cursor-not-allowed dark:disabled:bg-slate-600"
+                        className="w-full flex justify-center items-center py-2.5 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-gray-400 disabled:cursor-not-allowed "
                       >
                         {isSubmitting ? (
                           <>
