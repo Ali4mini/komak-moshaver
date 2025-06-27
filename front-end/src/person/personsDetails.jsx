@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { api } from "../common/api";
-import AudioPlayerWithTranscript from "./audioPlayerTranscript.jsx"; // Assuming this is correctly imported
+import AudioPlayerWithTranscript from "./audioPlayerTranscript.jsx";
 
 const PersonDetail = () => {
   const { id } = useParams();
@@ -17,11 +17,13 @@ const PersonDetail = () => {
   const [loadingLogs, setLoadingLogs] = useState(false);
   const [errorLogs, setErrorLogs] = useState(null);
 
-  // State for related properties (Sell and Rent IDs)
+  // State for related properties and applications
   const [sellIds, setSellIds] = useState([]);
   const [rentIds, setRentIds] = useState([]);
-  const [loadingProperties, setLoadingProperties] = useState(false); // Renamed from loadingFiles
-  const [errorProperties, setErrorProperties] = useState(null);     // Renamed from errorFiles
+  const [buyApplications, setBuyApplications] = useState([]);
+  const [rentApplications, setRentApplications] = useState([]);
+  const [loadingProperties, setLoadingProperties] = useState(false);
+  const [errorProperties, setErrorProperties] = useState(null);
 
   // State for audio player
   const [selectedLog, setSelectedLog] = useState(null);
@@ -59,33 +61,37 @@ const PersonDetail = () => {
         .finally(() => {
           setLoadingLogs(false);
         });
-    } else {
-      setCallLogs([]);
-      setLoadingLogs(false);
     }
   }, [person?.id]);
 
-  // Fetch related properties (Sell and Rent IDs) when person data is available
+  // Fetch related properties and applications
   useEffect(() => {
     if (person?.id) {
-      setLoadingProperties(true); // Use new loading state
-      setErrorProperties(null);   // Use new error state
-      api.get(`common/persons/${person.id}/files/`) // Use the correct custom action endpoint
+      setLoadingProperties(true);
+      setErrorProperties(null);
+      
+      // Fetch property IDs (files)
+      api.get(`common/persons/${person.id}/files/`)
         .then(response => {
           setSellIds(response.data.sell_ids || []);
           setRentIds(response.data.rent_ids || []);
         })
         .catch(error => {
-          setErrorProperties('Failed to load related properties'); // Use new error state
-          console.error('Error fetching related properties:', error);
+          console.error('Error fetching property IDs:', error);
+        });
+
+      // Fetch applications
+      api.get(`common/persons/${person.id}/applications/`)
+        .then(response => {
+          setBuyApplications(response.data.buy_applications || []);
+          setRentApplications(response.data.rent_applications || []);
+        })
+        .catch(error => {
+          console.error('Error fetching applications:', error);
         })
         .finally(() => {
-          setLoadingProperties(false); // Use new loading state
+          setLoadingProperties(false);
         });
-    } else {
-      setSellIds([]);
-      setRentIds([]);
-      setLoadingProperties(false);
     }
   }, [person?.id]);
 
@@ -94,7 +100,6 @@ const PersonDetail = () => {
     api.patch(`/logs/call-recordings/${selectedLog.id}/`, {
       recording_transcription: updatedTranscriptString
     });
-    // Optionally, re-fetch call logs or update the specific log in state
   };
 
   const handleShowPlayer = (log) => {
@@ -123,23 +128,17 @@ const PersonDetail = () => {
       };
     }
     try {
-      // Adjusted parsing logic to safely handle various transcript formats,
-      // particularly focusing on JSON parsing.
-      // This is a more robust approach.
       const parsed = JSON.parse(transcriptString);
       if (Array.isArray(parsed) && parsed.length >= 1) {
         const segments = parsed[0] || [];
         const metadata = parsed[1] || {};
         return { segments, metadata };
       }
-      // If it's not an array or not in the expected format, treat as plain text or error.
       return {
-        segments: [{ text: String(parsed) }], // Treat as plain text if not expected array
+        segments: [{ text: String(parsed) }],
         metadata: {}
       };
     } catch (error) {
-      console.error('Failed to parse transcript, attempting fallback:', error);
-      // Fallback for non-JSON string or malformed JSON
       return {
         segments: [{ text: transcriptString || "Error: Could not parse transcript" }],
         metadata: {}
@@ -166,7 +165,13 @@ const PersonDetail = () => {
     if (!dateTimeString) return 'Never contacted';
     try {
       const dateTime = new Date(dateTimeString);
-      return dateTime.toLocaleString('fa-IR', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+      return dateTime.toLocaleString('fa-IR', { 
+        year: 'numeric', 
+        month: '2-digit', 
+        day: '2-digit', 
+        hour: '2-digit', 
+        minute: '2-digit' 
+      });
     } catch (e) {
       return 'Invalid date/time';
     }
@@ -195,7 +200,7 @@ const PersonDetail = () => {
       <div className="p-4 text-red-500">
         {personError}
         <button
-          onClick={() => navigate('/persons')} // Or your list route
+          onClick={() => navigate('/persons')}
           className="block mt-2 text-blue-600 hover:text-blue-800"
         >
           بازگشت به لیست
@@ -209,7 +214,7 @@ const PersonDetail = () => {
       <div className="p-4 text-gray-500">
         No person data available.
         <button
-          onClick={() => navigate('/persons')} // Or your list route
+          onClick={() => navigate('/persons')}
           className="block mt-2 text-blue-600 hover:text-blue-800"
         >
           بازگشت به لیست
@@ -271,7 +276,7 @@ const PersonDetail = () => {
           </div>
         )}
 
-        {/* Related Properties Section (Updated) */}
+        {/* Related Properties Section */}
         <div className="mt-8">
           <h2 className="text-lg font-semibold text-gray-700 mb-4">ملک‌های مرتبط</h2>
           {loadingProperties ? (
@@ -292,14 +297,14 @@ const PersonDetail = () => {
                   <ul className="space-y-2">
                     {sellIds.map((sellId) => (
                       <li key={`sell-${sellId}`} className="bg-gray-50 p-2 rounded-md shadow-sm flex justify-between items-center">
-                        <span>ID: {sellId}</span>
+                        <span>ملک فروشی #{sellId}</span>
                         <a
-                          href={`/file/sell/${sellId}`} // Adjust this URL to your Sell detail page route
+                          href={`/file/sell/${sellId}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="text-blue-600 hover:text-blue-800 px-2 py-1 border border-blue-500 rounded hover:bg-blue-50 transition-colors"
                         >
-                          مشاهده ملک فروشی
+                          مشاهده
                         </a>
                       </li>
                     ))}
@@ -308,19 +313,79 @@ const PersonDetail = () => {
               )}
 
               {rentIds.length > 0 && (
-                <div>
+                <div className="mb-6">
                   <h3 className="text-md font-medium text-gray-600 mb-2">برای اجاره</h3>
                   <ul className="space-y-2">
                     {rentIds.map((rentId) => (
                       <li key={`rent-${rentId}`} className="bg-gray-50 p-2 rounded-md shadow-sm flex justify-between items-center">
-                        <span>ID: {rentId}</span>
+                        <span>ملک اجاره‌ای #{rentId}</span>
                         <a
-                          href={`/file/rent/${rentId}`} // Adjust this URL to your Rent detail page route
+                          href={`/file/rent/${rentId}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="text-blue-600 hover:text-blue-800 px-2 py-1 border border-blue-500 rounded hover:bg-blue-50 transition-colors"
                         >
-                          مشاهده ملک اجاره‌ای
+                          مشاهده
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </>
+          )}
+        </div>
+
+        {/* Applications Section */}
+        <div className="mt-8">
+          <h2 className="text-lg font-semibold text-gray-700 mb-4">درخواست‌ها</h2>
+          {loadingProperties ? (
+            <div className="flex justify-center py-4">
+              <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-900"></div>
+            </div>
+          ) : errorProperties ? (
+            <div className="p-3 bg-red-100 text-red-700 rounded-md">
+              {errorProperties}
+            </div>
+          ) : (buyApplications.length === 0 && rentApplications.length === 0) ? (
+            <p className="text-gray-500">هیچ درخواستی ثبت نشده است.</p>
+          ) : (
+            <>
+              {buyApplications.length > 0 && (
+                <div className="mb-6">
+                  <h3 className="text-md font-medium text-gray-600 mb-2">برای خرید</h3>
+                  <ul className="space-y-2">
+                    {buyApplications.map((application) => (
+                      <li key={`sell-${application}`} className="bg-gray-50 p-2 rounded-md shadow-sm flex justify-between items-center">
+                        <span>خرید #{application}</span>
+                        <a
+                          href={`/customer/buy/${application}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 hover:text-blue-800 px-2 py-1 border border-blue-500 rounded hover:bg-blue-50 transition-colors"
+                        >
+                          مشاهده
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {rentApplications.length > 0 && (
+                <div className="mb-6">
+                  <h3 className="text-md font-medium text-gray-600 mb-2">برای اجاره</h3>
+                  <ul className="space-y-2">
+                    {buyApplications.map((application) => (
+                      <li key={`rent-${application}`} className="bg-gray-50 p-2 rounded-md shadow-sm flex justify-between items-center">
+                        <span>اجاره #{application}</span>
+                        <a
+                          href={`/customer/rent/${application}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 hover:text-blue-800 px-2 py-1 border border-blue-500 rounded hover:bg-blue-50 transition-colors"
+                        >
+                          مشاهده
                         </a>
                       </li>
                     ))}
@@ -370,7 +435,13 @@ const PersonDetail = () => {
                         ) : ('-')}
                       </td>
                       <td className="px-4 py-3 text-sm text-gray-900">
-                        <button onClick={() => handleShowPlayer(log)} className="text-blue-600 hover:text-blue-800" disabled={!log.recording_file}>نمایش</button>
+                        <button 
+                          onClick={() => handleShowPlayer(log)} 
+                          className="text-blue-600 hover:text-blue-800" 
+                          disabled={!log.recording_file}
+                        >
+                          نمایش
+                        </button>
                       </td>
                     </tr>
                   ))}
@@ -394,9 +465,9 @@ const PersonDetail = () => {
           segments={selectedLog.transcriptSegments}
           isOpen={!!selectedLog}
           onClose={handleClosePlayer}
-          onSave={handleNewTranscript} // Ensure this prop is handled by AudioPlayerWithTranscript
-          recordingID={selectedLog.id} // Ensure this prop is handled by AudioPlayerWithTranscript
-          initialStatus={selectedLog.is_transcript_correct_show} // Ensure this prop is handled
+          onSave={handleNewTranscript}
+          recordingID={selectedLog.id}
+          initialStatus={selectedLog.is_transcript_correct_show}
         />
       )}
     </div>

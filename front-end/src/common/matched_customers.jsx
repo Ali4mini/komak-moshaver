@@ -1,7 +1,7 @@
-import { useState, Fragment, useEffect } from "react";
+import { useState, Fragment, useEffect, useCallback } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { api } from "./api";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setRelatedCustomers,
@@ -9,11 +9,15 @@ import {
   removeFromCustomersToNotify,
 } from "../file/fileSlice";
 
-const Customer = ({ customerName, customerPhone, customerId, customerType, hasNotified }) => {
+const getAuthToken = () => localStorage.getItem('access_token');
+
+const Customer = ({ customerName, customerPhone, customerId, hasNotified }) => {
   const dispatch = useDispatch();
+  const { fileType, fileId } = useParams();
+  let customerType = fileType === "sell" ? "buy": "rent" 
+
 
   const handleCheckboxChange = (e) => {
-    console.log(`in handler ${customerId}`);
     if (e.target.checked) {
       dispatch(addToCustomersToNotify(customerId));
     } else {
@@ -22,29 +26,29 @@ const Customer = ({ customerName, customerPhone, customerId, customerType, hasNo
   };
 
   return (
-    <div className="flex flex-row p-1 align-middle items-center justify-between ">
-
-      <Link key={customerId} to={`/customer/${customerType}/${customerId}`}>
-        {hasNotified ? (
-
-          <div className="flex flex-col">
-            <h3 className="text-lg text-gray-400 line-through">{customerName}</h3>
-            <p className="text-sm text-gray-400 line-through">{customerPhone}</p>
-          </div>
-        ) : (
-          <div className="flex flex-col">
-            <h3 className="text-lg text-black">{customerName}</h3>
-            <p className="text-sm text-gray-400">{customerPhone}</p>
-          </div>
-        )}
+    <div className={`flex items-center justify-between p-3 rounded-lg transition-colors ${hasNotified ? 'bg-gray-50' : 'bg-white hover:bg-gray-50'}`}>
+      <Link 
+        to={`/persons/${customerId}`}
+        className="flex-1 min-w-0"
+      >
+        <div className="flex flex-col">
+          <h3 className={`text-sm font-medium truncate ${hasNotified ? 'text-gray-400 line-through' : 'text-gray-800'}`}>
+            {customerName}
+          </h3>
+          <p className={`text-xs truncate ${hasNotified ? 'text-gray-300' : 'text-gray-500'}`}>
+            {customerPhone}
+          </p>
+        </div>
       </Link>
 
-      <input
-        type="checkbox"
-        onChange={handleCheckboxChange}
-        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded "
-        defaultChecked={hasNotified}
-      />
+      <label className="inline-flex items-center ml-3 cursor-pointer">
+        <input
+          type="checkbox"
+          onChange={handleCheckboxChange}
+          className={`w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 ${hasNotified ? 'opacity-70' : ''}`}
+          defaultChecked={hasNotified}
+        />
+      </label>
     </div>
   );
 };
@@ -52,100 +56,178 @@ const Customer = ({ customerName, customerPhone, customerId, customerType, hasNo
 const MatchedCustomers = ({ isOpen, setIsOpen, notifiedCustomers }) => {
   const dispatch = useDispatch();
   const store = useSelector((state) => state.file);
-  const customersList = store.relatedCustomers;
-  const customersToNotify = store.customersToNotify;
+  const customersList = store.relatedCustomers || [];
+  const customersToNotify = store.customersToNotify || [];
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [customersData, setCustomersData] = useState([]);
 
   const location = useLocation();
 
-  const notifyCustomers = () => {
-    console.log(customersToNotify);
-    api
-      .patch(`${location.pathname}/`, { notified_customers: customersToNotify })
-      .then((response) => {
-        console.log(response.data);
-        setIsOpen(false);
-      })
-      .catch((error) => console.log(error));
-  };
-  useEffect(() => {
-    const apiUrl = `${location.pathname}/related_customers/`;
-    api
-      .get(apiUrl)
-      .then((response) => {
-        dispatch(setRelatedCustomers(response.data));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  const fetchCustomerDetails = useCallback(async (customers) => {
+    setIsLoading(true);
+    setError(null);
+    const token = getAuthToken();
+    
+    if (!token) {
+      setError("نیاز به احراز هویت");
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      const headers = { Authorization: `Bearer ${token}` };
+      
+      // Fetch all person data in parallel
+      const personResponses = await Promise.all(
+        customers.map(customer => 
+          api.get(`common/persons/${customer.customer}`, { headers }).catch(err => null)
+        )
+      );
+
+      // Filter out null responses and extract data
+      const validResponses = personResponses
+        .filter(response => response && response.data)
+        .map(response => response.data);
+
+      setCustomersData(validResponses);
+      
+    } catch (err) {
+      setError("خطا در دریافت اطلاعات");
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
   }, []);
 
+  useEffect(() => {
+    if (isOpen) {
+      const apiUrl = `${location.pathname}/related_customers/`;
+      api.get(apiUrl)
+        .then((response) => {
+          dispatch(setRelatedCustomers(response.data));
+          fetchCustomerDetails(response.data);
+        })
+        .catch((error) => {
+          console.error(error);
+          setError("خطا در دریافت مشتریان مرتبط");
+        });
+    }
+  }, [isOpen, location.pathname, dispatch, fetchCustomerDetails]);
+
+  const notifyCustomers = () => {
+    setIsLoading(true);
+    api.patch(`${location.pathname}/`, { notified_customers: customersToNotify })
+      .then((response) => {
+        setIsOpen(false);
+      })
+      .catch((error) => {
+        console.error(error);
+        setError("خطا در ثبت اطلاع رسانی");
+      })
+      .finally(() => setIsLoading(false));
+  };
+
   return (
-    <>
-      <Transition
-        show={isOpen}
-        enter="transition duration-100 ease-out"
-        enterFrom="transform scale-95 opacity-0"
-        enterTo="transform scale-100 opacity-100"
-        leave="transition duration-75 ease-out"
-        leaveFrom="transform scale-100 opacity-100"
-        leaveTo="transform scale-95 opacity-0"
-        as={Fragment}
-      >
-        <Dialog
-          open={isOpen}
-          onClose={() => setIsOpen(false)}
-          size="sm"
-          className="relative z-50"
+    <Transition show={isOpen} as={Fragment}>
+      <Dialog onClose={() => setIsOpen(false)} className="relative z-50">
+        {/* Backdrop */}
+        <Transition.Child
+          as={Fragment}
+          enter="ease-out duration-300"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave="ease-in duration-200"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+          <div className="fixed inset-0 bg-black/30 backdrop-blur-sm" />
+        </Transition.Child>
 
-          <div className="fixed inset-0 flex items-center justigy-center">
-            <Dialog.Panel className="flex flex-col gap-2 h-5/6 mx-auto  px-5 py-2 max-w-md rounded-lg bg-white">
-              <Dialog.Title className="text-lg">مشتریان مرتبط</Dialog.Title>
-              <div
-                id="customers"
-                className="flex flex-col p-2 h-full rounded-md overflow-y-scroll border gap-2"
-              >
-                {customersList?.map((customer) => (
-
-
-                  < Customer
-                    customerName={customer.customer_name}
-                    customerPhone={customer.customer_phone}
-                    customerId={customer.id}
-                    customerType={customer.customer_type}
-                    hasNotified={false}
-                    key={customer.id}
-                  />
-                ))}
+        {/* Modal container */}
+        <div className="fixed inset-0 flex items-center justify-center p-4">
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0 scale-95"
+            enterTo="opacity-100 scale-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100 scale-100"
+            leaveTo="opacity-0 scale-95"
+          >
+            <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white shadow-xl transition-all">
+              {/* Modal header */}
+              <div className="px-6 pt-6 pb-2 border-b border-gray-100">
+                <Dialog.Title className="text-lg font-semibold text-gray-900">
+                  مشتریان مرتبط
+                </Dialog.Title>
+                <p className="mt-1 text-sm text-gray-500">
+                  {customersList.length} مشتری پیدا شد
+                </p>
               </div>
-              <div
-                id="actions"
-                className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-between mt-4"
-              >
+
+              {/* Customers list */}
+              <div className="px-4 py-3 max-h-[60vh] overflow-y-auto">
+                {isLoading ? (
+                  <div className="py-8 text-center">
+                    <p className="text-gray-500">در حال بارگیری...</p>
+                  </div>
+                ) : error ? (
+                  <div className="py-8 text-center">
+                    <p className="text-red-500">{error}</p>
+                  </div>
+                ) : customersData.length > 0 ? (
+                  <div className="divide-y divide-gray-100 rounded-lg border border-gray-100 overflow-hidden">
+                    {customersData.map((customer) => (
+                      <Customer
+                        key={customer.id}
+                        customerName={customer.last_name}
+                        customerPhone={customer.phone_number}
+                        customerId={customer.id}
+                        customerType={customer.type}
+                        hasNotified={notifiedCustomers?.includes(customer.id) || false}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="py-8 text-center">
+                    <p className="text-gray-500">مشتری مرتبطی یافت نشد</p>
+                  </div>
+                )}
+              </div>
+
+              {/* Modal footer */}
+              <div className="px-6 py-4 bg-gray-50 flex flex-col sm:flex-row-reverse sm:justify-start gap-3">
                 <button
-                  onClick={() => setIsOpen(false)}
-                  className="px-3 sm:px-4 text-xs md:text-base h-10 rounded-lg bg-blue-400"
+                  onClick={notifyCustomers}
+                  disabled={isLoading || customersToNotify.length === 0}
+                  className={`inline-flex justify-center rounded-md px-4 py-2 text-sm font-medium text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 ${
+                    isLoading || customersToNotify.length === 0 
+                      ? 'bg-blue-400 cursor-not-allowed' 
+                      : 'bg-blue-600 hover:bg-blue-700'
+                  }`}
                 >
-                  لغو
+                  {isLoading ? 'در حال پردازش...' : 'اطلاع رسانی انجام شد'}
                 </button>
                 <button
-                  onClick={() => notifyCustomers()}
-                  className="px-3 sm:px-4 text-xs md:text-base h-10 rounded-lg bg-yellow-400"
-                >
-                  اطلاع رسانی انجام شد
-                </button>
-                <button
-                  className="px-3 sm:px-4 text-xs md:text-base h-10 rounded-lg bg-red-400 cursor-not-allowed opacity-50"
+                  disabled
+                  className="inline-flex justify-center rounded-md bg-gray-200 px-4 py-2 text-sm font-medium text-gray-700 cursor-not-allowed opacity-70"
                 >
                   اطلاع رسانی کن
                 </button>
+                <button
+                  onClick={() => setIsOpen(false)}
+                  disabled={isLoading}
+                  className="inline-flex justify-center rounded-md bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2 border border-gray-300"
+                >
+                  لغو
+                </button>
               </div>
             </Dialog.Panel>
-          </div>
-        </Dialog >
-      </Transition >
-    </>
+          </Transition.Child>
+        </div>
+      </Dialog>
+    </Transition>
   );
 };
 

@@ -56,9 +56,9 @@ const NavBar = () => {
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
 
   useEffect(() => {
-    api.get("listing/?count", { params: { owner_name: "UNKNOWN", status: "ACTIVE", count: null } })
-      .then((response) => setScannerFilesCount(response.data["count"]))
-      .catch((error) => console.log("Error fetching scanner files count:", error));
+    // api.get("listing/?count", { params: { owner_name: "UNKNOWN", status: "ACTIVE", count: null } })
+    //   .then((response) => setScannerFilesCount(response.data["count"]))
+    //   .catch((error) => console.log("Error fetching scanner files count:", error));
     api.get("listing/restore/?count")
       .then((response) => setRestoreFilesCount(response.data["count"]))
       .catch((error) => console.log("Error fetching restore files count:", error));
