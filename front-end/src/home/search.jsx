@@ -277,7 +277,7 @@ const Search = ({ isOpen, setIsOpen }) => {
                       const resultItemType = item._searchResultItemType;
 
                       if (resultItemType === 'file') {
-                        itemProps = { itemType: 'file', name: item.owner_name || `فایل ${item.id}`, secondaryText: item.address || `کد فایل: ${item.id}`, typeSpecific: item.file_type, };
+                        itemProps = { itemType: 'file', name: item.owner_name || `فایل ${item.file_type === "sell" ? "فروش": "اجاره"}-${item.id}`, secondaryText: item.address || `کد فایل: ${item.id}`, typeSpecific: item.file_type, };
                       } else if (resultItemType === 'customer_preference') {
                         itemProps = { itemType: 'customer_preference', name: item.customer_name || `متقاضی ${item.id}`, secondaryText: item.customer_phone || `کد متقاضی: ${item.id}`, typeSpecific: item.customer_type, };
                       } else if (resultItemType === 'person' || resultItemType === 'person_with_files_context' || resultItemType === 'person_with_customer_preference_context') {

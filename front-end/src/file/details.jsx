@@ -72,7 +72,7 @@ const FileDetails = () => {
         setFile(fileResponse.data);
 
         const today = new Date().getTime();
-        const fileDate = fileResponse.data.date ? new Date(fileResponse.data.date).getTime() : null;
+        const fileDate = fileResponse.data.updated ? new Date(fileResponse.data.updated).getTime() : null;
         if (fileDate) {
             const differenceInDays = (today - fileDate) / (1000 * 3600 * 24);
             setIsFileOld(differenceInDays >= 30);
