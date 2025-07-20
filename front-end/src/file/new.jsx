@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { api } from "../common/api";
 import { setFlashMessage } from "../common/flashSlice";
 import { useDispatch } from "react-redux";
-import NewLocation from "../common/newLocation.jsx";
 import CustomDatePicker from "../common/datePicker";
 
 const NewFile = () => {
@@ -295,7 +294,6 @@ const NewFile = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">موقعیت روی نقشه (اختیاری)</label>
-              <NewLocation location={location} setLocation={setLocation} />
             </div>
 
             <div>
