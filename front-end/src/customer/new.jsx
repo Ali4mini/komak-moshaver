@@ -43,10 +43,11 @@ const NewCustomer = () => {
   const [formInstanceKey, setFormInstanceKey] = useState(Date.now());
 
   const resetForm = useCallback(() => {
+    console.log(formData["customerType"])
     setFormData({
       ...initialFormData,
-      customerType: getInitialCustomerType(),
-      date: new Date().toISOString().split("T")[0],
+      customerType: formData["customerType"],
+      date: formData["date"],
     });
     // UPDATE THE KEY TO FORCE RE-MOUNT OF CHECKBOXES
     setFormInstanceKey(Date.now());

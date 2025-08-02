@@ -47,7 +47,7 @@ const NewFile = () => {
   const [formInstanceKey, setFormInstanceKey] = useState(Date.now());
 
   const resetForm = () => {
-    setFileType((localStorage.getItem("agents_field") || "sell").toLowerCase());
+    // setFileType((localStorage.getItem("agents_field") || "sell").toLowerCase());
     setPropertyType("A");
     setAddress(""); setM2(""); setYear(""); setBedroom("");
     setPrice(""); setUpPrice(""); setRentPrice("");
@@ -62,7 +62,7 @@ const NewFile = () => {
     setTenetPhone(""); setTenetName("");
     setLobbyManName(""); setLobbyManPhone("");
     setDescription("");
-    setDate(new Date().toISOString().split("T")[0]);
+    // setDate(new Date().toISOString().split("T")[0]);
     setLocation(null);
     setSelectedFiles(null);
     const fileInput = document.getElementById('customFileInput');
