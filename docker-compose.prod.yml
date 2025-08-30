@@ -12,7 +12,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - komak-moshaver
-    restart: unless-stopped # Add this line
+    restart: unless-stopped 
 
   backend:
     build:
@@ -41,7 +41,7 @@ services:
       - media_data:/usr/share/nginx/html/media/
     networks:
       - komak-moshaver
-    restart: unless-stopped # Add this line
+    restart: unless-stopped 
 
   nginx:
     build:

@@ -177,8 +177,8 @@ const NavBar = () => {
 
         {/* Scrollable Navigation Items Area */}
         <div className="flex-grow overflow-y-auto overflow-x-hidden pr-1 space-y-1">
-            <NavLinkItem to="dashboard/" icon={DashboardIcon} label="داشبورد" />
-            <NavLinkItem to="/" icon={FilesIcon} label="فایل ها" />
+            <NavLinkItem to="/" icon={DashboardIcon} label="داشبورد" />
+            <NavLinkItem to="files/" icon={FilesIcon} label="فایل ها" />
             <NavLinkItem to="listing/" icon={RobotIcon} label="ربات" badgeCount={scannerFilesCount} />
             <NavLinkItem to="restore/" icon={RestoreIcon} label="احیا" badgeCount={restoreFilesCount} />
             <NavLinkItem to="file/new" icon={NewFileIcon} label="فایل جدید" />

@@ -4,28 +4,25 @@ from django.db.models.functions import TruncDate, TruncYear, TruncMonth
 from django.utils.dateparse import parse_date
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from customer.models import BuyCustomer, RentCustomer  # Assuming these use 'created_at'
-from file.models import Sell, Rent  # Assuming these use 'created_at' and 'updated_at'
-
-# from customer.models import BuyCustomer # Duplicate import removed
+from customer.models import BuyCustomer, RentCustomer  
+from file.models import Sell, Rent  
 from datetime import datetime
 from django.db import connection
 from rest_framework import (
     viewsets,
     status,
     permissions,
-)  # permissions can be used as needed
+)  
 from rest_framework.decorators import action
 
-# from rest_framework.response import Response # Already imported
 from django.utils import timezone
 from django.db.models import Q
 
-from logs.models import Call, BaseTourLog  # Import BaseTourLog for TourTypes
+from logs.models import Call, BaseTourLog  
 from .filters import CallFilter
 from .models import (
     Task,
-)  # CRITICAL: Ensure Task model is defined in logs/models.py or import path is corrected
+)  
 from logs.models import RentTour, SellTour
 from .serializers import TaskSerializer
 
@@ -33,8 +30,6 @@ from .serializers import TaskSerializer
 # --- Helper Function ---
 def find_last_update_date():
     with connection.cursor() as cursor:
-        # Assuming Sell model uses 'updated_at' for consistency with other models
-        # If it uses 'updated', change 'updated_at' back to 'updated' in the query.
         cursor.execute(
             """
             SELECT MAX(updated_at) FROM (
@@ -102,16 +97,6 @@ class CustomerBudgetDiversity(APIView):
 
 class FileTypeDiversity(APIView):
     def get(self, request, format=None):
-        # Ensure Sell.Types and Rent.Types are accessible (e.g., defined in the models)
-        # Example:
-        # class Sell(models.Model):
-        #     class Types(models.TextChoices):
-        #         APARTMENT = "A", "آپارتمان"
-        #         LAND = "L", "زمین و کلنگی"
-        #         STORE = "S", "مغازه و غرفه"
-        #         VILLA = "H", "خانه و ویلا"
-        #     property_type = models.CharField(max_length=1, choices=Types.choices, default=Types.APARTMENT)
-        #     # ... other fields ...
 
         sell_property_type_counts = (
             Sell.objects.values("property_type")
@@ -126,16 +111,15 @@ class FileTypeDiversity(APIView):
 
         sell_data = []
         for item in sell_property_type_counts:
-            # item['property_type'] here is the key, e.g., 'A', 'L'
             type_key = item["property_type"]
             type_label = Sell.Types(type_key).label  # Get the human-readable label
             count = item["count"]
 
             sell_data.append(
                 {
-                    "key": type_key,  # e.g., 'A'
-                    "type": type_label,  # e.g., 'آپارتمان' (this will be used as chart label)
-                    "count": count,  # The actual count
+                    "key": type_key,  
+                    "type": type_label,  
+                    "count": count,  
                 }
             )
 
@@ -158,9 +142,6 @@ class FileTypeDiversity(APIView):
 
 
 class CustomerTypeDiversity(APIView):
-    # NOTE: This view is named CustomerTypeDiversity but queries Sell.property_type.
-    # If this is intended for customer types, the query should target customer models and relevant fields.
-    # Current implementation is similar to a part of FileTypeDiversity.
     def get(self, request, format=None):
         property_type_counts = Sell.objects.values("property_type").annotate(
             count=Count("property_type")
@@ -177,8 +158,6 @@ class CustomerTypeDiversity(APIView):
                 property_type_percentages.append(
                     {"type": human_readable_name, "percentage": round(percentage, 2)}
                 )
-        # This view returns a list directly, not a dictionary like other similar views.
-        # Consider if Response(property_type_percentages) or Response({"sell_customer_property_preference": property_type_percentages}) is more appropriate.
         return Response(property_type_percentages)
 
 
@@ -202,8 +181,6 @@ class CustomersCounts(APIView):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
-        # Assuming BuyCustomer and RentCustomer models use 'created_at'
-        # If they use 'created', change 'created_at' back to 'created' here.
         def calculate_counts(model, period_func, period_label):
             counts = (
                 model.objects.filter(created_at__date__gte=start_date)
@@ -270,9 +247,6 @@ class FilesCounts(APIView):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
-        # Assuming Sell and Rent models use 'created_at'
-        # If they use 'created', change 'created_at' back to 'created' here.
-        # Also, .extra(select={'year': 'EXTRACT(YEAR FROM created_at)'}) is less common now, TruncYear is preferred.
 
         def get_counts_for_model(model_class):
             daily = (
@@ -342,10 +316,7 @@ class TaskViewSet(viewsets.ModelViewSet):
             today = timezone.now().date()
             queryset = queryset.filter(due_date__gt=today, is_archived=False)
         elif view == "archived":
-            # Only archived tasks.
             queryset = queryset.filter(is_archived=True)
-        # If view is 'all' or anything else, we don't filter by date/archive status.
-        # So we just use the base queryset.
 
         # --- Sorting Logic ---
         # Consistent sorting for all views.

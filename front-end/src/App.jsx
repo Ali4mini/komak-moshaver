@@ -61,8 +61,8 @@ function App() {
           {/* Add padding to the content area itself */}
           <div className="p-4 md:p-6"> 
             <Routes>
-              <Route path="/" element={<Files />} />
-              <Route path="dashboard/" element={<Dashboard />} />
+              <Route path="/" element={<Dashboard />} />
+              <Route path="files/" element={<Files />} />
               <Route path="listing/" element={<Scanner />} />
               <Route path="restore/" element={<Restore />} />
               <Route path="smsLogs/" element={<SmsLogsListPage />} />
