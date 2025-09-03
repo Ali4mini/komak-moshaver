@@ -1,8 +1,9 @@
 // src/AgentToolsDashboardSection.js
 import React from 'react';
-import TodayTasks from './TodayTasks';
-import UpcomingAppointments from './UpcomingAppoinments.jsx';
-import QuickAccess from './QuickActions.jsx';
+// import TodayTasks from './TodayTasks';
+import SimpleTasksList from './taskingSystem/Tasks.jsx';
+// import UpcomingAppointments from './UpcomingAppoinments.jsx';
+// import QuickAccess from './QuickActions.jsx';
 import NewFilesAndCustomers from "./NewFilesAndCustomers.jsx"
 
 function AgentToolsDashboardSection() {
@@ -11,7 +12,8 @@ function AgentToolsDashboardSection() {
       <div className="grid grid-cols-2 gap-3">
         {/* Column 1: Today's Tasks */}
         <div className="lg:col-span-1">
-          <TodayTasks />
+          {/* <TodayTasks /> */}
+	  <SimpleTasksList />
         </div>
 
         {/* Column 2: Upcoming Appointments */}

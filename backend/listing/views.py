@@ -1,34 +1,24 @@
-from file.models import Sell, Rent
-from customer.models import BuyCustomer, RentCustomer
+from datetime import datetime  # Import datetime
+from datetime import date, timedelta
 from itertools import chain
-from rest_framework.views import APIView
+from typing import Any, Dict, List
+
+import pytz
+from django.db.models.query import Q
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
-from file.serializers import SellFileSerializer, RentFileSerializer
-from django.db.models.query import Q
-from customer.serializers import BuyCustomerSerializer, RentCustomerSerializer
-from typing import List, Dict, Any
-from datetime import date, timedelta
-from datetime import datetime  # Import datetime
-from itertools import chain
-from typing import List, Dict, Any
 from rest_framework.views import APIView
-from rest_framework.response import Response
-import pytz
+
+from customer.models import BuyCustomer, RentCustomer
+from customer.serializers import BuyCustomerSerializer, RentCustomerSerializer
+from file.models import Rent, Sell
+from file.serializers import RentFileSerializer, SellFileSerializer
+from utils.paginations import StandardPagination
 
 # Create your views here.
 
 
-# SECTION - API
-# Define a basic pagination class
-class BasicPagination(PageNumberPagination):
-    page_size = 10  # Default page size
-    page_size_query_param = (
-        "page_size"  # Query parameter to override the default page size
-    )
-
-
-class RentFileRestore(APIView, BasicPagination):
+class RentFileRestore(APIView, StandardPagination):
     def get(self, request, *args, **kwargs):
 
         params = request.query_params.copy()
@@ -56,7 +46,7 @@ class RentFileRestore(APIView, BasicPagination):
 
 
 # TODO: add urls for this view
-class CustomerFileRestore(APIView, BasicPagination):
+class CustomerFileRestore(APIView, StandardPagination):
     def get(self, request, *args, **kwargs):
 
         today = date.today()
@@ -74,7 +64,7 @@ class CustomerFileRestore(APIView, BasicPagination):
         return self.get_paginated_response(serializer.data)
 
 
-class FileFilter(APIView, BasicPagination):
+class FileFilter(APIView, StandardPagination):
     def get(self, request, *args, **kwargs) -> Response:
         params = request.query_params.copy()
         filter_fields = self._define_filter_fields()
@@ -235,7 +225,7 @@ class FileFilter(APIView, BasicPagination):
         return Response(combined_data)
 
 
-class CustomerFilter(APIView, BasicPagination):
+class CustomerFilter(APIView, StandardPagination):
     def get(self, request, *args, **kwargs) -> Response:
         params = request.query_params.copy()
         filter_fields = self._define_filter_fields()

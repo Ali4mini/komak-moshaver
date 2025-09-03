@@ -32,8 +32,9 @@ const ShowMessage = ({ type, message }) => {
     >
       <div
         role="alert"
-        className={`fixed z-50 bottom-4 right-4 p-16 font-bold text-lg text-white border-l-4 rounded-lg shadow-lg ${colorClasses[type] || colorClasses.success
-          }`}
+        className={`fixed z-50 bottom-4 right-4 p-16 font-bold text-lg text-white border-l-4 rounded-lg shadow-lg ${
+          colorClasses[type] || colorClasses.success
+        }`}
       >
         <p>{message}</p>
       </div>

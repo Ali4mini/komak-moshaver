@@ -1,5 +1,5 @@
 // src/App.js
-import React, { useState, useEffect } from 'react'; // Added useState
+import React, { useState, useEffect } from "react"; // Added useState
 import NavBar from "./common/nav";
 import MobileNavBar from "./common/mobile_nav";
 import { Routes, Route, useNavigate } from "react-router-dom";
@@ -34,32 +34,44 @@ function App() {
 
   useEffect(() => {
     if (!isLoggedIn) {
-      navigate('agents/login');
+      navigate("agents/login");
     }
   }, [isLoggedIn, navigate]);
 
   // Define widths for margin calculation
   const collapsedNavWidthClass = "mr-[4.25rem]"; // Should match NavBar's collapsed width
-  const expandedNavWidthClass = "mr-60";       // Should match NavBar's expanded width
+  const expandedNavWidthClass = "mr-60"; // Should match NavBar's expanded width
 
   if (isLoggedIn) {
     return (
-      <div className="flex min-h-screen bg-gray-50"> {/* Outer container */}
+      <div className="flex min-h-screen bg-gray-50">
+        {" "}
+        {/* Outer container */}
         {/* Main content area */}
-        <main 
+        <main
           className={`flex-1 transition-all duration-300 ease-in-out
-                      ${width > 730 && isNavExpanded ? expandedNavWidthClass : 
-                       width > 730 ? collapsedNavWidthClass : ''}`} 
-                      // Apply margin only if desktop nav is active
+                      ${
+                        width > 730 && isNavExpanded
+                          ? expandedNavWidthClass
+                          : width > 730
+                            ? collapsedNavWidthClass
+                            : ""
+                      }`}
+          // Apply margin only if desktop nav is active
         >
           {flashStore.message ? (
-            <div className="sticky top-0 z-50"> {/* Position flash message appropriately */}
-              <ShowMessage type={flashStore.type} message={flashStore.message} />
+            <div className="sticky top-0 z-50 mr-50">
+              {" "}
+              {/* Position flash message appropriately */}
+              <ShowMessage
+                type={flashStore.type}
+                message={flashStore.message}
+              />
             </div>
           ) : null}
-          
+
           {/* Add padding to the content area itself */}
-          <div className="p-4 md:p-6"> 
+          <div className="p-4 md:p-6">
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="files/" element={<Files />} />
@@ -78,15 +90,17 @@ function App() {
               <Route path="customer/">
                 <Route path="new/" element={<NewCustomer />} />
                 <Route path=":customerType/:id" element={<CustomerDetail />} />
-                <Route path=":customerType/:id/edit/" element={<UpdateCustomer />} />
+                <Route
+                  path=":customerType/:id/edit/"
+                  element={<UpdateCustomer />}
+                />
               </Route>
             </Routes>
           </div>
         </main>
-
         {/* Navigation Bars */}
         {width > 730 ? (
-          <NavBar 
+          <NavBar
             isExpanded={isNavExpanded}
             onNavMouseEnter={() => setIsNavExpanded(true)}
             onNavMouseLeave={() => setIsNavExpanded(false)}

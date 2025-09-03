@@ -1,29 +1,23 @@
 # from os import wait # Unused import
-from django.db.models import Count
-from django.db.models.functions import TruncDate, TruncYear, TruncMonth
-from django.utils.dateparse import parse_date
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from customer.models import BuyCustomer, RentCustomer  
-from file.models import Sell, Rent  
 from datetime import datetime
+
 from django.db import connection
-from rest_framework import (
-    viewsets,
-    status,
-    permissions,
-)  
-from rest_framework.decorators import action
-
+from django.db.models import Count
+from django.db.models.functions import TruncDate, TruncMonth, TruncYear
 from django.utils import timezone
-from django.db.models import Q
+from django.utils.dateparse import parse_date
+from rest_framework import permissions, status, viewsets
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from logs.models import Call, BaseTourLog  
+from customer.models import BuyCustomer, RentCustomer
+from file.models import Rent, Sell
+from logs.models import BaseTourLog, Call, RentTour, SellTour
+from utils.paginations import StandardPagination
+
 from .filters import CallFilter
-from .models import (
-    Task,
-)  
-from logs.models import RentTour, SellTour
+from .models import Task
 from .serializers import TaskSerializer
 
 
@@ -117,9 +111,9 @@ class FileTypeDiversity(APIView):
 
             sell_data.append(
                 {
-                    "key": type_key,  
-                    "type": type_label,  
-                    "count": count,  
+                    "key": type_key,
+                    "type": type_label,
+                    "count": count,
                 }
             )
 
@@ -247,7 +241,6 @@ class FilesCounts(APIView):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
-
         def get_counts_for_model(model_class):
             daily = (
                 model_class.objects.filter(created_at__date__gte=start_date)
@@ -290,77 +283,109 @@ class FilesCounts(APIView):
         )
 
 
+# class TaskViewSet(viewsets.ModelViewSet):
+#     serializer_class = TaskSerializer
+#     # permission_classes = [permissions.IsAuthenticated]
+#
+#     def get_queryset(self):
+#         """
+#         Dynamically filter the queryset based on query parameters.
+#         """
+#         queryset = Task.objects.all() # Start with all tasks for the user
+#
+#         # --- Filtering Logic ---
+#         # Get the 'view' parameter from the request URL, e.g., /api/tasks/?view=today
+#         view = self.request.query_params.get("view", "today")  # Default to 'today'
+#
+#         if view == "today":
+#             # Default view: Non-archived tasks due today or with no due date.
+#             today = timezone.now().date()
+#             queryset = queryset.filter(
+#                 (Q(due_date=today) | Q(due_date__isnull=True)), is_archived=False
+#             )
+#         elif view == "upcoming":
+#             # Non-archived tasks with a due date in the future.
+#             today = timezone.now().date()
+#             queryset = queryset.filter(due_date__gt=today, is_archived=False)
+#         elif view == "archived":
+#             queryset = queryset.filter(is_archived=True)
+#
+#         # --- Sorting Logic ---
+#         # Consistent sorting for all views.
+#         return queryset.order_by("is_archived", "completed", "due_date", "-created_at")
+#
+#     def perform_create(self, serializer):
+#         serializer.save()
+#
+#     @action(detail=True, methods=["post"], url_path="toggle-complete")
+#     def toggle_complete(self, request, pk=None):
+#         task = self.get_object()
+#         task.completed = not task.completed
+#         task.save()
+#         return Response(self.get_serializer(task).data, status=status.HTTP_200_OK)
+#
+#     # The list_archived_tasks and list_all_tasks methods are no longer needed!
+#     # GET /api/tasks/?view=archived
+#     # GET /api/tasks/?view=all
+#     # ...are now handled by get_queryset.
+
+
 class TaskViewSet(viewsets.ModelViewSet):
+    """
+    A ViewSet for viewing, creating, and editing tasks.
+
+    Provides standard CRUD operations.
+    Includes filtering for different views: 'today', 'all', 'done', 'archived'.
+    Includes a custom action to toggle the completion status of a task.
+    """
+
     serializer_class = TaskSerializer
-    # permission_classes = [permissions.IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
+    pagination_class = StandardPagination
 
     def get_queryset(self):
         """
-        Dynamically filter the queryset based on query parameters.
-        This is much more flexible than separate endpoints.
+        This view should return a list of all the tasks
+        filtered by the 'view' query param.
         """
-        queryset = Task.objects.all()  # Start with all tasks for the user
+        queryset = Task.objects.all()
 
-        # --- Filtering Logic ---
-        # Get the 'view' parameter from the request URL, e.g., /api/tasks/?view=today
-        view = self.request.query_params.get("view", "today")  # Default to 'today'
+        if self.action != "list":
+            return queryset
+
+        view = self.request.query_params.get("view", "today").lower()
 
         if view == "today":
-            # Default view: Non-archived tasks due today or with no due date.
+            # Return non-archived tasks created today
             today = timezone.now().date()
-            queryset = queryset.filter(
-                (Q(due_date=today) | Q(due_date__isnull=True)), is_archived=False
-            )
-        elif view == "upcoming":
-            # Non-archived tasks with a due date in the future.
-            today = timezone.now().date()
-            queryset = queryset.filter(due_date__gt=today, is_archived=False)
+            res = queryset.filter(due_date=today, is_archived=False)
+            print(res)
+            return res
+        elif view == "all":
+            # Return all non-archived tasks
+            return queryset.filter(is_archived=False)
+        elif view == "done":
+            # Return completed tasks
+            return queryset.filter(completed=True)
         elif view == "archived":
-            queryset = queryset.filter(is_archived=True)
+            # Return only archived tasks
+            return queryset.filter(is_archived=True)
 
-        # --- Sorting Logic ---
-        # Consistent sorting for all views.
-        return queryset.order_by("is_archived", "completed", "due_date", "-created_at")
-
-    def perform_create(self, serializer):
-        serializer.save()
+        # Default to today's tasks if the view parameter is invalid
+        print("invalid view parameter")
+        today = timezone.now().date()
+        return queryset.filter(due_date=today, is_archived=False)
 
     @action(detail=True, methods=["post"], url_path="toggle-complete")
     def toggle_complete(self, request, pk=None):
+        """
+        An action to toggle the 'completed' status of a task.
+        """
         task = self.get_object()
         task.completed = not task.completed
         task.save()
-        return Response(self.get_serializer(task).data, status=status.HTTP_200_OK)
-
-    # We can simplify archive/unarchive by using a single PATCH request to the detail view.
-    # The default ModelViewSet already handles this! You can send a request like:
-    # PATCH /api/tasks/{id}/ with a body of {"is_archived": true}
-    # However, keeping these actions can sometimes be simpler on the frontend. We'll keep them for now
-    # but know that a PATCH is the more RESTful way.
-
-    @action(detail=True, methods=["post"], url_path="archive")
-    def archive_task(self, request, pk=None):
-        task = self.get_object()
-        if not task.is_archived:
-            task.is_archived = True
-            task.completed = (
-                True  # It's good practice to mark archived tasks as complete.
-            )
-            task.save()
-        return Response({"status": "task archived"}, status=status.HTTP_200_OK)
-
-    @action(detail=True, methods=["post"], url_path="unarchive")
-    def unarchive_task(self, request, pk=None):
-        task = self.get_object()
-        if task.is_archived:
-            task.is_archived = False
-            task.save()
-        return Response({"status": "task unarchived"}, status=status.HTTP_200_OK)
-
-    # The list_archived_tasks and list_all_tasks methods are no longer needed!
-    # GET /api/tasks/?view=archived
-    # GET /api/tasks/?view=all
-    # ...are now handled by get_queryset.
+        serializer = self.get_serializer(task)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class CallCountView(APIView):
@@ -384,7 +409,6 @@ class TourCountView(APIView):
         start_date_str = params.get("start_date")
         end_date_str = params.get("end_date")
 
-        # RentTour and SellTour inherit 'created_at' from BaseActivityLog.
         if start_date_str:
             try:
                 start_date_obj = datetime.strptime(start_date_str, "%Y-%m-%d").date()
