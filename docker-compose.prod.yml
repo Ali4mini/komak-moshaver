@@ -19,6 +19,7 @@ services:
       context: ./backend/
       target: prod
     environment:
+      #TODO: these need to be in a .env file
       DEBUG: "True"
       SECRET_KEY: "!88(h4((q=skn3flqv%cmdhx2-3#6l%1_$il@m#l)3t^l#g+5a"
       DB_NAME: "amlak"
@@ -58,41 +59,8 @@ services:
       - media_data:/usr/share/nginx/html/media/
     networks:
       - komak-moshaver
-    restart: unless-stopped # Add this line
+    restart: unless-stopped 
 
-  redis:
-    image: docker.arvancloud.ir/redis:latest
-    ports:
-      - "6379:6379"
-    networks:
-      - komak-moshaver
-    restart: unless-stopped # Add this line
-
-  celery:
-    build:
-      context: ./backend/
-      target: prod
-    command: celery -A amlak worker -l info
-    volumes:
-      - ./backend/:/app
-    depends_on:
-      - backend
-      - redis
-    networks:
-      - komak-moshaver
-    environment:
-      DJANGO_SETTINGS_MODULE: amlak.settings
-      DEBUG: "False"
-      SECRET_KEY: "someSecretKey$"
-      DB_NAME: "amlak"
-      DB_HOST: postgres
-      DB_USER: "amlak"
-      DB_PASS: "amlak"
-      DB_PORT: 5432
-      NESHAN_STATIC_MAP_API: "service.db7794d6a5ee46579d1a433d0115958e"
-      NESHAN_SERVICES_API: "service.c5332c5dc61c41d083e7b5bc438889ee"
-      CELERY_BROKER_URL: "redis://redis:6379/0"
-    restart: unless-stopped # Add this line
 
 networks:
   komak-moshaver:

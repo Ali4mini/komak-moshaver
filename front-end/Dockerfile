@@ -9,6 +9,7 @@ COPY package*.json ./
 # Install dependencies, including Vite
 RUN npm install && ls -la node_modules/
 
+
 # Copy the rest of the application files
 COPY . .
 

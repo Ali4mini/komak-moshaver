@@ -37,7 +37,6 @@ services:
       - "8000:8000"  
     depends_on:
       - postgres 
-      - redis  # Ensure backend starts after Redis
     networks:
       - komak-moshaver 
     command: poetry run python manage.py runserver 0.0.0.0:8000
@@ -56,38 +55,38 @@ services:
       - backend 
     networks:
       - komak-moshaver 
-
-  redis:
-    image: docker.arvancloud.ir/redis:latest  # Use the latest Redis image
-    ports:
-      - "6379:6379"  # Expose Redis port
-    networks:
-      - komak-moshaver 
-
-  celery:
-    build:
-      context: ./backend/
-      target: dev
-    command: celery -A amlak worker --loglevel=info && celery -A amlak beat --loglevel=info
-    volumes:
-      - ./backend/:/app
-    depends_on:
-      - backend
-      - redis
-    networks:
-        - komak-moshaver
-    environment:
-      DJANGO_SETTINGS_MODULE: amlak.settings
-      DEBUG: "True" 
-      SECRET_KEY: "someSecretKey$$" 
-      DB_NAME: "amlak"
-      DB_HOST: postgres
-      DB_USER: "amlak"
-      DB_PASS: "amlak"
-      DB_PORT: 5432
-      NESHAN_STATIC_MAP_API: "service.db7794d6a5ee46579d1a433d0115958e"
-      NESHAN_SERVICES_API: "service.c5332c5dc61c41d083e7b5bc438889ee"
-      CELERY_BROKER_URL: "redis://redis:6379/0"  # Set Redis as the broker
+  #
+  # redis:
+  #   image: docker.arvancloud.ir/redis:latest  # Use the latest Redis image
+  #   ports:
+  #     - "6379:6379"  # Expose Redis port
+  #   networks:
+  #     - komak-moshaver 
+  #
+  # celery:
+  #   build:
+  #     context: ./backend/
+  #     target: dev
+  #   command: celery -A amlak worker --loglevel=info && celery -A amlak beat --loglevel=info
+  #   volumes:
+  #     - ./backend/:/app
+  #   depends_on:
+  #     - backend
+  #     - redis
+  #   networks:
+  #       - komak-moshaver
+  #   environment:
+  #     DJANGO_SETTINGS_MODULE: amlak.settings
+  #     DEBUG: "True" 
+  #     SECRET_KEY: "someSecretKey$$" 
+  #     DB_NAME: "amlak"
+  #     DB_HOST: postgres
+  #     DB_USER: "amlak"
+  #     DB_PASS: "amlak"
+  #     DB_PORT: 5432
+  #     NESHAN_STATIC_MAP_API: "service.db7794d6a5ee46579d1a433d0115958e"
+  #     NESHAN_SERVICES_API: "service.c5332c5dc61c41d083e7b5bc438889ee"
+  #     CELERY_BROKER_URL: "redis://redis:6379/0"  # Set Redis as the broker
 
 
 networks:

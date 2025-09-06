@@ -1,5 +1,5 @@
 # Use the official Python image
-FROM docker.arvancloud.ir/python:3.12 AS base
+FROM docker.arvancloud.ir/python:3.12-slim-bullseye AS base
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1 \
@@ -19,9 +19,6 @@ WORKDIR /app
 # Copy dependency files first to leverage Docker caching
 COPY pyproject.toml poetry.lock /app/
 
-# Install project dependencies
-RUN poetry config virtualenvs.create false && \
-    poetry install --no-interaction --no-ansi --only main
 
 # Copy the rest of the application
 COPY . /app/
@@ -35,4 +32,7 @@ CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
 # Production Stage
 FROM base AS prod
 EXPOSE 8000
+# Install project dependencies
+RUN poetry config virtualenvs.create false && \
+    poetry install --no-interaction --no-ansi --only main
 CMD ["gunicorn", "--bind", "0.0.0.0:8000", "amlak.wsgi:application"]
