@@ -24,6 +24,7 @@ backend/liara.json
 backend/media/
 ./backend/media/
 backend/utils/backups/
+./backups/
 ./backend/utils/backups/
 .aider*
 ./AI/ASR/models/

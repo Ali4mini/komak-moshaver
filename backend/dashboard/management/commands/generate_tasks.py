@@ -4,12 +4,8 @@ from datetime import timedelta
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 
-# NEW: Required for using GenericForeignKey
-from django.contrib.contenttypes.models import ContentType
-
-# Make sure the import paths match your project structure
 from dashboard.models import Task
-from file.models import Sell, Rent
+from file.models import Rent, Sell
 
 
 class Command(BaseCommand):
