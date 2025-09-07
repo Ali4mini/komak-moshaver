@@ -35,4 +35,4 @@ EXPOSE 8000
 # Install project dependencies
 RUN poetry config virtualenvs.create false && \
     poetry install --no-interaction --no-ansi --only main
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "amlak.wsgi:application"]
+CMD ["./entrypoint.sh"]

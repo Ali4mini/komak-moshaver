@@ -81,8 +81,8 @@ MIDDLEWARE = [
     "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
-STATIC_URL = "/assets/"
-STATIC_ROOT = os.path.join(BASE_DIR, "/assets/")
+STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 WHITENOISE_ROOT = os.path.join(BASE_DIR, "/assets/")
 
 CORS_ORIGIN_ALLOW_ALL = True
