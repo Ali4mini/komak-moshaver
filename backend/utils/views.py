@@ -1,10 +1,12 @@
-from rest_framework import viewsets, filters
-from .models import Person
-from .serializers import PersonSerializer
 from django_filters.rest_framework import DjangoFilterBackend  # Ensure this is imported
+from rest_framework import filters, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from file.serializers import SellFileSerializer, RentFileSerializer
+
+from file.serializers import RentFileSerializer, SellFileSerializer
+
+from .models import Person
+from .serializers import PersonSerializer
 
 
 class PersonViewSet(viewsets.ModelViewSet):
