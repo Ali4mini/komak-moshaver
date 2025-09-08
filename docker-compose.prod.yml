@@ -12,7 +12,6 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - komak-moshaver
-    restart: unless-stopped 
 
   backend:
     build:
@@ -43,7 +42,6 @@ services:
       - static_data:/app/static/
     networks:
       - komak-moshaver
-    restart: unless-stopped 
 
   nginx:
     build:
@@ -61,7 +59,6 @@ services:
       - static_data:/usr/share/nginx/html/static/
     networks:
       - komak-moshaver
-    restart: unless-stopped 
 
 
 networks:
