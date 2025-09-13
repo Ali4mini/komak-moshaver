@@ -38,7 +38,7 @@ services:
     depends_on:
       - postgres
     volumes:
-      - media_data:/usr/share/nginx/html/media/
+      - media_data:/app/media
       - static_data:/app/static/
     networks:
       - komak-moshaver

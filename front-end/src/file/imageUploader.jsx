@@ -65,7 +65,7 @@ const ImageUploader = ({ onFilesSelected }) => {
   return (
     <div
       className={dropzoneClasses}
-      onClick={onLabelClick} // Use onClick on the div instead of a label
+      onClick={onLabelClick}
       onDragEnter={handleDragEnter}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
