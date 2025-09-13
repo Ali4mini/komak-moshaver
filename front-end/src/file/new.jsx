@@ -5,6 +5,24 @@ import { api } from "../common/api";
 import { setFlashMessage } from "../common/flashSlice";
 import { useDispatch } from "react-redux";
 import CustomDatePicker from "../common/datePicker";
+import ImageUploader from "./imageUploader";
+
+const CloseIcon = () => (
+  <svg
+    className="w-4 h-4"
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+      d="M6 18L18 6M6 6l12 12"
+    ></path>
+  </svg>
+);
 
 const NewFile = () => {
   const initialFileType = (
@@ -41,7 +59,7 @@ const NewFile = () => {
   const [date, setDate] = useState(initialDate);
 
   const [location, setLocation] = useState(null);
-  const [selectedFiles, setSelectedFiles] = useState(null);
+  const [selectedFiles, setSelectedFiles] = useState([]);
   const user = localStorage.getItem("user");
   const dispatch = useDispatch();
   const addressRef = useRef(null);
@@ -78,7 +96,7 @@ const NewFile = () => {
     setDescription("");
     // setDate(new Date().toISOString().split("T")[0]);
     setLocation(null);
-    setSelectedFiles(null);
+    setSelectedFiles([]);
     const fileInput = document.getElementById("customFileInput");
     if (fileInput) fileInput.value = null;
     // UPDATE THE KEY TO FORCE RE-MOUNT OF CHECKBOXES
@@ -95,12 +113,14 @@ const NewFile = () => {
     return await api.post(`file/${fileTypeRes}/${fileIdRes}/location/`, data);
   };
 
-  const handleUpload = async (endpoint) => {
+  const handleUploadImages = async (endpoint) => {
+    // Renamed for clarity
     if (!selectedFiles || selectedFiles.length === 0) return;
+
     const formData = new FormData();
-    Array.from(selectedFiles).forEach((file) =>
-      formData.append("images", file),
-    );
+    // No need for Array.from() since selectedFiles is already an array
+    selectedFiles.forEach((file) => formData.append("images", file));
+
     try {
       await api.post(endpoint, formData, {
         headers: { "Content-Type": "multipart/form-data" },
@@ -191,7 +211,7 @@ const NewFile = () => {
         const createdFileType = response.data["file_type"];
         await handleLocation(createdFileType, fileId, location);
         if (selectedFiles && selectedFiles.length > 0) {
-          await handleUpload(`file/${createdFileType}/${fileId}/images/`);
+          await handleUploadImages(`file/${createdFileType}/${fileId}/images/`);
         }
         dispatch(
           setFlashMessage({
@@ -219,7 +239,15 @@ const NewFile = () => {
     }
   };
 
-  const handleFileChange = (event) => setSelectedFiles(event.target.files);
+  const handleFilesSelected = (files) => {
+    setSelectedFiles((prevFiles) => [...prevFiles, ...files]);
+  };
+
+  const handleRemoveFile = (fileToRemove) => {
+    setSelectedFiles((prevFiles) =>
+      prevFiles.filter((file) => file !== fileToRemove),
+    );
+  };
 
   useEffect(() => {
     if (fileType === "sell") {
@@ -586,27 +614,36 @@ const NewFile = () => {
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 تصاویر ملک (اختیاری)
               </label>
-              <input
-                type="file"
-                multiple
-                id="customFileInput"
-                onChange={handleFileChange}
-                className="hidden"
-              />
-              <label
-                htmlFor="customFileInput"
-                className="flex items-center justify-center w-full sm:w-auto sm:max-w-md cursor-pointer bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold py-3 px-4 rounded-lg border-2 border-dashed border-indigo-300 transition duration-150 ease-in-out"
-              >
-                {selectedFiles && selectedFiles.length > 0
-                  ? `${selectedFiles.length} عکس انتخاب شد`
-                  : "برای انتخاب عکس کلیک کنید"}
-              </label>
-              {selectedFiles && selectedFiles.length > 0 && (
-                <div className="mt-2 text-xs text-gray-500">
-                  فایل‌های انتخاب شده:{" "}
-                  {Array.from(selectedFiles)
-                    .map((f) => f.name)
-                    .join(", ")}
+              <div className="flex justify-center">
+                <ImageUploader onFilesSelected={handleFilesSelected} />
+              </div>
+              {selectedFiles.length > 0 && (
+                <div className="mt-6">
+                  <h3 className="text-sm font-medium text-gray-700 mb-2">
+                    پیش‌نمایش تصاویر:
+                  </h3>
+                  <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4">
+                    {selectedFiles.map((file, index) => (
+                      <div
+                        key={index}
+                        className="relative group aspect-w-1 aspect-h-1"
+                      >
+                        <img
+                          src={URL.createObjectURL(file)}
+                          alt={file.name}
+                          className="w-full h-full object-cover rounded-md"
+                          onLoad={(e) => URL.revokeObjectURL(e.target.src)} // Clean up memory
+                        />
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveFile(file)}
+                          className="absolute top-1 right-1 p-1 bg-red-600 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          <CloseIcon />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
